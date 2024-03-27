@@ -1,7 +1,6 @@
 package graph;
 
 import org.graphstream.graph.implementations.*;
-import org.graphstream.graph.*;
 
 public class Flight extends SingleNode {
     
