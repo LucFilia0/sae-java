@@ -1,6 +1,7 @@
 package graph;
 
 import org.graphstream.graph.implementations.*;
+import java.sql.Time ;
 
 public class Flight extends SingleNode {
     
@@ -8,12 +9,11 @@ public class Flight extends SingleNode {
         super(graph,id) ;
     }
 
-    public void setFlightAttributes(String aeroportDepart, String aeroportArrivee, int heureDepart, int minuteDepart, int duree) {
-        this.setAttribute("aeroportDepart", aeroportDepart) ;
-        this.setAttribute("aeroportArrivee", aeroportArrivee) ;
-        this.setAttribute("heureDepart", heureDepart) ;
-        this.setAttribute("minuteDepart", minuteDepart) ;
-        this.setAttribute("duree", duree) ;
+    public void setFlightAttributes(String aeroportDepart, String aeroportArrivee, Time depart, int length) {
+        this.setAttribute("departure", aeroportDepart) ;
+        this.setAttribute("arrival", aeroportArrivee) ;
+        this.setAttribute("departureTime", depart) ;
+        this.setAttribute("flightLength", length) ;
     }
 
     
