@@ -16,7 +16,7 @@ public class TestGraph {
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph testGraph = new SingleGraph("testGraph");
-        File testGraphFile = new File("sae/DataTest/graph-test0.txt");
+        File testGraphFile = new File("sae/DataTest/graph-test6.txt");
 
         try {
             importTestGraph(testGraph, testGraphFile);
@@ -117,20 +117,30 @@ public class TestGraph {
         if(nbNodes < 0) {
             throw new InvalidFileFormatException();
         }
+        String id = "";
 
         for(int i=1; i<=nbNodes; ++i) {
-            graph.addNode(String.valueOf(i));
+            id = String.valueOf(i);
+            try {
+                graph.addNode(id);
+            }catch(IdAlreadyInUseException iaiue) { // C'est pas censé arrivé, mais on sait jamais, si on réutilise ailleurs...
+                System.err.println(id + " est deja utilise");
+            }
         }
     }
 
     @SuppressWarnings("resource")
     private static void setTestGraphEdges(Graph graph, Scanner lineScanner, int nbNodes) throws FileNotFoundException, InvalidFileFormatException, NumberFormatException {
+        
+        int lineId = 2;
+        
         String _line = "", _nodeA = "", _nodeB = "";
         int nodeA = 0, nodeB = 0;
 
         Scanner nodeScanner = null;
 
         while(lineScanner.hasNextLine()) {
+            ++lineId;
             _line = lineScanner.nextLine();
             nodeScanner = new Scanner(_line);
             // Get node A
@@ -138,19 +148,18 @@ public class TestGraph {
                 _nodeA = nodeScanner.next();
             }else {
                 nodeScanner.close();
-                throw new InvalidFileFormatException();
+                throw new InvalidFileFormatException(lineId);
             }
             // Get node B
             if(nodeScanner.hasNext()) {
                 _nodeB = nodeScanner.next();
             }else {
                 nodeScanner.close();
-                throw new InvalidFileFormatException();
+                throw new InvalidFileFormatException(lineId);
             }
             // Vérif nombre en plus sur la ligne
             if(nodeScanner.hasNext()) {
-                nodeScanner.close();
-                throw new InvalidFileFormatException();
+                System.err.println("Ligne " + lineId + " du fichier source : Plus de deux sommets indiques");
             }
 
             try {
@@ -162,10 +171,18 @@ public class TestGraph {
             }
 
             if(nodeA <= nbNodes && nodeA > 0 && nodeB > 0 && nodeB <=nbNodes) {
-                graph.addEdge(_nodeA + "-" + _nodeB, _nodeA, _nodeB);
+                try {
+                    graph.addEdge(_nodeA + "-" + _nodeB, _nodeA, _nodeB);
+                }catch(IdAlreadyInUseException iaiue) {
+                    System.err.println(_nodeB + "-" + _nodeA + " deja utilise : erreur ligne " + lineId);
+                }catch(ElementNotFoundException enfe) {
+                    System.err.println("Element introuvable : ligne " + lineId);
+                }catch(EdgeRejectedException ere) {
+                    System.err.println("Impossible de rajouter l'arete : ligne " + lineId);
+                }
             }else {
                 nodeScanner.close();
-                throw new InvalidFileFormatException();
+                throw new InvalidFileFormatException(lineId);
             }
             nodeScanner.close();
         }
