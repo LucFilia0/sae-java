@@ -5,6 +5,6 @@ import util.Time ;
 public class InvalidTimeException extends Exception {
     
     public InvalidTimeException(Time time) {
-        super(time.getHours() + "h" + time.getMinutes() + " est un temps invalide.") ;
+        super(time.getHour() + "h" + time.getMinute() + " est un temps invalide.") ;
     }
 }

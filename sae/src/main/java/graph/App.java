@@ -10,6 +10,10 @@ public class App {
         // Type de rendu + Création du Graph
         System.setProperty("org.graphstream.ui", "swing");
         Graph flightMap = new SingleGraph("SAE") ;
+        Time test1 = new Time(-12, 10) ;
+        System.out.println(test1);
+        Coordinate test2 = new Latitude(-12, -5, 18, 'N') ;
+        System.out.println(test2) ;
 
         // Générateurs
         FlightFactory flights = new FlightFactory() ;

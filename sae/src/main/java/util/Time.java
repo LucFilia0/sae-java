@@ -3,29 +3,32 @@ package util;
 import exceptions.InvalidTimeException;
 
 public class Time {
-    private int h ;
+    private int hour ;
     private int min ;
 
-    public Time(int h, int min) {
+    public Time(int hour, int min) {
+        // hour et min vont de 0 à 59, mis à 0 sinon + InvalidTimeException
         try {
-            this.setHour(h);
-            this.setMinutes(min);
+            this.setHour(hour) ;
+            this.setMinute(min) ;
         }
 
         catch (InvalidTimeException ITE) {
-
+            System.err.println(ITE) ;
+            this.hour = 0 ;
+            this.min = 0 ;
         }
 
     }
 
 
     public int getHour() {
-        return this.h;
+        return this.hour ;
     }
 
-    public void setHour(int h) throws InvalidTimeException {
-        this.h = h;
-        if (h < 0 || h > 23) {
+    public void setHour(int hour) throws InvalidTimeException {
+        this.hour = hour ;
+        if (hour < 0 || hour > 23) {
             throw new InvalidTimeException(this) ;
         }
     }

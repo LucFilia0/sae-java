@@ -58,4 +58,8 @@ public class Coordinate {
         }
     }
 
+    public String toString() {
+        return Integer.toString(this.getDegree()) + ' ' + Integer.toString(this.getMinutes()) + ' ' + Integer.toString(this.getSeconds()) ;
+    }
+
 }

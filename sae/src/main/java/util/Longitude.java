@@ -31,4 +31,8 @@ public class Longitude extends Coordinate {
         }
     }
 
+    public String toString() {
+        return super.toString() + ' ' + this.getDirection() ;
+    }
+
 }
