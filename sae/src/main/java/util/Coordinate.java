@@ -2,12 +2,12 @@ package util;
 
 import exceptions.InvalidCoordinatesException ;
 
-public class Coordinate {
+public abstract class Coordinate {
     protected int degree ;
     protected int minutes ;
     protected int seconds ;
 
-    Coordinate(int degree, int minutes, int seconds) {
+    public Coordinate(int degree, int minutes, int seconds) {
         // degree doit être entre -180 et 180, mis à 0 sinon + InvalidCoordinateException
         // minutes et secondes vont de 0 à 59, mis à 0 sinon + InvalidCoordinateException
 
