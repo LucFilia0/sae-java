@@ -35,7 +35,7 @@ public class TestGraph {
     }
 
     public static void colorGraphRLF(Graph graph) {
-        HashMap<Integer, HashSet<Node>> colorMap = new HashMap<>() ;
+        HashMap<Integer, HashSet<Node>> colorMap = new HashMap<Integer, HashSet<Node>>() ;
         Node[] tab = new Node[graph.getNodeCount()] ;
         int i = 0 ;
 
@@ -47,7 +47,7 @@ public class TestGraph {
         }
         
         triTabNode(tab) ;
-        LinkedList<Node> list = new LinkedList<>() ;
+        LinkedList<Node> list = new LinkedList<Node>() ;
         Collections.addAll(list, tab) ;
         
         
@@ -55,29 +55,29 @@ public class TestGraph {
         int color = 1 ;
 
         //Servira à stocker les voisins des noeuds courrants
-        Set<Node> buffer = new HashSet<>() ;
+        Set<Node> neighbors = new HashSet<Node>() ;
 
         //Servira à parcourir la liste des noeuds
         ListIterator<Node> iterator ;
         Node bufferNode ;
-        colorMap.put(1, new HashSet<>()) ;
+        colorMap.put(1, new HashSet<Node>()) ;
 
         //Traitement des noeuds
         while (!list.isEmpty()) {
             
             // On ajoute le premier noeud de la couleur et on ajoute ses voisins à buffer
             colorMap.get(color).add(list.getFirst()) ;
-            buffer.addAll(list.getFirst().neighborNodes().collect(Collectors.toSet())) ;
+            neighbors.addAll(list.getFirst().neighborNodes().collect(Collectors.toSet())) ;
             list.removeFirst() ;
             iterator = list.listIterator(0) ;
             
             // On colore progressivement les noeuds en ajoutant à chaque fois leurs voisins à buffer
             while (iterator.hasNext()) {
                 bufferNode = iterator.next() ;
-                if (!buffer.contains(bufferNode)) {
+                if (!neighbors.contains(bufferNode)) {
                     colorMap.get(color).add(bufferNode) ;
                     iterator.remove() ;
-                    buffer.addAll(bufferNode.neighborNodes().collect(Collectors.toSet())) ;
+                    neighbors.addAll(bufferNode.neighborNodes().collect(Collectors.toSet())) ;
                 }
             }
 
@@ -85,7 +85,7 @@ public class TestGraph {
             if (!list.isEmpty()) {
 
                 //Affichage pour visualiser ici (test)
-                Iterator<Node> itr = buffer.iterator() ;
+                Iterator<Node> itr = neighbors.iterator() ;
                 while (itr.hasNext()) {
                     System.out.print(itr.next() + "   ");
                 }
@@ -93,8 +93,8 @@ public class TestGraph {
 
                 //Changement de couleur, remise à 0 des voisins
                 color++ ;
-                colorMap.put(color, new HashSet<>()) ;
-                buffer = new HashSet<>() ;
+                colorMap.put(color, new HashSet<Node>()) ;
+                neighbors = new HashSet<Node>() ;
             }
 
         }
