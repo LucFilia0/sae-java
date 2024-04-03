@@ -39,30 +39,39 @@ public class TestGraph {
         Node[] tab = new Node[graph.getNodeCount()] ;
         int i = 0 ;
 
-        // Tri par degré
+        // Tri par degré puis stock le résultat dans une liste chainée
         for (Node node : graph) {
             tab[i] = node ;
             node.setAttribute("color", 0);
             i++ ;
         }
-        triTabNode(tab);
+        
+        triTabNode(tab) ;
         LinkedList<Node> list = new LinkedList<>() ;
         Collections.addAll(list, tab) ;
         
         
-        //Coloration
+        //Début de la Coloration ici
         int color = 1 ;
+
+        //Servira à stocker les voisins des noeuds courrants
         Set<Node> buffer = new HashSet<>() ;
+
+        //Servira à parcourir la liste des noeuds
         ListIterator<Node> iterator ;
         Node bufferNode ;
         colorMap.put(1, new HashSet<>()) ;
 
+        //Traitement des noeuds
         while (!list.isEmpty()) {
+            
+            // On ajoute le premier noeud de la couleur et on ajoute ses voisins à buffer
             colorMap.get(color).add(list.getFirst()) ;
             buffer.addAll(list.getFirst().neighborNodes().collect(Collectors.toSet())) ;
             list.removeFirst() ;
             iterator = list.listIterator(0) ;
             
+            // On colore progressivement les noeuds en ajoutant à chaque fois leurs voisins à buffer
             while (iterator.hasNext()) {
                 bufferNode = iterator.next() ;
                 if (!buffer.contains(bufferNode)) {
@@ -72,12 +81,17 @@ public class TestGraph {
                 }
             }
 
+            //Passage à la couleur suivante
             if (!list.isEmpty()) {
+
+                //Affichage pour visualiser ici (test)
                 Iterator<Node> itr = buffer.iterator() ;
                 while (itr.hasNext()) {
                     System.out.print(itr.next() + "   ");
                 }
                 System.out.println("\n================\n");
+
+                //Changement de couleur, remise à 0 des voisins
                 color++ ;
                 colorMap.put(color, new HashSet<>()) ;
                 buffer = new HashSet<>() ;
@@ -85,6 +99,7 @@ public class TestGraph {
 
         }
 
+        // Affichage de la coloration (test)
         for (Integer key : colorMap.keySet()) {
             Iterator<Node> itr = colorMap.get(key).iterator() ;
             System.out.print(key + " : ");
@@ -95,8 +110,6 @@ public class TestGraph {
             }
             System.out.println() ;
         }
-
-        i = 1 ;
 
     }
 
