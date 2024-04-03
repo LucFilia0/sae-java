@@ -2,24 +2,120 @@ package graph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
+import java.util.* ;
+import java.util.stream.*;
 
 // Exceptions
 import exceptions.InvalidFileFormatException;
 
 public class TestGraph {
 
+    public static void triTabNode(Node[] tab) {
+        int max ;
+
+        for (int i = 0 ; i < tab.length ; i++) {
+            max = i ;
+            for (int j = i + 1 ; j < tab.length ; j++) {
+                if (tab[j].getDegree() > tab[max].getDegree()) {
+                    max = j;
+                }
+            }
+
+            Node temp = tab[i] ;
+            tab[i] = tab[max] ;
+            tab[max] = temp ;
+        }
+
+        for (int i = 0 ; i < tab.length ; i++) {
+            System.out.println(tab[i]);
+        }
+    }
+
+    public static void colorGraphRFL(Graph graph) {
+        HashMap<Integer, HashSet<Node>> colorMap = new HashMap<>() ;
+        Node[] tab = new Node[graph.getNodeCount()] ;
+        int i = 0 ;
+
+        // Tri par degré
+        for (Node node : graph) {
+            tab[i] = node ;
+            node.setAttribute("color", 0);
+            i++ ;
+        }
+        triTabNode(tab);
+        LinkedList<Node> list = new LinkedList<>() ;
+        Collections.addAll(list, tab) ;
+        
+        
+        //Coloration
+        int color = 1 ;
+        Set<Node> buffer = new HashSet<>() ;
+        ListIterator<Node> iterator ;
+        Node bufferNode ;
+        colorMap.put(1, new HashSet<>()) ;
+
+        while (!list.isEmpty()) {
+            colorMap.get(color).add(list.getFirst()) ;
+            buffer.addAll(list.getFirst().neighborNodes().collect(Collectors.toSet())) ;
+            list.removeFirst() ;
+            iterator = list.listIterator(0) ;
+            
+            while (iterator.hasNext()) {
+                bufferNode = iterator.next() ;
+                if (!buffer.contains(bufferNode)) {
+                    colorMap.get(color).add(bufferNode) ;
+                    iterator.remove() ;
+                    buffer.addAll(bufferNode.neighborNodes().collect(Collectors.toSet())) ;
+                }
+            }
+
+            if (!list.isEmpty()) {
+                Iterator<Node> itr = buffer.iterator() ;
+                while (itr.hasNext()) {
+                    System.out.print(itr.next() + "   ");
+                }
+                System.out.println("\n================\n");
+                color++ ;
+                colorMap.put(color, new HashSet<>()) ;
+                buffer = new HashSet<>() ;
+            }
+
+        }
+
+        for (Integer key : colorMap.keySet()) {
+            Iterator<Node> itr = colorMap.get(key).iterator() ;
+            System.out.print(key + " : ");
+            while (itr.hasNext()) {
+                Node node = (Node) itr.next() ;
+                node.setAttribute("ui.class", "color" + key.toString());
+                System.out.print(node + "   ") ;
+            }
+            System.out.println() ;
+        }
+
+        i = 1 ;
+
+    }
+
     public static void main(String args[]) {
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph testGraph = new SingleGraph("testGraph");
-        File testGraphFile = new File("sae/DataTest/graph-test6.txt");
+        File testGraphFile = new File("sae/DataTest/graph-test4.txt");
 
         try {
             importTestGraph(testGraph, testGraphFile);
+            TestGraph.colorGraphRFL(testGraph);
+            testGraph.setAttribute("ui.stylesheet", "node {size : 25px ;} node.color1 {fill-color : red ;}" 
+            + " node.color2 {fill-color : blue ;}" 
+            + " node.color3 {fill-color : green ;}"
+            + " node.color4 {fill-color : orange ;}"
+            + " node.color5 {fill-color : pink ;}"
+            + " node.color6 {fill-color : gray ;}"
+            ) ;
             testGraph.display();
         }catch(FileNotFoundException ex) {
             System.err.println(ex);
@@ -122,7 +218,8 @@ public class TestGraph {
         for(int i=1; i<=nbNodes; ++i) {
             id = String.valueOf(i);
             try {
-                graph.addNode(id);
+                Node n = graph.addNode(id);
+                n.setAttribute("ui.label", id);
             }catch(IdAlreadyInUseException iaiue) { // C'est pas censé arrivé, mais on sait jamais, si on réutilise ailleurs...
                 System.err.println(id + " est deja utilise");
             }
