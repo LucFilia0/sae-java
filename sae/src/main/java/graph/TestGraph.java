@@ -34,7 +34,7 @@ public class TestGraph {
         }
     }
 
-    public static void colorGraphRFL(Graph graph) {
+    public static void colorGraphRLF(Graph graph) {
         HashMap<Integer, HashSet<Node>> colorMap = new HashMap<>() ;
         Node[] tab = new Node[graph.getNodeCount()] ;
         int i = 0 ;
@@ -121,7 +121,7 @@ public class TestGraph {
 
         try {
             importTestGraph(testGraph, testGraphFile);
-            TestGraph.colorGraphRFL(testGraph);
+            TestGraph.colorGraphRLF(testGraph);
             testGraph.setAttribute("ui.stylesheet", "node {size : 25px ;} node.color1 {fill-color : red ;}" 
             + " node.color2 {fill-color : blue ;}" 
             + " node.color3 {fill-color : green ;}"
