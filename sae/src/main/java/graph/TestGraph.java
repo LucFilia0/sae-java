@@ -13,111 +13,108 @@ import exceptions.InvalidFileFormatException;
 
 public class TestGraph {
 
-    public static void triTabNode(Node[] tab) {
-        int max ;
+    public static Node selectNextNodeToAdd(HashSet<Node> neighbors, HashSet<Node> nodeList) {
+        HashMap<Node, Integer> nodeMap = new HashMap<>() ;
 
-        for (int i = 0 ; i < tab.length ; i++) {
-            max = i ;
-            for (int j = i + 1 ; j < tab.length ; j++) {
-                if (tab[j].getDegree() > tab[max].getDegree()) {
-                    max = j;
+        for (Node nodeInList : nodeList) {
+            nodeMap.put(nodeInList, 0) ;
+        }
+
+        for (Node node : neighbors) {
+            for (Node neighborOfNode : node.neighborNodes().collect(Collectors.toSet())) {
+                if (nodeList.contains(neighborOfNode)) {
+                    nodeMap.merge(neighborOfNode, 1, Integer::sum) ;
                 }
             }
-
-            Node temp = tab[i] ;
-            tab[i] = tab[max] ;
-            tab[max] = temp ;
         }
 
-        for (int i = 0 ; i < tab.length ; i++) {
-            System.out.println(tab[i]);
+        Node max = null ;
+
+        for (Node key : nodeMap.keySet()) {
+            if (max == null || nodeMap.get(max) > nodeMap.get(key)) {
+                max = key ;
+            }
         }
+
+        return max ;
+    }
+
+    public static void addNodesToNodeList(Graph graph, HashMap<Integer, HashSet<Node>> colorMap, Integer color, HashSet<Node> neighbors, HashSet<Node> nodeList, Node nextNode) {
+        /**
+         * 
+         */
+        while (!nodeList.isEmpty()) {
+            nextNode = selectNextNodeToAdd(neighbors, nodeList) ;
+            if (nextNode != null) {
+                colorMap.get(color).add(graph.getNode(nextNode.getId())) ;
+                nodeList.remove(nextNode) ;
+                nodeList.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
+            }
+        }
+    }
+
+    public static Node loadGraphNodesIntoNodeList(Graph newGraph, HashSet<Node> nodeList, Node currentNode) {
+        for (Node node : newGraph) {
+            if (currentNode == null) {
+                currentNode = node ;
+            }
+
+            else {
+                if (currentNode.getDegree() < node.getDegree()) {
+                    currentNode = node ;
+                }
+            }
+            nodeList.add(node) ;
+        }
+
+        return currentNode ;
     }
 
     public static void colorGraphRLF(Graph graph) {
-        HashMap<Integer, HashSet<Node>> colorMap = new HashMap<Integer, HashSet<Node>>() ;
-        Node[] tab = new Node[graph.getNodeCount()] ;
-        int i = 0 ;
-
-        // Tri par degré puis stock le résultat dans une liste chainée
-        for (Node node : graph) {
-            tab[i] = node ;
-            node.setAttribute("color", 0);
-            i++ ;
-        }
+        /**
+         * 
+         */
+        Graph newGraph = Graphs.clone(graph) ;
+        HashMap<Integer, HashSet<Node>> colorMap = new HashMap<>() ;
+        HashSet<Node> nodeList ;
+        HashSet<Node> neighbors ;
+        Node currentNode ;
+        Node nextNode ;
         
-        triTabNode(tab) ;
-        LinkedList<Node> list = new LinkedList<Node>() ;
-        Collections.addAll(list, tab) ;
-        
-        
-        //Début de la Coloration ici
         int color = 1 ;
 
-        //Servira à stocker les voisins des noeuds courrants
-        Set<Node> neighbors = new HashSet<Node>() ;
+        while (newGraph.getNodeCount() != 0) {
+            currentNode = null ;
+            nextNode = null ;
+            colorMap.put(color, new HashSet<>()) ;
+            nodeList = new HashSet<>() ;
 
-        //Servira à parcourir la liste des noeuds
-        ListIterator<Node> iterator ;
-        Node bufferNode ;
-        colorMap.put(1, new HashSet<Node>()) ;
+            currentNode = loadGraphNodesIntoNodeList(newGraph, nodeList, currentNode) ;
+            colorMap.get(color).add(graph.getNode(currentNode.getId())) ;
 
-        //Traitement des noeuds
-        while (!list.isEmpty()) {
+            neighbors = (HashSet<Node>) currentNode.neighborNodes().collect(Collectors.toSet()) ;
+            nodeList.remove(currentNode) ;
+            nodeList.removeAll(neighbors) ;
+            addNodesToNodeList(graph, colorMap, color, neighbors, nodeList, nextNode) ;
+
+            //Ajout des couleurs dans le vrai graphe 
+            for (Node coloringNode : colorMap.get(color)) {
+                coloringNode.setAttribute("color", color) ;
+                coloringNode.setAttribute("ui.class", "color" + color) ;
+                newGraph.removeNode(newGraph.getNode(coloringNode.getId())) ;
+            }
+            color++ ;
             
-            // On ajoute le premier noeud de la couleur et on ajoute ses voisins à buffer
-            colorMap.get(color).add(list.getFirst()) ;
-            neighbors.addAll(list.getFirst().neighborNodes().collect(Collectors.toSet())) ;
-            list.removeFirst() ;
-            iterator = list.listIterator(0) ;
-            
-            // On colore progressivement les noeuds en ajoutant à chaque fois leurs voisins à buffer
-            while (iterator.hasNext()) {
-                bufferNode = iterator.next() ;
-                if (!neighbors.contains(bufferNode)) {
-                    colorMap.get(color).add(bufferNode) ;
-                    iterator.remove() ;
-                    neighbors.addAll(bufferNode.neighborNodes().collect(Collectors.toSet())) ;
-                }
-            }
-
-            //Passage à la couleur suivante
-            if (!list.isEmpty()) {
-
-                //Affichage pour visualiser ici (test)
-                Iterator<Node> itr = neighbors.iterator() ;
-                while (itr.hasNext()) {
-                    System.out.print(itr.next() + "   ");
-                }
-                System.out.println("\n================\n");
-
-                //Changement de couleur, remise à 0 des voisins
-                color++ ;
-                colorMap.put(color, new HashSet<Node>()) ;
-                neighbors = new HashSet<Node>() ;
-            }
-
-        }
-
-        // Affichage de la coloration (test)
-        for (Integer key : colorMap.keySet()) {
-            Iterator<Node> itr = colorMap.get(key).iterator() ;
-            System.out.print(key + " : ");
-            while (itr.hasNext()) {
-                Node node = (Node) itr.next() ;
-                node.setAttribute("ui.class", "color" + key.toString());
-                System.out.print(node + "   ") ;
-            }
-            System.out.println() ;
         }
 
     }
+
 
     public static void main(String args[]) {
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph testGraph = new SingleGraph("testGraph");
-        File testGraphFile = new File("sae/DataTest/graph-test4.txt");
+        File testGraphFile = new File("sae/DataTest/graph-test0.txt");
 
         try {
             importTestGraph(testGraph, testGraphFile);
