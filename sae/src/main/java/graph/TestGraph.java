@@ -70,7 +70,7 @@ public class TestGraph {
         return currentNode ;
     }
 
-    public static void colorGraphRLF(Graph graph) {
+    public static int colorGraphRLF(Graph graph) {
         /**
          * 
          */
@@ -107,6 +107,22 @@ public class TestGraph {
             
         }
 
+
+        return color - 1 ;
+    }
+
+    public static int testColorationGraph(Graph graph) {
+        int nbProbleme = 0 ;
+        for (Node node : graph) {
+            for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
+                if (node.getAttribute("color") == neighbor.getAttribute("color")) {
+                    nbProbleme++ ;
+                    System.out.println("Probleme entre " + node + " et " + neighbor) ;
+                }
+            }
+        }   
+
+        return nbProbleme ;
     }
 
 
@@ -114,11 +130,11 @@ public class TestGraph {
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph testGraph = new SingleGraph("testGraph");
-        File testGraphFile = new File("sae/DataTest/graph-test0.txt");
-
+        File testGraphFile = new File("sae/DataTest/graph-test2.txt");
         try {
-            importTestGraph(testGraph, testGraphFile);
-            TestGraph.colorGraphRLF(testGraph);
+            importTestGraph(testGraph, testGraphFile) ;
+            System.out.println("Nombre de couleurs : " + colorGraphRLF(testGraph)) ;
+            System.out.println(testColorationGraph(testGraph)) ;
             testGraph.setAttribute("ui.stylesheet", "node {size : 25px ;} node.color1 {fill-color : red ;}" 
             + " node.color2 {fill-color : blue ;}" 
             + " node.color3 {fill-color : green ;}"
