@@ -13,16 +13,53 @@ import exceptions.InvalidFileFormatException;
 
 public class TestGraph {
 
-    public static Node selectNextNodeToAdd(HashSet<Node> neighbors, HashSet<Node> nodeList) {
+    public static void main(String args[]) {
+        System.setProperty("org.graphstream.ui", "swing");
+
+        Graph testGraph = new SingleGraph("testGraph");
+        File testGraphFile = new File("sae/DataTest/graph-test19.txt");
+        try {
+            importTestGraph(testGraph, testGraphFile) ;
+            System.out.println("Nombre de couleurs : " + colorGraphRLF(testGraph) + " K-Max : " + testGraph.getAttribute("kMax")) ;
+            System.out.println("Nb conflits : " + testColorationGraph(testGraph)) ;
+            testGraph.setAttribute("ui.stylesheet", "node {size : 25px ; fill-color : gray ;} node.color1 {fill-color : red ;}" 
+            + " node.color2 {fill-color : blue ;}" 
+            + " node.color3 {fill-color : green ;}"
+            + " node.color4 {fill-color : orange ;}"
+            + " node.color5 {fill-color : pink ;}"
+            + " node.color6 {fill-color : purple ;}"
+            ) ;
+            testGraph.display();
+        }catch(FileNotFoundException ex) {
+            System.err.println(ex);
+        }catch(NumberFormatException ex) {
+            System.err.println(ex);
+        }catch(InvalidFileFormatException ex) {
+            System.err.println(ex);
+        }
+    }
+
+    /** 
+     * Selects the next node to add to the set of colored Nodes by getting the one with the highest number of common
+     * neighbors with the first node that was added to this color's set.
+     * 
+     * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently worked on
+     * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently worked on
+     * @return Node The node that has the highest number of common neighbors with the first node that was added and which is in setOfAddableNodes
+     * 
+     * @author Nathan LIEGEON
+     */
+    public static Node selectNextNodeToAdd(HashSet<Node> setOfNeighborsOfFirstNode, HashSet<Node> setOfAddableNodes) {
         HashMap<Node, Integer> nodeMap = new HashMap<>() ;
 
-        for (Node nodeInList : nodeList) {
+        for (Node nodeInList : setOfAddableNodes) {
             nodeMap.put(nodeInList, 0) ;
         }
 
-        for (Node node : neighbors) {
+        for (Node node : setOfNeighborsOfFirstNode) {
             for (Node neighborOfNode : node.neighborNodes().collect(Collectors.toSet())) {
-                if (nodeList.contains(neighborOfNode)) {
+                if (setOfAddableNodes.contains(neighborOfNode)) {
+                    // If not in map => Sets value to 1, else adds one to the value
                     nodeMap.merge(neighborOfNode, 1, Integer::sum) ;
                 }
             }
@@ -39,22 +76,47 @@ public class TestGraph {
         return max ;
     }
 
-    public static void addNodesToNodeList(Graph graph, HashMap<Integer, HashSet<Node>> colorMap, Integer color, HashSet<Node> neighbors, HashSet<Node> nodeList, Node nextNode) {
-        /**
-         * 
-         */
-        while (!nodeList.isEmpty()) {
-            nextNode = selectNextNodeToAdd(neighbors, nodeList) ;
+    /**
+     * Adds nodes the current color's set until there is no node left which can be added
+     *
+     * @param graph Graph from which you will add the nodes
+     * @param colorMap Hashmap storing for each color (Integer key) 
+     * the set of all nodes that have that color (HashSet<Node> value)
+     * @param Integer color The color currently being worked on
+     * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently worked on
+     * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently worked on
+     * 
+     * @author Nathan LIEGEON
+     */
+    public static void addNodesToSetOfAddableNodes(Graph graph, HashMap<Integer, HashSet<Node>> colorMap, 
+    Integer color, HashSet<Node> setOfNeighborsOfFirstNode, HashSet<Node> setOfAddableNodes) {
+        Node nextNode = null ;
+        while (!setOfAddableNodes.isEmpty()) {
+            nextNode = selectNextNodeToAdd(setOfNeighborsOfFirstNode, setOfAddableNodes) ;
             if (nextNode != null) {
                 colorMap.get(color).add(graph.getNode(nextNode.getId())) ;
-                nodeList.remove(nextNode) ;
-                nodeList.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
+                setOfAddableNodes.remove(nextNode) ;
+                setOfAddableNodes.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
             }
         }
     }
 
-    public static Node loadGraphNodesIntoNodeList(Graph newGraph, HashSet<Node> nodeList, Node currentNode) {
-        for (Node node : newGraph) {
+    
+    /** 
+     * Loads every single node from the graph into setOfAddableNodes for future manipulations.
+     * While adding them it also looks for the one with the highest degree then returns it at the end.
+     * Can return null if no node is loaded into the list.
+     *
+     * @param graph Graph from which you will load the nodes
+     * @param setOfAddableNodes The set in which you will load all of graph's nodes
+     * @return Node returns the node with the highest degree, can be null.
+     * 
+     * @author Nathan LIEGEON
+     * 
+     */
+    public static Node loadGraphNodesIntoSetOfAddableNodes(Graph graph, HashSet<Node> setOfAddableNodes) {
+        Node currentNode = null ;
+        for (Node node : graph) {
             if (currentNode == null) {
                 currentNode = node ;
             }
@@ -64,38 +126,44 @@ public class TestGraph {
                     currentNode = node ;
                 }
             }
-            nodeList.add(node) ;
+            setOfAddableNodes.add(node) ;
         }
 
         return currentNode ;
     }
 
+    
+    /** 
+     * Applique l'algorithme RLF (Recursive Largest First) pour colorier graph
+     * (Malgré son nom l'implémentation est ici itérative)
+     * 
+     * @param graph graph à colorier
+     * @return int nombre de couleurs utilisées pour colorier graph
+     * 
+     * @author Nathan LIEGEON
+     */
     public static int colorGraphRLF(Graph graph) {
-        /**
-         * 
-         */
+
         Graph newGraph = Graphs.clone(graph) ;
         HashMap<Integer, HashSet<Node>> colorMap = new HashMap<>() ;
-        HashSet<Node> nodeList ;
-        HashSet<Node> neighbors ;
-        Node currentNode ;
-        Node nextNode ;
+        HashSet<Node> setOfAddableNodes ;
+        HashSet<Node> setOfNeighborsOfFirstNode ;
+        Node firstNodeOfThisColor ;
         
         int color = 1 ;
 
         while (newGraph.getNodeCount() != 0) {
-            currentNode = null ;
-            nextNode = null ;
+            firstNodeOfThisColor = null ;
             colorMap.put(color, new HashSet<>()) ;
-            nodeList = new HashSet<>() ;
+            setOfAddableNodes = new HashSet<>() ;
 
-            currentNode = loadGraphNodesIntoNodeList(newGraph, nodeList, currentNode) ;
-            colorMap.get(color).add(graph.getNode(currentNode.getId())) ;
+            firstNodeOfThisColor = loadGraphNodesIntoSetOfAddableNodes(newGraph, setOfAddableNodes) ;
+            colorMap.get(color).add(graph.getNode(firstNodeOfThisColor.getId())) ;
 
-            neighbors = (HashSet<Node>) currentNode.neighborNodes().collect(Collectors.toSet()) ;
-            nodeList.remove(currentNode) ;
-            nodeList.removeAll(neighbors) ;
-            addNodesToNodeList(graph, colorMap, color, neighbors, nodeList, nextNode) ;
+            setOfNeighborsOfFirstNode = (HashSet<Node>) firstNodeOfThisColor.neighborNodes().collect(Collectors.toSet()) ;
+            setOfAddableNodes.remove(firstNodeOfThisColor) ;
+            setOfAddableNodes.removeAll(setOfNeighborsOfFirstNode) ;
+            addNodesToSetOfAddableNodes(graph, colorMap, color, setOfNeighborsOfFirstNode, setOfAddableNodes) ;
 
             //Ajout des couleurs dans le vrai graphe 
             for (Node coloringNode : colorMap.get(color)) {
@@ -111,45 +179,25 @@ public class TestGraph {
         return color - 1 ;
     }
 
+    /**
+     * Requires nodes to have the attribute "color".
+     * Checks if the coloration worked.
+     * 
+     * @param graph Graph that will be tested.
+     * @return int number of nodes which are adjacent to another node with the same color.
+     */
     public static int testColorationGraph(Graph graph) {
-        int nbProbleme = 0 ;
+        int nbProblems = 0 ;
         for (Node node : graph) {
             for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
                 if (node.getAttribute("color") == neighbor.getAttribute("color")) {
-                    nbProbleme++ ;
+                    nbProblems++ ;
                     System.out.println("Probleme entre " + node + " et " + neighbor) ;
                 }
             }
         }   
 
-        return nbProbleme ;
-    }
-
-
-    public static void main(String args[]) {
-        System.setProperty("org.graphstream.ui", "swing");
-
-        Graph testGraph = new SingleGraph("testGraph");
-        File testGraphFile = new File("sae/DataTest/graph-test2.txt");
-        try {
-            importTestGraph(testGraph, testGraphFile) ;
-            System.out.println("Nombre de couleurs : " + colorGraphRLF(testGraph)) ;
-            System.out.println(testColorationGraph(testGraph)) ;
-            testGraph.setAttribute("ui.stylesheet", "node {size : 25px ;} node.color1 {fill-color : red ;}" 
-            + " node.color2 {fill-color : blue ;}" 
-            + " node.color3 {fill-color : green ;}"
-            + " node.color4 {fill-color : orange ;}"
-            + " node.color5 {fill-color : pink ;}"
-            + " node.color6 {fill-color : gray ;}"
-            ) ;
-            testGraph.display();
-        }catch(FileNotFoundException ex) {
-            System.err.println(ex);
-        }catch(NumberFormatException ex) {
-            System.err.println(ex);
-        }catch(InvalidFileFormatException ex) {
-            System.err.println(ex);
-        }
+        return nbProblems ;
     }
 
     public static void importTestGraph(Graph graph, File file) throws FileNotFoundException, NumberFormatException, InvalidFileFormatException {
@@ -160,6 +208,7 @@ public class TestGraph {
             lineScanner = new Scanner(file);
             setTestGraphInfos(lineScanner, testGraphInfo);
             System.out.println("K-max : " + testGraphInfo.getKMax() + " | nbNodes : " + testGraphInfo.getNbNodes());
+            graph.setAttribute("kMax", testGraphInfo.getKMax()) ;
             setTestGraphNodes(graph, testGraphInfo.getNbNodes());
             System.out.println("Nodes importation OK");
             setTestGraphEdges(graph, lineScanner, testGraphInfo.getNbNodes());
