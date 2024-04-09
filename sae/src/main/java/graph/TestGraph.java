@@ -2,11 +2,13 @@ package graph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.* ; 
+import java.util.stream.*;
 
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
-import java.util.* ;
-import java.util.stream.*;
+import org.graphstream.algorithm.*;
+import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
 
 // Exceptions
 import exceptions.InvalidFileFormatException;
@@ -17,11 +19,16 @@ public class TestGraph {
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph testGraph = new SingleGraph("testGraph");
-        File testGraphFile = new File("sae/DataTest/graph-test19.txt");
+        File testGraphFile = new File("sae/DataTest/graph-test1.txt") ;
         try {
             importTestGraph(testGraph, testGraphFile) ;
-            System.out.println("Nombre de couleurs : " + colorGraphRLF(testGraph) + " K-Max : " + testGraph.getAttribute("kMax")) ;
-            System.out.println("Nb conflits : " + testColorationGraph(testGraph)) ;
+            if ((int) testGraph.getAttribute("kMax") != 2) {
+                System.out.println(" K-Max : " + testGraph.getAttribute("kMax") + " | Nombre de couleurs : " + colorGraphRLF(testGraph)) ;
+            }
+            else {
+                System.out.println("Worked ? : " + twoColorGraph(testGraph)) ;
+            }
+
             testGraph.setAttribute("ui.stylesheet", "node {size : 25px ; fill-color : gray ;} node.color1 {fill-color : red ;}" 
             + " node.color2 {fill-color : blue ;}" 
             + " node.color3 {fill-color : green ;}"
@@ -49,7 +56,7 @@ public class TestGraph {
      * 
      * @author Nathan LIEGEON
      */
-    public static Node selectNextNodeToAdd(HashSet<Node> setOfNeighborsOfFirstNode, HashSet<Node> setOfAddableNodes) {
+    public static Node selectNextNodeToAdd(Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
         HashMap<Node, Integer> nodeMap = new HashMap<>() ;
 
         for (Node nodeInList : setOfAddableNodes) {
@@ -88,8 +95,8 @@ public class TestGraph {
      * 
      * @author Nathan LIEGEON
      */
-    public static void addNodesToSetOfAddableNodes(Graph graph, HashMap<Integer, HashSet<Node>> colorMap, 
-    Integer color, HashSet<Node> setOfNeighborsOfFirstNode, HashSet<Node> setOfAddableNodes) {
+    public static void addNodesToSetOfAddableNodes(Graph graph, Map<Integer, HashSet<Node>> colorMap, 
+    Integer color, Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
         Node nextNode = null ;
         while (!setOfAddableNodes.isEmpty()) {
             nextNode = selectNextNodeToAdd(setOfNeighborsOfFirstNode, setOfAddableNodes) ;
@@ -114,7 +121,7 @@ public class TestGraph {
      * @author Nathan LIEGEON
      * 
      */
-    public static Node loadGraphNodesIntoSetOfAddableNodes(Graph graph, HashSet<Node> setOfAddableNodes) {
+    public static Node loadGraphNodesIntoSetOfAddableNodes(Graph graph, Set<Node> setOfAddableNodes) {
         Node currentNode = null ;
         for (Node node : graph) {
             if (currentNode == null) {
@@ -134,11 +141,11 @@ public class TestGraph {
 
     
     /** 
-     * Applique l'algorithme RLF (Recursive Largest First) pour colorier graph
-     * (Malgré son nom l'implémentation est ici itérative)
+     * Colors the graph using the RLF (Recursive Larget First) Algorithm
+     * Implemented iteratively contrary to its name, could be modified later.
      * 
-     * @param graph graph à colorier
-     * @return int nombre de couleurs utilisées pour colorier graph
+     * @param graph Graph which will be colored
+     * @return Number of colors used
      * 
      * @author Nathan LIEGEON
      */
@@ -150,9 +157,10 @@ public class TestGraph {
         HashSet<Node> setOfNeighborsOfFirstNode ;
         Node firstNodeOfThisColor ;
         
-        int color = 1 ;
+        int color = 0 ;
 
         while (newGraph.getNodeCount() != 0) {
+            color++ ;
             firstNodeOfThisColor = null ;
             colorMap.put(color, new HashSet<>()) ;
             setOfAddableNodes = new HashSet<>() ;
@@ -165,18 +173,75 @@ public class TestGraph {
             setOfAddableNodes.removeAll(setOfNeighborsOfFirstNode) ;
             addNodesToSetOfAddableNodes(graph, colorMap, color, setOfNeighborsOfFirstNode, setOfAddableNodes) ;
 
-            //Ajout des couleurs dans le vrai graphe 
+            //Adds the colors to the real graph
             for (Node coloringNode : colorMap.get(color)) {
                 coloringNode.setAttribute("color", color) ;
                 coloringNode.setAttribute("ui.class", "color" + color) ;
                 newGraph.removeNode(newGraph.getNode(coloringNode.getId())) ;
             }
-            color++ ;
             
         }
 
 
-        return color - 1 ;
+        return color ;
+    }
+
+    /**
+     * Colors the graph with only 2 colors
+     * The graph has to be 2-Colorable, else the algorithm will stop once two adjacent nodes have the same color.
+     * 
+     * @param node starting Node that will be colored
+     * @param color color that will be used
+     * @return boolean true if the coloration succeeded, false if it didn't
+     * 
+     * @author Nathan LIEGEON
+     */
+    public static boolean twoColorGraph(Graph graph) {
+        ConnectedComponents graphComponents = new ConnectedComponents(graph) ;
+        graphComponents.compute() ;
+        boolean bool = true ;
+
+        // Couldn't find a better way to isolate a random Node in every Connected Component
+        //Might be highly unoptimized, need to look more into it
+        for (ConnectedComponent thisComponent : graphComponents) {
+            if (bool) {
+                bool = recursiveTwoColoringNode(thisComponent.getNodeSet().iterator().next(), 1, true) ;
+            }
+        }
+        
+        return bool ;
+    }
+
+    /**
+     * Recursively 2-colors startingNode's connected component by coloring startingNode with currentColor then calling the function on all of startingNodes' neighbors.
+     * 
+     * @param startingNode Node that will be colored
+     * @param color Color that will be applied (1 or 2)
+     * @param bool true if there is no Problem (Node having neighbor with same color), else false
+     * @return boolean true if the coloration encountered no problem, else false
+     * 
+     * @author Nathan LIEGEON
+     */
+    public static boolean recursiveTwoColoringNode(Node startingNode, Integer initialColor, boolean bool) {
+        if (bool) {
+            
+            int nodeColor = (int) startingNode.getAttribute("color") ;
+            if (nodeColor == 0) {
+                startingNode.setAttribute("color", initialColor) ;
+                startingNode.setAttribute("ui.class", "color" + initialColor) ;
+                
+                for (Node neighbor : startingNode.neighborNodes().collect(Collectors.toSet())) {
+                    if ((int) neighbor.getAttribute("color") == initialColor) {
+                        bool = false ;
+                    }
+                    else {
+                        bool = recursiveTwoColoringNode(neighbor, initialColor%2 + 1, bool) ;
+                    }
+                }
+            }
+        }
+
+        return bool ;
     }
 
     /**
@@ -185,6 +250,8 @@ public class TestGraph {
      * 
      * @param graph Graph that will be tested.
      * @return int number of nodes which are adjacent to another node with the same color.
+     * 
+     * @author Nathan LIEGEON
      */
     public static int testColorationGraph(Graph graph) {
         int nbProblems = 0 ;
@@ -295,7 +362,8 @@ public class TestGraph {
             try {
                 Node n = graph.addNode(id);
                 n.setAttribute("ui.label", id);
-            }catch(IdAlreadyInUseException iaiue) { // C'est pas censé arrivé, mais on sait jamais, si on réutilise ailleurs...
+                n.setAttribute("color", 0) ;
+            }catch(IdAlreadyInUseException iaiue) { // C'est pas censé arriver, mais on sait jamais, si on réutilise ailleurs...
                 System.err.println(id + " est deja utilise");
             }
         }
