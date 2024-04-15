@@ -1,16 +1,31 @@
 package graph;
 
+//-- Import Java
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+//-- Import GraphStream
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 
-// Exceptions
+//-- Import Exceptions
 import exceptions.InvalidFileFormatException;
 
-public class TestGraph {
+/**
+ * TestGraph is the basic class to handle the "graph-testX.txt" files.
+ * @author Luc le Manifik
+ */
+public class TestGraph extends SingleGraph {
+
+    private String id;
+    private int kMax;
+    private int nbNodes;
+
+    public TestGraph(String id) {
+        super(id);
+    }
+    // Mettre 
 
     public static void main(String args[]) {
         System.setProperty("org.graphstream.ui", "swing");
