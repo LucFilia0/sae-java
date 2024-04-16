@@ -3,7 +3,7 @@ package util;
 import exceptions.InvalidLatitudeDirectionException;
 
 /**
- * Class extending {@link Coordinate}
+ * Class extending {@link Coordinate Coordinate}
  * Handles directions which can only be can only be 'N' for Nord (North) or 'S' for Sud (South)
  * 
  * @author Nathan LIEGEON
@@ -12,7 +12,7 @@ public class Latitude extends Coordinate {
     protected char direction ;
 
     /**
-     * Creates a Latitude object, see Coordinate for how the first 3 fields are handled
+     * Creates a Latitude object, see {@link Coordinate} for how the first 3 fields are handled
      * 
      * @param degree 
      * @param minutes

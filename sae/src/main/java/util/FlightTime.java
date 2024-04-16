@@ -3,7 +3,7 @@ package util;
 import exceptions.InvalidTimeException;
 
 /**
- * Class handling hours and minutes only for easier access and manipulation
+ * Class handling hours and minutes only for easier access and manipulation in the {@link graph.Flight Flight class}
  * 
  * @author Nathan LIEGEON
  */

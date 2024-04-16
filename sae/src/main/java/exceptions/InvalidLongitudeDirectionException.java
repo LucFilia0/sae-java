@@ -1,8 +1,7 @@
 package exceptions;
 
 /**
- * Error managing a wrong direction being entered in a Longitude object
- * @see Longitude
+ * Error managing a wrong direction being entered in a {@link util.Longitude Longitude} object
  * 
  * @author Nathan LIEGEON
  */
