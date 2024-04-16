@@ -4,7 +4,17 @@ import org.graphstream.graph.implementations.*;
 import util.Latitude ;
 import util.Longitude ;
 
+/**
+ * Class managing Nodes representing the airports
+ */
 public class Airport extends SingleNode {
+
+    /**
+     * Instantiates an Airport, use AirportFactory to create one
+     * @see AirportFactory
+     * @param graph
+     * @param id
+     */
     protected Airport(AbstractGraph graph, String id) {
         super(graph, id) ;
     }

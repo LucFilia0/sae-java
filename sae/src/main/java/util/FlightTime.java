@@ -2,12 +2,26 @@ package util;
 
 import exceptions.InvalidTimeException;
 
-public class Time {
+/**
+ * Class handling hours and minutes only for easier access and manipulation
+ * 
+ * @author Nathan LIEGEON
+ */
+public class FlightTime {
     private int hour ;
     private int min ;
 
-    public Time(int hour, int min) {
-        // hour et min vont de 0 à 59, mis à 0 sinon + InvalidTimeException
+    /**
+     * Instantiates a FlightTime object
+     * 
+     * @param hour Values go from 0 to 23
+     * @param min Values go from 0 to 59
+     * 
+     * @throws InvalidTimeException
+     * 
+     * @author Nathan LIEGEON
+     */
+    public FlightTime(int hour, int min) {
         try {
             this.setHour(hour) ;
             this.setMinute(min) ;
@@ -21,11 +35,22 @@ public class Time {
 
     }
 
-
+    /**
+     * Getter for the hour field
+     * 
+     * @return the hour of the object
+     * 
+     */
     public int getHour() {
         return this.hour ;
     }
 
+    /**
+     * Setter for the hour field
+     * 
+     * @param hour Values go from 0 to 23
+     * @throws InvalidTimeException
+     */
     public void setHour(int hour) throws InvalidTimeException {
         this.hour = hour ;
         if (hour < 0 || hour > 23) {
@@ -33,16 +58,28 @@ public class Time {
         }
     }
 
+    /**
+     * Getter for the min field
+     * 
+     * @return the min of the object
+     */
     public int getMinute() {
         return this.min;
     }
 
+    /**
+     * Setter for the min field
+     * 
+     * @param min Values go from 0 to 59
+     * @throws InvalidTimeException
+     */
     public void setMinute(int min) throws InvalidTimeException {
         this.min = min;
         if (min < 0 || min > 59) {
             throw new InvalidTimeException(this) ;
         }
     }
+
 
     public String toString() {
         return this.getHour() + "h" + this.getMinute() ;
