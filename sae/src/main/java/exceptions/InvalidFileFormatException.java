@@ -1,12 +1,15 @@
 package exceptions;
 
+/**
+ * Throwed if the file which is currently read contains a format error. Like a missing information, for example.
+ */
 public class InvalidFileFormatException extends Error {
     
     public InvalidFileFormatException() {
-        super("Le fichier source est invalide, sori");
+        super("Source file does not match the required format of data");
     }
 
-    public InvalidFileFormatException(int line) {
-        super("Le fichier source est invalide : ligne : " + line);
+    public InvalidFileFormatException(String comment) {
+        super("Source file does not match the required format of data : " + comment);
     }
 }

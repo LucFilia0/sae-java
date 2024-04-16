@@ -4,9 +4,12 @@ import org.graphstream.graph.implementations.*;
 
 import exceptions.* ;
 import util.* ;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class App {
     public static void main(String[] args) {
+        /*
         // Type de rendu + Création du Graph
         System.setProperty("org.graphstream.ui", "swing");
         Graph flightMap = new SingleGraph("SAE") ;
@@ -44,6 +47,22 @@ public class App {
 
         catch(InvalidLongitudeDirectionException ILoDE) {
             System.err.println(ILoDE) ;
+        }
+        */
+
+        System.setProperty("org.graphstream.ui", "swing");
+
+        TestGraph ouioui = new TestGraph("ouioui");
+        File file = new File("sae/DataTest/graph-test3.txt");
+        try {
+            ouioui.importDataFromFile(file);
+            ouioui.display();
+        }catch(FileNotFoundException fnfe) {
+            System.err.println(fnfe);
+        }catch(NumberFormatException nfe) {
+            System.out.println(nfe);
+        }catch(InvalidFileFormatException iffe) {
+            System.err.println(iffe);
         }
     }
 }
