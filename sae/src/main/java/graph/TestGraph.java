@@ -30,7 +30,10 @@ public class TestGraph extends SingleGraph {
 
     /**
      * This constructor creates a new TestGraph.
+     * 
      * @param id (String) - The identifier of the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     TestGraph(String id) {
         super(id);
@@ -45,7 +48,10 @@ public class TestGraph extends SingleGraph {
     /**
      * This function prints the informations of its TestGraph.
      * It shows the graph's identifier, kMax and number of nodes.
+     * 
      * @return the String which contains those informations.
+     * 
+     * @author Luc le Manifik
      */
     public String toString() {
         return "-- TestGraph\nIdentifier : " + super.id + "\nkMax : " + this.kMax + "\nNumber of nodes : " + this.nbNodes + "/" + this.nbMaxNodes + "\nNumber of edges : " + this.nbEdges;
@@ -55,6 +61,7 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Returns the identifier of the TestGraph.
+     * 
      * @return identifier (String)
      */
     public String getId() {
@@ -63,6 +70,7 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Returns the value of kMax, the maximum number of allowed colors.
+     * 
      * @return kMax (int)
      */
     public int getKMax() {
@@ -71,6 +79,7 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Returns the value of the expected amount of nodes in the GraphTest.
+     * 
      * @return nbMaxNodes (int)
      */
     public int getNbMaxNodes() {
@@ -79,6 +88,7 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Returns the number of nodes implemented in the TestGraph.
+     * 
      * @return nbNodes (int)
      */
     public int getNbNodes() {
@@ -87,6 +97,7 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Returns the number of edges implemented in the TestGraph.
+     * 
      * @return nbEdges (int)
      */
     public int getNbEdges() {
@@ -97,8 +108,11 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Sets the value of kMax, which is the maximum amount of colors of the TestGraph.
+     * 
      * @param kMax (int) - The new value of kMax.
      * @throws InvalidEntryException Throwed if the wanted value of kMax is inferior to 0.
+     * 
+     * @author Luc le Manifik
      */
     public void setKMax(int kMax) throws InvalidEntryException {
         if(kMax < 0) {
@@ -109,8 +123,11 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Sets the value of the expected amount of nodes in the TestGraph.
+     * 
      * @param nbMaxNodes (int) - The new value of nbMaxNodes.
      * @throws InvalidEntryException Throwed if the wanted value of nbMaxValues is inferior to 0.
+     * 
+     * @author Luc le Manifik
      */
     public void setNbMaxNodes(int nbMaxNodes) throws InvalidEntryException {
         if(nbMaxNodes < 0) {
@@ -121,8 +138,11 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Sets the value the number of nodes currently implemented in the TestGraph.
+     * 
      * @param nbNodes (int) - The new value of nbNodes.
      * @throws InvalidEntryException Throwed if the wanted value of nbNodes is inferior to 0.
+     * 
+     * @author Luc le Manifik
      */
     public void setNbNodes(int nbNodes) throws InvalidEntryException {
         if(nbNodes < 0) {
@@ -133,8 +153,11 @@ public class TestGraph extends SingleGraph {
 
     /**
      * Sets the value the number of edges currently implemented in the TestGraph.
+     * 
      * @param nbEdges (int) - The new value of nbEdges.
      * @throws InvalidEntryException Throwed if the wanted value of nbEdges is inferior to 0.
+     * 
+     * @author Luc le Manifik
      */
     public void setNbEdges(int nbEdges) throws InvalidEntryException {
         if(nbNodes < 0) {
@@ -149,10 +172,13 @@ public class TestGraph extends SingleGraph {
      * This function sets the TestGraph with the datas imported from the file specified in parameter.
      * It creates the nodes, the edges, and sets the attributes of the TestGraph, like its maximum number of nodes, etc...
      * Also shows the informations of the TestGraph in the console.
+     * 
      * @param file (java.io.File) - The file from where are imported all the informations of the TestGraph.
      * @throws FileNotFoundException Throwed if the file passed in parameter is not found, or does not exist.
      * @throws NumberFormatException Throwed if the cast from (String) to (int) occures with an error. It can means that the String is not in required format (presence of spaces or symbols).
      * @throws InvalidFileFormatException Throwed if the source file does not meet the required format. Like a missing information on a line.
+     * 
+     * @author Luc le Manifik
      */
     public void importDataFromFile(File file) throws FileNotFoundException, NumberFormatException, InvalidFileFormatException {
 
@@ -175,10 +201,13 @@ public class TestGraph extends SingleGraph {
 
     /**
      * This method sets the maximum number of nodes, and the maximum amount of color of the TestGraph, by reading the Scanner which is passed in parameter.
+     * 
      * @param lineScanner (java.util.scanner) - The scanner which is currently reading the source file, or any support that contains the informations, in the correct format.
      * @throws NumberFormatException Throwed if the cast from (String) to (int) occures with an error. It can means that the String is not in required format (presence of spaces or symbols).
      * @throws InvalidFileFormatException Throwed if the source file does not meet the required format. Like a missing information on a line.
      * @throws InvalidEntryException Throwed if the entered value of some functions is inferior to 0.
+     * 
+     * @author Luc le Manifik
      */
     private void setTestGraphInfosFrom(Scanner lineScanner) throws NumberFormatException, InvalidFileFormatException, InvalidEntryException {
         
@@ -254,11 +283,15 @@ public class TestGraph extends SingleGraph {
     }
 
     /**
-     * This method creates the nodes and the edges of the TestGraph, throught the scanner passed in parameter. The scanner is ideally reading the source file, or any other support where the required informations are correctly written.
+     * This method creates the nodes and the edges of the TestGraph, throught the scanner passed in parameter.
+     * The scanner is ideally reading the source file, or any other support where the required informations are correctly written.
+     * 
      * @param lineScanner (java.util.scanner) - The scanner which is currently reading the source file, or any support that contains the informations, in the correct format.
      * @throws InvalidFileFormatException Throwed if the source file does not meet the required format. Like a missing information on a line.
      * @throws NumberFormatException Throwed if the cast from (String) to (int) occures with an error. It can means that the String is not in required format (presence of spaces or symbols).
      * @throws InvalidEntryException Throwed if the entered value of some functions is inferior to 0. Catched in setTestGraphInfosFrom().
+     * 
+     * @author Luc le Manifik
      */
     @SuppressWarnings("resource")
     private void setTestGraphFrom(Scanner lineScanner) throws InvalidFileFormatException, NumberFormatException, InvalidEntryException {
