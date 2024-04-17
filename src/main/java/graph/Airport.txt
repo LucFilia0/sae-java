@@ -1,0 +1,18 @@
+package graph;
+
+import org.graphstream.graph.implementations.*;
+import util.Latitude ;
+import util.Longitude ;
+
+public class Airport extends SingleNode {
+    protected Airport(AbstractGraph graph, String id) {
+        super(graph, id) ;
+    }
+
+    public void setAirportAttributes(String name, String location, Latitude latitude, Longitude longitude) {
+        this.setAttribute("name", name); // -> The name of the Airport
+        this.setAttribute("airportLocation", location); // -> The location/city of the Airport
+        this.setAttribute("latitude", latitude);  // -> The latitude of the Airport
+        this.setAttribute("longitude", longitude) ; // -> The longitude of the Airport
+    }
+}
