@@ -397,6 +397,7 @@ public class Flight extends SingleNode {
                 if(timeGap < timeSecurity) {
                     explode = true;
                 }
+
             }
         }
 

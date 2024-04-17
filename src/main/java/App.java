@@ -25,10 +25,10 @@ public class App {
 
         
         try {
-            as.importAirportsFromFile(new File("sae/DataTest/aeroports.csv"));
-            fig.importFlightsFromFile(new File("sae/DataTest/vol-test4.csv"), as, timeSecurity);
+            as.importAirportsFromFile(new File("DataTest/aeroports.csv"));
+            fig.importFlightsFromFile(new File("DataTest/vol-test4.csv"), as, timeSecurity);
             
-            as.showAllAirports();
+            //as.showAllAirports();
         }catch(FileNotFoundException fnfe) {
             System.err.println(fnfe);
         }catch(NumberFormatException nfe) {

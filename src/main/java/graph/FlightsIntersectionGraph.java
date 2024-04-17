@@ -204,7 +204,6 @@ public class FlightsIntersectionGraph extends SingleGraph {
                 onfe.printStackTrace();
             } */
             try {
-                System.out.println(idFlight + " | " + e.getId());
                 if(flight.isBooming((Flight)e, timeSecurity)) {
                     this.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
                 }
@@ -213,7 +212,6 @@ public class FlightsIntersectionGraph extends SingleGraph {
                 try {
                     throw onfe;
                 } catch (ObjectNotFoundException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             }
