@@ -15,6 +15,7 @@ import org.graphstream.graph.implementations.SingleGraph;
 
 import java.io.FileNotFoundException;
 
+import exceptions.InvalidEntryException;
 import exceptions.InvalidFileFormatException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
@@ -54,10 +55,12 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * @throws FileNotFoundException Throwed if the file is not found or does not exist.
      * @throws NumberFormatException Throwed if the cast from (String) to (int) is not done correctly.
      * @throws InvalidTimeException Throwed if the departureTime values are not correct.
+     * @throws ObjectNotFoundException Throwed if the searched Airport is not found.
+     * @throws InvalidEntryException Throwed if the values passed in the Flights's constructor are not correct.
      * 
      * @author Luc le Manifik
      */
-    public void importFlightsFromFile(File flightsFile, AirportSet airportSet, double timeSecurity) throws FileNotFoundException, NumberFormatException, InvalidTimeException, ObjectNotFoundException {
+    public void importFlightsFromFile(File flightsFile, AirportSet airportSet, double timeSecurity) throws FileNotFoundException, NumberFormatException, InvalidTimeException, ObjectNotFoundException, InvalidEntryException {
         
         Scanner scanLine = null;
 
@@ -91,6 +94,9 @@ public class FlightsIntersectionGraph extends SingleGraph {
                 }catch(ObjectNotFoundException onfe) {
                     scanLine.close();
                     throw onfe;
+                }catch(InvalidEntryException iee) {
+                    scanLine.close();
+                    throw iee;
                 }
             }
         }
@@ -107,10 +113,11 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * @throws NumberFormatException Throwed if the cast from (String) to (int) goes wrong.
      * @throws InvalidTimeException Throwed if the data on the departure time are incorrect.
      * @throws ObjectNotFoundException Throwed if the research by the name of the Airport have found nothing (The key is incorrect or the Airport does not exist). 
+     * @throws InvalidEntryException Throwed if the arguments passed by the Flight's constructor are not correct.
      * 
      * @author Luc le Manifik
      */
-    private Flight createFlightFrom(String line, AirportSet airportSet, int currentLine) throws InvalidFileFormatException, NumberFormatException, InvalidTimeException, ObjectNotFoundException {
+    private Flight createFlightFrom(String line, AirportSet airportSet, int currentLine) throws InvalidFileFormatException, NumberFormatException, InvalidTimeException, ObjectNotFoundException, InvalidEntryException {
 
         String okLine = line.replaceAll(" ", "");
 
@@ -186,23 +193,27 @@ public class FlightsIntersectionGraph extends SingleGraph {
             flight.setFlightAttributes(airportSet.getAirport(s_departure), airportSet.getAirport(s_arrival), departureTime, duration);
         }catch(ObjectNotFoundException onfe) {
             throw onfe;
+        }catch(InvalidEntryException iee) {
+            throw iee;
         }
 
         return flight;
     }
 
+    /**
+     * This function creates the edges of the FIG by adding an edge between two Flights if they are colliding.
+     * The collisions are checked by the isBooming() function.
+     * 
+     * @param flight ({@link graph.Flight graph.Flight}) - The Flight from which we are adding the collisions.
+     * @param timeSecurity (double) - The value, in MINUTES, of the threshold under which two Flights are in collision.
+     * @throws ObjectNotFoundException Throwed if the departure Airport or the arrival Airport of one of the two Flights is not found.
+     * 
+     * @author Luc le Manifik
+     */
     private void createCollisions(Flight flight, double timeSecurity) throws ObjectNotFoundException {
         String idFlight = flight.getId();
 
         this.nodes().forEach(e -> {
-            /* try {
-                if(flight.isBooming((Flight)e, timeSecurity)) {
-                    this.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
-                    System.out.println("BOOM");
-                }
-            }catch(ObjectNotFoundException onfe) {
-                onfe.printStackTrace();
-            } */
             try {
                 if(flight.isBooming((Flight)e, timeSecurity)) {
                     this.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());

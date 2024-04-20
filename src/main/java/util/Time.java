@@ -41,5 +41,15 @@ public class Time {
     public String toString() {
         return this.getHours() + "h" + this.getMinutes() ;
     }
+
+    /**
+     * Return the value of the Time in minutes.
+     * @return (int) - The value of the Time in minutes.
+     * 
+     * @author Luc le Manifik
+     */
+    public int getHourValueInMinutes() {
+        return this.h * 60 + this.min;
+    }
     
 }

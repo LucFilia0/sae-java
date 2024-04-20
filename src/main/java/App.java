@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import exceptions.InvalidCoordinateException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
+import exceptions.InvalidEntryException;
 
 public class App {
     public static void main(String[] args) {
@@ -26,7 +27,7 @@ public class App {
         
         try {
             as.importAirportsFromFile(new File("DataTest/aeroports.csv"));
-            fig.importFlightsFromFile(new File("DataTest/vol-test4.csv"), as, timeSecurity);
+            fig.importFlightsFromFile(new File("DataTest/vol-test8.csv"), as, timeSecurity);
             
             //as.showAllAirports();
         }catch(FileNotFoundException fnfe) {
@@ -39,6 +40,8 @@ public class App {
             System.err.println(ice);
         }catch(ObjectNotFoundException onfe) {
             System.err.println(onfe);
+        }catch(InvalidEntryException iee) {
+            System.err.println(iee);
         }
 
 
