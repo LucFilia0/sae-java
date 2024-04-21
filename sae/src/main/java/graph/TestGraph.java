@@ -428,4 +428,59 @@ public class TestGraph {
         }
         nodeScanner.close();
     }
+
+
+    private static int ColorationDsatur(Graph graph){
+        ArrayList< ListNodesDSATUR<Node> > ListNodes = new ArrayList< ListNodesDSATUR<Node> >();
+        for (Node node : graph.getEachNode()) {
+            ListNodes.add(new ListNodesDSATUR<Node>(node));
+        }
+
+        // Ascendent Sort
+        Collections.sort(ListNodes, new Comparator<ListNodesDSATUR<Node>>() {
+            
+            @Override
+            public int compare(ListNodesDSATUR<Node> n1, ListNodesDSATUR<Node> n2) {
+                if (n1.getDsatur() != n2.getDsatur()) {
+                    return Integer.compare(n2.getDsatur(), n1.getDsatur());
+                }
+                return Integer.compare(n2.getId(), n1.getId());
+            }
+        });
+
+        // Descendent Sort
+        Collections.sort(ListNodes, Collections.reverseOrder());
+
+
+        //First Node at first Color
+        ListNodes.get(0).setColor(1);
+        ListNodes.get(0).setUtil(1);
+        
+
+        for(int i = 1; i < ListNodes.size(); i++ ){
+            Node NodeP = MaxNodeDSATUR(ListNodes);
+            for(ListNodesDSATUR<Node> NodeAdj : ListNodes){
+                
+                if(NodeAdj.getNode().inListAdj(NodeP)){
+
+                    if(NodeAdj.getUtil()!= 0){
+
+                    }
+                }
+
+            }
+        }
+    }
+
+    private static Node MaxNodeDSATUR(ArrayList< ListNodesDSATUR<Node> > ListesNodes){
+        ListNodesDSATUR<Node> max = null;    
+        for (int i = 1; i < ListesNodes.size(); i++) {
+            if (ListesNodes.get(i).getDsatur() > max.getDsatur() && ListesNodes.get(i).getUtil() == 0ss) {
+                max = ListesNodes.get(i);
+            }
+        }
+
+        return max.getNode();
+
+    }
 }
