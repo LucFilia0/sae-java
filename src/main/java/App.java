@@ -10,6 +10,7 @@ import util.AirportSet;
 //-- Import Exceptions
 
 import java.io.FileNotFoundException;
+
 import exceptions.InvalidCoordinateException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
@@ -17,17 +18,23 @@ import exceptions.InvalidEntryException;
 
 public class App {
     public static void main(String[] args) {
+
+        //-- Definitions
+
+        double timeSecurity = 15;
+
+        //String testGraphFile = "data/graph-test1.txt";
+        String airportsFile = "data/aeroports.csv";
+        String flightsFile = "data/vol-test2.csv";
+
         System.setProperty("org.graphstream.ui", "swing");
 
         FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Yep");
         AirportSet as = new AirportSet();
-
-        double timeSecurity = 15;
-
         
         try {
-            as.importAirportsFromFile(new File("DataTest/aeroports.csv"));
-            fig.importFlightsFromFile(new File("DataTest/vol-test2.csv"), as, timeSecurity);
+            as.importAirportsFromFile(new File(airportsFile));
+            fig.importFlightsFromFile(new File(flightsFile), as, timeSecurity);
             
             //as.showAllAirports();
         }catch(FileNotFoundException fnfe) {
@@ -43,7 +50,6 @@ public class App {
         }catch(InvalidEntryException iee) {
             System.err.println(iee);
         }
-
 
         fig.display();
     }
