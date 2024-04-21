@@ -430,57 +430,144 @@ public class TestGraph {
     }
 
 
-    private static int ColorationDsatur(Graph graph){
-        ArrayList< ListNodesDSATUR<Node> > ListNodes = new ArrayList< ListNodesDSATUR<Node> >();
-        for (Node node : graph.getEachNode()) {
-            ListNodes.add(new ListNodesDSATUR<Node>(node));
+    private static int ColorationDsatur(Graph graph, int Kmax){
+        LinkedList<Node> ListNodes = new LinkedList<Node>();
+
+        int j;
+
+        for (Node node : graph) {
+            node.setAttribute("color", -1);
+            node.setAttribute("DSATUR", node.getDegree());
+            ListNodes.add(node);
         }
 
+        int[] color = new int[Kmax];
+
         // Ascendent Sort
-        Collections.sort(ListNodes, new Comparator<ListNodesDSATUR<Node>>() {
+        Collections.sort(ListNodes, new Comparator<Node>() {
             
             @Override
-            public int compare(ListNodesDSATUR<Node> n1, ListNodesDSATUR<Node> n2) {
-                if (n1.getDsatur() != n2.getDsatur()) {
-                    return Integer.compare(n2.getDsatur(), n1.getDsatur());
+            public int compare(Node n1, Node n2) {
+                if (n1.getAttribute("DSATUR") != n2.getAttribute("DSATUR")) {
+                    return Integer.compare((int)n1.getAttribute("DSATUR"),(int)n2.getAttribute("DSATUR"));
                 }
-                return Integer.compare(n2.getId(), n1.getId());
+                return Integer.compare((int)n1.getAttribute("id") ,(int)n2.getAttribute("id"));
             }
         });
 
         // Descendent Sort
         Collections.sort(ListNodes, Collections.reverseOrder());
 
+        recursifDSATUR(ListNodes, color);
 
-        //First Node at first Color
-        ListNodes.get(0).setColor(1);
-        ListNodes.get(0).setUtil(1);
-        
+        int max = 0;
+        for(Node node : graph){
+            if((int)node.getAttribute("Color") > max){
+                max = (int)node.getAttribute("Color");
+            }
+        }
 
-        for(int i = 1; i < ListNodes.size(); i++ ){
-            Node NodeP = MaxNodeDSATUR(ListNodes);
-            for(ListNodesDSATUR<Node> NodeAdj : ListNodes){
-                
-                if(NodeAdj.getNode().inListAdj(NodeP)){
+        return max;
+    }
 
-                    if(NodeAdj.getUtil()!= 0){
+    private static int nbConflit;
 
-                    }
+    
+
+    private static void recursifDSATUR(LinkedList<Node> ListNodes, int[] color){
+
+         if(ListNodes.isEmpty()){
+            return;
+         }
+         else{
+            
+            //Step1
+            Node nodeP = MaxNodeDSATUR(ListNodes);
+ 
+             //Initialisation of color tab
+            initColor(color);
+
+            //Step2
+            for(Node nodeAdj : nodeP.neighborNodes().collect(Collectors.toSet()) ){
+ 
+                 if((int)nodeAdj.getAttribute("Color") != -1){
+                     color[(int)nodeAdj.getAttribute("Color") - 1] = 1;
+                 }
+             }
+
+             int j = 0;
+
+             while(color[j] != 0 && j!= (color.length-1) ){ j++; };
+
+             if (j == (color.length-1) ){
+                 nodeP.setAttribute("Color", minGiveColorTab(color) );
+                 //il peu etre judicieux de rajouter un attribut conflit au avion qui risque de se percuter
+                 nbConflit = nbConflit + 1;
+             }
+             else{ nodeP.setAttribute("Color", color[j+1]); };
+
+
+            //Step3
+            for(Node nodeAdj : nodeP.neighborNodes().collect(Collectors.toSet()) ){
+                nodeAdj.setAttribute("DSATUR",0);
+                initColor(color);
+
+                for(Node nodeAdj2 : nodeAdj.neighborNodes().collect(Collectors.toSet())){
+                    if((int)nodeAdj2.getAttribute("Color") != -1){
+                        color[(int)nodeAdj2.getAttribute("Color") - 1] = 1;
+                    }    
                 }
 
+                nodeAdj.setAttribute("DSATUR", nbColorAdj(color));
             }
-        }
+
+            nodeP.removeAttribute("DSATUR");
+            ListNodes.remove(nodeP);
+
+            //Step4
+            recursifDSATUR(ListNodes,color);
+         }
     }
 
-    private static Node MaxNodeDSATUR(ArrayList< ListNodesDSATUR<Node> > ListesNodes){
-        ListNodesDSATUR<Node> max = null;    
+    private static int minGiveColorTab(int color[] ){
+        int min = color[0];
+        for(int i = 1; i < color.length ; i++){
+            if(color[i] < min ){
+                min = color[i];
+            }
+        }
+
+        return min;
+
+    }
+
+    private static void initColor(int[] color){
+        for(int j = 0; j < color.length; j++){
+            color [j] = 0;   
+    }
+}
+
+    private static int nbColorAdj(int[] color){
+        int nb = 0;
+        for(int i = 0; i< color.length; i++){
+            if(color[i] == 1){
+                nb ++;
+            }
+        }
+
+        return nb;
+
+    }
+
+    private static Node MaxNodeDSATUR( LinkedList<Node> ListesNodes){
+        Node max = ListesNodes.getFirst();
         for (int i = 1; i < ListesNodes.size(); i++) {
-            if (ListesNodes.get(i).getDsatur() > max.getDsatur() && ListesNodes.get(i).getUtil() == 0ss) {
-                max = ListesNodes.get(i);
+            if ( (int)ListesNodes.get(i).getAttribute("DSATUR") > (int)max.getAttribute("DSATUR")) {
+                max = ListesNodes.get(i) ;
             }
         }
-
-        return max.getNode();
+        return max;
 
     }
+    
 }
