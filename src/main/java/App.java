@@ -27,7 +27,7 @@ public class App {
         
         try {
             as.importAirportsFromFile(new File("DataTest/aeroports.csv"));
-            fig.importFlightsFromFile(new File("DataTest/vol-test8.csv"), as, timeSecurity);
+            fig.importFlightsFromFile(new File("DataTest/vol-test2.csv"), as, timeSecurity);
             
             //as.showAllAirports();
         }catch(FileNotFoundException fnfe) {

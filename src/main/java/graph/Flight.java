@@ -12,20 +12,49 @@ import org.graphstream.graph.implementations.*;
 
 //-- Import Exceptions
 
-import exceptions.ObjectNotFoundException;
 import exceptions.InvalidEntryException;
 
 
 /**
- * Flight extends SingleNode, from GraphStream, and is a node of a FlightsIntersectionGraph. 
+ * Flight extends SingleNode, from GraphStream, and is a node of a FlightsIntersectionGraph.
+ * 
+ * @implNote Uses the GraphStream attributes.
  * 
  * @author Luc le Manifik
  */
 public class Flight extends SingleNode {
     
+    // Can only be used with the "graph.addNode()" method.
     protected Flight(AbstractGraph graph, String id) {
         super(graph,id) ; // -> the name of the flight is its identifier
     }
+
+    //-- Flight Attributes
+
+    /**
+     * The String identifier that represents the departure Airport ({@link util.Airport util.Airport})
+     */
+    private final String DEPARTURE_AIRPORT = "departureAirport";
+
+    /**
+     * The String identifier that represents the departure Airport ({@link util.Airport util.Airport})
+     */
+    private final String ARRIVAL_AIRPORT = "arrivalAirport";
+
+    /**
+     * The String identifier that represents the departure Time ({@link util.Time util.Time})
+     */
+    private final String DEPARTURE_TIME = "departureTime";
+
+    /**
+     * The String identifier that represents the Flight's duration, in MINUTES (int)
+     */
+    private final String FLIGHT_DURATION = "flightDuration";
+
+    /**
+     * The String identifier that represents the Flight's layer (int)
+     */
+    private final String LAYER = "layer";
 
     /**
      * Initialize the attributes of a Flight.
@@ -68,80 +97,55 @@ public class Flight extends SingleNode {
      * Get the departure Airport of the Flight.
      * 
      * @return obj ({@link util.Airport util.Airport})
-     * @throws ObjectNotFoundException Throwed when the key does not match any object.
      * 
      * @author Luc le Manifik
      */
-    public Airport getDepartureAirport() throws ObjectNotFoundException {
-        Object obj = this.getAttribute("departureAirport");
-        if(obj == null) {
-            throw new ObjectNotFoundException();
-        }
-        return (Airport)obj;
+    public Airport getDepartureAirport() {
+        return (Airport)this.getAttribute(this.DEPARTURE_AIRPORT);
     }
 
     /**
      * Get the arrival Airport of the Flight.
      * 
      * @return obj ({@link util.Airport util.Airport})
-     * @throws ObjectNotFoundException Throwed when the key does not match any object.
      * 
      * @author Luc le Manifik
      */
-    public Airport getArrivalAirport() throws ObjectNotFoundException {
-        Object obj = this.getAttribute("arrivalAirport");
-        if(obj == null) {
-            throw new ObjectNotFoundException();
-        }
-        return (Airport)obj;
+    public Airport getArrivalAirport() {
+        return (Airport)this.getAttribute(this.ARRIVAL_AIRPORT);
     }
 
     /**
      * Get the departure Time of the Flight.
      * 
      * @return obj ({@link util.Time util.Time})
-     * @throws ObjectNotFoundException Throwed when the key does not match any object.
      * 
      * @author Luc le Manifik
      */
-    public Time getDepartureTime() throws ObjectNotFoundException {
-        Object obj = this.getAttribute("departureTime");
-        if(obj == null) {
-            throw new ObjectNotFoundException();
-        }
-        return (Time)obj;
+    public Time getDepartureTime() {
+        return (Time)this.getAttribute(this.DEPARTURE_TIME);
     }
 
     /**
      * Get the duration of the Flight (in MINUTES).
      * 
      * @return obj (int)
-     * @throws ObjectNotFoundException Throwed when the key does not match any object.
      * 
      * @author Luc le Manifik
      */
-    public int getFlightDuration() throws ObjectNotFoundException {
-        Object obj = this.getAttribute("flightDuration");
-        if(obj == null) {
-            throw new ObjectNotFoundException();
-        }
-        return (int)obj;
+    public int getFlightDuration() {
+        return (int)this.getAttribute(this.FLIGHT_DURATION);
     }
 
     /**
      * Get the layer on which is the Flight.
      * 
      * @return obj (int)
-     * @throws ObjectNotFoundException Throwed when the key does not match any object.
      * 
      * @author Luc le Manifik
      */
-    public int getLayer() throws ObjectNotFoundException {
-        Object obj = this.getAttribute("layer");
-        if(obj == null) {
-            throw new ObjectNotFoundException();
-        }
-        return (int)obj;
+    public int getLayer(){
+        return (int)this.getAttribute(this.LAYER);
     }
 
     //-- Flight Setters
@@ -158,7 +162,7 @@ public class Flight extends SingleNode {
         if(departureAirport == null) {
             throw new NullPointerException();
         }
-        this.setAttribute("departureAirport", departureAirport);
+        this.setAttribute(this.DEPARTURE_AIRPORT, departureAirport);
     }
 
     /**
@@ -173,7 +177,7 @@ public class Flight extends SingleNode {
         if(arrivalAirport == null) {
             throw new NullPointerException();
         }
-        this.setAttribute("arrivalAirport", arrivalAirport);
+        this.setAttribute(this.ARRIVAL_AIRPORT, arrivalAirport);
     }
 
     /**
@@ -188,7 +192,7 @@ public class Flight extends SingleNode {
         if(departureTime == null) {
             throw new NullPointerException();
         }
-        this.setAttribute("departureTime", departureTime);
+        this.setAttribute(this.DEPARTURE_TIME, departureTime);
     }
 
     /**
@@ -203,7 +207,7 @@ public class Flight extends SingleNode {
         if(flightDuration <= 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute("flightDuration", flightDuration);
+        this.setAttribute(this.FLIGHT_DURATION, flightDuration);
     }
 
     /**
@@ -215,7 +219,7 @@ public class Flight extends SingleNode {
      */
     public void setLayer(int layer) {
         if(layer >= 0) {
-            this.setAttribute("layer", layer);
+            this.setAttribute(this.LAYER, layer);
         }
     }
 
@@ -229,11 +233,9 @@ public class Flight extends SingleNode {
      * 
      * @return explode (boolean) - Returns "true" if the two Flights collide, else "false".
      * 
-     * @throws ObjectNotFoundException Throwed if the attributes of the Airports (departure or arrival) are empty or if the attribute's keys are incorrect.
-     * 
      * @author Luc le Manifik
      */
-    public boolean isBooming(Flight tangoCharlie, double timeSecurity) throws ObjectNotFoundException {
+    public boolean isBooming(Flight tangoCharlie, double timeSecurity) {
 
         /*
         * Steps :
@@ -267,21 +269,17 @@ public class Flight extends SingleNode {
             double crossX;
             // double crossY; -> never used
     
-            try {
-                depX_A = this.getDepartureAirport().getLongitude().getDecimalCoordinate();
-                depY_A = this.getDepartureAirport().getLatitude().getDecimalCoordinate();
-    
-                arrX_A = this.getArrivalAirport().getLongitude().getDecimalCoordinate();
-                arrY_A = this.getArrivalAirport().getLatitude().getDecimalCoordinate();
-    
-                depX_B = tangoCharlie.getDepartureAirport().getLongitude().getDecimalCoordinate();
-                depY_B = tangoCharlie.getDepartureAirport().getLatitude().getDecimalCoordinate();
-    
-                arrX_B = tangoCharlie.getArrivalAirport().getLongitude().getDecimalCoordinate();
-                arrY_B = tangoCharlie.getArrivalAirport().getLatitude().getDecimalCoordinate();
-            }catch(ObjectNotFoundException onfe) {
-                throw onfe;
-            }
+            depX_A = this.getDepartureAirport().getLongitude().getDecimalCoordinate();
+            depY_A = this.getDepartureAirport().getLatitude().getDecimalCoordinate();
+
+            arrX_A = this.getArrivalAirport().getLongitude().getDecimalCoordinate();
+            arrY_A = this.getArrivalAirport().getLatitude().getDecimalCoordinate();
+
+            depX_B = tangoCharlie.getDepartureAirport().getLongitude().getDecimalCoordinate();
+            depY_B = tangoCharlie.getDepartureAirport().getLatitude().getDecimalCoordinate();
+
+            arrX_B = tangoCharlie.getArrivalAirport().getLongitude().getDecimalCoordinate();
+            arrY_B = tangoCharlie.getArrivalAirport().getLatitude().getDecimalCoordinate();
     
     
             /*
@@ -380,12 +378,8 @@ public class Flight extends SingleNode {
                     double timeGap;
                     
                     // Flight duration (in MINUTES)
-                    try {
-                        flightDuration_A = this.getFlightDuration();
-                        flightDuration_B = tangoCharlie.getFlightDuration();
-                    }catch(ObjectNotFoundException onfe) {
-                        throw onfe;
-                    }
+                    flightDuration_A = this.getFlightDuration();
+                    flightDuration_B = tangoCharlie.getFlightDuration();
     
                     // Flight distance (on X_AXIS)
                     flightDistanceX_A = Math.absoluteValue(depX_A, arrX_A);
@@ -404,12 +398,8 @@ public class Flight extends SingleNode {
                     deltaX_A = Math.absoluteValue(crossX, depX_A);
                     deltaX_B = Math.absoluteValue(crossX, depX_B);
     
-                    try {
-                        crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getHourValueInMinutes(); // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
-                        crossTime_B = (deltaX_B / speedX_B) + tangoCharlie.getDepartureTime().getHourValueInMinutes();    
-                    }catch(ObjectNotFoundException onfe) {
-                        throw onfe;
-                    }
+                    crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getHourValueInMinutes(); // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
+                    crossTime_B = (deltaX_B / speedX_B) + tangoCharlie.getDepartureTime().getHourValueInMinutes();    
                     
                     timeGap = Math.absoluteValue(crossTime_A, crossTime_B); // The time difference between the two crossTime
     

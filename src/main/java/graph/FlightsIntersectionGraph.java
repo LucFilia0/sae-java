@@ -25,22 +25,95 @@ import exceptions.ObjectNotFoundException;
  * The FlightIntersectionGraph represents the collisions between Flights.
  * The nodes of the Graph are the Flights.
  * 
+ * @implNote Uses the GraphStream attributes.
+ * 
  * @author Luc le Manifik
  */
 public class FlightsIntersectionGraph extends SingleGraph {
 
+    //-- FIG Attributes
+
+    /**
+     * The String identifier that represents the number of Flights presents in the FIG (int)
+     */
+    private final String NB_FLIGHTS = "nbFlights";
+
+    /**
+     * The String identifier that represents the number of collisions in the FIG (int)
+     */
+    private final String NB_COLLISIONS = "nbCollisions";
+
     //-- FIG Constructor
 
+    /**
+     * Constructor of the FlightsIntersectionGraph (FIG) class.
+     * Creates a new FIG.
+     * 
+     * @param id (String) - The identifier of the FIG.
+     * 
+     * @author Luc le Manifik
+     */
     public FlightsIntersectionGraph(String id) {
         super(id); // -> The identifier of the FIG, in the parent class (SingleGraph)
-        this.setAttribute("nbFlights", 0); // -> The number of flights in the FIG
-        this.setAttribute("nbCollisions", 0); // -> The number of collisions in the FIG
+        this.setAttribute(this.NB_FLIGHTS, 0); // -> The number of flights in the FIG
+        this.setAttribute(this.NB_COLLISIONS, 0); // -> The number of collisions in the FIG
     }
 
     //-- FIG toString()
 
+    /**
+     * toString() FIG's method.
+     */
     public String toString() {
-        return "-- Flights Intersection Graph\nIdentifier : " + super.id;
+        return "-- Flights Intersection Graph\nIdentifier : " + super.id + "\nNumber of Flights : " + this.getNbFlights() + "\nNumber of collisions : " + this.getNbCollisions();
+    }
+
+    //-- FIG Getters
+
+    /**
+     * Get the number of Flights in the FIG.
+     * 
+     * @return (int) - The number of Flights in the FIG.
+     * 
+     * @author Luc le Manifik
+     */
+    public int getNbFlights() {
+        return (int)this.getAttribute(this.NB_FLIGHTS);
+    }
+
+    /**
+     * Get the number of collisions in the FIG.
+     * 
+     * @return (int) - The number of collisions in the FIG.
+     * 
+     * @author Luc le Manifik
+     */
+    public int getNbCollisions()  {
+        return (int)this.getAttribute(this.NB_COLLISIONS);
+    }
+
+    //-- FIG Setters
+
+    /**
+     * Set the number of Flights in the FIG.
+     * 
+     * @param nbFlights (int) - The new number of Flights in the FIG.
+     * 
+     * @author Luc le Manifik
+     */
+    private void setNbFlights(int nbFlights) {
+        this.setAttribute(this.NB_FLIGHTS, nbFlights);
+    }
+
+    /**
+     * Set the number of collisions in the FIG.
+     * 
+     * @param nbCollisions (int) - The new number of collisions in the FIG.
+     * 
+     * @author Luc le Manifik
+     */
+    private void setNbCollisions(int nbCollisions) {
+        this.setAttribute(this.NB_COLLISIONS, nbCollisions);
     }
 
     //-- FIG Importations
@@ -52,6 +125,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * @param flightsFile ({@link java.io.File java.io.File}) - The source file where the informations  on the Flights are stored.
      * @param airportSet ({@link util.AirportSet util.AirportSet}) - The Set that contains all the Airports.
      * @param timeSecurity (double) - The time Gap below which the Flights are considered like in collision (in MINUTES).
+     * 
      * @throws FileNotFoundException Throwed if the file is not found or does not exist.
      * @throws NumberFormatException Throwed if the cast from (String) to (int) is not done correctly.
      * @throws InvalidTimeException Throwed if the departureTime values are not correct.
@@ -81,7 +155,9 @@ public class FlightsIntersectionGraph extends SingleGraph {
             if(line.charAt(0) != '\n') { // Pass if the line is just a jump
                 try {
                     flight = this.createFlightFrom(line, airportSet, currentLine);
-                    this.createCollisions(flight, timeSecurity);
+                    this.setNbFlights(this.getNbFlights() + 1); // Increments the number of Flights
+
+                    this.createCollisions(flight, timeSecurity); // Creates all the collisions from this new Flight
                 }catch(InvalidFileFormatException iffe) {
                     scanLine.close();
                     throw iffe;
@@ -117,7 +193,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * 
      * @author Luc le Manifik
      */
-    private Flight createFlightFrom(String line, AirportSet airportSet, int currentLine) throws InvalidFileFormatException, NumberFormatException, InvalidTimeException, ObjectNotFoundException, InvalidEntryException {
+    private Flight createFlightFrom(String line, AirportSet airportSet, int currentLine) throws InvalidFileFormatException, NumberFormatException, InvalidTimeException, ObjectNotFoundException , InvalidEntryException {
 
         String okLine = line.replaceAll(" ", "");
 
@@ -133,6 +209,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
 
         while(scanData.hasNext()) {
             string_attribute = scanData.next(); // store the current Flight's data (name, then departureAirport, then ...)
+            string_attribute = string_attribute.replaceAll(" ", ""); // Remove useless spaces -> Avoid little errors
             switch(currentAttribute) {
                 case 0 :
                     s_name = string_attribute;
@@ -195,6 +272,8 @@ public class FlightsIntersectionGraph extends SingleGraph {
             throw onfe;
         }catch(InvalidEntryException iee) {
             throw iee;
+        }catch(NullPointerException npe) {
+            throw npe;
         }
 
         return flight;
@@ -203,6 +282,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
     /**
      * This function creates the edges of the FIG by adding an edge between two Flights if they are colliding.
      * The collisions are checked by the isBooming() function.
+     * This function takes a Flight in parameter and tests all the collisions with the Flights that are already added to the FIG.
      * 
      * @param flight ({@link graph.Flight graph.Flight}) - The Flight from which we are adding the collisions.
      * @param timeSecurity (double) - The value, in MINUTES, of the threshold under which two Flights are in collision.
@@ -210,21 +290,13 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * 
      * @author Luc le Manifik
      */
-    private void createCollisions(Flight flight, double timeSecurity) throws ObjectNotFoundException {
+    private void createCollisions(Flight flight, double timeSecurity) {
         String idFlight = flight.getId();
 
         this.nodes().forEach(e -> {
-            try {
-                if(flight.isBooming((Flight)e, timeSecurity)) {
-                    this.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
-                }
-                
-            }catch(ObjectNotFoundException onfe) {
-                try {
-                    throw onfe;
-                } catch (ObjectNotFoundException e1) {
-                    e1.printStackTrace();
-                }
+            if(flight.isBooming((Flight)e, timeSecurity)) {
+                this.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
+                this.setNbCollisions(this.getNbCollisions() + 1); // Increment nbCollisions
             }
         });
         

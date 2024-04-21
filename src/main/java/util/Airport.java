@@ -9,15 +9,31 @@ public class Airport {
     
     //-- Airport Attributes
 
-    private String name; 
+    /**
+     * The name of the Airport (String)
+     */
+    private String name;
+
+    /**
+     * The city where the Airort is (String)
+     */
     private String location;
-    private Longitude longitude;
+
+    /**
+     * The latitude of the Airport ({@link util.Latitude util.Latitude})
+     */
     private Latitude latitude;
+
+    /**
+     * The longitude of the Airport ({@link util.Longitude util.Longitude})
+     */
+    private Longitude longitude;
 
     //-- Airport Constructor
 
     /**
-     * Constructor of the Airport class. Creates a new Airport.
+     * Constructor of the Airport class.
+     * Creates a new Airport.
      * 
      * @param name (String) - The name of the Airport.
      * @param location (String) - The location/city of the Airport.

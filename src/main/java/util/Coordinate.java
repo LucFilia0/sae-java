@@ -12,9 +12,24 @@ public abstract class Coordinate {
 
     //-- Coordinate parameters
 
+    /**
+     * The degree of the Coordinate (int) | [-180; 180] for Longitude or [-90; 90] for Latitude
+     */
     protected int degree ;
+
+    /**
+     * The minutes of the Coordinate (int) | [0; 59]
+     */
     protected int minutes ;
+
+    /**
+     * The seconds of the Coordinate (int) | [0; 59]
+     */
     protected int seconds ;
+
+    /**
+     * The direction of the Coordinate (char) | [EO] for Longitude or [NS] for Latitude (Regex)
+     */
     protected char direction; // -> Depends if the Coordinate is a Longitude ('N' || 'S') or a Latitude ('E' || 'O')
 
     //-- Coordinate Constructor 
@@ -36,6 +51,9 @@ public abstract class Coordinate {
 
     //-- Coordinate toString()
 
+    /**
+     * toString() Coordinate's method.
+     */
     public String toString() {
         return this.degree + "° " + this.minutes + "' " + this.seconds + "'' " + this.direction;
     }
@@ -43,7 +61,7 @@ public abstract class Coordinate {
     //-- Coordinate Getters
 
     /**
-     * Get the degree of the Coordinate
+     * Get the degree of the Coordinate.
      * 
      * @return degree (int)
      */
@@ -52,7 +70,7 @@ public abstract class Coordinate {
     }
 
     /**
-     * Get the minutes of the Coordinate
+     * Get the minutes of the Coordinate.
      * 
      * @return minutes (int)
      */
@@ -61,7 +79,7 @@ public abstract class Coordinate {
     }
 
     /**
-     * Get the seconds of the Coordinate
+     * Get the seconds of the Coordinate.
      * 
      * @return seconds (int)
      */
@@ -81,6 +99,7 @@ public abstract class Coordinate {
      * @author Luc le Manifik
      */
     public void setDegree(int degree) throws InvalidCoordinateException {
+
         this.degree = degree;
 
         if(degree < -180 || degree > 180) {
@@ -98,6 +117,7 @@ public abstract class Coordinate {
      * @author Luc le Manifik
      */
     public void setMinutes(int minutes) throws InvalidCoordinateException {
+
         this.minutes = minutes;
 
         if(minutes < 0 || minutes > 59) {
@@ -115,6 +135,7 @@ public abstract class Coordinate {
      * @author Luc le Manifik
      */
     public void setSeconds(int seconds) throws InvalidCoordinateException {
+
         this.seconds = seconds;
 
         if(seconds < 0 || seconds > 59) {

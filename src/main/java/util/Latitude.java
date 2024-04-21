@@ -15,10 +15,10 @@ public class Latitude extends Coordinate {
     /**
      * Constructor of the Latitude class. Creates a new Latitude.
      * 
-     * @param degree (int)
-     * @param minutes (int)
-     * @param seconds (int)
-     * @param direction (char)
+     * @param degree (int) - [-90; 90]
+     * @param minutes (int) - [0; 59]
+     * @param seconds (int) - [0; 59]
+     * @param direction (char) - [NS] (Regex)
      * @throws InvalidCoordinateException Throwed if the values are not correct.
      * 
      * @author Luc le Manifik

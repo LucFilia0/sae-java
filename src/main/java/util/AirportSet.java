@@ -25,6 +25,9 @@ public class AirportSet {
     
     //-- AirportSet Attributes
 
+    /**
+     * The Set that contains all the Airports
+     */
     private HashSet<Airport> airportSet; // -> The HashSet that contains all the Airports
 
     //-- AirportSet Constructor

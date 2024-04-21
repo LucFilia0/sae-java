@@ -14,15 +14,15 @@ public class Longitude extends Coordinate {
     /**
      * Constructor of the Longitude class. Creates a new Longitude.
      * 
-     * @param degree (int)
-     * @param minutes (int)
-     * @param seconds (int)
-     * @param direction (char)
+     * @param degree (int) - [-180; 180]
+     * @param minutes (int) - [0; 59]
+     * @param seconds (int) - [0; 59]
+     * @param direction (char) - [EO] (Regex)
      * @throws InvalidCoordinateException Throwed if the values are not correct.
      * 
      * @author Luc le Manifik
      */
-    Longitude(int degree, int minutes, int seconds, char direction) throws InvalidCoordinateException {
+    public Longitude(int degree, int minutes, int seconds, char direction) throws InvalidCoordinateException {
         super(degree, minutes, seconds) ;
         super.direction = direction ;
 

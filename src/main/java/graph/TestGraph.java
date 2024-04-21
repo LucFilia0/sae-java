@@ -19,14 +19,40 @@ import exceptions.InvalidEntryException;
 /**
  * TestGraph is the basic class to handle the "graph-testX.txt" files.
  * This class extends the class SingleGraph, from GraphStream.
+ * 
+ * @implNote Uses the GraphStream attributes.
+ * 
  * @author Luc le Manifik
  */
 public class TestGraph extends SingleGraph {
 
+    //-- TestGraph Attributes
+
+    /**
+     * The String identifier that represents the max allowed number of colors (int)
+     */
+    private final String K_MAX = "kMax";
+
+    /**
+     * The String identifier that represents the max allowed number of Nodes (int)
+     */
+    private final String NB_MAX_NODES = "nbMaxNodes";
+
+    /**
+     * The String identifier that represents the current number of Nodes (int)
+     */
+    private final String NB_NODES = "nbNodes";
+
+    /**
+     * The String identifier that represents the current number of edges (int)
+     */
+    private final String NB_EDGES = "nbEdges";
+
     //-- TestGraph Constructor
 
     /**
-     * This constructor creates a new TestGraph.
+     * Constructor of the TestGraph class.
+     * Creates a new TestGraph.
      * 
      * @param id (String) - The identifier of the TestGraph
      * 
@@ -34,10 +60,10 @@ public class TestGraph extends SingleGraph {
      */
     TestGraph(String id) {
         super(id);
-        this.setAttribute("kMax", 0); // -> Maximum amount of colors.
-        this.setAttribute("nbMaxNodes", 0); // -> Required amount of nodes. 
-        this.setAttribute("nbNodes", 0); // -> Current/real amount of nodes.
-        this.setAttribute("nbEdged", 0); // -> Amount of edges.
+        this.setAttribute(this.K_MAX, 0);
+        this.setAttribute(this.NB_MAX_NODES, 0);
+        this.setAttribute(this.NB_NODES, 0);
+        this.setAttribute(this.NB_EDGES, 0);
     }
 
     //-- TestGraph toString()
@@ -59,7 +85,9 @@ public class TestGraph extends SingleGraph {
     /**
      * Returns the identifier of the TestGraph.
      * 
-     * @return identifier (String)
+     * @return (String) - The identifier of the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     public String getId() {
         return super.getId();
@@ -68,37 +96,45 @@ public class TestGraph extends SingleGraph {
     /**
      * Returns the value of kMax, the maximum number of allowed colors.
      * 
-     * @return kMax (int)
+     * @return (int) - The maximum number of colors in the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     public int getKMax() {
-        return (int)this.getAttribute("kMax");
+        return (int)this.getAttribute(this.K_MAX);
     }
 
     /**
      * Returns the value of the expected amount of nodes in the GraphTest.
      * 
-     * @return nbMaxNodes (int)
+     * @return (int) - The expected number of nodes in the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     public int getNbMaxNodes() {
-        return (int)this.getAttribute("nbMaxNodes");
+        return (int)this.getAttribute(this.NB_MAX_NODES);
     }
 
     /**
      * Returns the number of nodes implemented in the TestGraph.
      * 
-     * @return nbNodes (int)
+     * @return (int) - The number of nodes in the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     public int getNbNodes() {
-        return (int)this.getAttribute("nbNodes");
+        return (int)this.getAttribute(this.NB_NODES);
     }
 
     /**
      * Returns the number of edges implemented in the TestGraph.
      * 
      * @return nbEdges (int)
+     * 
+     * @author Luc le Manifik
      */
     public int getNbEdges() {
-        return (int)this.getAttribute("nbEdges");
+        return (int)this.getAttribute(this.NB_EDGES);
     }
 
     //-- TestGraph Setters
@@ -115,7 +151,7 @@ public class TestGraph extends SingleGraph {
         if(kMax < 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute("kMax", kMax);;
+        this.setAttribute(this.K_MAX, kMax);;
     }
 
     /**
@@ -130,7 +166,7 @@ public class TestGraph extends SingleGraph {
         if(nbMaxNodes < 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute("nbMaxNodes", nbMaxNodes);
+        this.setAttribute(this.NB_MAX_NODES, nbMaxNodes);
     }
 
     /**
@@ -145,7 +181,7 @@ public class TestGraph extends SingleGraph {
         if(nbNodes < 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute("nbNodes", nbNodes);
+        this.setAttribute(this.NB_NODES, nbNodes);
     }
 
     /**
@@ -160,7 +196,7 @@ public class TestGraph extends SingleGraph {
         if(nbEdges < 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute("nbEdges", nbEdges);
+        this.setAttribute(this.NB_EDGES, nbEdges);
     }
 
     //-- TestGraph Methods
