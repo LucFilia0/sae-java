@@ -1,63 +1,62 @@
 package util;
 
-import exceptions.InvalidLongitudeDirectionException;
-
+import exceptions.InvalidCoordinateException;
 
 /**
- * Class extending {@link Coordinate}
- * Handles directions which can only be 'E' for Est (East) or 'O' for Ouest (West)
+ * This class stores the geographical coordinates of the airports.
  * 
- * @author Nathan LIEGEON
+ * @author Nathan LIEEON - Modified : Luc le Manifik
  */
 public class Longitude extends Coordinate {
-    protected char direction ;
+
+    //-- Longitude Constructor
 
     /**
-     * Instantiated a Longitude Object
+     * Constructor of the Longitude class. Creates a new Longitude.
      * 
-     * @param degree
-     * @param minutes
-     * @param seconds
-     * @param direction Can only be 'E' or 'O', if 'W' is entered it will be converted to 'O'
+     * @param degree (int) - [-180; 180]
+     * @param minutes (int) - [0; 59]
+     * @param seconds (int) - [0; 59]
+     * @param direction (char) - [EO] (Regex)
+     * @throws InvalidCoordinateException Throwed if the values are not correct.
      * 
-     * @author Nathan LIEGEON
+     * @author Luc le Manifik
      */
-    public Longitude(int degree, int minutes, int seconds, char direction) {
-
+    public Longitude(int degree, int minutes, int seconds, char direction) throws InvalidCoordinateException {
         super(degree, minutes, seconds) ;
-        try {
-            this.setDirection(direction); ;
-        }
+        super.direction = direction ;
 
-        catch (InvalidLongitudeDirectionException ILoDE) {
-            System.err.println(ILoDE) ;
-            this.direction = ' ' ;
+        if (degree < -180 || degree > 180 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59 || (direction != 'E' && direction != 'O')) {
+            throw new InvalidCoordinateException(this) ;
         }
-
     }
-    
-    /**
-     * Getter for the direction of the object
-     * 
-     * @return the direction of the object
-     */
+
+    //-- Latitude's implemented abstract methods from Coordinate
+
+    // JavaDoc made in Coordinate
     public char getDirection() {
-        return this.direction;
+        return super.direction;
     }
 
-    public void setDirection(char direction) throws InvalidLongitudeDirectionException {
-        this.direction = Character.toUpperCase(direction) ;
-        if (this.direction == 'W') {
-            this.direction = 'O' ;    
-        }
-
-        if (direction != 'E' && direction != 'O') {
-            throw new InvalidLongitudeDirectionException() ;
+    // JavaDoc made in Coordinate
+    public void setDirection(char direction) throws InvalidCoordinateException {
+        super.direction = direction;
+        if(direction != 'E' && direction != 'O') {
+            throw new InvalidCoordinateException(this);
         }
     }
 
-    public String toString() {
-        return super.toString() + ' ' + this.getDirection() ;
+    // JavaDoc made in Coordinate
+    public double getDecimalCoordinate() {
+        double decimalCoordinate; 
+        decimalCoordinate = this.minutes + this.seconds/60;
+        decimalCoordinate = this.degree + decimalCoordinate/60;
+
+        // If the direction is West, then it turns negative
+        if(this.direction == 'O') {
+            decimalCoordinate = decimalCoordinate * -1;
+        }
+        return decimalCoordinate;
     }
 
 }

@@ -19,20 +19,40 @@ import exceptions.InvalidEntryException;
 /**
  * TestGraph is the basic class to handle the "graph-testX.txt" files.
  * This class extends the class SingleGraph, from GraphStream.
+ * 
+ * @implNote Uses the GraphStream attributes.
+ * 
  * @author Luc le Manifik
  */
 public class TestGraph extends SingleGraph {
+
     //-- TestGraph Attributes
 
-    private int kMax; // -> Maximum amount of colors.
-    private int nbMaxNodes; // -> Required amount of nodes. 
-    private int nbNodes; // -> Current/real amount of nodes.
-    private int nbEdges; // -> Amount of edges.
+    /**
+     * The String identifier that represents the max allowed number of colors (int)
+     */
+    private final String K_MAX = "kMax";
+
+    /**
+     * The String identifier that represents the max allowed number of Nodes (int)
+     */
+    private final String NB_MAX_NODES = "nbMaxNodes";
+
+    /**
+     * The String identifier that represents the current number of Nodes (int)
+     */
+    private final String NB_NODES = "nbNodes";
+
+    /**
+     * The String identifier that represents the current number of edges (int)
+     */
+    private final String NB_EDGES = "nbEdges";
 
     //-- TestGraph Constructor
 
     /**
-     * This constructor creates a new TestGraph.
+     * Constructor of the TestGraph class.
+     * Creates a new TestGraph.
      * 
      * @param id (String) - The identifier of the TestGraph
      * 
@@ -40,10 +60,10 @@ public class TestGraph extends SingleGraph {
      */
     TestGraph(String id) {
         super(id);
-        this.kMax = 0;
-        this.nbMaxNodes = 0;
-        this.nbNodes = 0;
-        this.nbEdges = 0;
+        this.setAttribute(this.K_MAX, 0);
+        this.setAttribute(this.NB_MAX_NODES, 0);
+        this.setAttribute(this.NB_NODES, 0);
+        this.setAttribute(this.NB_EDGES, 0);
     }
 
     //-- TestGraph toString()
@@ -57,7 +77,7 @@ public class TestGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     public String toString() {
-        return "-- TestGraph\nIdentifier : " + super.id + "\nkMax : " + this.kMax + "\nNumber of nodes : " + this.nbNodes + "/" + this.nbMaxNodes + "\nNumber of edges : " + this.nbEdges;
+        return "-- TestGraph\nIdentifier : " + super.id + "\nkMax : " + this.getKMax() + "\nNumber of nodes : " + this.getNbNodes() + "/" + this.getNbMaxNodes() + "\nNumber of edges : " + this.getNbEdges();
     }
 
     //-- TestGraph Getters
@@ -65,7 +85,9 @@ public class TestGraph extends SingleGraph {
     /**
      * Returns the identifier of the TestGraph.
      * 
-     * @return identifier (String)
+     * @return (String) - The identifier of the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     public String getId() {
         return super.getId();
@@ -74,37 +96,45 @@ public class TestGraph extends SingleGraph {
     /**
      * Returns the value of kMax, the maximum number of allowed colors.
      * 
-     * @return kMax (int)
+     * @return (int) - The maximum number of colors in the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     public int getKMax() {
-        return this.kMax;
+        return (int)this.getAttribute(this.K_MAX);
     }
 
     /**
      * Returns the value of the expected amount of nodes in the GraphTest.
      * 
-     * @return nbMaxNodes (int)
+     * @return (int) - The expected number of nodes in the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     public int getNbMaxNodes() {
-        return this.nbMaxNodes;
+        return (int)this.getAttribute(this.NB_MAX_NODES);
     }
 
     /**
      * Returns the number of nodes implemented in the TestGraph.
      * 
-     * @return nbNodes (int)
+     * @return (int) - The number of nodes in the TestGraph
+     * 
+     * @author Luc le Manifik
      */
     public int getNbNodes() {
-        return this.nbNodes;
+        return (int)this.getAttribute(this.NB_NODES);
     }
 
     /**
      * Returns the number of edges implemented in the TestGraph.
      * 
      * @return nbEdges (int)
+     * 
+     * @author Luc le Manifik
      */
     public int getNbEdges() {
-        return this.nbEdges;
+        return (int)this.getAttribute(this.NB_EDGES);
     }
 
     //-- TestGraph Setters
@@ -121,7 +151,7 @@ public class TestGraph extends SingleGraph {
         if(kMax < 0) {
             throw new InvalidEntryException();
         }
-        this.kMax = kMax;
+        this.setAttribute(this.K_MAX, kMax);;
     }
 
     /**
@@ -136,7 +166,7 @@ public class TestGraph extends SingleGraph {
         if(nbMaxNodes < 0) {
             throw new InvalidEntryException();
         }
-        this.nbMaxNodes = nbMaxNodes;
+        this.setAttribute(this.NB_MAX_NODES, nbMaxNodes);
     }
 
     /**
@@ -151,7 +181,7 @@ public class TestGraph extends SingleGraph {
         if(nbNodes < 0) {
             throw new InvalidEntryException();
         }
-        this.nbNodes = nbNodes;
+        this.setAttribute(this.NB_NODES, nbNodes);
     }
 
     /**
@@ -163,10 +193,10 @@ public class TestGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     public void setNbEdges(int nbEdges) throws InvalidEntryException {
-        if(nbNodes < 0) {
+        if(nbEdges < 0) {
             throw new InvalidEntryException();
         }
-        this.nbEdges = nbEdges;
+        this.setAttribute(this.NB_EDGES, nbEdges);
     }
 
     //-- TestGraph Methods
@@ -183,7 +213,7 @@ public class TestGraph extends SingleGraph {
      * 
      * @author Luc le Manifik
      */
-    public void importDataFromFile(File file) throws FileNotFoundException, NumberFormatException, InvalidFileFormatException {
+    public void importFromFile(File file) throws FileNotFoundException, NumberFormatException, InvalidFileFormatException {
         Scanner lineScanner = null;
         try {
             lineScanner = new Scanner(file);
@@ -200,6 +230,190 @@ public class TestGraph extends SingleGraph {
             throw nfe;
         }
     }
+
+    /**
+     * This method sets the maximum number of nodes, and the maximum amount of color of the TestGraph, by reading the Scanner which is passed in parameter.
+     * 
+     * @param lineScanner (java.util.scanner) - The scanner which is currently reading the source file, or any support that contains the informations, in the correct format.
+     * @throws NumberFormatException Throwed if the cast from (String) to (int) occures with an error. It can means that the String is not in required format (presence of spaces or symbols).
+     * @throws InvalidFileFormatException Throwed if the source file does not meet the required format. Like a missing information on a line.
+     * @throws InvalidEntryException Throwed if the entered value of some functions is inferior to 0.
+     * 
+     * @author Luc le Manifik
+     */
+    private void setTestGraphInfosFrom(Scanner lineScanner) throws NumberFormatException, InvalidFileFormatException, InvalidEntryException {
+        
+        String line = "";
+        Scanner dataScanner = null;
+
+        // First Line : get kMax
+        if(lineScanner.hasNextLine()) {
+            line = lineScanner.nextLine(); // Store the first line of the file into line
+            dataScanner = new Scanner(line);
+            if(dataScanner.hasNext()) {
+                try {
+                    this.setKMax(Integer.parseInt(dataScanner.next()));
+                }catch(NumberFormatException nfe) {
+                    lineScanner.close();
+                    dataScanner.close();
+                    throw nfe;
+                }catch(InvalidEntryException iee) {
+                    lineScanner.close();
+                    dataScanner.close();
+                    throw iee;
+                }
+
+                if(dataScanner.hasNext()) { // Check if there is an other value on the line. Then prompts an error, but continue the execution of the program
+                    lineScanner.close();
+                    dataScanner.close();
+                    System.err.println("Error at Line 1 : Too many informations on line");
+                }
+            }else { // If the first line is empty or unusable (only spaces, or just an "\n")
+                lineScanner.close();
+                dataScanner.close();
+                throw new InvalidFileFormatException("First line of the source file is empty or unusable. Can't get k-max.");
+            }
+            dataScanner.close();
+        }else {
+            lineScanner.close();
+            throw new InvalidFileFormatException("Source file is empty");
+        }
+
+        // Second Line : get NbMaxNodes
+        if(lineScanner.hasNextLine()) {
+            line = lineScanner.nextLine(); // Store the second line into "line"
+            dataScanner = new Scanner(line);
+            if(dataScanner.hasNext()) {
+                try {
+                    this.setNbMaxNodes(Integer.parseInt(dataScanner.next()));
+                }catch(NumberFormatException nfe) {
+                    lineScanner.close();
+                    dataScanner.close();
+                    throw nfe;
+                }catch(InvalidEntryException iee) {
+                    lineScanner.close();
+                    dataScanner.close();
+                    throw iee;
+                }
+
+                if(dataScanner.hasNext()) { // Check if there is another information on the line. Prompt a message error but continue the execution of the program 
+                    lineScanner.close();
+                    dataScanner.close();
+                    System.err.println("Error at Line 2 : Too many informations on line");
+                }
+            }else { // If the second line is empty or unusable (only spaces, or just an "\n")
+                lineScanner.close();
+                dataScanner.close();
+                throw new InvalidFileFormatException("Second line of the source file is empty or unusable. Can't get the number of nodes.");
+            }
+            dataScanner.close();
+        }
+        else {
+            lineScanner.close();
+            throw new InvalidFileFormatException("Second line of the source file is empty.");
+        }
+    }
+
+    /**
+     * This method creates the nodes and the edges of the TestGraph, throught the scanner passed in parameter.
+     * The scanner is ideally reading the source file, or any other support where the required informations are correctly written.
+     * 
+     * @param lineScanner (java.util.scanner) - The scanner which is currently reading the source file, or any support that contains the informations, in the correct format.
+     * @throws InvalidFileFormatException Throwed if the source file does not meet the required format. Like a missing information on a line.
+     * @throws NumberFormatException Throwed if the cast from (String) to (int) occures with an error. It can means that the String is not in required format (presence of spaces or symbols).
+     * @throws InvalidEntryException Throwed if the entered value of some functions is inferior to 0. Catched in setTestGraphInfosFrom().
+     * 
+     * @author Luc le Manifik
+     */
+    @SuppressWarnings("resource")
+    private void setTestGraphFrom(Scanner lineScanner) throws InvalidFileFormatException, NumberFormatException, InvalidEntryException {
+        
+        // Gets the TestGraph informations, which are the number of node and k-max
+        try {
+            this.setTestGraphInfosFrom(lineScanner);
+        }catch(NumberFormatException nfe) {
+            throw nfe;
+        }catch(InvalidFileFormatException iffe) {
+            throw iffe;
+        }catch(InvalidEntryException iee) {
+            throw iee;
+        }
+
+        int lineCursor = 2; // Indicates which line of the file is currently read
+        
+        String line = "", idNodeA = "", idNodeB = "";
+
+        Scanner nodeScanner = null;
+
+        while(lineScanner.hasNextLine()) {
+            ++lineCursor;
+            line = lineScanner.nextLine(); // Store the line of the source file, with 2 nodes, into "line"
+            nodeScanner = new Scanner(line);
+            // Get node A
+            if(nodeScanner.hasNext()) {
+                idNodeA = nodeScanner.next();
+            }else { // If there is no information on the line
+                nodeScanner.close();
+                throw new InvalidFileFormatException("line " + lineCursor);
+            }
+            // Get node B
+            if(nodeScanner.hasNext()) {
+                idNodeB = nodeScanner.next();
+            }else { // If there is no information for the second node on the line
+                nodeScanner.close();
+                throw new InvalidFileFormatException("line " + lineCursor);
+            }
+            // Checks if there is too much informations on the line, then print a message error, but continue the execution
+            if(nodeScanner.hasNext()) {
+                System.err.println("Error at Line " + lineCursor + " : Too many informations on line");
+            }
+
+            // Adds the nodes if they do not already exist
+            if(this.getNode(idNodeA) == null) {
+                this.addNode(idNodeA);
+                this.setNbNodes(this.getNbNodes() + 1);
+            }
+            if(this.getNode(idNodeB) == null) {
+                this.addNode(idNodeB);
+                this.setNbNodes(this.getNbNodes() + 1);
+            }
+
+            // Checks if there is not too much nodes that have been added
+            if(this.getNbNodes() <= this.getNbNodes()) {
+                try {
+                    this.addEdge(idNodeA + "-" + idNodeB, idNodeA, idNodeB);
+                    this.setNbEdges(this.getNbEdges() + 1);
+                }
+                // Errors are treated here, because they do not require to stop the program, and just need to prompt some informations
+                catch(IdAlreadyInUseException iaiue) {
+                    // -> If an edge with the same id already exists and strict checking is enabled
+                    System.err.println("Error at Line " + lineCursor + " : Edge " + idNodeA + "-" + idNodeB + " already exists.");
+                }catch(ElementNotFoundException enfe) {
+                    // -> If strict checking is enabled, and 'node1' or 'node2' are not registered in the graph
+                    System.err.println("Error at Line " + lineCursor + " : Node [" + idNodeA + "] or node [" + idNodeB + "] undeclared.");
+                }catch(EdgeRejectedException ere) {
+                    // -> If strict checking is enabled and the edge is not accepted
+                    System.err.println("Error at Line " + lineCursor + " : Trying to add edge [" + idNodeA + "-" + idNodeB + "] but edge [" + idNodeB + "-" + idNodeA + "] seems to already exist");
+                }
+            }else {
+                nodeScanner.close();
+                throw new InvalidFileFormatException("The number of created nodes exceeds the required amount specified in the source file.");
+            }
+            nodeScanner.close();
+        }
+
+        // Add the missing nodes, those which are not bound to other nodes
+        // Because nodes are created by reading the edges of the source file,
+        // But if a node is not bound to any other node, then he is not created at this state of the program.
+        while(this.getNbNodes() < this.getNbMaxNodes()) {
+            this.setNbNodes(this.getNbNodes() + 1);
+            this.addNode(String.valueOf(this.getNbNodes()));
+        }
+
+        nodeScanner.close();
+    }
+
+    //-- TestGraph Coloration
 
     /** 
      * Selects the next node to add to the set of colored Nodes by getting the one with the highest number of common
@@ -420,187 +634,5 @@ public class TestGraph extends SingleGraph {
         }   
 
         return nbProblems ;
-    }
-
-    /**
-     * This method sets the maximum number of nodes, and the maximum amount of color of the TestGraph, by reading the Scanner which is passed in parameter.
-     * 
-     * @param lineScanner (java.util.scanner) - The scanner which is currently reading the source file, or any support that contains the informations, in the correct format.
-     * @throws NumberFormatException Throwed if the cast from (String) to (int) occures with an error. It can means that the String is not in required format (presence of spaces or symbols).
-     * @throws InvalidFileFormatException Throwed if the source file does not meet the required format. Like a missing information on a line.
-     * @throws InvalidEntryException Throwed if the entered value of some functions is inferior to 0.
-     * 
-     * @author Luc le Manifik
-     */
-    private void setTestGraphInfosFrom(Scanner lineScanner) throws NumberFormatException, InvalidFileFormatException, InvalidEntryException {
-        
-        String line = "";
-        Scanner dataScanner = null;
-
-        // First Line : get kMax
-        if(lineScanner.hasNextLine()) {
-            line = lineScanner.nextLine(); // Store the first line of the file into line
-            dataScanner = new Scanner(line);
-            if(dataScanner.hasNext()) {
-                try {
-                    this.setKMax(Integer.parseInt(dataScanner.next()));
-                }catch(NumberFormatException nfe) {
-                    lineScanner.close();
-                    dataScanner.close();
-                    throw nfe;
-                }catch(InvalidEntryException iee) {
-                    lineScanner.close();
-                    dataScanner.close();
-                    throw iee;
-                }
-
-                if(dataScanner.hasNext()) { // Check if there is an other value on the line. Then prompts an error, but continue the execution of the program
-                    lineScanner.close();
-                    dataScanner.close();
-                    System.err.println("Error at Line 1 : Too many informations on line");
-                }
-            }else { // If the first line is empty or unusable (only spaces, or just an "\n")
-                lineScanner.close();
-                dataScanner.close();
-                throw new InvalidFileFormatException("First line of the source file is empty or unusable. Can't get k-max.");
-            }
-            dataScanner.close();
-        }else {
-            lineScanner.close();
-            throw new InvalidFileFormatException("Source file is empty");
-        }
-
-        // Second Line : get NbMaxNodes
-        if(lineScanner.hasNextLine()) {
-            line = lineScanner.nextLine(); // Store the second line into "line"
-            dataScanner = new Scanner(line);
-            if(dataScanner.hasNext()) {
-                try {
-                    this.setNbMaxNodes(Integer.parseInt(dataScanner.next()));
-                }catch(NumberFormatException nfe) {
-                    lineScanner.close();
-                    dataScanner.close();
-                    throw nfe;
-                }catch(InvalidEntryException iee) {
-                    lineScanner.close();
-                    dataScanner.close();
-                    throw iee;
-                }
-
-                if(dataScanner.hasNext()) { // Check if there is another information on the line. Prompt a message error but continue the execution of the program 
-                    lineScanner.close();
-                    dataScanner.close();
-                    System.err.println("Error at Line 2 : Too many informations on line");
-                }
-            }else { // If the second line is empty or unusable (only spaces, or just an "\n")
-                lineScanner.close();
-                dataScanner.close();
-                throw new InvalidFileFormatException("Second line of the source file is empty or unusable. Can't get the number of nodes.");
-            }
-            dataScanner.close();
-        }
-        else {
-            lineScanner.close();
-            throw new InvalidFileFormatException("Second line of the source file is empty.");
-        }
-    }
-
-    /**
-     * This method creates the nodes and the edges of the TestGraph, throught the scanner passed in parameter.
-     * The scanner is ideally reading the source file, or any other support where the required informations are correctly written.
-     * 
-     * @param lineScanner (java.util.scanner) - The scanner which is currently reading the source file, or any support that contains the informations, in the correct format.
-     * @throws InvalidFileFormatException Throwed if the source file does not meet the required format. Like a missing information on a line.
-     * @throws NumberFormatException Throwed if the cast from (String) to (int) occures with an error. It can means that the String is not in required format (presence of spaces or symbols).
-     * @throws InvalidEntryException Throwed if the entered value of some functions is inferior to 0. Catched in setTestGraphInfosFrom().
-     * 
-     * @author Luc le Manifik
-     */
-    @SuppressWarnings("resource")
-    private void setTestGraphFrom(Scanner lineScanner) throws InvalidFileFormatException, NumberFormatException, InvalidEntryException {
-        
-        // Gets the TestGraph informations, which are the number of node and k-max
-        try {
-            this.setTestGraphInfosFrom(lineScanner);
-        }catch(NumberFormatException nfe) {
-            throw nfe;
-        }catch(InvalidFileFormatException iffe) {
-            throw iffe;
-        }catch(InvalidEntryException iee) {
-            throw iee;
-        }
-
-        int lineCursor = 2; // Indicates which line of the file is currently read
-        
-        String line = "", idNodeA = "", idNodeB = "";
-
-        Scanner nodeScanner = null;
-
-        while(lineScanner.hasNextLine()) {
-            ++lineCursor;
-            line = lineScanner.nextLine(); // Store the line of the source file, with 2 nodes, into "line"
-            nodeScanner = new Scanner(line);
-            // Get node A
-            if(nodeScanner.hasNext()) {
-                idNodeA = nodeScanner.next();
-            }else { // If there is no information on the line
-                nodeScanner.close();
-                throw new InvalidFileFormatException("line " + lineCursor);
-            }
-            // Get node B
-            if(nodeScanner.hasNext()) {
-                idNodeB = nodeScanner.next();
-            }else { // If there is no information for the second node on the line
-                nodeScanner.close();
-                throw new InvalidFileFormatException("line " + lineCursor);
-            }
-            // Checks if there is too much informations on the line, then print a message error, but continue the execution
-            if(nodeScanner.hasNext()) {
-                System.err.println("Error at Line " + lineCursor + " : Too many informations on line");
-            }
-
-            // Adds the nodes if they do not already exist
-            if(this.getNode(idNodeA) == null) {
-                this.addNode(idNodeA);
-                ++this.nbNodes;
-            }
-            if(this.getNode(idNodeB) == null) {
-                this.addNode(idNodeB);
-                ++this.nbNodes;
-            }
-
-            // Checks if there is not too much nodes that have been added
-            if(this.nbNodes <= this.nbMaxNodes) {
-                try {
-                    this.addEdge(idNodeA + "-" + idNodeB, idNodeA, idNodeB);
-                    ++this.nbEdges;
-                }
-                // Errors are treated here, because they do not require to stop the program, and just need to prompt some informations
-                catch(IdAlreadyInUseException iaiue) {
-                    // -> If an edge with the same id already exists and strict checking is enabled
-                    System.err.println("Error at Line " + lineCursor + " : Edge " + idNodeA + "-" + idNodeB + " already exists.");
-                }catch(ElementNotFoundException enfe) {
-                    // -> If strict checking is enabled, and 'node1' or 'node2' are not registered in the graph
-                    System.err.println("Error at Line " + lineCursor + " : Node [" + idNodeA + "] or node [" + idNodeB + "] undeclared.");
-                }catch(EdgeRejectedException ere) {
-                    // -> If strict checking is enabled and the edge is not accepted
-                    System.err.println("Error at Line " + lineCursor + " : Trying to add edge [" + idNodeA + "-" + idNodeB + "] but edge [" + idNodeB + "-" + idNodeA + "] seems to already exist");
-                }
-            }else {
-                nodeScanner.close();
-                throw new InvalidFileFormatException("The number of created nodes exceeds the required amount specified in the source file.");
-            }
-            nodeScanner.close();
-        }
-
-        // Add the missing nodes, those which are not bound to other nodes
-        // Because nodes are created by reading the edges of the source file,
-        // But if a node is not bound to any other node, then he is not created at this state of the program.
-        while(this.nbNodes < this.nbNodes) {
-            ++this.nbNodes;
-            this.addNode(String.valueOf(this.nbNodes));
-        }
-
-        nodeScanner.close();
     }
 }

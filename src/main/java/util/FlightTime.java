@@ -8,7 +8,15 @@ import exceptions.InvalidTimeException;
  * @author Nathan LIEGEON
  */
 public class FlightTime {
+
+    /**
+     * The number of hour - [0; 23]
+     */
     private int hour ;
+
+    /**
+     * The number of minutes - [0; 59]
+     */
     private int min ;
 
     /**
@@ -16,8 +24,6 @@ public class FlightTime {
      * 
      * @param hour Values go from 0 to 23
      * @param min Values go from 0 to 59
-     * 
-     * @throws InvalidTimeException
      * 
      * @author Nathan LIEGEON
      */
@@ -27,8 +33,8 @@ public class FlightTime {
             this.setMinute(min) ;
         }
 
-        catch (InvalidTimeException ITE) {
-            System.err.println(ITE) ;
+        catch (InvalidTimeException ite) {
+            System.err.println(ite) ;
             this.hour = 0 ;
             this.min = 0 ;
         }
@@ -80,9 +86,20 @@ public class FlightTime {
         }
     }
 
-
+    /**
+     * toString() FlightTime's method.
+     */
     public String toString() {
         return this.getHour() + "h" + this.getMinute() ;
     }
     
+    /**
+     * Return the value of the Time in minutes.
+     * @return (int) - The value of the Time in minutes.
+     * 
+     * @author Luc le Manifik
+     */
+    public int getHourValueInMinutes() {
+        return this.hour * 60 + this.min;
+    }
 }
