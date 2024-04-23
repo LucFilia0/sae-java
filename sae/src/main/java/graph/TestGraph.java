@@ -582,7 +582,9 @@ public class TestGraph {
     /**
      * Give the less use color of NodeP's adjacents nodes
      * @param color Color tab wich give a resum of Adjacents Node's colors
-     * @return
+     * @return min Less use color
+     * 
+     * @autor GIRAUD Nila
      */
     private static int minGiveColorTab(int color[] ){
         int min = color[0];
@@ -596,6 +598,12 @@ public class TestGraph {
 
     }
 
+    /**
+     * Initialise the Color tab at 0
+     * @param color Color tab wich give a resum of Adjacents Node's colors
+     * 
+     * @autor GIRAUD Nila
+     */
     private static void initColor(int[] color){
         for(int j = 0; j < color.length; j++){
             color [j] = 0;   
@@ -614,6 +622,13 @@ public class TestGraph {
 
     }
 
+    /**
+     * Find the node with the DSAT max
+     * @param ListesNodes LinkedList of Graph's Nodes
+     * @return max A node
+     * 
+     * @autor GIRAUD Nila
+     */
     private static Node MaxNodeDSATUR( LinkedList<Node> ListesNodes){
         Node max = ListesNodes.getFirst();
         for (int i = 1; i < ListesNodes.size(); i++) {
@@ -624,6 +639,14 @@ public class TestGraph {
         return max;
 
     }
+
+    /**
+     * Insert a Node in a linkedList with in a descendent order
+     * @param ListNodes LinkedList of Graph's Nodes
+     * @param nodeP The Node that we want to insert
+     * 
+     * @autor GIRAUD Nila
+     */
 
     public static void insertSorted(LinkedList<Node> ListNodes, Node nodeP) {
         int i = 0;
