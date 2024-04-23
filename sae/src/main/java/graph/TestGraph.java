@@ -10,6 +10,8 @@ import org.graphstream.graph.implementations.*;
 import org.graphstream.algorithm.*;
 import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
 
+import java.util.ListIterator;
+
 // Exceptions
 import exceptions.InvalidFileFormatException;
 
@@ -19,14 +21,15 @@ public class TestGraph {
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph testGraph = new SingleGraph("testGraph");
-        File testGraphFile = new File("sae/DataTest/graph-test1.txt") ;
+        File testGraphFile = new File("DataTest/graph-test2.txt") ;
+        
         try {
             importTestGraph(testGraph, testGraphFile) ;
             if ((int) testGraph.getAttribute("kMax") != 2) {
-                System.out.println(" K-Max : " + testGraph.getAttribute("kMax") + " | Nombre de couleurs : " + colorGraphRLF(testGraph)) ;
+                System.out.println(" K-Max : " + testGraph.getAttribute("kMax") + " | Nombre de couleurs : " + ColorationDsatur(testGraph, (int)testGraph.getAttribute("kMax"))) ;
             }
             else {
-                System.out.println("Worked ? : " + twoColorGraph(testGraph)) ;
+                System.out.println("Worked ? : " + ColorationDsatur(testGraph, 2) ) ; //twoColorGraph(testGraph)
             }
 
             testGraph.setAttribute("ui.stylesheet", "node {size : 25px ; fill-color : gray ;} node.color1 {fill-color : red ;}" 
@@ -429,21 +432,37 @@ public class TestGraph {
         nodeScanner.close();
     }
 
-
+    /**
+     * Give a graph's coloration with less colision we can, use graph saturation principle (degree).
+     * 
+     * @param graph Graph that will be tested.
+     * @param Kmax Max color we can use.
+     * @return max Number of color we use for it.
+     * 
+     * @autor GIRAUD Nila
+     */
     private static int ColorationDsatur(Graph graph, int Kmax){
         LinkedList<Node> ListNodes = new LinkedList<Node>();
+        System.out.println("Salut");
 
-        int j;
-
+        //Put all Nodes in a LinkedList
         for (Node node : graph) {
-            node.setAttribute("color", -1);
+            node.setAttribute("color", 0);
             node.setAttribute("DSATUR", node.getDegree());
-            ListNodes.add(node);
+            
+            insertSorted(ListNodes, node); // Descendent Sort
         }
 
+        for (Node node : ListNodes){
+            System.out.println(node.getAttribute("DSATUR"));
+            System.out.println(node.getAttribute("color"));
+            System.out.println("\n");
+        }
+
+        //Color 
         int[] color = new int[Kmax];
 
-        // Ascendent Sort
+        /*  Ascendent Sort
         Collections.sort(ListNodes, new Comparator<Node>() {
             
             @Override
@@ -456,33 +475,61 @@ public class TestGraph {
         });
 
         // Descendent Sort
-        Collections.sort(ListNodes, Collections.reverseOrder());
+        Collections.sort(ListNodes, Collections.reverseOrder());*/
 
         recursifDSATUR(ListNodes, color);
 
+        for (Node node : graph){
+
+            node.removeAttribute("DSATUR");
+            node.setAttribute("ui.class", "color" + node.getAttribute("color"));
+
+            System.out.println(node.getAttribute("DSATUR"));
+            System.out.println(node.getAttribute("color"));
+            System.out.println(node.getAttribute("ui.class"));
+            System.out.println("\n");
+        }
+
         int max = 0;
         for(Node node : graph){
-            if((int)node.getAttribute("Color") > max){
-                max = (int)node.getAttribute("Color");
+            if((int)node.getAttribute("color") > max){
+                max = (int)node.getAttribute("color");
             }
         }
+
+        System.out.println(nbConflit);
 
         return max;
     }
 
-    private static int nbConflit;
+    private static int nbConflit = 0;
 
-    
+
+    /**
+     * Recursif methode for ColorationDSATUR, take a node and find and finds an optimized color.
+     * Stop when there are no more nodes.
+     * @param ListNodes LinkedList of Graph's Nodes, with descendent sort (with one less node at each recursive call)
+     * @param color Color tab wich give a resum of Adjacents Node's colors
+     * 
+     * @author GIRAUD Nila
+     */
 
     private static void recursifDSATUR(LinkedList<Node> ListNodes, int[] color){
 
-         if(ListNodes.isEmpty()){
-            return;
-         }
-         else{
+         if(!ListNodes.isEmpty()){
+
+            for (Node node : ListNodes){
+                System.out.println("\n" + node.getAttribute("DSATUR"));
+                System.out.println(node.getAttribute("color"));
+                System.out.println(node);
+                
+                System.out.println("\n");
+            }
+            System.out.println("Salut");
             
             //Step1
             Node nodeP = MaxNodeDSATUR(ListNodes);
+            System.out.println(nodeP + " | " + nodeP.getAttribute("DSATUR") + " | " + nodeP.getAttribute("color"));
  
              //Initialisation of color tab
             initColor(color);
@@ -490,45 +537,53 @@ public class TestGraph {
             //Step2
             for(Node nodeAdj : nodeP.neighborNodes().collect(Collectors.toSet()) ){
  
-                 if((int)nodeAdj.getAttribute("Color") != -1){
-                     color[(int)nodeAdj.getAttribute("Color") - 1] = 1;
+                 if((int)nodeAdj.getAttribute("color") != 0){
+                     color[(int)nodeAdj.getAttribute("color") - 1] ++;
                  }
              }
 
              int j = 0;
 
-             while(color[j] != 0 && j!= (color.length-1) ){ j++; };
+             while(j!= (color.length) && color[j] != 0 ){ j++; };
 
-             if (j == (color.length-1) ){
-                 nodeP.setAttribute("Color", minGiveColorTab(color) );
+             if (j == (color.length) ){
+                 nodeP.setAttribute("color", minGiveColorTab(color));
                  //il peu etre judicieux de rajouter un attribut conflit au avion qui risque de se percuter
                  nbConflit = nbConflit + 1;
              }
-             else{ nodeP.setAttribute("Color", color[j+1]); };
-
+             else{ nodeP.setAttribute("color", j+1); };
+             System.out.println("color :" + nodeP.getAttribute("color"));
 
             //Step3
             for(Node nodeAdj : nodeP.neighborNodes().collect(Collectors.toSet()) ){
-                nodeAdj.setAttribute("DSATUR",0);
                 initColor(color);
 
                 for(Node nodeAdj2 : nodeAdj.neighborNodes().collect(Collectors.toSet())){
-                    if((int)nodeAdj2.getAttribute("Color") != -1){
-                        color[(int)nodeAdj2.getAttribute("Color") - 1] = 1;
+                    if((int)nodeAdj2.getAttribute("color") != 0 && nodeAdj2 != nodeP){
+                        color[(int)nodeAdj2.getAttribute("color") - 1] = 1;
                     }    
                 }
-
-                nodeAdj.setAttribute("DSATUR", nbColorAdj(color));
+                int nbColor = nbColorAdj(color);
+                if( nbColor!= 0){
+                    nodeAdj.setAttribute("DSATUR", nbColor); }
             }
 
-            nodeP.removeAttribute("DSATUR");
+            System.out.println(nodeP + " | " + nodeP.getAttribute("DSATUR") +  " | " + nodeP.getAttribute("color"));
+
+            System.out.println(nodeP + " | " + nodeP.getAttribute("DSATUR") +  " | " + nodeP.getAttribute("color"));
             ListNodes.remove(nodeP);
 
             //Step4
             recursifDSATUR(ListNodes,color);
          }
+
     }
 
+    /**
+     * Give the less use color of NodeP's adjacents nodes
+     * @param color Color tab wich give a resum of Adjacents Node's colors
+     * @return
+     */
     private static int minGiveColorTab(int color[] ){
         int min = color[0];
         for(int i = 1; i < color.length ; i++){
@@ -550,7 +605,7 @@ public class TestGraph {
     private static int nbColorAdj(int[] color){
         int nb = 0;
         for(int i = 0; i< color.length; i++){
-            if(color[i] == 1){
+            if(color[i] != 0){
                 nb ++;
             }
         }
@@ -568,6 +623,21 @@ public class TestGraph {
         }
         return max;
 
+    }
+
+    public static void insertSorted(LinkedList<Node> ListNodes, Node nodeP) {
+        int i = 0;
+        if(!ListNodes.isEmpty()){
+        for(Node node : ListNodes ) {
+            if ((int)node.getAttribute("DSATUR") <= (int)nodeP.getAttribute("DSATUR")) {
+                ListNodes.add(i,nodeP);
+                return;
+            }
+            i++;
+        }
+        }
+        ListNodes.addLast(nodeP);
+       
     }
     
 }
