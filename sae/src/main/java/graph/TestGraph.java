@@ -444,6 +444,7 @@ public class TestGraph {
     private static int ColorationDsatur(Graph graph, int Kmax){
         LinkedList<Node> ListNodes = new LinkedList<Node>();
         System.out.println("Salut");
+        graph.setAttribute("nbConflit",0);
 
         //Put all Nodes in a LinkedList
         for (Node node : graph) {
@@ -477,7 +478,7 @@ public class TestGraph {
         // Descendent Sort
         Collections.sort(ListNodes, Collections.reverseOrder());*/
 
-        recursifDSATUR(ListNodes, color);
+        recursifDSATUR(ListNodes, color, graph);
 
         for (Node node : graph){
 
@@ -497,13 +498,10 @@ public class TestGraph {
             }
         }
 
-        System.out.println(nbConflit);
+        System.out.println(graph.getAttribute("nbConflit"));
 
         return max;
     }
-
-    private static int nbConflit = 0;
-
 
     /**
      * Recursif methode for ColorationDSATUR, take a node and find and finds an optimized color.
@@ -514,7 +512,7 @@ public class TestGraph {
      * @author GIRAUD Nila
      */
 
-    private static void recursifDSATUR(LinkedList<Node> ListNodes, int[] color){
+    private static void recursifDSATUR(LinkedList<Node> ListNodes, int[] color, Graph graph){
 
          if(!ListNodes.isEmpty()){
 
@@ -549,7 +547,8 @@ public class TestGraph {
              if (j == (color.length) ){
                  nodeP.setAttribute("color", minGiveColorTab(color));
                  //il peu etre judicieux de rajouter un attribut conflit au avion qui risque de se percuter
-                 nbConflit = nbConflit + color[(int)nodeP.getAttribute("color")-1];
+                 int nbConflit = (int)graph.getAttribute("nbConflit");
+                 graph.setAttribute("nbConflit", nbConflit + color[(int)nodeP.getAttribute("color")-1]);
              }
              else{ nodeP.setAttribute("color", j+1); };
              System.out.println("color :" + nodeP.getAttribute("color"));
@@ -574,7 +573,7 @@ public class TestGraph {
             ListNodes.remove(nodeP);
 
             //Step4
-            recursifDSATUR(ListNodes,color);
+            recursifDSATUR(ListNodes,color, graph);
          }
 
     }
