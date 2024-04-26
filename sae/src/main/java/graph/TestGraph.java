@@ -21,7 +21,7 @@ public class TestGraph {
         System.setProperty("org.graphstream.ui", "swing");
 
         Graph testGraph = new SingleGraph("testGraph");
-        File testGraphFile = new File("DataTest/graph-test2.txt") ;
+        File testGraphFile = new File("DataTest/graph-test6.txt") ;
         
         try {
             importTestGraph(testGraph, testGraphFile) ;
@@ -549,7 +549,7 @@ public class TestGraph {
              if (j == (color.length) ){
                  nodeP.setAttribute("color", minGiveColorTab(color));
                  //il peu etre judicieux de rajouter un attribut conflit au avion qui risque de se percuter
-                 nbConflit = nbConflit + 1;
+                 nbConflit = nbConflit + color[(int)nodeP.getAttribute("color")-1];
              }
              else{ nodeP.setAttribute("color", j+1); };
              System.out.println("color :" + nodeP.getAttribute("color"));
@@ -587,14 +587,14 @@ public class TestGraph {
      * @autor GIRAUD Nila
      */
     private static int minGiveColorTab(int color[] ){
-        int min = color[0];
+        int min = 0;
         for(int i = 1; i < color.length ; i++){
-            if(color[i] < min ){
-                min = color[i];
+            if(color[i] < color[min] ){
+                min = i;
             }
         }
 
-        return min;
+        return min + 1;
 
     }
 
