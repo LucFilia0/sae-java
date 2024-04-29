@@ -3,18 +3,27 @@ package graph;
 //-- Import Java
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.* ; 
-import java.util.stream.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-//-- Import GraphStream
-import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.*;
-import org.graphstream.algorithm.*;
+import org.graphstream.algorithm.ConnectedComponents;
 import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
+//-- Import GraphStream
+import org.graphstream.graph.EdgeRejectedException;
+import org.graphstream.graph.ElementNotFoundException;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.IdAlreadyInUseException;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.Graphs;
+import org.graphstream.graph.implementations.SingleGraph;
 
+import exceptions.InvalidEntryException;
 //-- Import Exceptions
 import exceptions.InvalidFileFormatException;
-import exceptions.InvalidEntryException;
 
 /**
  * TestGraph is the basic class to handle the "graph-testX.txt" files.
@@ -58,7 +67,7 @@ public class TestGraph extends SingleGraph {
      * 
      * @author Luc le Manifik
      */
-    TestGraph(String id) {
+    public TestGraph(String id) {
         super(id);
         this.setAttribute(this.K_MAX, 0);
         this.setAttribute(this.NB_MAX_NODES, 0);
@@ -421,15 +430,17 @@ public class TestGraph extends SingleGraph {
      * 
      * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently worked on
      * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently worked on
-     * @return Node The node that has the highest number of common neighbors with the first node that was added and which is in setOfAddableNodes
+     * @return Node which is : 
+     * 1. the one with the highest number of common neighbors with the first node of the color 
+     * 2. in setOfAddableNodes
      * 
      * @author Nathan LIEGEON
      */
     public static Node selectNextNodeToAdd(Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
         HashMap<Node, Integer> nodeMap = new HashMap<>() ;
 
-        for (Node nodeInList : setOfAddableNodes) {
-            nodeMap.put(nodeInList, 0) ;
+        for (Node nodeInSet : setOfAddableNodes) {
+            nodeMap.put(nodeInSet, 0) ;
         }
 
         for (Node node : setOfNeighborsOfFirstNode) {
@@ -453,39 +464,85 @@ public class TestGraph extends SingleGraph {
     }
 
     /**
-     * Adds nodes the current color's set until there is no node left which can be added
+     * Colors all the nodes in setOfAddableNodes until it is empty
      *
-     * @param graph Graph from which you will add the nodes
+     * @param graph Graph you are trying to color
      * @param colorMap Hashmap storing for each color (Integer key) 
      * the set of all nodes that have that color (HashSet<Node> value)
-     * @param Integer color The color currently being worked on
-     * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently worked on
-     * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently worked on
+     * @param color The color currently being worked on
+     * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently being worked on
+     * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently being worked on
      * 
      * @author Nathan LIEGEON
      */
-    public static void addNodesToSetOfAddableNodes(Graph graph, Map<Integer, HashSet<Node>> colorMap, 
+    public static void colorNodesFromSetOfAddableNodes(Graph graph, Map<Integer, HashSet<Node>> colorMap, 
     Integer color, Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
         Node nextNode = null ;
+        Node tempNode ;
         while (!setOfAddableNodes.isEmpty()) {
             nextNode = selectNextNodeToAdd(setOfNeighborsOfFirstNode, setOfAddableNodes) ;
             if (nextNode != null) {
-                colorMap.get(color).add(graph.getNode(nextNode.getId())) ;
+                tempNode = graph.getNode(nextNode.getId()) ;
+                colorMap.get(color).add(tempNode) ;
+                
                 setOfAddableNodes.remove(nextNode) ;
                 setOfAddableNodes.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
             }
         }
+    }   
+    /**
+     * Colors a node by minimizing conflicts (2 nodes with the same color touching each other)
+     * 
+     * @param graph Graph you are trying to color
+     * @param node Node you are trying to color 
+     * @return array consisting of 2 values, the color assigned to the node and the number of conflicts it generated
+     * 
+     * @author Nathan LIEGEON
+     */
+    public static int[] getLeastConflictingColor(Graph graph, Node node) {
+        int[] minConflict = {-1, -1} ;
+        int[] currentConflict  = new int[2];
+        HashMap<Integer, Integer> conflictCount = new HashMap<>() ;
+        for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
+            if ((Integer) graph.getNode(neighbor.getId()).getAttribute("color") != 0) {
+                conflictCount.merge((Integer)neighbor.getAttribute("color"), 1, Integer::sum) ;
+            }
+        }
+
+        for (Integer color : conflictCount.keySet()) {
+            currentConflict[0] = color ;
+            currentConflict[1] = conflictCount.get(color) ;
+            if (minConflict[0] == -1 || minConflict[1] > currentConflict[1]) {
+                minConflict = currentConflict ;
+            }
+
+        }
+
+        return minConflict ;
     }
 
-    
+    /**
+     * Applies the color returned by {@link getLeastConflictingColor} and returns the number of conflicts it generated
+     * 
+     * @param graph Graph we are trying to color
+     * @param node Node currently being colored
+     * @return number of conflicts caused by the node
+     */
+    public static int colorWithLeastConflicts(Graph graph, Node node) {
+        int[] res = getLeastConflictingColor(graph, node) ;
+        node.setAttribute("color", res[0]) ;
+        node.setAttribute("ui.class", "color" + res[0]) ;
+        return res[1] ;
+    }
+
     /** 
      * Loads every single node from the graph into setOfAddableNodes for future manipulations.
      * While adding them it also looks for the one with the highest degree then returns it at the end.
-     * Can return null if no node is loaded into the list.
+     * Can return null if no node is loaded into the set.
      *
      * @param graph Graph from which you will load the nodes
-     * @param setOfAddableNodes The set in which you will load all of graph's nodes
-     * @return Node returns the node with the highest degree, can be null.
+     * @param setOfAddableNodes Set in which you will load the nodes
+     * @return Node with the highest degree, can be null.
      * 
      * @author Nathan LIEGEON
      * 
@@ -507,29 +564,32 @@ public class TestGraph extends SingleGraph {
 
         return currentNode ;
     }
-
     
     /** 
      * Colors the graph using the RLF (Recursive Larget First) Algorithm
      * Implemented iteratively contrary to its name, could be modified later.
+     * If the number of colors used reaches kMax, a different algorithm will be used to minimize conflicts.
      * 
      * @param graph Graph which will be colored
-     * @return Number of colors used
+     * @return array consisting of 2 values : first one being the number of colors used, second being the number of conflicts
      * 
      * @author Nathan LIEGEON
      */
-    public static int colorGraphRLF(Graph graph) {
+    public static int[] colorGraphRLF(Graph graph) {
 
         Graph newGraph = Graphs.clone(graph) ;
         HashMap<Integer, HashSet<Node>> colorMap = new HashMap<>() ;
         HashSet<Node> setOfAddableNodes ;
         HashSet<Node> setOfNeighborsOfFirstNode ;
         Node firstNodeOfThisColor ;
-        
+        int kMax = (Integer)graph.getAttribute("kMax") ;
         int color = 0 ;
+        int[] infoTab = {0, 0} ;
 
-        while (newGraph.getNodeCount() != 0) {
+        while (newGraph.getNodeCount() != 0 && color <= kMax) {
             color++ ;
+            infoTab[0]++ ;
+            
             firstNodeOfThisColor = null ;
             colorMap.put(color, new HashSet<>()) ;
             setOfAddableNodes = new HashSet<>() ;
@@ -540,19 +600,29 @@ public class TestGraph extends SingleGraph {
             setOfNeighborsOfFirstNode = (HashSet<Node>) firstNodeOfThisColor.neighborNodes().collect(Collectors.toSet()) ;
             setOfAddableNodes.remove(firstNodeOfThisColor) ;
             setOfAddableNodes.removeAll(setOfNeighborsOfFirstNode) ;
-            addNodesToSetOfAddableNodes(graph, colorMap, color, setOfNeighborsOfFirstNode, setOfAddableNodes) ;
+            colorNodesFromSetOfAddableNodes(graph, colorMap, color, setOfNeighborsOfFirstNode, setOfAddableNodes) ;
 
             //Adds the colors to the real graph
-            for (Node coloringNode : colorMap.get(color)) {
+            for (Node coloringNode : colorMap.get(color)) { 
                 coloringNode.setAttribute("color", color) ;
                 coloringNode.setAttribute("ui.class", "color" + color) ;
                 newGraph.removeNode(newGraph.getNode(coloringNode.getId())) ;
             }
             
         }
+        
+        if (infoTab[0] > kMax) {
+            infoTab[0] = kMax ;
+        }
 
+        if (newGraph.getNodeCount() != 0) {
+            for (Node node : newGraph) {
+                node = graph.getNode(node.getId()) ;
+                infoTab[1] = infoTab[1] + colorWithLeastConflicts(graph, node) ;
+            }
+        }
 
-        return color ;
+        return infoTab ;
     }
 
     /**
