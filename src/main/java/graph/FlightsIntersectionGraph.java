@@ -4,12 +4,16 @@ package graph;
 
 import java.io.File;
 import java.util.Scanner;
+
 import util.FlightTime;
 import util.AirportSet;
 
 //-- Import GraphStream
 
 import org.graphstream.graph.implementations.SingleGraph;
+
+//-- Import JXMapViewer
+
 
 //-- Import Exceptions
 
@@ -182,9 +186,11 @@ public class FlightsIntersectionGraph extends SingleGraph {
 
     /**
      * Set the attributes of a Flight from a String, with informations separated by semi-colons ";".
+     * 
      * @param okLine (String) - The line on which the relatives informations of the Flight are registered.
      * @param airportSet ({@link util.AirportSet util.AirportSet}) - The AirportSet on which are contains all the airports.
      * @param currentLine (int) - The current line of the source file, used to report the errors.
+     * 
      * @throws InvalidFileFormatException Throwed if the line does not meet the requirement. Like missing informations, etc...
      * @throws NumberFormatException Throwed if the cast from (String) to (int) goes wrong.
      * @throws InvalidTimeException Throwed if the data on the departure time are incorrect.

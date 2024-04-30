@@ -3,15 +3,33 @@ package util;
 //-- Import Java
 
 import java.util.HashSet;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Scanner;
+import java.util.Set;
+
+import javax.imageio.ImageIO;
+
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.GeoPosition;
+
+//-- Import JxMapViewer
+
+import org.jxmapviewer.viewer.Waypoint;
+import org.jxmapviewer.viewer.WaypointPainter;
+import org.jxmapviewer.viewer.WaypointRenderer;
 
 //-- Import Exceptions
 
 import exceptions.InvalidFileFormatException;
 import exceptions.ObjectNotFoundException;
+import ihm.Map;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import exceptions.InvalidCoordinateException;
 
 /**
@@ -90,7 +108,7 @@ public class AirportSet {
             }
         }
         throw new ObjectNotFoundException();
-    } 
+    }
 
     /**
      * Prompt all the informations of all the Flights in the console
@@ -109,13 +127,15 @@ public class AirportSet {
      * Imports the Airports from a File passed in parameter. They are automatically added to the AirportSet.
      * 
      * @param airportsFile ({@link java.io.File java.io.File}) - The File read.
+     * @param map ({@link ihm.Map}) - The Map on which are prompted the Waypoints of the Airports
+     *
      * @throws FileNotFoundException Throwed if the File is not found or does not exist.
      * @throws NumberFormatException Throwed if the cast from (String) to (int) is not done correctly (spaces, symbols,...)/
      * @throws InvalidCoordinateException Throwed if the coordinates ({@link util.Longitude util.Longitude} and {@link util.Latitude util.Latitude}) are not correct in the source file.
      * 
      * @author Luc le Manifik
      */
-    public void importAirportsFromFile(File airportsFile) throws FileNotFoundException, NumberFormatException, InvalidCoordinateException {
+    public void importAirportsFromFile(File airportsFile, Map map) throws FileNotFoundException, NumberFormatException, InvalidCoordinateException {
         
         Scanner scanLine = null;
 
@@ -128,12 +148,14 @@ public class AirportSet {
         String line;
         int currentLine = 0; // The line currently read in the source file. To report errors.
 
+        Set<Waypoint> waypointSet = new HashSet<Waypoint>();
+
         while(scanLine.hasNextLine()) {
             ++currentLine;
             line = scanLine.nextLine();
             if(line.charAt(0) != '\n') { // Check if the line is not just a blank line
                 try {
-                    this.createAirportFrom(line, currentLine); // Creates an Airport with the informations of the line.
+                    this.createAirportFrom(waypointSet, line, currentLine); // Creates an Airport with the informations of the line.
                 }catch(InvalidFileFormatException iffe) {
                     scanLine.close();
                     throw iffe;
@@ -148,20 +170,55 @@ public class AirportSet {
         }
 
         scanLine.close();
+
+        if(!map.equals(null)) {
+
+            WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>(); // The Waypoint drawer
+            waypointPainter.setRenderer(new WaypointRenderer<Waypoint>() {
+                @Override
+                public void paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint w)
+                {
+                    BufferedImage img = null;
+
+                    try {
+                        img = ImageIO.read(new File("sprint/map-pin.png"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (img == null)
+                        return;
+
+                    Point2D point = map.getTileFactory().geoToPixel(w.getPosition(), map.getZoom());
+                    
+                    int x = (int)point.getX() -img.getWidth() / 2;
+                    int y = (int)point.getY() -img.getHeight();
+                    
+                    g.drawImage(img, x, y, null);
+	            }
+            }); // Setting up the visual of the Waypoints
+
+            // Adding the Set of Airports to the waypointPainter
+            waypointPainter.setWaypoints(waypointSet);
+
+            map.getMap().setOverlayPainter(waypointPainter); // Putting the waypointPainter on the map
+        }
     }
 
     /**
      * Creates and add an Airport to the AirportSet, by reading the line (String) passed in parameter. 
      * 
+     * @param waypointSet ({@link java.util.Set}) - The Set which contains all the Airport's Waypoints
      * @param okLine (String) - The (String) that is read and contains the informations about the Airport.
      * @param currentLine (int) - The current line in the source file. Used to report errors.
+     * 
      * @throws InvalidFileFormatException Throwed if the source file does not match the required format.
      * @throws NumberFormatException Throwed if the cast from (String) to (int) is not done correctly (spaces, symbols...).
      * @throws InvalidCoordinateException Throwed if the values of the coordinates ({@link util.Longitude util.Longitude} and {@link util.Latitude util.Latitude}) are not correct.
      * 
      * @author Luc le Manifik
      */
-    private void createAirportFrom(String line, int currentLine) throws InvalidFileFormatException, NumberFormatException, InvalidCoordinateException {
+    private void createAirportFrom(Set<Waypoint> waypointSet, String line, int currentLine) throws InvalidFileFormatException, NumberFormatException, InvalidCoordinateException {
 
         String okLine = line.replaceAll(" ", "");
 
@@ -236,8 +293,8 @@ public class AirportSet {
 
         // Creates the two coordinates, need to be declared here before to be used in the Airport's Constructor
 
-        Longitude longitude = null;
-        Latitude latitude = null;
+        Longitude longitude = new Longitude(0, 0, 0, 'E');
+        Latitude latitude = new Latitude(0, 0, 0, 'N');
 
         try {
             latitude = new Latitude(latitudeDegree, latitudeMinutes, latitudeSeconds, s_latitudeDirection.charAt(0));
@@ -246,7 +303,23 @@ public class AirportSet {
             throw ice;
         }
         
+        Airport airport = new Airport(s_name, s_location, latitude, longitude);
 
-        this.addAirport(new Airport(s_name, s_location, latitude, longitude));
+        // Adding the airport to the AirportSet
+        this.addAirport(airport);
+
+        if(!waypointSet.equals(null)) {
+
+            Waypoint airport_Waypoint = new Waypoint() {
+                @Override
+                public GeoPosition getPosition() {
+                    return new GeoPosition(airport.getLatitude().getDecimalCoordinate(), airport.getLongitude().getDecimalCoordinate());
+                }
+            };
+
+            // Adding the two Waypoints to the waypointSet
+            waypointSet.add(airport_Waypoint);
+
+        }
     }
 }
