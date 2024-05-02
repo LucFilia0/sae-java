@@ -34,27 +34,27 @@ public class Flight extends SingleNode {
     /**
      * The String identifier that represents the departure Airport ({@link util.Airport util.Airport})
      */
-    private final String DEPARTURE_AIRPORT = "departureAirport";
+    public static final String DEPARTURE_AIRPORT = "departureAirport";
 
     /**
      * The String identifier that represents the departure Airport ({@link util.Airport util.Airport})
      */
-    private final String ARRIVAL_AIRPORT = "arrivalAirport";
+    public static final String ARRIVAL_AIRPORT = "arrivalAirport";
 
     /**
      * The String identifier that represents the departure Time ({@link util.Time util.Time})
      */
-    private final String DEPARTURE_TIME = "departureTime";
+    public static final String DEPARTURE_TIME = "departureTime";
 
     /**
      * The String identifier that represents the Flight's duration, in MINUTES (int)
      */
-    private final String FLIGHT_DURATION = "flightDuration";
+    public static final String FLIGHT_DURATION = "flightDuration";
 
     /**
      * The String identifier that represents the Flight's layer (int)
      */
-    private final String LAYER = "layer";
+    public static final String LAYER = "layer";
 
     /**
      * Initialize the attributes of a Flight.
@@ -101,7 +101,7 @@ public class Flight extends SingleNode {
      * @author Luc le Manifik
      */
     public Airport getDepartureAirport() {
-        return (Airport)this.getAttribute(this.DEPARTURE_AIRPORT);
+        return (Airport)this.getAttribute(Flight.DEPARTURE_AIRPORT);
     }
 
     /**
@@ -112,7 +112,7 @@ public class Flight extends SingleNode {
      * @author Luc le Manifik
      */
     public Airport getArrivalAirport() {
-        return (Airport)this.getAttribute(this.ARRIVAL_AIRPORT);
+        return (Airport)this.getAttribute(Flight.ARRIVAL_AIRPORT);
     }
 
     /**
@@ -123,7 +123,7 @@ public class Flight extends SingleNode {
      * @author Luc le Manifik
      */
     public FlightTime getDepartureTime() {
-        return (FlightTime)this.getAttribute(this.DEPARTURE_TIME);
+        return (FlightTime)this.getAttribute(Flight.DEPARTURE_TIME);
     }
 
     /**
@@ -134,7 +134,7 @@ public class Flight extends SingleNode {
      * @author Luc le Manifik
      */
     public int getFlightDuration() {
-        return (int)this.getAttribute(this.FLIGHT_DURATION);
+        return (int)this.getAttribute(Flight.FLIGHT_DURATION);
     }
 
     /**
@@ -145,7 +145,7 @@ public class Flight extends SingleNode {
      * @author Luc le Manifik
      */
     public int getLayer(){
-        return (int)this.getAttribute(this.LAYER);
+        return (int)this.getAttribute(Flight.LAYER);
     }
 
     //-- Flight Setters
@@ -162,7 +162,7 @@ public class Flight extends SingleNode {
         if(departureAirport == null) {
             throw new NullPointerException();
         }
-        this.setAttribute(this.DEPARTURE_AIRPORT, departureAirport);
+        this.setAttribute(Flight.DEPARTURE_AIRPORT, departureAirport);
     }
 
     /**
@@ -177,7 +177,7 @@ public class Flight extends SingleNode {
         if(arrivalAirport == null) {
             throw new NullPointerException();
         }
-        this.setAttribute(this.ARRIVAL_AIRPORT, arrivalAirport);
+        this.setAttribute(Flight.ARRIVAL_AIRPORT, arrivalAirport);
     }
 
     /**
@@ -192,7 +192,7 @@ public class Flight extends SingleNode {
         if(departureTime == null) {
             throw new NullPointerException();
         }
-        this.setAttribute(this.DEPARTURE_TIME, departureTime);
+        this.setAttribute(Flight.DEPARTURE_TIME, departureTime);
     }
 
     /**
@@ -207,7 +207,7 @@ public class Flight extends SingleNode {
         if(flightDuration <= 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute(this.FLIGHT_DURATION, flightDuration);
+        this.setAttribute(Flight.FLIGHT_DURATION, flightDuration);
     }
 
     /**
@@ -219,7 +219,7 @@ public class Flight extends SingleNode {
      */
     public void setLayer(int layer) {
         if(layer >= 0) {
-            this.setAttribute(this.LAYER, layer);
+            this.setAttribute(Flight.LAYER, layer);
         }
     }
 

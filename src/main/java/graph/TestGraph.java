@@ -20,6 +20,7 @@ import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.graphicGraph.stylesheet.Color;
 
 import exceptions.InvalidEntryException;
 //-- Import Exceptions
@@ -495,23 +496,25 @@ public class TestGraph extends SingleGraph {
      * 
      * @param graph Graph you are trying to color
      * @param node Node you are trying to color 
+     * @param colorAttribute (String) - key of the attribute used for coloring
      * @return array consisting of 2 values, the color assigned to the node and the number of conflicts it generated
      * 
      * @author Nathan LIEGEON
      */
-    public static int[] getLeastConflictingColor(Graph graph, Node node) {
+    public static int[] getLeastConflictingColor(Graph graph, Node node, String colorAttribute) {
         int[] minConflict = {-1, -1} ;
         int[] currentConflict  = new int[2];
         HashMap<Integer, Integer> conflictCount = new HashMap<>() ;
         for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
-            if ((Integer) graph.getNode(neighbor.getId()).getAttribute("color") != 0) {
-                conflictCount.merge((Integer)neighbor.getAttribute("color"), 1, Integer::sum) ;
+            if ((Integer) graph.getNode(neighbor.getId()).getAttribute(colorAttribute) != 0) {
+                conflictCount.merge((Integer)neighbor.getAttribute(colorAttribute), 1, Integer::sum) ;
             }
         }
 
         for (Integer color : conflictCount.keySet()) {
             currentConflict[0] = color ;
             currentConflict[1] = conflictCount.get(color) ;
+            System.out.println("color : " + currentConflict[0]);
             if (minConflict[0] == -1 || minConflict[1] > currentConflict[1]) {
                 minConflict = currentConflict ;
             }
@@ -526,11 +529,12 @@ public class TestGraph extends SingleGraph {
      * 
      * @param graph Graph we are trying to color
      * @param node Node currently being colored
+     * @param colorAttribute (String) - key of the attribute used for coloring
      * @return number of conflicts caused by the node
      */
-    public static int colorWithLeastConflicts(Graph graph, Node node) {
-        int[] res = getLeastConflictingColor(graph, node) ;
-        node.setAttribute("color", res[0]) ;
+    public static int colorWithLeastConflicts(Graph graph, Node node, String colorAttribute) {
+        int[] res = getLeastConflictingColor(graph, node, colorAttribute) ;
+        node.setAttribute(colorAttribute, res[0]) ;
         node.setAttribute("ui.class", "color" + res[0]) ;
         return res[1] ;
     }
@@ -575,18 +579,17 @@ public class TestGraph extends SingleGraph {
      * 
      * @author Nathan LIEGEON
      */
-    public static int[] colorGraphRLF(Graph graph) {
+    public static int[] colorGraphRLF(Graph graph, String colorAttribute, int kMax) {
 
         Graph newGraph = Graphs.clone(graph) ;
         HashMap<Integer, HashSet<Node>> colorMap = new HashMap<>() ;
         HashSet<Node> setOfAddableNodes ;
         HashSet<Node> setOfNeighborsOfFirstNode ;
         Node firstNodeOfThisColor ;
-        int kMax = (Integer)graph.getAttribute("kMax") ;
         int color = 0 ;
         int[] infoTab = {0, 0} ;
 
-        while (newGraph.getNodeCount() != 0 && color <= kMax) {
+        while (newGraph.getNodeCount() != 0 && color < kMax) {
             color++ ;
             infoTab[0]++ ;
             
@@ -604,8 +607,7 @@ public class TestGraph extends SingleGraph {
 
             //Adds the colors to the real graph
             for (Node coloringNode : colorMap.get(color)) { 
-                coloringNode.setAttribute("color", color) ;
-                coloringNode.setAttribute("ui.class", "color" + color) ;
+                coloringNode.setAttribute(colorAttribute, color) ;
                 newGraph.removeNode(newGraph.getNode(coloringNode.getId())) ;
             }
             
@@ -618,7 +620,7 @@ public class TestGraph extends SingleGraph {
         if (newGraph.getNodeCount() != 0) {
             for (Node node : newGraph) {
                 node = graph.getNode(node.getId()) ;
-                infoTab[1] = infoTab[1] + colorWithLeastConflicts(graph, node) ;
+                infoTab[1] = infoTab[1] + colorWithLeastConflicts(graph, node, colorAttribute) ;
             }
         }
 
@@ -684,19 +686,19 @@ public class TestGraph extends SingleGraph {
     }
 
     /**
-     * Requires nodes to have the attribute "color".
      * Checks if the coloration worked.
      * 
      * @param graph Graph that will be tested.
+     * @param String key of the color attribute used
      * @return int number of nodes which are adjacent to another node with the same color.
      * 
      * @author Nathan LIEGEON
      */
-    public static int testColorationGraph(Graph graph) {
+    public static int testColorationGraph(Graph graph, String colorAttribute) {
         int nbProblems = 0 ;
         for (Node node : graph) {
             for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
-                if (node.getAttribute("color") == neighbor.getAttribute("color")) {
+                if (node.getAttribute(colorAttribute) == neighbor.getAttribute(colorAttribute)) {
                     nbProblems++ ;
                     System.out.println("Probleme entre " + node + " et " + neighbor) ;
                 }
@@ -704,5 +706,26 @@ public class TestGraph extends SingleGraph {
         }   
 
         return nbProblems ;
+    }
+
+    public static void setGraphStyle(Graph graph, int nbColor, String colorAttribute) {
+        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : 20px ; }") ;
+
+        Color[] colorTab = {Color.BLACK, Color.BLUE, Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, Color.LIGHT_GRAY
+            , Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED, Color.YELLOW} ;
+
+        for (Node coloringNode : graph) {
+            Integer color = (Integer)coloringNode.getAttribute(colorAttribute) ;
+            coloringNode.setAttribute("ui.class", "color" + color) ;
+        }
+        
+        // Scuffed way to show colors on the graph
+        for (int i = 0 ; i < nbColor ; i++) {
+            Color currentColor = colorTab[i % colorTab.length] ;
+            String str = "rgb(" + currentColor.getRed() + ',' + currentColor.getGreen() + ',' + currentColor.getBlue() + ')' ;
+            stylesheet.append("node.color" + (i+1) + "{fill-color : " + str + " ; }\n") ;
+        }
+
+        graph.setAttribute("ui.stylesheet", stylesheet.toString()) ;
     }
 }

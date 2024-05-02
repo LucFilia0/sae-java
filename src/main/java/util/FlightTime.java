@@ -1,5 +1,8 @@
 package util;
 
+import java.sql.Time;
+import java.time.LocalTime;
+
 import exceptions.InvalidTimeException;
 
 /**
@@ -101,5 +104,29 @@ public class FlightTime {
      */
     public int getHourValueInMinutes() {
         return this.hour * 60 + this.min;
+    }
+
+    /**
+     * Converts a time object to a FlightTime object
+     * @param time (Time) - object to convert
+     * @return (FlightTime) - converted time
+     * 
+     * @author Nathan LIEGEON
+     */
+    public FlightTime convertTime(Time time) {
+        int hour = (int)time.getTime()%(1000000 * 60 * 60)/24 ;
+        int minute = (int) time.getTime()%(1000000 * 60 * 60) / (24*60) ;
+        FlightTime returnTime = new FlightTime(hour, minute) ;
+        return returnTime ;
+    }
+
+    /**
+     * 
+     * @return (FlightTime) - CurrentTime
+     * 
+     * @author Nathan LIEGEON
+     */
+    public static FlightTime getCurrentTime() {
+        return new FlightTime(LocalTime.now().getHour(), LocalTime.now().getMinute()) ;
     }
 }

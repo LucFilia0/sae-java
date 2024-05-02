@@ -4,12 +4,16 @@ package graph;
 
 import java.io.File;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
 import util.FlightTime;
 import util.AirportSet;
 
 //-- Import GraphStream
 
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.graph.Node ;
+import org.graphstream.graph.Edge ;
 
 //-- Import Exceptions
 
@@ -36,12 +40,12 @@ public class FlightsIntersectionGraph extends SingleGraph {
     /**
      * The String identifier that represents the number of Flights presents in the FIG (int)
      */
-    private final String NB_FLIGHTS = "nbFlights";
+    public static final String NB_FLIGHTS = "nbFlights";
 
     /**
      * The String identifier that represents the number of collisions in the FIG (int)
      */
-    private final String NB_COLLISIONS = "nbCollisions";
+    public static final String NB_COLLISIONS = "nbCollisions";
 
     //-- FIG Constructor
 
@@ -55,8 +59,8 @@ public class FlightsIntersectionGraph extends SingleGraph {
      */
     public FlightsIntersectionGraph(String id) {
         super(id); // -> The identifier of the FIG, in the parent class (SingleGraph)
-        this.setAttribute(this.NB_FLIGHTS, 0); // -> The number of flights in the FIG
-        this.setAttribute(this.NB_COLLISIONS, 0); // -> The number of collisions in the FIG
+        this.setAttribute(FlightsIntersectionGraph.NB_FLIGHTS, 0); // -> The number of flights in the FIG
+        this.setAttribute(FlightsIntersectionGraph.NB_COLLISIONS, 0); // -> The number of collisions in the FIG
     }
 
     //-- FIG toString()
@@ -78,7 +82,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     public int getNbFlights() {
-        return (int)this.getAttribute(this.NB_FLIGHTS);
+        return (int)this.getAttribute(FlightsIntersectionGraph.NB_FLIGHTS);
     }
 
     /**
@@ -89,7 +93,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     public int getNbCollisions()  {
-        return (int)this.getAttribute(this.NB_COLLISIONS);
+        return (int)this.getAttribute(FlightsIntersectionGraph.NB_COLLISIONS);
     }
 
     //-- FIG Setters
@@ -102,7 +106,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     private void setNbFlights(int nbFlights) {
-        this.setAttribute(this.NB_FLIGHTS, nbFlights);
+        this.setAttribute(FlightsIntersectionGraph.NB_FLIGHTS, nbFlights);
     }
 
     /**
@@ -113,7 +117,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     private void setNbCollisions(int nbCollisions) {
-        this.setAttribute(this.NB_COLLISIONS, nbCollisions);
+        this.setAttribute(FlightsIntersectionGraph.NB_COLLISIONS, nbCollisions);
     }
 
     //-- FIG Importations
@@ -296,6 +300,49 @@ public class FlightsIntersectionGraph extends SingleGraph {
             }
         });
         
+    }
+
+    /**
+     * Makes all flights visible
+     */
+    public void showAllFlights() {
+        for (Node node : this) {
+            node.removeAttribute("ui.hide") ;
+        }
+    }
+
+    /**
+     * Shows only the flights that are in the air at a given time
+     * @param givenTime (FlightTime) - time used for the checks
+     */
+    public void showCurrentFlights(FlightTime givenTime) {
+        int givenTimeInMinutes = givenTime.getHourValueInMinutes() ;
+        for (Node node : this) {
+            Flight flightNode = (Flight) node ;
+            int departure = flightNode.getDepartureTime().getHourValueInMinutes() ;
+            int arrival = departure + flightNode.getFlightDuration() ;
+            if (givenTimeInMinutes < departure || givenTimeInMinutes > arrival) {
+                flightNode.setAttribute("ui.hide") ;
+                for (Edge edge : flightNode.edges().collect(Collectors.toSet())) {
+                    edge.setAttribute("ui.hide") ;
+                }
+            }
+        } 
+    }
+    /**
+     * Shows only the flights that are on the same layer
+     * @param layer (int) - layer used for the checks
+     */
+    public void showSameLayerFlights(int layer) {
+        for (Node node : this) {
+            Flight flightNode = (Flight) node ;
+            if (flightNode.getLayer() != layer) {
+                flightNode.setAttribute("ui.hide") ;
+                for (Edge edge : flightNode.edges().collect(Collectors.toSet())) {
+                    edge.setAttribute("ui.hide") ;
+                }
+            }
+        }
     }
 
     //-- FIG Coloration
