@@ -12,6 +12,7 @@ import org.graphstream.ui.swing_viewer.util.* ;
 import org.graphstream.ui.view.* ;
 import org.graphstream.ui.view.util.MouseManager;
 import org.graphstream.ui.swing_viewer.* ;
+import org.graphstream.algorithm.Toolkit ;
 
 //-- Import Exceptions
 
@@ -29,10 +30,12 @@ import exceptions.InvalidEntryException;
 
 import util.* ;
 import graph.* ;
+import graph.Renderer;
 
 public class App {
     public static void main(String[] args) {
-        System.setProperty("org.graphstream.ui", "swing");
+        System.setProperty("org.graphstream.ui", "swing") ;
+        System.setProperty("sun.java2d.uiScale", "100%") ;
 
         FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Yep");
         TestGraph testGraph = new TestGraph("hello") ;
@@ -86,18 +89,16 @@ public class App {
        
         int[] res = TestGraph.colorGraphRLF(fig, Flight.LAYER, 4) ;
         System.out.println("layers : " + res[0] + "\nconflicts : " + res[1]) ;
+        
+        // Use this instead of graph.display()
+        Renderer r = new Renderer(testGraph) ;
+        ViewPanel v = r.getViewPanel() ;
 
-        SwingViewer viewer = new SwingViewer(testGraph, SwingViewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD) ;
-        viewer.enableAutoLayout() ;
-        ViewPanel pan = (ViewPanel)viewer.addView(SwingViewer.DEFAULT_VIEW_ID, new SwingGraphRenderer()) ;
-        JFrame frame = new JFrame("Le graph il est là :D") ;
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
+        JFrame frame = new JFrame("Bienvenue chez Plane air") ;
         frame.setVisible(true) ;
         frame.setSize(800, 800) ;
-        frame.add(pan) ;
-
-        int resolution = Toolkit.getDefaultToolkit().getScreenResolution() ;
-        System.out.println(resolution) ;
+        frame.add(v) ;
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
         
     }
 }

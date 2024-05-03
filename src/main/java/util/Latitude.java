@@ -34,12 +34,18 @@ public class Latitude extends Coordinate {
 
     //-- Latitude's implemented abstract methods from Coordinate
 
-    // JavaDoc made in Coordinate
+    /**
+     * 
+     * @inherit-doc
+     */
     public char getDirection() {
         return this.direction;
     }
 
-    // JavaDoc made in Coordinate
+    /**
+     * 
+     * @inherit-doc
+     */
     public void setDirection(char direction) throws InvalidCoordinateException {
         this.direction = direction;
         if(direction != 'N' && direction != 'S') {
@@ -47,7 +53,10 @@ public class Latitude extends Coordinate {
         }
     }
 
-    // JavaDoc made in Coordinate
+    /**
+     * 
+     * @inherit-doc
+     */
     public double getDecimalCoordinate() {
         double decimalCoordinate; 
         decimalCoordinate = this.minutes + this.seconds/60;

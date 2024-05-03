@@ -445,12 +445,12 @@ public class TestGraph extends SingleGraph {
         }
 
         for (Node node : setOfNeighborsOfFirstNode) {
-            for (Node neighborOfNode : node.neighborNodes().collect(Collectors.toSet())) {
+            node.neighborNodes().forEach(neighborOfNode -> {
                 if (setOfAddableNodes.contains(neighborOfNode)) {
                     // If not in map => Sets value to 1, else adds one to the value
                     nodeMap.merge(neighborOfNode, 1, Integer::sum) ;
                 }
-            }
+            }) ;
         }
 
         Node max = null ;
@@ -467,10 +467,10 @@ public class TestGraph extends SingleGraph {
     /**
      * Colors all the nodes in setOfAddableNodes until it is empty
      *
-     * @param graph Graph you are trying to color
-     * @param colorMap Hashmap storing for each color (Integer key) 
-     * the set of all nodes that have that color (HashSet<Node> value)
-     * @param color The color currently being worked on
+     * @param graph graph you are trying to color
+     * @param colorMap map storing for each color (Integer key) 
+     * the set of all nodes that have that color (HashSet value)
+     * @param color integer the color currently being worked on
      * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently being worked on
      * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently being worked on
      * 
@@ -494,9 +494,9 @@ public class TestGraph extends SingleGraph {
     /**
      * Colors a node by minimizing conflicts (2 nodes with the same color touching each other)
      * 
-     * @param graph Graph you are trying to color
-     * @param node Node you are trying to color 
-     * @param colorAttribute (String) - key of the attribute used for coloring
+     * @param graph graph you are trying to color
+     * @param node node you are trying to color 
+     * @param colorAttribute key of the attribute used for coloring
      * @return array consisting of 2 values, the color assigned to the node and the number of conflicts it generated
      * 
      * @author Nathan LIEGEON
@@ -505,16 +505,16 @@ public class TestGraph extends SingleGraph {
         int[] minConflict = {-1, -1} ;
         int[] currentConflict  = new int[2];
         HashMap<Integer, Integer> conflictCount = new HashMap<>() ;
-        for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
+
+        node.neighborNodes().forEach(neighbor -> {
             if ((Integer) graph.getNode(neighbor.getId()).getAttribute(colorAttribute) != 0) {
                 conflictCount.merge((Integer)neighbor.getAttribute(colorAttribute), 1, Integer::sum) ;
             }
-        }
+        }) ;
 
         for (Integer color : conflictCount.keySet()) {
             currentConflict[0] = color ;
             currentConflict[1] = conflictCount.get(color) ;
-            System.out.println("color : " + currentConflict[0]);
             if (minConflict[0] == -1 || minConflict[1] > currentConflict[1]) {
                 minConflict = currentConflict ;
             }
@@ -529,7 +529,7 @@ public class TestGraph extends SingleGraph {
      * 
      * @param graph Graph we are trying to color
      * @param node Node currently being colored
-     * @param colorAttribute (String) - key of the attribute used for coloring
+     * @param colorAttribute key of the attribute used for coloring
      * @return number of conflicts caused by the node
      */
     public static int colorWithLeastConflicts(Graph graph, Node node, String colorAttribute) {
@@ -575,6 +575,7 @@ public class TestGraph extends SingleGraph {
      * If the number of colors used reaches kMax, a different algorithm will be used to minimize conflicts.
      * 
      * @param graph Graph which will be colored
+     * @param colorAttribute 
      * @return array consisting of 2 values : first one being the number of colors used, second being the number of conflicts
      * 
      * @author Nathan LIEGEON
@@ -709,7 +710,7 @@ public class TestGraph extends SingleGraph {
     }
 
     public static void setGraphStyle(Graph graph, int nbColor, String colorAttribute) {
-        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : 20px ; }") ;
+        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : 30px ; }") ;
 
         Color[] colorTab = {Color.BLACK, Color.BLUE, Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, Color.LIGHT_GRAY
             , Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED, Color.YELLOW} ;

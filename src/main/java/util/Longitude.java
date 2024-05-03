@@ -5,7 +5,7 @@ import exceptions.InvalidCoordinateException;
 /**
  * This class stores the geographical coordinates of the airports.
  * 
- * @author Nathan LIEEON - Modified : Luc le Manifik
+ * @author Nathan LIEGEON - Modified : Luc le Manifik
  */
 public class Longitude extends Coordinate {
 
@@ -33,12 +33,18 @@ public class Longitude extends Coordinate {
 
     //-- Latitude's implemented abstract methods from Coordinate
 
-    // JavaDoc made in Coordinate
+    /**
+     * 
+     * @inherit-doc
+     */
     public char getDirection() {
         return super.direction;
     }
 
-    // JavaDoc made in Coordinate
+    /**
+     * 
+     * @inherit-doc
+     */
     public void setDirection(char direction) throws InvalidCoordinateException {
         super.direction = direction;
         if(direction != 'E' && direction != 'O') {
@@ -46,7 +52,9 @@ public class Longitude extends Coordinate {
         }
     }
 
-    // JavaDoc made in Coordinate
+    /**
+     * @inherit-doc
+     */
     public double getDecimalCoordinate() {
         double decimalCoordinate; 
         decimalCoordinate = this.minutes + this.seconds/60;
