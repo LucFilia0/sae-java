@@ -7,8 +7,10 @@ import java.awt.* ;
 //-- Import GraphStream
 
 import org.graphstream.graph.Node;
+import org.graphstream.stream.thread.ThreadProxyPipe;
 import org.graphstream.ui.swing_viewer.util.* ;
 import org.graphstream.ui.view.* ;
+import org.graphstream.ui.view.util.MouseManager;
 import org.graphstream.ui.swing_viewer.* ;
 
 //-- Import Exceptions
@@ -85,15 +87,14 @@ public class App {
         int[] res = TestGraph.colorGraphRLF(fig, Flight.LAYER, 4) ;
         System.out.println("layers : " + res[0] + "\nconflicts : " + res[1]) ;
 
-        //new Clicks(testGraph) ;
         SwingViewer viewer = new SwingViewer(testGraph, SwingViewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD) ;
-        ViewPanel panel = (ViewPanel) viewer.addView(SwingViewer.DEFAULT_VIEW_ID, new SwingGraphRenderer()) ;
-        JFrame frame = new JFrame() ;
-        frame.add(panel) ;
-        frame.setSize(800,800) ;
-        frame.setVisible(true) ;
+        viewer.enableAutoLayout() ;
+        ViewPanel pan = (ViewPanel)viewer.addView(SwingViewer.DEFAULT_VIEW_ID, new SwingGraphRenderer()) ;
+        JFrame frame = new JFrame("Le graph il est là :D") ;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
-
+        frame.setVisible(true) ;
+        frame.setSize(800, 800) ;
+        frame.add(pan) ;
 
         int resolution = Toolkit.getDefaultToolkit().getScreenResolution() ;
         System.out.println(resolution) ;
