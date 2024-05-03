@@ -15,7 +15,7 @@ import org.graphstream.algorithm.Toolkit ;
 /**
  * Class handling rendering of the Graph and mouse events
  */
-public class Renderer implements ViewerListener {
+public class PanelCreator implements ViewerListener {
 	protected boolean loop = true;
 
 	private Graph g ;
@@ -26,26 +26,40 @@ public class Renderer implements ViewerListener {
 	/**
 	 * Opens the graph in a JFrame and handles mouse events
 	 * @param graph graph you are trying to render
+	 * @see ViewPanel 
 	 */
-	public Renderer(Graph graph) {
+	public PanelCreator(Graph graph) {
+		// Looks stupid but lets the implement ViewerListener events access the graph
 		g = graph ;
-		// Generates the window that 
+
+		// Generates the ViewPanel containing the graph
 		viewer = new SwingViewer(g, ThreadingModel.GRAPH_IN_ANOTHER_THREAD) ;
 		panel = (ViewPanel)viewer.addDefaultView(false) ;
 		viewer.enableAutoLayout() ;
 		viewer.getDefaultView().enableMouseOptions() ;
 
+		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
+		// and also checks for events
 		fromViewer = viewer.newViewerPipe();
 		fromViewer.addViewerListener(this);
 		fromViewer.addSink(g) ;
-		Thread thread = new Thread(new Runnable() {
+
+		// Thread running in the background constantly sending the changes to the Graph
+		Thread graphPump = new Thread(new Runnable() {
 			public void run() {
 				while(loop) {
-					fromViewer.pump() ;
+					try {
+						fromViewer.blockingPump() ;
+					}
+
+					// Don't mind this idk why or when this gets thrown
+					catch (InterruptedException e) {
+						System.out.println("bro got interrupted 😡😡😡") ;
+					}
 				}
 			}
 		}) ;
-		thread.start() ;
+		graphPump.start() ;
 	}
 
 	public void viewClosed(String id) {
@@ -63,19 +77,6 @@ public class Renderer implements ViewerListener {
 	}
 
 	public void mouseLeft(String id) {
-	}
-
-
-	public boolean isLoop() {
-		return this.loop;
-	}
-
-	public boolean getLoop() {
-		return this.loop;
-	}
-
-	public void setLoop(boolean loop) {
-		this.loop = loop;
 	}
 
 	public Graph getGraph() {

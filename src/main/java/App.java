@@ -1,26 +1,20 @@
 //-- Import Java
 
+import java.awt.* ;
 import java.io.File;
 import javax.swing.* ;
-import java.awt.* ;
+import javax.swing.plaf.FontUIResource;
 
 //-- Import GraphStream
 
 import org.graphstream.graph.Node;
-import org.graphstream.stream.thread.ThreadProxyPipe;
-import org.graphstream.ui.swing_viewer.util.* ;
-import org.graphstream.ui.view.* ;
-import org.graphstream.ui.view.util.MouseManager;
 import org.graphstream.ui.swing_viewer.* ;
-import org.graphstream.algorithm.Toolkit ;
+import org.graphstream.graph.implementations.* ;
+import org.graphstream.graph.* ;
 
 //-- Import Exceptions
 
 import java.io.FileNotFoundException;
-import org.graphstream.ui.graphicGraph.GraphicGraph;
-import org.graphstream.ui.graphicGraph.stylesheet.Color;
-import org.graphstream.ui.swing.SwingGraphRenderer;
-
 import exceptions.InvalidCoordinateException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
@@ -30,7 +24,6 @@ import exceptions.InvalidEntryException;
 
 import util.* ;
 import graph.* ;
-import graph.Renderer;
 
 public class App {
     public static void main(String[] args) {
@@ -40,7 +33,7 @@ public class App {
         FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Yep");
         TestGraph testGraph = new TestGraph("hello") ;
         try {
-            testGraph.importFromFile(new File("DataTest/graph-test0.txt"));
+            testGraph.importFromFile(new File("DataTest/graph-test19.txt"));
 
         }catch(FileNotFoundException fnfe) {
             System.err.println(fnfe);
@@ -77,28 +70,47 @@ public class App {
         for (Node node : testGraph) {
             node.setAttribute("color", 0) ;
         }
-        int[] color = TestGraph.colorGraphRLF(testGraph, "color", testGraph.getKMax()) ;
-        TestGraph.setGraphStyle(testGraph, color[0], "color") ;
-        
-        System.out.println("nb couleurs : " + color[0] + "\nnb conflits : " + color[1]);
-        System.out.println("conflits truc : " + TestGraph.testColorationGraph(testGraph, "color")) ;
 
-        color = TestGraph.colorGraphRLF(fig, Flight.LAYER, 100) ;
-        TestGraph.setGraphStyle(fig, color[0], Flight.LAYER) ;
-        System.out.println("nb couleurs : " + color[0] + "\nnb conflits : " + color[1]);
-       
-        int[] res = TestGraph.colorGraphRLF(fig, Flight.LAYER, 4) ;
-        System.out.println("layers : " + res[0] + "\nconflicts : " + res[1]) ;
+        Graph testGraph2 = Graphs.clone(testGraph) ;
+        int[] c = Coloration.colorGraphRLF(testGraph, "color", testGraph.getKMax()) ;
+        System.out.println("nb couleurs RLF : " + c[0] + "\n nb conflits RLF : " + c[1]) ;
+        Coloration.setGraphStyle(testGraph, c[0], "color") ;
+        
+        c = Coloration.ColorationDsatur(testGraph2, testGraph.getKMax(), "color") ;
+        System.out.println("nb couleurs DSAT : " + c[0] + "\n nb conflits DSAT : " + c[1]) ;
+        Coloration.setGraphStyle(testGraph2, c[0], "color") ;
         
         // Use this instead of graph.display()
-        Renderer r = new Renderer(testGraph) ;
+        PanelCreator r = new PanelCreator(testGraph) ;
+        PanelCreator r2 = new PanelCreator(testGraph2) ;
         ViewPanel v = r.getViewPanel() ;
+        ViewPanel v2 = r2.getViewPanel() ;
 
         JFrame frame = new JFrame("Bienvenue chez Plane air") ;
         frame.setVisible(true) ;
-        frame.setSize(800, 800) ;
-        frame.add(v) ;
+        frame.setSize(1200, 800) ;
+        frame.setLayout(new GridLayout(1,2)) ;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
+
+        // p1
+        JPanel p1 = new JPanel() ;
+        p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS)) ;
+        JLabel l1 = new JLabel("RLF") ;
+        l1.setFont(new FontUIResource(l1.getFont().getName(), l1.getFont().getStyle(), 30)) ;
+        l1.setAlignmentX(JLabel.CENTER_ALIGNMENT) ;
+        p1.add(l1) ;
+        p1.add(v) ;
+        frame.add(p1) ;
+
+        // p2
+        JPanel p2 = new JPanel() ;
+        p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS)) ;
+        JLabel l2 = new JLabel("DSATUR") ;
+        l2.setFont(new FontUIResource(l2.getFont().getName(), l2.getFont().getStyle(), 30)) ;
+        l2.setAlignmentX(JLabel.CENTER_ALIGNMENT) ;
+        p2.add(l2) ;
+        p2.add(v2) ;
+        frame.add(p2) ;
         
     }
 }
