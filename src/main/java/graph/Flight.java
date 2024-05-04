@@ -4,11 +4,16 @@ package graph;
 
 import util.FlightTime ;
 import util.Airport;
-import util.Math;
+import util.MyMath;
+import java.io.File;
 
 //-- Import GraphStream
 
 import org.graphstream.graph.implementations.*;
+
+//-- Import JxMapViewer
+
+import org.jxmapviewer.viewer.GeoPosition;
 
 //-- Import Exceptions
 
@@ -32,29 +37,34 @@ public class Flight extends SingleNode {
     //-- Flight Attributes
 
     /**
-     * The String identifier that represents the departure Airport ({@link util.Airport util.Airport})
+     * The String identifier which represents the departure Airport ({@link util.Airport util.Airport})
      */
-    private final String DEPARTURE_AIRPORT = "departureAirport";
+    private static final String DEPARTURE_AIRPORT = "departureAirport";
 
     /**
-     * The String identifier that represents the departure Airport ({@link util.Airport util.Airport})
+     * The String identifier which represents the departure Airport ({@link util.Airport util.Airport})
      */
-    private final String ARRIVAL_AIRPORT = "arrivalAirport";
+    private static final String ARRIVAL_AIRPORT = "arrivalAirport";
 
     /**
-     * The String identifier that represents the departure Time ({@link util.Time util.Time})
+     * The String identifier which represents the departure Time ({@link util.Time util.Time})
      */
-    private final String DEPARTURE_TIME = "departureTime";
+    private static final String DEPARTURE_TIME = "departureTime";
 
     /**
-     * The String identifier that represents the Flight's duration, in MINUTES (int)
+     * The String identifier which represents the Flight's duration, in MINUTES (int)
      */
-    private final String FLIGHT_DURATION = "flightDuration";
+    private static final String FLIGHT_DURATION = "flightDuration";
 
     /**
-     * The String identifier that represents the Flight's layer (int)
+     * The String identifier which represents the Flight's layer (int)
      */
-    private final String LAYER = "layer";
+    private static final String LAYER = "layer";
+
+    /**
+     * The file which contains the icon of the flights ({@link java.io.File})
+     */
+    public static final File FLIGHT_ICON = new File("sprint/plane.png");
 
     /**
      * Initialize the attributes of a Flight.
@@ -74,6 +84,7 @@ public class Flight extends SingleNode {
             this.setFlightDuration(flightDuration); // -> The duration of the flight, in MINUTES
     
             this.setLayer(0); // -> The coloration : The layer on which the Flight is placed (0 means no layer attributed)
+
         }catch(NullPointerException npe) {
             throw npe;
         }catch(InvalidEntryException iee) {
@@ -85,6 +96,7 @@ public class Flight extends SingleNode {
 
     /**
      * Returns the informations of Flight in (String).
+     * 
      * @return (String)
      */
     public String toString() {
@@ -96,56 +108,56 @@ public class Flight extends SingleNode {
     /**
      * Get the departure Airport of the Flight.
      * 
-     * @return obj ({@link util.Airport util.Airport})
+     * @return ({@link util.Airport})
      * 
      * @author Luc le Manifik
      */
     public Airport getDepartureAirport() {
-        return (Airport)this.getAttribute(this.DEPARTURE_AIRPORT);
+        return (Airport)this.getAttribute(Flight.DEPARTURE_AIRPORT);
     }
 
     /**
      * Get the arrival Airport of the Flight.
      * 
-     * @return obj ({@link util.Airport util.Airport})
+     * @return ({@link util.Airport})
      * 
-     * @author Luc le Manifik
+     * @author le Manifik
      */
     public Airport getArrivalAirport() {
-        return (Airport)this.getAttribute(this.ARRIVAL_AIRPORT);
+        return (Airport)this.getAttribute(Flight.ARRIVAL_AIRPORT);
     }
 
     /**
      * Get the departure Time of the Flight.
      * 
-     * @return obj ({@link util.Time util.Time})
+     * @return ({@link util.FlightTime})
      * 
      * @author Luc le Manifik
      */
     public FlightTime getDepartureTime() {
-        return (FlightTime)this.getAttribute(this.DEPARTURE_TIME);
+        return (FlightTime)this.getAttribute(Flight.DEPARTURE_TIME);
     }
 
     /**
      * Get the duration of the Flight (in MINUTES).
      * 
-     * @return obj (int)
+     * @return (int)
      * 
      * @author Luc le Manifik
      */
     public int getFlightDuration() {
-        return (int)this.getAttribute(this.FLIGHT_DURATION);
+        return (int)this.getAttribute(Flight.FLIGHT_DURATION);
     }
 
     /**
      * Get the layer on which is the Flight.
      * 
-     * @return obj (int)
+     * @return (int)
      * 
      * @author Luc le Manifik
      */
     public int getLayer(){
-        return (int)this.getAttribute(this.LAYER);
+        return (int)this.getAttribute(Flight.LAYER);
     }
 
     //-- Flight Setters
@@ -153,7 +165,7 @@ public class Flight extends SingleNode {
     /**
      * Set the departure Airport of the Flight.
      * 
-     * @param departureAirport ({@link util.Airport util.Airport}) - The new departure Airport.
+     * @param departureAirport ({@link util.Airport}) - The new departure Airport.
      * @throws NullPointerException Throwed if the Object passed in paramter is null.
      * 
      * @author Luc le Manifik
@@ -162,13 +174,13 @@ public class Flight extends SingleNode {
         if(departureAirport == null) {
             throw new NullPointerException();
         }
-        this.setAttribute(this.DEPARTURE_AIRPORT, departureAirport);
+        this.setAttribute(Flight.DEPARTURE_AIRPORT, departureAirport);
     }
 
     /**
      * Set the arrival Airport of the Flight.
      * 
-     * @param arrivalAirport ({@link util.Airport util.Airport}) - The new arrival Airport.
+     * @param arrivalAirport ({@link util.Airport}) - The new arrival Airport.
      * @throws NullPointerException Throwed if the Object passed in paramter is null.
      * 
      * @author Luc le Manifik
@@ -177,13 +189,13 @@ public class Flight extends SingleNode {
         if(arrivalAirport == null) {
             throw new NullPointerException();
         }
-        this.setAttribute(this.ARRIVAL_AIRPORT, arrivalAirport);
+        this.setAttribute(Flight.ARRIVAL_AIRPORT, arrivalAirport);
     }
 
     /**
      * Set the departure Time of the Flight.
      * 
-     * @param departureTime ({@link util.Time util.Time}) - The new departure Time of the Flight.
+     * @param departureTime ({@link util.Time}) - The new departure Time of the Flight.
      * @throws NullPointerException Throwed if the Object passed in paramter is null.
      * 
      * @author Luc le Manifik
@@ -192,7 +204,7 @@ public class Flight extends SingleNode {
         if(departureTime == null) {
             throw new NullPointerException();
         }
-        this.setAttribute(this.DEPARTURE_TIME, departureTime);
+        this.setAttribute(Flight.DEPARTURE_TIME, departureTime);
     }
 
     /**
@@ -207,20 +219,21 @@ public class Flight extends SingleNode {
         if(flightDuration <= 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute(this.FLIGHT_DURATION, flightDuration);
+        this.setAttribute(Flight.FLIGHT_DURATION, flightDuration);
     }
 
     /**
      * Set the new layer on which the Flight is.
      * 
-     * @param layer (int) - The new layer of the Flight.
+     * @param layer (int) - The new layer of the Flight
      * 
      * @author Luc le Manifik
      */
-    public void setLayer(int layer) {
-        if(layer >= 0) {
-            this.setAttribute(this.LAYER, layer);
+    public void setLayer(int layer) throws InvalidEntryException {
+        if(layer < 0) {
+            throw new InvalidEntryException();
         }
+        this.setAttribute(Flight.LAYER, layer);
     }
 
     //-- Flight Methods
@@ -382,8 +395,8 @@ public class Flight extends SingleNode {
                     flightDuration_B = tangoCharlie.getFlightDuration();
     
                     // Flight distance (on X_AXIS)
-                    flightDistanceX_A = Math.absoluteValue(depX_A, arrX_A);
-                    flightDistanceX_B = Math.absoluteValue(depX_B, arrX_B);
+                    flightDistanceX_A = MyMath.absoluteValue(depX_A, arrX_A);
+                    flightDistanceX_B = MyMath.absoluteValue(depX_B, arrX_B);
     
                     // Flight speed
                     speedX_A = flightDistanceX_A / flightDuration_A; // v = d/dt
@@ -395,13 +408,13 @@ public class Flight extends SingleNode {
                     
                     double deltaX_A, deltaX_B;
     
-                    deltaX_A = Math.absoluteValue(crossX, depX_A);
-                    deltaX_B = Math.absoluteValue(crossX, depX_B);
+                    deltaX_A = MyMath.absoluteValue(crossX, depX_A);
+                    deltaX_B = MyMath.absoluteValue(crossX, depX_B);
     
                     crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getHourValueInMinutes(); // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
                     crossTime_B = (deltaX_B / speedX_B) + tangoCharlie.getDepartureTime().getHourValueInMinutes();    
                     
-                    timeGap = Math.absoluteValue(crossTime_A, crossTime_B); // The time difference between the two crossTime
+                    timeGap = MyMath.absoluteValue(crossTime_A, crossTime_B); // The time difference between the two crossTime
     
                     // Check if the timeGap is between the timeSecurity -> If the Flights are getting to the crossing point at the same time.
                     if(timeGap < timeSecurity) {
@@ -412,5 +425,74 @@ public class Flight extends SingleNode {
             }
         }
         return explode;
+    }
+
+    public GeoPosition getCurrentGeoPosition() {
+
+        GeoPosition currentGeoPosition = null;
+
+        long currentTimeInMinutes = System.currentTimeMillis() / 60000; // From milliseconds to minutes
+
+        int flightDepartureTime = this.getDepartureTime().getHourValueInMinutes();
+        int flightArrivalTime = flightDepartureTime + this.getFlightDuration();
+
+        /*
+         * Precisions :
+         * We need t calculate both the x_position, and the y_position of the Flight, so we can put them into a GeoPosition object.
+         * We first need to calculate the distance, speed and then the position on the X axis, and then for the Y_AXIS.
+         * 
+         * 0. Verifying the Flight is currently flying
+         * 1. Distance of the Flight (X & Y)
+         * 2. Speed of the Flight (X & Y)
+         * 3. Position (X & Y)
+         */
+
+        /*
+         * 0. Verifying the Flight is currently flying
+         */
+        if(flightDepartureTime <= currentTimeInMinutes && currentTimeInMinutes <= flightArrivalTime) {
+
+            // Departure Airport's coordinates
+            double depX = this.getDepartureAirport().getLongitude().getDecimalCoordinate();
+            double depY = this.getArrivalAirport().getLatitude().getDecimalCoordinate();
+
+            // Arrival Airport's coordinates
+            double arrX = this.getArrivalAirport().getLongitude().getDecimalCoordinate();
+            double arrY = this.getArrivalAirport().getLatitude().getDecimalCoordinate();
+
+            int flightDuration = this.getFlightDuration();
+
+            /*
+             * 1. Distance of the Flight
+             */
+            double flightDistanceX = MyMath.absoluteValue(depX, arrX);
+            double flightDistanceY = MyMath.absoluteValue(depY, arrY);
+
+            /*
+             * 2. Speed of the Flight
+             */
+            double flightSpeedX = flightDistanceX / flightDuration; // v = d / t
+            double flightSpeedY = flightDistanceY / flightDuration;
+
+            /*
+             * 3. Position
+             * 
+             * 'flightDuration' in MINUTES and 'currentTimeInMinutes' in minutes -> OK
+             * 
+             * pos(t) = 1/2 * a * t^2 + v * t + x0
+             * 
+             * With a = 0 (because it is suppposed that the speed is constant)
+             * v = 'flightSpeed[XY]'
+             * t = 'durationFlight'
+             * x0 = dep[XY]
+             */
+
+            double positionX = flightDuration * flightSpeedX + depX;
+            double positionY = flightDuration * flightSpeedY + depY;
+
+            currentGeoPosition = new GeoPosition(positionX, positionY);
+        }
+
+        return currentGeoPosition;
     }
 }

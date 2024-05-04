@@ -2,15 +2,15 @@
 
 import javax.swing.*;
 
-import org.jxmapviewer.viewer.GeoPosition;
-
-
 import java.awt.BorderLayout;
 
 //-- Import Java
 
 import java.io.File;
+
+import graph.Flight;
 import graph.FlightsIntersectionGraph;
+import util.Airport;
 import util.AirportSet;
 
 //-- Import IHM
@@ -30,11 +30,7 @@ import exceptions.InvalidEntryException;
 public class App {
     public static void main(String[] args) {
 
-        /*
-         * Data Importation
-         */
-        //-- Definitions
-
+        // == Data Importation
         double timeSecurity = 15;
 
         //String testGraphFile = "data/graph-test1.txt";
@@ -43,15 +39,12 @@ public class App {
 
         System.setProperty("org.graphstream.ui", "swing");
 
-        FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Yep");
+        FlightsIntersectionGraph fig = new FlightsIntersectionGraph("FIG");
         AirportSet as = new AirportSet();
-
-        Map map = new Map();
         
         try {
-            as.importAirportsFromFile(new File(airportsFile), map);
+            as.importAirportsFromFile(new File(airportsFile));
             fig.importFlightsFromFile(new File(flightsFile), as, timeSecurity);
-            
             //as.showAllAirports();
         }catch(FileNotFoundException fnfe) {
             System.err.println(fnfe);
@@ -67,63 +60,24 @@ public class App {
             System.err.println(iee);
         }
 
-        // fig.display();
-
-        /*
-         * IHM - Map
-         */
+        JFrame appFrame = new JFrame("Plane Air");
+        int appWidth = 1024;
+        int appHeight = 720;
 
         JPanel body = new JPanel();
         body.setLayout(new BorderLayout());
 
-        map.getMap().setAddressLocation(new GeoPosition(45.7540653,4.8428123));
-        map.getMap().setZoom(12);
+        Map map = new Map();
+        map.center();
+        //map.paintAirports(as, Airport.AIRPORT_ICON_FILE);
+        map.paintFlights(fig, Flight.FLIGHT_ICON);
 
         body.add(map, BorderLayout.CENTER);
-/* 
-        // Waypoints
-        // =================================================================================================================================
-        String airportName = "ANG";
-        double airportLat = 0, airportLong = 0;
+        appFrame.setContentPane(body);
 
-        try {
-            airportLat = as.getAirport(airportName).getLatitude().getDecimalCoordinate();
-            airportLong = as.getAirport(airportName).getLongitude().getDecimalCoordinate();
-        }catch(ObjectNotFoundException onfe) {
-            System.err.println(onfe);
-        }
-
-        GeoPosition gp = new GeoPosition(airportLat, airportLong);
-
-        // A Waypoint needs to return its position (a Waypoint is juste a position)
-        Waypoint wp = new Waypoint() {
-            @Override
-            public GeoPosition getPosition() {
-                return gp;
-            }
-        };
-
-        // A WaypointPainter is the style of the Waypoints (here the default one)
-        WaypointPainter<Waypoint> wpp = new WaypointPainter<Waypoint>();
-        wpp.setRenderer(new DefaultWaypointRenderer());
-
-        Set<Waypoint> wps = new HashSet<Waypoint>();
-        wps.add(wp);
-
-        wpp.setWaypoints(wps); // To set the Waypoint he displays, a WaypointPainter needs to have a Set of Waypoints
-        map.getMap().setOverlayPainter(wpp); // Set the WaypointPainter on Overlay
-
-        // =================================================================================================================================
-
-        map.getMap().setAddressLocation(gp);
- */
-        //-- Frame
-        JFrame _frame = new JFrame("Test Map");
-        _frame.setContentPane(body);
-
-        _frame.setSize(1024, 720);
-        _frame.setLocationRelativeTo(null);
-        _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        _frame.setVisible(true);
+        appFrame.setSize(appWidth, appHeight);
+        appFrame.setLocationRelativeTo(null);
+        appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        appFrame.setVisible(true);
     }
 }

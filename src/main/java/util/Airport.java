@@ -1,5 +1,9 @@
 package util;
 
+//-- Import java
+
+import java.io.File;
+
 /**
  * Airport represents the different airports of France.
  * 
@@ -28,6 +32,8 @@ public class Airport {
      * The longitude of the Airport ({@link util.Longitude util.Longitude})
      */
     private Longitude longitude;
+
+    public static final File AIRPORT_ICON_FILE = new File("sprint/airport.png"); 
 
     //-- Airport Constructor
 

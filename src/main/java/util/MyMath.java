@@ -6,7 +6,7 @@ package util;
  * 
  * @author Luc le Manifik
  */
-public class Math {
+public class MyMath {
     
     /**
      * Returns the gap between two numbers (doubles).
