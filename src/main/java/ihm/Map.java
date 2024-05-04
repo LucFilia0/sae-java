@@ -8,8 +8,9 @@ import util.Airport;
 import util.AirportSet;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
+import java.util.stream.Stream;
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -30,6 +31,7 @@ import org.jxmapviewer.viewer.*;
 
 import graph.FlightsIntersectionGraph;
 
+import org.graphstream.algorithm.util.FibonacciHeap.Node;
 import org.jxmapviewer.*;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
@@ -64,25 +66,9 @@ public class Map extends JPanel {
      */
     private int center_zoom;
 
-    /**
-     * The Set which contains all the GeoPositions of the Airports.
-     */
-    private Set<Waypoint> airports_waypointSet;
+    private Set<Waypoint> waypointSet;
 
-    /**
-     * The WaypointPainter which prompt the Airport's icon.
-     */
-    private WaypointPainter<Waypoint> airports_waypointPainter;
-
-    /**
-     * The Set which contains all the GeoPositions of the Flights
-     */
-    private Set<Waypoint> flights_waypointSet;
-
-    /**
-     * The WaypointPainter which prompt the Flight's icon.
-     */
-    private WaypointPainter<Waypoint> flights_waypointPainter;
+    private WaypointPainter<Waypoint> waypointPainter;
 
     //-- Map Constructor
 
@@ -96,13 +82,8 @@ public class Map extends JPanel {
 
 
 
-        this.airports_waypointSet = new HashSet<Waypoint>();
-        this.flights_waypointSet = new HashSet<Waypoint>();
-        /* The WaypointPainter is set in the "setAirportsWaypointPainter()" function
-         * because it needs the Icon's File (same for the Flights)
-         */
-        this.airports_waypointPainter = null;
-        this.flights_waypointPainter = null;
+        this.waypointSet = new HashSet<Waypoint>();
+        this.waypointPainter = new WaypointPainter<Waypoint>();
 
         
 
@@ -191,16 +172,8 @@ public class Map extends JPanel {
             this.center_zoom = center_zoom;
     }
 
-    /**
-     * Set the visual of the WayointPainter put in parameter from the iconFile (png or else).
-     * This function is here to set up the 'airports_waypointPainter' and the 'flights_waypointPainter' with the same function.
-     * 
-     * @param iconFile ({@link java.io.File}) - The icon File. The image that will be displayed by the WaypointPainter
-     * @param waypointPainter ({@link org.jxmapviewer.viewer.WaypointPainter}) - The WaypointPainter that will display the Waypoints
-     * 
-     * @author Luc le Manifik
-     */
-    private void setWaypointPainterRenderer(File iconFile, WaypointPainter<Waypoint> waypointPainter) {
+    
+    public void setWaypointPainter(File iconFile) {
         waypointPainter.setRenderer(new WaypointRenderer<Waypoint>() {
             @Override
             public void paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint w)
@@ -208,7 +181,7 @@ public class Map extends JPanel {
                 BufferedImage img = null;
 
                 try {
-                    img = ImageIO.read(iconFile); // The icon of the Waypoint
+                    img = ImageIO.read(iconFile); // Setting up the visual of the Waypoints
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -223,34 +196,6 @@ public class Map extends JPanel {
                 }
             }
         });
-    }
-
-    /**
-     * Set the Airport's WaypointPainter, which will draw all the Airport's Waypoints.
-     * 
-     * @param airportIconFile ({@link java.io.File}) - The icon that will be used to draw the Airports on the Map
-     * 
-     * @author Luc le Manifik
-     */
-    public void setAirportsWaypointPainter(File airportIconFile) {
-        this.airports_waypointPainter = new WaypointPainter<Waypoint>();
-
-        // Setting up the visual of the Waypoints
-        this.setWaypointPainterRenderer(airportIconFile, airports_waypointPainter);
-    }
-
-    /**
-     * Set the Flight's WaypointPainter, which will draw all the Flight's Waypoints.
-     * 
-     * @param flightIconFile ({@link java.io.File}) - The icon that will be used to draw the Flights on the Map
-     * 
-     * @author Luc le Manifik
-     */
-    public void setFlightsWaypointPainter(File flightIconFile) {
-        this.flights_waypointPainter = new WaypointPainter<Waypoint>();
-
-        // Setting up the visual of the Waypoints
-        this.setWaypointPainterRenderer(flightIconFile, flights_waypointPainter);
     }
 
     //-- Map Methods
@@ -276,48 +221,35 @@ public class Map extends JPanel {
      * 
      * @author Luc le Manifik
      */
-    public void paintAirports(AirportSet airportSet, File airportIconFile) {
+    public void addAirports(AirportSet airportSet, File airportIconFile) {
 
-        this.setAirportsWaypointPainter(airportIconFile);
+        this.setWaypointPainter(airportIconFile);
 
         Set<Airport> airports = airportSet.getAirportSet();
 
         for(Airport airport : airports) {
-
             // Add a new Waypoint which contains the actual airport's coordinates to "airports_waypointSet"
-            this.airports_waypointSet.add(new Waypoint() {
-                @Override
-                public GeoPosition getPosition() {
-                    return new GeoPosition(airport.getLatitude().getDecimalCoordinate(), airport.getLongitude().getDecimalCoordinate());
-                }
-            });
+            this.waypointSet.add(airport);
         }
-
-        // Add all the Airport's Waypoints to the Airport's WaypointPainter
-        this.airports_waypointPainter.setWaypoints(this.airports_waypointSet);
-        // Set up the waypointPainter as the JxMapViewer's overlay  
-        this.map.setOverlayPainter(airports_waypointPainter);
     }
 
-    public void paintFlights(FlightsIntersectionGraph fig, File flightIconFile) {
+    public void addFlights(FlightsIntersectionGraph fig, File flightIconFile) {
 
-        this.setFlightsWaypointPainter(flightIconFile);
+        this.setWaypointPainter(flightIconFile);
 
-        fig.forEach(node -> {
-            Flight flight = (Flight)node;
-            this.flights_waypointSet.add(new Waypoint() {
-                @Override
-                public GeoPosition getPosition() {
-                    return flight.getCurrentGeoPosition();
-                }
-            });
-        });
+        List<org.graphstream.graph.Node> nodeList = fig.nodes().toList();
 
-        // Add all the Flight's Waypoints to the Waypoint's WaypointPainter
-        this.flights_waypointPainter.setWaypoints(this.flights_waypointSet);
-        // Set up the JxMapViewer Overlay
-        this.map.getOverlayPainter().
-        this.map.setOverlayPainter(flights_waypointPainter);
+        for(org.graphstream.graph.Node node : nodeList) {
+            GeoPosition flighPosition = ((Flight) node).getCurrentGeoPosition();
+            if(flighPosition != null) {
+                this.waypointSet.add((Flight)node);
+            }
+        }
+    }
+
+    public void print() {
+        this.waypointPainter.setWaypoints(this.waypointSet);
+        this.map.setOverlayPainter(waypointPainter);
     }
 
     //-- Map KeyListener

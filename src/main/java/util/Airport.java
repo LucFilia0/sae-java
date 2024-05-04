@@ -4,12 +4,15 @@ package util;
 
 import java.io.File;
 
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.Waypoint;
+
 /**
  * Airport represents the different airports of France.
  * 
  * @author Luc le Manifik
  */
-public class Airport {
+public class Airport implements Waypoint {
     
     //-- Airport Attributes
 
@@ -98,6 +101,11 @@ public class Airport {
      */
     public Latitude getLatitude() {
         return this.latitude;
+    }
+
+    @Override
+    public GeoPosition getPosition() {
+        return new GeoPosition(this.latitude.getDecimalCoordinate(), this.longitude.getDecimalCoordinate());
     }
 
     //-- Airport Setters

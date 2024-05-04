@@ -14,6 +14,7 @@ import org.graphstream.graph.implementations.*;
 //-- Import JxMapViewer
 
 import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.Waypoint;
 
 //-- Import Exceptions
 
@@ -27,7 +28,7 @@ import exceptions.InvalidEntryException;
  * 
  * @author Luc le Manifik
  */
-public class Flight extends SingleNode {
+public class Flight extends SingleNode implements Waypoint {
     
     // Can only be used with the "graph.addNode()" method.
     protected Flight(AbstractGraph graph, String id) {
@@ -158,6 +159,11 @@ public class Flight extends SingleNode {
      */
     public int getLayer(){
         return (int)this.getAttribute(Flight.LAYER);
+    }
+
+    @Override
+    public GeoPosition getPosition() {
+        return this.getCurrentGeoPosition(); // recalculated each time we ask for the Flight location
     }
 
     //-- Flight Setters
@@ -395,8 +401,8 @@ public class Flight extends SingleNode {
                     flightDuration_B = tangoCharlie.getFlightDuration();
     
                     // Flight distance (on X_AXIS)
-                    flightDistanceX_A = MyMath.absoluteValue(depX_A, arrX_A);
-                    flightDistanceX_B = MyMath.absoluteValue(depX_B, arrX_B);
+                    flightDistanceX_A = arrX_A - depX_A;
+                    flightDistanceX_B = arrX_B - depX_B;
     
                     // Flight speed
                     speedX_A = flightDistanceX_A / flightDuration_A; // v = d/dt
@@ -408,8 +414,8 @@ public class Flight extends SingleNode {
                     
                     double deltaX_A, deltaX_B;
     
-                    deltaX_A = MyMath.absoluteValue(crossX, depX_A);
-                    deltaX_B = MyMath.absoluteValue(crossX, depX_B);
+                    deltaX_A = depX_A - crossX;
+                    deltaX_B = depX_B - crossX;
     
                     crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getHourValueInMinutes(); // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
                     crossTime_B = (deltaX_B / speedX_B) + tangoCharlie.getDepartureTime().getHourValueInMinutes();    
@@ -431,7 +437,8 @@ public class Flight extends SingleNode {
 
         GeoPosition currentGeoPosition = null;
 
-        long currentTimeInMinutes = System.currentTimeMillis() / 60000; // From milliseconds to minutes
+        //long currentTimeInMinutes = System.currentTimeMillis() / 60000; // From milliseconds to minutes
+        long currentTimeInMinutes = 8*60;
 
         int flightDepartureTime = this.getDepartureTime().getHourValueInMinutes();
         int flightArrivalTime = flightDepartureTime + this.getFlightDuration();
@@ -454,7 +461,7 @@ public class Flight extends SingleNode {
 
             // Departure Airport's coordinates
             double depX = this.getDepartureAirport().getLongitude().getDecimalCoordinate();
-            double depY = this.getArrivalAirport().getLatitude().getDecimalCoordinate();
+            double depY = this.getDepartureAirport().getLatitude().getDecimalCoordinate();
 
             // Arrival Airport's coordinates
             double arrX = this.getArrivalAirport().getLongitude().getDecimalCoordinate();
@@ -465,8 +472,11 @@ public class Flight extends SingleNode {
             /*
              * 1. Distance of the Flight
              */
-            double flightDistanceX = MyMath.absoluteValue(depX, arrX);
-            double flightDistanceY = MyMath.absoluteValue(depY, arrY);
+            //double flightDistanceX = MyMath.absoluteValue(depX, arrX);
+            //double flightDistanceY = MyMath.absoluteValue(depY, arrY);
+
+            double flightDistanceX = arrX - depX;
+            double flightDistanceY = arrY - depY;
 
             /*
              * 2. Speed of the Flight
@@ -487,8 +497,21 @@ public class Flight extends SingleNode {
              * x0 = dep[XY]
              */
 
-            double positionX = flightDuration * flightSpeedX + depX;
-            double positionY = flightDuration * flightSpeedY + depY;
+            double positionX = (currentTimeInMinutes - flightDepartureTime) * flightSpeedX + depX;
+            double positionY = (currentTimeInMinutes - flightDepartureTime) * flightSpeedY + depY;
+
+            System.out.println(
+                "\nDep X : " + depX +
+                "\nArr X : " + arrX +
+                "\nDistance X : " + flightDistanceX +
+                "\nSpeed X : " + flightSpeedX + "\n" +
+                "\nDep Y : " + depY +
+                "\nArr Y : " + arrY +
+                "\nDistance Y : " + flightDistanceY +
+                "\nSpeed Y : " + flightSpeedY + "\n" +
+                "\nPosition X : " + positionX +
+                "\nPosition Y : " + positionY
+            );
 
             currentGeoPosition = new GeoPosition(positionX, positionY);
         }

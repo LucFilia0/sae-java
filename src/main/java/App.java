@@ -10,8 +10,8 @@ import java.io.File;
 
 import graph.Flight;
 import graph.FlightsIntersectionGraph;
-import util.Airport;
 import util.AirportSet;
+import util.Airport;
 
 //-- Import IHM
 
@@ -69,8 +69,9 @@ public class App {
 
         Map map = new Map();
         map.center();
-        //map.paintAirports(as, Airport.AIRPORT_ICON_FILE);
-        map.paintFlights(fig, Flight.FLIGHT_ICON);
+        //map.addAirports(as, Airport.AIRPORT_ICON_FILE);
+        map.addFlights(fig, Flight.FLIGHT_ICON);
+        map.print();
 
         body.add(map, BorderLayout.CENTER);
         appFrame.setContentPane(body);

@@ -19,11 +19,9 @@ public class MyMath {
      * @author Luc le Manifik
      */
     public static double absoluteValue(double a, double b) {
-        double sort;
-        if(a < b)
-            sort = b - a;
-        else
-            sort = a - b;
+        double sort = a - b;
+        if(sort < 0)
+            sort = sort * -1;
         return sort;
     }
 }
