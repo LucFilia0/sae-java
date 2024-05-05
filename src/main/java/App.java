@@ -69,7 +69,7 @@ public class App {
 
         Map map = new Map();
         map.center();
-        //map.addAirports(as, Airport.AIRPORT_ICON_FILE);
+        map.addAirports(as, Airport.AIRPORT_ICON_FILE);
         map.addFlights(fig, Flight.FLIGHT_ICON);
         map.print();
 

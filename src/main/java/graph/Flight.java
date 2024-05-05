@@ -437,8 +437,9 @@ public class Flight extends SingleNode implements Waypoint {
 
         GeoPosition currentGeoPosition = null;
 
-        //long currentTimeInMinutes = System.currentTimeMillis() / 60000; // From milliseconds to minutes
-        long currentTimeInMinutes = 8*60;
+        // Get the current time (from milliseconds to minutes)
+        long currentTimeInMinutes = System.currentTimeMillis() / 60000;
+        //long currentTimeInMinutes = 8*60; // For tests (8h00)
 
         int flightDepartureTime = this.getDepartureTime().getHourValueInMinutes();
         int flightArrivalTime = flightDepartureTime + this.getFlightDuration();
@@ -500,20 +501,8 @@ public class Flight extends SingleNode implements Waypoint {
             double positionX = (currentTimeInMinutes - flightDepartureTime) * flightSpeedX + depX;
             double positionY = (currentTimeInMinutes - flightDepartureTime) * flightSpeedY + depY;
 
-            System.out.println(
-                "\nDep X : " + depX +
-                "\nArr X : " + arrX +
-                "\nDistance X : " + flightDistanceX +
-                "\nSpeed X : " + flightSpeedX + "\n" +
-                "\nDep Y : " + depY +
-                "\nArr Y : " + arrY +
-                "\nDistance Y : " + flightDistanceY +
-                "\nSpeed Y : " + flightSpeedY + "\n" +
-                "\nPosition X : " + positionX +
-                "\nPosition Y : " + positionY
-            );
-
-            currentGeoPosition = new GeoPosition(positionX, positionY);
+            // /!\ -> latitude = positionY & longitude = positionX
+            currentGeoPosition = new GeoPosition(positionY, positionX);
         }
 
         return currentGeoPosition;

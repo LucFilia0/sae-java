@@ -10,7 +10,6 @@ import util.AirportSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -20,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+
 
 //-- Import Swing
 
@@ -31,7 +31,6 @@ import org.jxmapviewer.viewer.*;
 
 import graph.FlightsIntersectionGraph;
 
-import org.graphstream.algorithm.util.FibonacciHeap.Node;
 import org.jxmapviewer.*;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
@@ -109,6 +108,9 @@ public class Map extends JPanel {
         // -> When "Space" is pressed : Default view of the France
         this.map.setFocusable(true); // Allow the map to listen a "KeyListener"
         this.map.addKeyListener(new CenteringMapWhenSpacePressed());
+
+        // Centering the Map to it's default position
+        this.center();
     }
 
     //-- Map Getters
