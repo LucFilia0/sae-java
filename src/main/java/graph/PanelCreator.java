@@ -18,7 +18,7 @@ import org.graphstream.algorithm.Toolkit ;
 public class PanelCreator implements ViewerListener {
 	protected boolean loop = true;
 
-	private Graph g ;
+	private Graph graph ;
 	private Viewer viewer ;
 	private ViewerPipe fromViewer ;
 	private ViewPanel panel ;
@@ -29,11 +29,11 @@ public class PanelCreator implements ViewerListener {
 	 * @see ViewPanel 
 	 */
 	public PanelCreator(Graph graph) {
-		// Looks stupid but lets the implement ViewerListener events access the graph
-		g = graph ;
+		// Looks stupid but lets the implemented ViewerListener events access the graph
+		this.graph = graph ;
 
 		// Generates the ViewPanel containing the graph
-		viewer = new SwingViewer(g, ThreadingModel.GRAPH_IN_ANOTHER_THREAD) ;
+		viewer = new SwingViewer(graph, ThreadingModel.GRAPH_IN_ANOTHER_THREAD) ;
 		panel = (ViewPanel)viewer.addDefaultView(false) ;
 		viewer.enableAutoLayout() ;
 		viewer.getDefaultView().enableMouseOptions() ;
@@ -42,7 +42,7 @@ public class PanelCreator implements ViewerListener {
 		// and also checks for events
 		fromViewer = viewer.newViewerPipe();
 		fromViewer.addViewerListener(this);
-		fromViewer.addSink(g) ;
+		fromViewer.addSink(graph) ;
 
 		// Thread running in the background constantly sending the changes to the Graph
 		Thread graphPump = new Thread(new Runnable() {
@@ -54,7 +54,7 @@ public class PanelCreator implements ViewerListener {
 
 					// Don't mind this idk why or when this gets thrown
 					catch (InterruptedException e) {
-						System.out.println("bro got interrupted 😡😡😡") ;
+						System.err.println("bro got interrupted 😡😡😡") ;
 					}
 				}
 			}
@@ -74,13 +74,19 @@ public class PanelCreator implements ViewerListener {
 	}
  
 	public void mouseOver(String id) {
+		Node n = graph.getNode(id) ;
+		n.removeAttribute("ui.style") ;
+		n.setAttribute("ui.style", "size : 40px ;") ;
 	}
 
 	public void mouseLeft(String id) {
+		Node n = graph.getNode(id) ;
+		n.removeAttribute("ui.style") ;
+		n.setAttribute("ui.style", "size : 20px ;") ;
 	}
 
 	public Graph getGraph() {
-		return this.g;
+		return this.graph;
 	}
 
 	public Viewer getViewer() {

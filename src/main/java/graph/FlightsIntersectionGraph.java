@@ -47,6 +47,11 @@ public class FlightsIntersectionGraph extends SingleGraph {
      */
     public static final String NB_COLLISIONS = "nbCollisions";
 
+    /**
+     * The String identifier that represents the maximum number of Layers allowed.
+     */
+    public static final String KMAX = "kMax" ;
+
     //-- FIG Constructor
 
     /**
@@ -61,6 +66,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
         super(id); // -> The identifier of the FIG, in the parent class (SingleGraph)
         this.setAttribute(FlightsIntersectionGraph.NB_FLIGHTS, 0); // -> The number of flights in the FIG
         this.setAttribute(FlightsIntersectionGraph.NB_COLLISIONS, 0); // -> The number of collisions in the FIG
+        this.setAttribute(FlightsIntersectionGraph.KMAX, 0) ; // -> The maximum number of layers in the FIG
     }
 
     //-- FIG toString()
@@ -96,6 +102,17 @@ public class FlightsIntersectionGraph extends SingleGraph {
         return (int)this.getAttribute(FlightsIntersectionGraph.NB_COLLISIONS);
     }
 
+    /**
+     * Get the maximum number of layers in the FIG.
+     * 
+     * @return (int) - The maximum number of layers in the FIG.
+     * 
+     * @author Nathan LIEGEON
+     */
+    public int getKMax() {
+        return (int)this.getAttribute(FlightsIntersectionGraph.KMAX) ;
+    }
+
     //-- FIG Setters
 
     /**
@@ -118,6 +135,17 @@ public class FlightsIntersectionGraph extends SingleGraph {
      */
     private void setNbCollisions(int nbCollisions) {
         this.setAttribute(FlightsIntersectionGraph.NB_COLLISIONS, nbCollisions);
+    }
+
+    /**
+     * Set the maximum numbers of layers in the FIG.
+     * 
+     * @param kMax (int) - The new maximum number of layers in the FIG.
+     * 
+     * @author Nathan LIEGEON
+     */
+    public void setKMax(int kMax) {
+        this.setAttribute(FlightsIntersectionGraph.KMAX, kMax) ;
     }
 
     //-- FIG Importations
@@ -268,12 +296,8 @@ public class FlightsIntersectionGraph extends SingleGraph {
 
         try {
             flight.setFlightAttributes(airportSet.getAirport(s_departure), airportSet.getAirport(s_arrival), departureTime, duration);
-        }catch(ObjectNotFoundException onfe) {
-            throw onfe;
-        }catch(InvalidEntryException iee) {
-            throw iee;
-        }catch(NullPointerException npe) {
-            throw npe;
+        }catch(ObjectNotFoundException | InvalidEntryException | NullPointerException e) {
+            throw e;
         }
 
         return flight;
@@ -308,14 +332,16 @@ public class FlightsIntersectionGraph extends SingleGraph {
     public void showAllFlights() {
         for (Node node : this) {
             node.removeAttribute("ui.hide") ;
+            node.edges().forEach(edge -> edge.removeAttribute("ui.hide")) ;
         }
     }
 
     /**
      * Shows only the flights that are in the air at a given time
-     * @param givenTime (FlightTime) - time used for the checks
+     * @param givenTime time used for the checks
      */
-    public void showCurrentFlights(FlightTime givenTime) {
+    public void showFlightsAtATime(FlightTime givenTime) {
+        this.showAllFlights() ;
         int givenTimeInMinutes = givenTime.getHourValueInMinutes() ;
         for (Node node : this) {
             Flight flightNode = (Flight) node ;
@@ -323,28 +349,23 @@ public class FlightsIntersectionGraph extends SingleGraph {
             int arrival = departure + flightNode.getFlightDuration() ;
             if (givenTimeInMinutes < departure || givenTimeInMinutes > arrival) {
                 flightNode.setAttribute("ui.hide") ;
-                for (Edge edge : flightNode.edges().collect(Collectors.toSet())) {
-                    edge.setAttribute("ui.hide") ;
-                }
+                flightNode.edges().forEach(edge -> edge.setAttribute("ui.hide")) ;
             }
         } 
     }
     /**
      * Shows only the flights that are on the same layer
-     * @param layer (int) - layer used for the checks
+     * @param layer layer used for the checks
      */
     public void showSameLayerFlights(int layer) {
+        this.showAllFlights() ;
         for (Node node : this) {
             Flight flightNode = (Flight) node ;
             if (flightNode.getLayer() != layer) {
                 flightNode.setAttribute("ui.hide") ;
-                for (Edge edge : flightNode.edges().collect(Collectors.toSet())) {
-                    edge.setAttribute("ui.hide") ;
-                }
+                flightNode.edges().forEach(edge -> edge.setAttribute("ui.hide")) ;
             }
         }
     }
-
-    //-- FIG Coloration
 
 }

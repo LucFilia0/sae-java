@@ -4,6 +4,7 @@ package graph;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.* ;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 //-- Import GraphStream
@@ -298,6 +299,55 @@ public class Coloration {
 
         return bool ;
     }
+    
+    // WELSH & POWELL
+
+    /**
+     * Colors a Graph using the Welsh & Powell algorithm with at most kMax colors
+     * If it cannot do so, it will try to minimize conflicts
+     * 
+     * @param graph Graph getting colored
+     * @param colorAttribute Attribute used to store colors in the graph
+     * @param kMax Maximum number of colors allowed
+     * @return array consisting of 2 values : first one being the number of colors used, second being the number of conflicts
+     */
+    public static int[] colorWelshPowell(Graph graph, String colorAttribute, int kMax) {
+        int[] infoTab = {0,0} ;
+        LinkedList<Node> nodeList = new LinkedList<>() ;
+        Set<Node> nodeSet ;
+        graph.nodes().forEach(node -> nodeList.addFirst(node));
+
+        // Descending order sort by degree
+        nodeList.sort(new Comparator<Node>() {
+            public int compare(Node arg0, Node arg1) {
+                return Integer.compare(arg1.getDegree(), arg0.getDegree()) ;
+            }
+        }) ;
+
+        // Implementation of the algorithm
+        while (!nodeList.isEmpty() && infoTab[0] < kMax) {
+            nodeSet = new HashSet<>() ;
+            infoTab[0]++ ;
+            ListIterator<Node> itr = nodeList.listIterator() ;
+            while (itr.hasNext()) {
+                Node currentNode = itr.next() ;
+                if ((int)currentNode.getAttribute(colorAttribute) == 0 && !nodeSet.contains(currentNode)) {
+                    itr.previous() ;
+                    itr.remove() ;
+                    currentNode.setAttribute(colorAttribute, infoTab[0]) ;
+                    nodeSet.addAll(currentNode.neighborNodes().collect(Collectors.toSet())) ;
+                }
+            }
+        }
+
+        // Conflicts management
+        if (!nodeList.isEmpty()) {
+            for (Node node : nodeList) {
+                infoTab[1] += Coloration.colorWithLeastConflicts(graph, node, colorAttribute) ;
+            }
+        }
+        return infoTab ;
+    }
 
 
     // DSATUR
@@ -357,7 +407,7 @@ public class Coloration {
 
             node.removeAttribute("DSATUR");
             node.setAttribute("ui.class", attributColor + node.getAttribute(attributColor));
-            /*
+            /* 
             System.out.println(node.getAttribute("DSATUR"));
             System.out.println(node.getAttribute(attributColor));
             System.out.println(node.getAttribute("ui.class"));
@@ -575,7 +625,7 @@ public class Coloration {
      * @param colorAttribute key of the attribute handling colors
      */
     public static void setGraphStyle(Graph graph, int nbColor, String colorAttribute) {
-        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : 30px ; }") ;
+        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : 20px ; }") ;
 
         Color[] colorTab = {Color.BLACK, Color.BLUE, Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, Color.LIGHT_GRAY
             , Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED, Color.YELLOW} ;
