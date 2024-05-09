@@ -49,8 +49,8 @@ public class Latitude extends Coordinate {
 
     // JavaDoc made in Coordinate
     public double getDecimalCoordinate() {
-        double decimalCoordinate; 
-        decimalCoordinate = this.minutes + this.seconds/60;
+        double decimalCoordinate;
+        decimalCoordinate = this.minutes + this.seconds/(double)60;
         decimalCoordinate = this.degree + decimalCoordinate/60;
 
         // If the direction is South, then is turns negative.

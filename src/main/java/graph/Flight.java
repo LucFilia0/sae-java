@@ -65,7 +65,7 @@ public class Flight extends SingleNode implements Waypoint {
     /**
      * The file which contains the icon of the flights ({@link java.io.File})
      */
-    public static final File FLIGHT_ICON = new File("sprint/plane.png");
+    public static final File FLIGHT_ICON_FILE = new File("sprint/plane.png");
 
     /**
      * Initialize the attributes of a Flight.
@@ -341,7 +341,7 @@ public class Flight extends SingleNode implements Waypoint {
             */
     
             // Route A (Flight A : "this")
-            slope_A = (arrY_A - depY_A) / (arrX_A - depX_A);
+            slope_A = (arrY_A - depY_A) / (arrX_A - depX_A); // If arrX_A == depX_A then PROBLEM
             originCoordinate_A = depY_A - (slope_A * depX_A);
             // => y = slope_A * x + originCoordinate_A
     
@@ -351,12 +351,13 @@ public class Flight extends SingleNode implements Waypoint {
             // => y = slope_B * x + originCoordinate_B
     
             // Crossing coordinate
-            if(slope_A != slope_B) { // If both slopes are the same, then the Flight's routes are parallel, and they never cross.
+            if(slope_A != slope_B && originCoordinate_A != originCoordinate_B) { // If both slopes are the same, then the Flight's routes are parallel, and they never cross.
                 crossX = (originCoordinate_A - originCoordinate_B) / (slope_B - slope_A); // Mathematic resoltion, don't ask
                 // crossY = slope_A * crossX + originCoordinate_A; -> never used
     
                 // Check if crossX is on the route of A AND on the route of B
-                if(((depX_A <= crossX && crossX <= arrX_A) || (arrX_A <= crossX && crossX <= depX_A)) && ((depX_B <= crossX && crossX <= arrX_B) || (arrX_B <= crossX && crossX <= depX_B))) {
+                // Putting "<" instead of "<=" to avoid crossing at the airport
+                if(((depX_A < crossX && crossX < arrX_A) || (arrX_A < crossX && crossX < depX_A)) && ((depX_B < crossX && crossX < arrX_B) || (arrX_B < crossX && crossX < depX_B))) {
                     /*
                     * ===== STEP 3 :
                     * 
@@ -433,6 +434,14 @@ public class Flight extends SingleNode implements Waypoint {
         return explode;
     }
 
+    /**
+     * This function returns the current position of the Flight.
+     * It considers the departure Airport's coordinates, the arrival Airport's coordinates and the current time to calculate it's real position.
+     * 
+     * @return currentGeoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The current GeoPosition of the Flight if it is currently flying. Else, returns "null".
+     * 
+     * @author Luc le Manifik
+     */
     public GeoPosition getCurrentGeoPosition() {
 
         GeoPosition currentGeoPosition = null;

@@ -69,6 +69,16 @@ public class Map extends JPanel {
 
     private WaypointPainter<Waypoint> waypointPainter;
 
+    /*
+    private Set<Waypoint> airport_waypointSet;
+
+    private WaypointPainter<Waypoint> airport_waypointPainter;
+
+    private Set<Waypoint> flight_waypointSet;
+
+    private WaypointPainter<Waypoint> flight_waypointPainter;
+    */
+
     //-- Map Constructor
 
     public Map() {
@@ -79,12 +89,16 @@ public class Map extends JPanel {
         this.center_geoPosition = new GeoPosition(47, 3);
         this.center_zoom = 13;
 
-
-
         this.waypointSet = new HashSet<Waypoint>();
         this.waypointPainter = new WaypointPainter<Waypoint>();
 
-        
+        /*
+        this.airport_waypointSet = new HashSet<Waypoint>();
+        this.flight_waypointSet = new HashSet<Waypoint>();
+
+        this.airport_waypointPainter = new WaypointPainter<Waypoint>();
+        this.airport_waypointPainter = new WaypointPainter<Waypoint>();
+        */   
 
         // The parameters of the tiles of the Map
         TileFactoryInfo _tileFactoryInfo = new OSMTileFactoryInfo();
