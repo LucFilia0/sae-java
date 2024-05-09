@@ -4,7 +4,6 @@ package graph;
 
 import util.FlightTime ;
 import util.Airport;
-import util.MyMath;
 import java.io.File;
 
 //-- Import GraphStream
@@ -286,7 +285,6 @@ public class Flight extends SingleNode implements Waypoint {
     
             // Crossing cooordinate (Where the Flights are supposed to EXPLODE)
             double crossX;
-            // double crossY; -> never used
     
             depX_A = this.getDepartureAirport().getLongitude().getDecimalCoordinate();
             depY_A = this.getDepartureAirport().getLatitude().getDecimalCoordinate();
@@ -300,134 +298,142 @@ public class Flight extends SingleNode implements Waypoint {
             arrX_B = tangoCharlie.getArrivalAirport().getLongitude().getDecimalCoordinate();
             arrY_B = tangoCharlie.getArrivalAirport().getLatitude().getDecimalCoordinate();
     
+            if(depX_A == arrX_A) {
+
+            }else if(depX_B == arrX_B) {
+
+            }else {
+                /*
+                * ===== STEP 2 :
+                * 
+                * We try to find if the Flight's routes are crossing between there departure and arrival point.
+                * 
+                * //-- First route equation (Flight A : "this")
+                * 
+                * slope_A = deltaY / deltaX
+                *         = (arrY_A - depY_A) / (arrX_A - depX_A)
+                * Getting originCoordinate_A :
+                *       y = slope_A * x + originCoordinate_A
+                *       originCoordinate_A = depY_A - (slope_A * depX_A)
+                * 
+                *    => RA : y = slope_A * x + originCoordinate_A
+                *  
+                * //-- Second route equation (Flight B : "tangoCharlie")
+                * 
+                * slope_B = deltaY / deltaX
+                *         = (arrY_B - depY_B) / (arrX_B - depX_B)
+                * Getting originCoordinate_B :
+                *       y = slope_B * x + originCoordinate_B
+                *       originCoordinate_B = depY_B - (slope_B * depX_B)
+                * 
+                *    => RB : y = slope_B * x + originCoordinate_B
+                * 
+                * We are searching "x" when "y" is the same into RA and RB, so when :  
+                * 
+                *     slope_B * x + originCoordinate_B = slope_A * x + originCoordinate_A
+                * <=> slope_B * x - slope_A * x = originCoordinate_A - originCoordinate_B
+                * <=> x(slope_B - slope_A) = originCoordinate_A - originCoordinate_B
+                * 
+                *    =>  x = (originCoordinate_A - originCoordinate_B) / (slope_B - slope_A)
+                * 
+                * "x" is now abscissa of the crossing point. We now need to check if "x" 
+                * is between the coordinates of [depX_A; arrX_A] and [depX_B; arrX_B].
+                * If it's the case, then it means that the crossing point is on the  two segments that represents the routes
+                * of the two Flights.
+                */
+        
+                // Route A (Flight A : "this")
+                slope_A = (arrY_A - depY_A) / (arrX_A - depX_A); // If arrX_A == depX_A then PROBLEM. Case treated above
+                originCoordinate_A = depY_A - (slope_A * depX_A);
+                // because => y = slope_A * x + originCoordinate_A
+        
+                // Route B (Flight B : "tangoCharlie")
+                slope_B = (arrY_B - depY_B) / (arrX_B - depX_B);
+                originCoordinate_B = depY_B - (slope_B * depX_B);
+                // because => y = slope_B * x + originCoordinate_B
+        
+                // Crossing coordinate
+                if(slope_A != slope_B && originCoordinate_A != originCoordinate_B) { // If both slopes are the same, then the Flight's routes are parallel, and they never cross.
+                    crossX = (originCoordinate_A - originCoordinate_B) / (slope_B - slope_A); // Mathematic resoltion, don't ask
     
-            /*
-            * ===== STEP 2 :
-            * 
-            * We try to find if the Flight's routes are crossing between there departure and arrival point.
-            * 
-            * //-- First route equation (Flight A : "this")
-            * 
-            * slope_A = deltaY / deltaX
-            *         = (arrY_A - depY_A) / (arrX_A - depX_A)
-            * Getting originCoordinate_A :
-            *       y = slope_A * x + originCoordinate_A
-            *       originCoordinate_A = depY_A - (slope_A * depX_A)
-            * 
-            *    => RA : y = slope_A * x + originCoordinate_A
-            *  
-            * //-- Second route equation (Flight B : "tangoCharlie")
-            * 
-            * slope_B = deltaY / deltaX
-            *         = (arrY_B - depY_B) / (arrX_B - depX_B)
-            * Getting originCoordinate_B :
-            *       y = slope_B * x + originCoordinate_B
-            *       originCoordinate_B = depY_B - (slope_B * depX_B)
-            * 
-            *    => RB : y = slope_B * x + originCoordinate_B
-            * 
-            * We are searching "x" when "y" is the same into RA and RB, so when :  
-            * 
-            *     slope_B * x + originCoordinate_B = slope_A * x + originCoordinate_A
-            * <=> slope_B * x - slope_A * x = originCoordinate_A - originCoordinate_B
-            * <=> x(slope_B - slope_A) = originCoordinate_A - originCoordinate_B
-            * 
-            *    =>  x = (originCoordinate_A - originCoordinate_B) / (slope_B - slope_A)
-            * 
-            * "x" is now abscissa of the crossing point. We now need to check if "x" 
-            * is between the coordinates of [depX_A; arrX_A] and [depX_B; arrX_B].
-            * If it's the case, then it means that the crossing point is on the  two segments that represents the routes
-            * of the two Flights.
-            */
+                    // Check if crossX is on the route of A AND on the route of B
+                    // Putting "<" instead of "<=" to avoid crossing at the airport
+                    if(((depX_A < crossX && crossX < arrX_A) || (arrX_A < crossX && crossX < depX_A)) && ((depX_B < crossX && crossX < arrX_B) || (arrX_B < crossX && crossX < depX_B))) {
+                        /*
+                        * ===== STEP 3 :
+                        * 
+                        * Searching the time gap between A and B.
+                        * 
+                        * /!\ Here, regex are used : [AB] means "A" OR "B".
+                        * 
+                        * We consider the position of the two Flights on the X_AXIS only. We know the "x" position where the are supposed to collide, so
+                        * we just check the time gap between their time at crossX.
+                        * 
+                        * Position equation, with a = 0 (constant speed, so null acceleration) and x0 = depX_[AB] :
+                        *      x(t) = 1/2*aX*t² + vX*t + x0
+                        * Traduction with the variables :
+                        *      crossX = speedX_[AB]*t + depX_[AB]
+                        * 
+                        *      => t = (crossX - depX_[AB]) / speedX_[AB]
+                        * 
+                        * Speed of the Flights (on the X_AXIS) :
+                        * vX = dX/dt
+                        * with : dX (distance on X_AXIS) = (arrX_[AB] - depX_[AB])
+                        *        dt (delta time) = [AB].getFlightDuration()
+                        * So :
+                        *      speedX_[AB] = (arrX_[AB] - depX_[AB]) / [AB].getFlightDuration()
+                        * 
+                        * Then we do :
+                        *      t = (crossX - depX_[AB]) / speedX_[AB]
+                        * It will gave the time gap between the departureTime of the Flight and the crossX coordinate.
+                        * So we need to add the departureTime, and THEN compare the time gap.
+                        */
+        
+                        // Declaration of the required variables to calcul Flight's speed
+                        double speedX_A, speedX_B; // The speeds of the Flights ("this" and "tangoCharlie").
+                        int flightDuration_A, flightDuration_B; // The durations of the Flights (in MINUTES).
+                        double flightDistanceX_A, flightDistanceX_B; // The distance travelled by the Flights
+                        
+                        // The time when they get to the crossing point.
+                        double crossTime_A, crossTime_B;
+                        double timeGap;
+                        
+                        // Flight duration (in MINUTES)
+                        flightDuration_A = this.getFlightDuration();
+                        flightDuration_B = tangoCharlie.getFlightDuration();
+        
+                        // Flight distance (on X_AXIS)
+                        flightDistanceX_A = arrX_A - depX_A;
+                        flightDistanceX_B = arrX_B - depX_B;
     
-            // Route A (Flight A : "this")
-            slope_A = (arrY_A - depY_A) / (arrX_A - depX_A); // If arrX_A == depX_A then PROBLEM
-            originCoordinate_A = depY_A - (slope_A * depX_A);
-            // => y = slope_A * x + originCoordinate_A
-    
-            // Route B (Flight B : "tangoCharlie")
-            slope_B = (arrY_B - depY_B) / (arrX_B - depX_B);
-            originCoordinate_B = depY_B - (slope_B * depX_B);
-            // => y = slope_B * x + originCoordinate_B
-    
-            // Crossing coordinate
-            if(slope_A != slope_B && originCoordinate_A != originCoordinate_B) { // If both slopes are the same, then the Flight's routes are parallel, and they never cross.
-                crossX = (originCoordinate_A - originCoordinate_B) / (slope_B - slope_A); // Mathematic resoltion, don't ask
-                // crossY = slope_A * crossX + originCoordinate_A; -> never used
-    
-                // Check if crossX is on the route of A AND on the route of B
-                // Putting "<" instead of "<=" to avoid crossing at the airport
-                if(((depX_A < crossX && crossX < arrX_A) || (arrX_A < crossX && crossX < depX_A)) && ((depX_B < crossX && crossX < arrX_B) || (arrX_B < crossX && crossX < depX_B))) {
-                    /*
-                    * ===== STEP 3 :
-                    * 
-                    * Searching the time gap between A and B.
-                    * 
-                    * /!\ Here, regex are used : [AB] means "A" OR "B".
-                    * 
-                    * We consider the position of the two Flights on the X_AXIS only. We know the "x" position where the are supposed to collide, so
-                    * we just check the time gap between their time at crossX.
-                    * 
-                    * Position equation, with a = 0 (constant speed, so null acceleration) and x0 = depX_[AB] :
-                    *      x(t) = 1/2*aX*t² + vX*t + x0
-                    * Traduction with the variables :
-                    *      crossX = speedX_[AB]*t + depX_[AB]
-                    * 
-                    *      => t = (crossX - depX_[AB]) / speedX_[AB]
-                    * 
-                    * Speed of the Flights (on the X_AXIS) :
-                    * vX = dX/dt
-                    * with : dX (distance on X_AXIS) = (arrX_[AB] - depX_[AB])
-                    *        dt (delta time) = [AB].getFlightDuration()
-                    * So :
-                    *      speedX_[AB] = (arrX_[AB] - depX_[AB]) / [AB].getFlightDuration()
-                    * 
-                    * Then we do :
-                    *      t = (crossX - depX_[AB]) / speedX_[AB]
-                    * It will gave the time gap between the departureTime of the Flight and the crossX coordinate.
-                    * So we need to add the departureTime, and THEN compare the time gap.
-                    */
-    
-                    // Declaration of the required variables to calcul Flight's speed
-                    double speedX_A, speedX_B; // The speeds of the Flights ("this" and "tangoCharlie").
-                    int flightDuration_A, flightDuration_B; // The durations of the Flights (in MINUTES).
-                    double flightDistanceX_A, flightDistanceX_B; // The distance travelled by the Flights
-                    
-                    // The time when they get to the crossing point.
-                    double crossTime_A, crossTime_B;
-                    double timeGap;
-                    
-                    // Flight duration (in MINUTES)
-                    flightDuration_A = this.getFlightDuration();
-                    flightDuration_B = tangoCharlie.getFlightDuration();
-    
-                    // Flight distance (on X_AXIS)
-                    flightDistanceX_A = arrX_A - depX_A;
-                    flightDistanceX_B = arrX_B - depX_B;
-    
-                    // Flight speed
-                    speedX_A = flightDistanceX_A / flightDuration_A; // v = d/dt
-                    speedX_B = flightDistanceX_B / flightDuration_B; // v = d/dt
-                    // Unit of the speed is something like "degree per minute"
-    
-                    // Time when the Flights get to the crossing point
-                    // We are adding there departure time to the time they pass by crossX to get the time where they pass by crossX (your head is exploding right now)
-                    
-                    double deltaX_A, deltaX_B;
-    
-                    deltaX_A = depX_A - crossX;
-                    deltaX_B = depX_B - crossX;
-    
-                    crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getHourValueInMinutes(); // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
-                    crossTime_B = (deltaX_B / speedX_B) + tangoCharlie.getDepartureTime().getHourValueInMinutes();    
-                    
-                    timeGap = MyMath.absoluteValue(crossTime_A, crossTime_B); // The time difference between the two crossTime
-    
-                    // Check if the timeGap is between the timeSecurity -> If the Flights are getting to the crossing point at the same time.
-                    if(timeGap < timeSecurity) {
-                        explode = true;
+                        // Flight speed
+                        speedX_A = flightDistanceX_A / flightDuration_A; // v = d/dt
+                        speedX_B = flightDistanceX_B / flightDuration_B; // v = d/dt
+                        // Unit of the speed is something like "degree per minute"
+        
+                        // Time when the Flights get to the crossing point
+                        // We are adding there departure time to the time they pass by crossX to get the time where they pass by crossX (your head is exploding right now)
+                        
+                        double deltaX_A, deltaX_B;
+        
+                        deltaX_A = depX_A - crossX;
+                        deltaX_B = depX_B - crossX;
+        
+                        crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getHourValueInMinutes(); // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
+                        crossTime_B = (deltaX_B / speedX_B) + tangoCharlie.getDepartureTime().getHourValueInMinutes();
+
+                        // The time difference between the two crossTime
+                        timeGap = (crossTime_A > crossTime_B) ? crossTime_A - crossTime_B : crossTime_B - crossTime_A; 
+        
+                        // Check if the timeGap is between the timeSecurity -> If the Flights are getting to the crossing point at the same time.
+                        if(timeGap < timeSecurity) {
+                            explode = true;
+                        }
                     }
-    
+                }else if(originCoordinate_A == originCoordinate_B) {
+                    // We enter here if the slopes of the routes are the same AND they have the same coordinate origin
+                    // So -> They are confounded
+
                 }
             }
         }
