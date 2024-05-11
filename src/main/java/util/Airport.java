@@ -2,8 +2,6 @@ package util;
 
 //-- Import java
 
-import java.io.File;
-
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 
@@ -35,8 +33,6 @@ public class Airport implements Waypoint {
      * The longitude of the Airport ({@link util.Longitude util.Longitude})
      */
     private Longitude longitude;
-
-    public static final File AIRPORT_ICON_FILE = new File("sprint/airport.png"); 
 
     //-- Airport Constructor
 

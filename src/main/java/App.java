@@ -1,160 +1,306 @@
 //-- Import Swing
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
 
-import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.Waypoint;
-import org.jxmapviewer.viewer.WaypointPainter;
-import org.jxmapviewer.viewer.WaypointRenderer;
+//-- Import AWT
 
 import java.awt.BorderLayout;
-import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import ihm.icon.*;
+import org.jxmapviewer.JXMapViewer;
+
+//-- Import JxMapViewer
+
+import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.VirtualEarthTileFactoryInfo;
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
+import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.GeoPosition;
+
 
 //-- Import Java
 
+import java.util.HashSet;
 import java.io.File;
 
 import graph.Flight;
 import graph.FlightsIntersectionGraph;
+import graph.TestGraph;
 import util.AirportSet;
 import util.Airport;
 
 //-- Import IHM
 
 import ihm.Map;
-
+import ihm.waypoint.MapWaypoint;
+import ihm.waypoint.FlightWaypoint;
+import ihm.waypoint.AirportWaypoint;
+import ihm.waypoint.MapWaypointPainter;
 
 //-- Import Exceptions
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashSet;
 
 import exceptions.InvalidCoordinateException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
 import exceptions.InvalidEntryException;
 
-public class App {
+/**
+ * This class loads the application.
+ * 
+ * @author Luc le Manifik
+ */
+public class App extends javax.swing.JFrame {
+
     public static void main(String[] args) {
 
-        // == Data Importation
+        App planeAIR = new App("Plane AIR"); // Such a great name, isn't it ?
+        planeAIR.setVisible(true);
+    }
+
+    /**
+     * The width of the application's screen
+     */
+    private final static int APPLICATION_SCREEN_WIDTH = 1080;
+
+    /**
+     * The height of the application's screen
+     */
+    private final static int APPLICATION_SCREEN_HEIGHT = 720;
+
+    /**
+     * The TestGraph, xhich is used (sometimes)
+     */
+    private TestGraph testGraph;
+
+    /**
+     * The graph which sets all the Flights on their Layer, and avoid collisions
+     */
+    private FlightsIntersectionGraph fig;
+
+    /**
+     * The Set which contains all the Airports
+     */
+    private AirportSet airportSet;
+
+    /**
+     * The Set which contains all the MapWaypoints currently on the Map
+     */
+    private HashSet<MapWaypoint> waypointSet;
+
+    /**
+     * The WaypointPainter which paints all the Waypoints on the Map.
+     */
+    private MapWaypointPainter mapWaypointPainter;
+
+    /**
+     * The Map. No... THE Map. That's better
+     */
+    private JXMapViewer map;
+
+    /**
+     * The JComboBox xhich allows to switch betwenn the different modes of the Map (no THE... ok I'm stopping...)
+     */
+    private JComboBox<String> viewMapChooser;
+
+    /**
+     * The constructor of the App class. Creates a new App. Initiates all the differents steps before to launch the App.
+     * 
+     * @param name (String) - The name of the Application
+     * 
+     * @author Luc le Manifik
+     */
+    App(String name) {
+        
+        System.setProperty("org.graphstream.ui", "swing");
+        
+        this.setTitle(name);
+        this.initAttributes();
+
+        this.importData();
+        this.setComponents();
+        this.placeComponents();
+        this.initEvents();
+
+        this.paintWaypoints();
+    }
+
+    /**
+     * This procedure initalize all the application's components.
+     * 
+     * @author Luc le Manifik
+     */
+    private void initAttributes() {
+
+        // Data
+        this.testGraph = new TestGraph("TestGraph");
+        this.fig = new FlightsIntersectionGraph("FlightIntersectionGraph");
+        this.airportSet = new AirportSet();
+        
+        // IHM
+        this.map = new JXMapViewer();
+        String[] viewMapOptions = new String[]{"Open Stree", "Virtual Earth", "Hybrid", "Satellites"};
+        this.viewMapChooser = new JComboBox<String>(viewMapOptions);
+
+        // Waypoints (you touch you dead)
+        this.waypointSet = new HashSet<MapWaypoint>();
+        this.mapWaypointPainter = new MapWaypointPainter();
+        this.map.setOverlayPainter(this.mapWaypointPainter);
+    }
+
+    private void importData() {
+
         double timeSecurity = 15;
 
         //String testGraphFile = "data/graph-test1.txt";
         String airportsFile = "data/aeroports.csv";
-        String flightsFile = "data/vol-test3.csv";
-
-        System.setProperty("org.graphstream.ui", "swing");
-
-        FlightsIntersectionGraph fig = new FlightsIntersectionGraph("FIG");
-        AirportSet as = new AirportSet();
+        String flightsFile = "data/vol-test1.csv";
         
         try {
-            as.importAirportsFromFile(new File(airportsFile));
-            fig.importFlightsFromFile(new File(flightsFile), as, timeSecurity);
+            this.airportSet.importAirportsFromFile(new File(airportsFile));
+            this.fig.importFlightsFromFile(new File(flightsFile), this.airportSet, timeSecurity);
             //as.showAllAirports();
-        }catch(FileNotFoundException fnfe) {
-            System.err.println(fnfe);
-        }catch(NumberFormatException nfe) {
-            System.err.println(nfe);
-        }catch(InvalidTimeException ite) {
-            System.err.println(ite);
-        }catch(InvalidCoordinateException ice) {
-            System.err.println(ice);
-        }catch(ObjectNotFoundException onfe) {
-            System.err.println(onfe);
-        }catch(InvalidEntryException iee) {
-            System.err.println(iee);
+        }catch(
+            FileNotFoundException |
+            NumberFormatException |
+            InvalidTimeException |
+            InvalidCoordinateException |
+            ObjectNotFoundException |
+            InvalidEntryException
+            e) {
+            System.err.println(e);
         }
+    }
 
-        //fig.display();
+    /**
+     * This procedure will set up all the components.
+     * 
+     * @author Luc le Manifik
+     */
+    private void setComponents() {
 
-        JFrame appFrame = new JFrame("Plane Air");
-        int appWidth = 1024;
-        int appHeight = 720;
+        // The App
+        this.setSize(App.APPLICATION_SCREEN_WIDTH, App.APPLICATION_SCREEN_HEIGHT);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel body = new JPanel();
-        body.setLayout(new BorderLayout());
+        // The Map
+        DefaultTileFactory _defaultTileFactory = new DefaultTileFactory(new OSMTileFactoryInfo()); // Default look when the App is launched
+        this.map.setTileFactory(_defaultTileFactory);
+        this.map.setAddressLocation(new GeoPosition(45.7701836,4.8834086));
+        this.map.setZoom(6);
 
-        Map map = new Map();
-        map.addAirports(as, Airport.AIRPORT_ICON_FILE);
-        //map.addFlights(fig, Flight.FLIGHT_ICON);
-        map.print();
+        // The viewMapChooser
+        
+    }
 
-        /*
-         * Test Overlay
-         */
-        HashSet<Waypoint> waypointSet = new HashSet<Waypoint>();
+    /**
+     * This procedure places all the components in their right place.
+     * Does the Layouts, etc...
+     * 
+     * @author Luc le Manifik
+     */
+    private void placeComponents() {
 
-        WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
+        // Layout
+        this.getContentPane().setLayout(new BorderLayout());
 
-        /*
-        waypointPainter.setRenderer(new WaypointRenderer<Waypoint>() {
+        // Adding elements
+        this.add(this.map, BorderLayout.CENTER);
+        this.add(this.viewMapChooser, BorderLayout.NORTH);
+    }
+
+    /**
+     * This procedure creates all the events.
+     * 
+     * @author Luc le Manifik
+     */
+    private void initEvents() {
+
+        // Mouse listening events
+        PanMouseInputListener _mouseListener = new PanMouseInputListener(map);
+        this.map.addMouseListener(_mouseListener);
+        this.map.addMouseMotionListener(_mouseListener);
+        this.map.addMouseWheelListener(new ZoomMouseWheelListenerCursor(map));
+
+        // ViewMapChooser
+        this.viewMapChooser.addActionListener(new ActionListener() {
             @Override
-            public void paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint w)
-            {
-                BufferedImage img = null;
-
-                try {
-                    img = ImageIO.read(Airport.AIRPORT_ICON_FILE); // Setting up the visual of the Waypoints
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (img != null) {
-                    Point2D point = map.getTileFactory().geoToPixel(w.getPosition(), map.getZoom());
-                    
-                    int x = (int)point.getX() -img.getWidth() / 2;
-                    int y = (int)point.getY() -img.getHeight();
-                    
-                    g.drawImage(img, x, y, null);
+            public void actionPerformed(ActionEvent arg0) {
+                int index = viewMapChooser.getSelectedIndex();
+                switch(index) {
+                    case 0 :
+                        map.setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
+                        break;
+                    case 1 :
+                        map.setTileFactory(new DefaultTileFactory(new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP)));
+                        break;
+                    case 2 :
+                        map.setTileFactory(new DefaultTileFactory(new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID)));
+                        break;
+                    case 3 :
+                        map.setTileFactory(new DefaultTileFactory(new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.SATELLITE)));
+                        break;
+                    default :
+                        System.err.println("Omg what did you do ??");
+                        break;
                 }
             }
         });
-        */
+    }
 
-        /* BufferedImage img1 = null;
-        BufferedImage img2 = null;
+    /**
+     * This procedure paints the MapWaypoints on the Map.
+     * the Flights are only painted id they are currently flying.
+     */
+    private void paintWaypoints() {
 
-        try {
-            img1 = ImageIO.read(Airport.AIRPORT_ICON_FILE);
-            img2 = ImageIO.read(Flight.FLIGHT_ICON_FILE);
-        }catch(IOException e) {
-            e.printStackTrace();
+        // removing all the current MapWaypoints from the Map
+        // this.map.removeAll();
+
+        addAirports();
+        addFlights();
+
+        this.mapWaypointPainter.setWaypoints(this.waypointSet);
+
+        for(MapWaypoint waypoint : this.waypointSet) {
+            this.map.add(waypoint.getWaypointButton()); // Adds the WaypointButtons, which are the visual for Waypoint
         }
+    }
 
-        Graphics2D graphic_img1 = img1.createGraphics();
-        System.out.println(img1.getGraphics());
-        System.out.println(graphic_img1);
+    /**
+     * This procedure adds all the Airports which are in the airportSet.
+     * 
+     * @author Luc le Manifik
+     */
+    private void addAirports() {
 
-        waypointPainter.paint(graphic_img1, map.getMap(), 10, 10);
+        for(Airport airport : this.airportSet.getAirportSet()) {
+            GeoPosition airportPosition = new GeoPosition(airport.getLatitude().getDecimalCoordinate(), airport.getLongitude().getDecimalCoordinate());
+            // Adding the airport to the waypointSet
+            this.waypointSet.add(new AirportWaypoint(airport.getName(), airportPosition));
+        }
+    }
 
-        waypointSet.add(new Waypoint() {
-            @Override
-            public GeoPosition getPosition() {
-                return new GeoPosition(0, 0);
+    /**
+     * This procedure adds all the Flights which are in the FIG.
+     * 
+     * @author Luc le Manifik
+     */
+    private void addFlights() {
+
+        this.fig.forEach(node -> {
+            Flight flight = (Flight)node;
+            GeoPosition currentFlightPosition = flight.getCurrentGeoPosition();
+            // The function returns null is the Flight is not currently flying
+            if(currentFlightPosition != null) {
+                this.waypointSet.add(new FlightWaypoint(flight.getId(), currentFlightPosition));
+                System.out.println("Flight added");
             }
         });
-
-        waypointPainter.setWaypoints(waypointSet);
-
-        map.getMap().setOverlayPainter(waypointPainter  );
-
-         */
-
-        body.add(map, BorderLayout.CENTER);
-        appFrame.setContentPane(body);
-
-        appFrame.setSize(appWidth, appHeight);
-        appFrame.setLocationRelativeTo(null);
-        appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        appFrame.setVisible(true);
     }
 }

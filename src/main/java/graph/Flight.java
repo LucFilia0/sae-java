@@ -4,7 +4,6 @@ package graph;
 
 import util.FlightTime ;
 import util.Airport;
-import java.io.File;
 
 //-- Import GraphStream
 
@@ -60,11 +59,6 @@ public class Flight extends SingleNode implements Waypoint {
      * The String identifier which represents the Flight's layer (int)
      */
     private static final String LAYER = "layer";
-
-    /**
-     * The file which contains the icon of the flights ({@link java.io.File})
-     */
-    public static final File FLIGHT_ICON_FILE = new File("sprint/plane.png");
 
     /**
      * Initialize the attributes of a Flight.
@@ -454,7 +448,7 @@ public class Flight extends SingleNode implements Waypoint {
 
         // Get the current time (from milliseconds to minutes)
         long currentTimeInMinutes = System.currentTimeMillis() / 60000;
-        //long currentTimeInMinutes = 8*60; // For tests (8h00)
+        //long currentTimeInMinutes = 8 * 60; // 8h
 
         int flightDepartureTime = this.getDepartureTime().getHourValueInMinutes();
         int flightArrivalTime = flightDepartureTime + this.getFlightDuration();

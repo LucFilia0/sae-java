@@ -58,7 +58,7 @@ public class TestGraph extends SingleGraph {
      * 
      * @author Luc le Manifik
      */
-    TestGraph(String id) {
+    public TestGraph(String id) {
         super(id);
         this.setAttribute(this.K_MAX, 0);
         this.setAttribute(this.NB_MAX_NODES, 0);
