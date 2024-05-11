@@ -74,7 +74,7 @@ public class App {
             System.err.println(iee);
         }
 
-        //fig.display();
+        fig.display();
 
         JFrame appFrame = new JFrame("Plane Air");
         int appWidth = 1024;
@@ -155,6 +155,6 @@ public class App {
         appFrame.setSize(appWidth, appHeight);
         appFrame.setLocationRelativeTo(null);
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        appFrame.setVisible(true);
+        // appFrame.setVisible(true);
     }
 }
