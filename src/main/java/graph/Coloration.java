@@ -1,21 +1,14 @@
 package graph;
 
 //-- Import Java
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.* ;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 //-- Import GraphStream
-import org.graphstream.graph.EdgeRejectedException;
-import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
-import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.graphicGraph.stylesheet.Color;
+import org.graphstream.ui.graphicGraph.stylesheet.Style;
 import org.graphstream.algorithm.ConnectedComponents;
 import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
 
@@ -23,7 +16,6 @@ import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
 //-- Import Exceptions
 
 import exceptions.InvalidEntryException;
-import exceptions.InvalidFileFormatException;
 
 /**
  * Class handling Coloration algorithms, mostly consists of static methods
@@ -351,8 +343,6 @@ public class Coloration {
 
 
     // DSATUR
-
-
     /**
      * Give a graph's coloration with less colision we can, use graph saturation principle (degree).
      * 
@@ -407,12 +397,6 @@ public class Coloration {
 
             node.removeAttribute("DSATUR");
             node.setAttribute("ui.class", attributColor + node.getAttribute(attributColor));
-            /* 
-            System.out.println(node.getAttribute("DSATUR"));
-            System.out.println(node.getAttribute(attributColor));
-            System.out.println(node.getAttribute("ui.class"));
-            System.out.println("\n");
-            */
         }
 
         int[] res = {0,0};
@@ -625,23 +609,39 @@ public class Coloration {
      * @param colorAttribute key of the attribute handling colors
      */
     public static void setGraphStyle(Graph graph, int nbColor, String colorAttribute) {
-        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : 20px ; }") ;
-
-        Color[] colorTab = {Color.BLACK, Color.BLUE, Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, Color.LIGHT_GRAY
-            , Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED, Color.YELLOW} ;
+        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : 20px ; }\n") ;
 
         for (Node coloringNode : graph) {
             Integer color = (Integer)coloringNode.getAttribute(colorAttribute) ;
             coloringNode.setAttribute("ui.class", "color" + color) ;
         }
         
-        // Scuffed way to show colors on the graph
+        // FFFFFF in decimal (i asked Google 👍)
+        int maxHexValue = 16777215 ;
+        
+        // Hexadecimal value used for the color stored as an int
+        int currentHexValue ;
+
         for (int i = 0 ; i < nbColor ; i++) {
-            Color currentColor = colorTab[i % colorTab.length] ;
-            String str = "rgb(" + currentColor.getRed() + ',' + currentColor.getGreen() + ',' + currentColor.getBlue() + ')' ;
-            stylesheet.append("node.color" + (i+1) + "{fill-color : " + str + " ; }\n") ;
+            currentHexValue = (maxHexValue/(nbColor))*i ;
+            stylesheet.append("node.color" + (i+1) + "{fill-color : #" + toValidHex(Integer.toHexString(currentHexValue)) + " ; }\n") ;
         }
 
         graph.setAttribute("ui.stylesheet", stylesheet.toString()) ;
+    }
+
+    /**
+     * Fills the leading digits of a hex code with 0 until the number has 6 digits
+     * example : str FF (reprensenting #FF) becomes 0000FF
+     * @param str hex value of a number, HAS TO ONLY CONTAIN NUMBERS
+     * @return the formatted hex string
+     */
+    public static String toValidHex(String str) {
+        int nbZero = (6 - str.length()) ;
+        StringBuffer res = new StringBuffer() ;
+        for (int i = 0 ; i < nbZero ; i++) {
+            res.append("0") ;
+        }
+        return res.append(str).toString() ;
     }
 }

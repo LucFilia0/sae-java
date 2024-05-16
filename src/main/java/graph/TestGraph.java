@@ -417,6 +417,9 @@ public class TestGraph extends SingleGraph {
             this.addNode(String.valueOf(this.getNbNodes()));
         }
 
+        String[] str = {"graph-textX.txt"} ;
+        Automatisation.importDataFromFolder("DataTest", str, 'X') ;
+
         nodeScanner.close();
     }
     

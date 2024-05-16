@@ -341,7 +341,6 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * @param givenTime time used for the checks
      */
     public void showFlightsAtATime(FlightTime givenTime) {
-        this.showAllFlights() ;
         int givenTimeInMinutes = givenTime.getHourValueInMinutes() ;
         for (Node node : this) {
             Flight flightNode = (Flight) node ;
@@ -359,6 +358,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      */
     public void showSameLayerFlights(int layer) {
         this.showAllFlights() ;
+        this.setAttribute("hidden") ;
         for (Node node : this) {
             Flight flightNode = (Flight) node ;
             if (flightNode.getLayer() != layer) {

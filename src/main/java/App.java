@@ -8,18 +8,13 @@ import javax.swing.* ;
 import javax.swing.plaf.FontUIResource;
 
 import org.graphstream.ui.swing_viewer.* ;
+import org.graphstream.ui.view.*;
 import org.graphstream.graph.implementations.* ;
 
 //-- Import GraphStream
 import org.graphstream.graph.* ;
 
 //-- Import Exceptions
-
-import java.io.FileNotFoundException;
-import exceptions.InvalidCoordinateException;
-import exceptions.InvalidTimeException;
-import exceptions.ObjectNotFoundException;
-import exceptions.InvalidEntryException;
 
 // Import packages
 
@@ -34,6 +29,13 @@ public class App {
         System.setProperty("sun.java2d.uiScale", "100%") ;
 
         FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Yep");
+        TestGraph tg = new TestGraph("Nope") ;
+        try {
+            tg.importFromFile(new File("DataTest/graph-test12.txt"));
+        }
+        catch (Exception e) {
+            System.err.println(e) ;
+        }
         
         AirportSet as = new AirportSet();
 
@@ -42,29 +44,23 @@ public class App {
         
         try {
             as.importAirportsFromFile(new File("DataTest/aeroports.csv"));
-            fig.importFlightsFromFile(new File("DataTest/vol-test8.csv"), as, timeSecurity);
+            fig.importFlightsFromFile(new File("DataTest/vol-test4.csv"), as, timeSecurity);
             
             //as.showAllAirports();
-        }catch(FileNotFoundException fnfe) {
-            System.err.println(fnfe);
-        }catch(NumberFormatException nfe) {
-            System.err.println(nfe);
-        }catch(InvalidTimeException ite) {
-            System.err.println(ite);
-        }catch(InvalidCoordinateException ice) {
-            System.err.println(ice);
-        }catch(ObjectNotFoundException onfe) {
-            System.err.println(onfe);
-        }catch(InvalidEntryException iee) {
-            System.err.println(iee);
+        }catch(Exception e) {
+            System.err.println(e);
         }
 
-        int[] c = Coloration.colorWelshPowell(fig, Flight.LAYER, 4) ;
+        for (Node n : tg) {
+            n.setAttribute("color", 0) ;
+        }
+
+        int[] c = Coloration.colorWelshPowell(tg, "color", tg.getKMax()) ;
         System.out.println("nb couleurs Welsh & Powell : " + c[0] + "\n nb conflits Welsh & Powell : " + c[1]) ;
-        Coloration.setGraphStyle(fig, c[0], Flight.LAYER) ;
+        Coloration.setGraphStyle(tg, c[0], "color") ;
         
         // Use this instead of graph.display()
-        PanelCreator r = new PanelCreator(fig) ;
+        PanelCreator r = new PanelCreator(tg) ;
         ViewPanel v = r.getViewPanel() ;
 
         JFrame frame = new JFrame("Bienvenue chez Plane air") ;
@@ -72,35 +68,9 @@ public class App {
         frame.setSize(1200, 800) ;
         frame.setLayout(new BorderLayout()) ;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
-        JPanel p = new JPanel() ;
-        p.setLayout(new GridLayout(1, 2)) ;
-        frame.add(p, BorderLayout.CENTER) ;
+        frame.add(v) ;
 
-        // p1
-        JPanel p1 = new JPanel() ;
-        p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS)) ;
-        JLabel l1 = new JLabel("Welsh & Powell") ;
-        l1.setFont(new FontUIResource(l1.getFont().getName(), l1.getFont().getStyle(), 30)) ;
-        l1.setAlignmentX(JLabel.CENTER_ALIGNMENT) ;
-        p1.add(l1) ;
-        p1.add(v) ;
-
-        // p2
-        JPanel p2 = new JPanel() ;
-        p2.setLayout(new GridLayout(3, 1)) ;
-        JButton button1 = new JButton("Show Flights currently in the air") ;
-        button1.addActionListener(e -> fig.showFlightsAtATime(FlightTime.getCurrentTime()));
-        p2.add(button1) ;
-        
-        JButton button2 = new JButton("Show all flights on the first layer") ;
-        button2.addActionListener(e -> fig.showSameLayerFlights(1));
-        p2.add(button2) ;
-
-        JButton button3 = new JButton("Show all flights") ;
-        button3.addActionListener(e -> fig.showAllFlights()) ;
-        p2.add(button3) ;
-
-        p.add(p1) ;
-        p.add(p2) ;
+        String[] str = {"graph-testX.txt"} ;
+        Automatisation.importDataFromFolder("DataTest", str, 'X') ;
     }
 }
