@@ -1,16 +1,9 @@
 //-- Import Java
 
 import java.awt.* ;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.* ;
-import javax.swing.plaf.FontUIResource;
-
 import org.graphstream.ui.swing_viewer.* ;
-import org.graphstream.ui.view.*;
-import org.graphstream.graph.implementations.* ;
-
 //-- Import GraphStream
 import org.graphstream.graph.* ;
 

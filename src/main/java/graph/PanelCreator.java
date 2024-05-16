@@ -121,6 +121,16 @@ public class PanelCreator implements ViewerListener, MouseWheelListener, MouseLi
 		double zoom = cam.getViewPercent() + (double)me.getUnitsToScroll() / 100 ;
 		if (zoom > 0.1 && zoom < 2) {
 			cam.setViewPercent(zoom);
+			if (zoom < 1 && me.getUnitsToScroll() < 0) {
+				Point mouseLocation = MouseInfo.getPointerInfo().getLocation() ;
+				double posX = mouseLocation.getX() ;
+				double posY = mouseLocation.getY() ;
+
+				Point3 pos = cam.transformPxToGu(posX, posY) ;
+				Point3 camPos = cam.getViewCenter() ;
+				Point3 finalCamPos = camPos.interpolate(pos, cam.getViewPercent()/10) ;
+				cam.setViewCenter(finalCamPos.x, finalCamPos.y, finalCamPos.z);
+			}
 		}
 	}
 
