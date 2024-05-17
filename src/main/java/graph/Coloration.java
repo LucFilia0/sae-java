@@ -8,14 +8,11 @@ import java.util.stream.Collectors;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
-import org.graphstream.ui.graphicGraph.stylesheet.Style;
 import org.graphstream.algorithm.ConnectedComponents;
 import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
 
 
 //-- Import Exceptions
-
-import exceptions.InvalidEntryException;
 
 /**
  * Class handling Coloration algorithms, mostly consists of static methods
@@ -239,57 +236,43 @@ public class Coloration {
      * The graph has to be 2-Colorable, else the algorithm will stop once two adjacent nodes have the same color.
      * 
      * @param node starting Node that will be colored
-     * @param color color that will be used
-     * @return boolean true if the coloration succeeded, false if it didn't
+     * @param colorAttribute key of the attribute used to store colors
      * 
      * @author Nathan LIEGEON
      */
-    public static boolean twoColorGraph(Graph graph) {
+    public static void twoColorGraph(Graph graph, String colorAttribute) {
         ConnectedComponents graphComponents = new ConnectedComponents(graph) ;
         graphComponents.compute() ;
-        boolean bool = true ;
 
         // Couldn't find a better way to isolate a random Node in every Connected Component
         //Might be highly unoptimized, need to look more into it
         for (ConnectedComponent thisComponent : graphComponents) {
-            if (bool) {
-                bool = recursiveTwoColoringNode(thisComponent.getNodeSet().iterator().next(), 1, true) ;
-            }
+            recursiveTwoColoringNode(thisComponent.getNodeSet().iterator().next(), 1, colorAttribute) ;
         }
-        
-        return bool ;
     }
 
     /**
      * Recursively 2-colors startingNode's connected component by coloring startingNode with currentColor then calling the function on all of startingNodes' neighbors.
      * 
      * @param startingNode Node that will be colored
-     * @param color Color that will be applied (1 or 2)
-     * @param bool true if there is no Problem (Node having neighbor with same color), else false
+     * @param initialColor Color that will be applied (1 or 2)
+     * @param colorAttribute key of the attribute used to store colors
      * @return boolean true if the coloration encountered no problem, else false
      * 
      * @author Nathan LIEGEON
      */
-    public static boolean recursiveTwoColoringNode(Node startingNode, Integer initialColor, boolean bool) {
-        if (bool) {
+    public static void recursiveTwoColoringNode(Node startingNode, Integer initialColor, String colorAttribute) {
+        int nodeColor = (int) startingNode.getAttribute("color") ;
+        if (nodeColor == 0) {
+            startingNode.setAttribute(colorAttribute, initialColor) ;
+            startingNode.setAttribute("ui.class", "color" + initialColor) ;
             
-            int nodeColor = (int) startingNode.getAttribute("color") ;
-            if (nodeColor == 0) {
-                startingNode.setAttribute("color", initialColor) ;
-                startingNode.setAttribute("ui.class", "color" + initialColor) ;
-                
-                for (Node neighbor : startingNode.neighborNodes().collect(Collectors.toSet())) {
-                    if ((int) neighbor.getAttribute("color") == initialColor) {
-                        bool = false ;
-                    }
-                    else {
-                        bool = recursiveTwoColoringNode(neighbor, initialColor%2 + 1, bool) ;
-                    }
+            startingNode.neighborNodes().forEach(neighbor -> {
+                if ((int) neighbor.getAttribute("color") == 0) {
+                    recursiveTwoColoringNode(neighbor, initialColor%2 + 1, colorAttribute) ;
                 }
-            }
+            });
         }
-
-        return bool ;
     }
     
     // WELSH & POWELL

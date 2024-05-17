@@ -4,7 +4,6 @@ package graph;
 
 import java.io.File;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import util.FlightTime;
 import util.AirportSet;
@@ -13,7 +12,6 @@ import util.AirportSet;
 
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.graph.Node ;
-import org.graphstream.graph.Edge ;
 
 //-- Import Exceptions
 
@@ -350,7 +348,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
                 flightNode.setAttribute("ui.hide") ;
                 flightNode.edges().forEach(edge -> edge.setAttribute("ui.hide")) ;
             }
-        } 
+        }
     }
     /**
      * Shows only the flights that are on the same layer

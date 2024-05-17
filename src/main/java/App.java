@@ -24,7 +24,7 @@ public class App {
         FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Yep");
         TestGraph tg = new TestGraph("Nope") ;
         try {
-            tg.importFromFile(new File("DataTest/graph-test12.txt"));
+            tg.importFromFile(new File("DataTest/graph-test0.txt"));
         }
         catch (Exception e) {
             System.err.println(e) ;
@@ -62,8 +62,5 @@ public class App {
         frame.setLayout(new BorderLayout()) ;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
         frame.add(v) ;
-
-        String[] str = {"graph-testX.txt"} ;
-        Automatisation.importDataFromFolder("DataTest", str, 'X') ;
     }
 }

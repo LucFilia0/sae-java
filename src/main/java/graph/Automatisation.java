@@ -2,12 +2,12 @@ package graph;
 
 import java.io.File ;
 import java.io.FileFilter;
+
 import java.util.List ;
-
-import org.graphstream.graph.Graph;
-
 import java.util.Comparator;
 import java.util.LinkedList ;
+
+import org.graphstream.graph.Graph;
 
 public class Automatisation {
     
@@ -138,21 +138,25 @@ public class Automatisation {
         int length = input.length() ;
         int i = 0 ;
         StringBuffer num = new StringBuffer() ;
-        while (i < length && input.charAt(i) < '0' || input.charAt(i) > '9') {
+        
+        // Goes to the first digit in the String
+        while (i < length && !Character.isDigit(input.charAt(i))) {
             i++ ;
         }
 
+        // Stores the number in a StringBuffer
         if (i < length) {
-            while (i < length && input.charAt(i) >= '0' && input.charAt(i) <= '9') {
+            while (i < length && Character.isDigit(input.charAt(i))) {
                 num.append(input.charAt(i)) ;
                 i++ ;
             }
         }
 
+        // Returns null if there is no number
         else {
             return null ;
         }
-
+        
         return num.toString() ;
     }
     

@@ -8,14 +8,9 @@ import java.util.* ;
 //-- Import GraphStream
 import org.graphstream.graph.EdgeRejectedException;
 import org.graphstream.graph.ElementNotFoundException;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.IdAlreadyInUseException;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.Graphs;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.graphicGraph.stylesheet.Color;
-import org.graphstream.algorithm.ConnectedComponents;
-import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
+
 
 
 //-- Import Exceptions
