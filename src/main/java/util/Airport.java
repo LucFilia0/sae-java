@@ -2,15 +2,25 @@ package util;
 
 //-- Import java
 
+import java.util.Iterator;
+
+//-- Import GraphStream
+
+import org.graphstream.graph.Node;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 
+//-- Import Plane AIR
+
+import graph.FlightsIntersectionGraph;
+import graph.Flight;
+
 /**
- * Airport represents the different airports of France.
+ * Airport represents the different France's airports.
  * 
  * @author Luc le Manifik
  */
-public class Airport implements Waypoint {
+public class Airport {
     
     //-- Airport Attributes
 
@@ -99,9 +109,15 @@ public class Airport implements Waypoint {
         return this.latitude;
     }
 
-    @Override
-    public GeoPosition getPosition() {
-        return new GeoPosition(this.latitude.getDecimalCoordinate(), this.longitude.getDecimalCoordinate());
+    /**
+     * Returns the GeoPosition of the Airport.
+     * 
+     * @return ({@link org.jxmapviewer.viewer.GeoPosition}) - The GeoPosition of the Airport
+     * 
+     * @author Luc le Maifik
+     */
+    public GeoPosition getGeoPosition() {
+        return new GeoPosition(this.getLatitude().getDecimalCoordinate(), this.getLongitude().getDecimalCoordinate());
     }
 
     //-- Airport Setters
@@ -164,5 +180,36 @@ public class Airport implements Waypoint {
             throw new NullPointerException();
         }
         this.latitude = latitude;
+    }
+
+    //-- Airport Methods
+
+    /**
+     * This method returns if the Airport must be marked active (in red) on the Map, because one of the Flights
+     * in the FIG is using this Airport.
+     * 
+     * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG, which contains the Flights to check
+     *
+     * @return (boolean) - True if the Flight must be marked as an active one
+     * 
+     * @author Luc le Manifik
+     */
+    public boolean mustBeActive(FlightsIntersectionGraph fig) {
+
+        boolean sort = false;
+
+        Iterator<Node> figIterator = fig.nodes().toList().iterator();
+        Flight currentFlight = null;
+        
+        while(figIterator.hasNext() && !sort) {
+
+            currentFlight = (Flight)figIterator.next();
+
+            if(this.equals(currentFlight.getDepartureAirport()) || this.equals(currentFlight.getArrivalAirport())) {
+                sort = true;
+            }
+        }
+
+        return sort;
     }
 }

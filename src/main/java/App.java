@@ -9,8 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.jxmapviewer.JXMapViewer;
-
 //-- Import JxMapViewer
 
 import org.jxmapviewer.OSMTileFactoryInfo;
@@ -25,18 +23,24 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.HashSet;
 import java.io.File;
+import java.util.LinkedList;
+
+//-- Import Plane AIR
 
 import graph.Flight;
 import graph.FlightsIntersectionGraph;
 import graph.TestGraph;
 import util.AirportSet;
 import util.Airport;
+import util.DataImportation;
 
 //-- Import IHM
 
 import ihm.Map;
 import ihm.waypoint.MapWaypoint;
 import ihm.waypoint.FlightWaypoint;
+import ihm.waypoint.InactiveAirportWaypoint;
+import ihm.waypoint.ActiveAirportWaypoint;
 import ihm.waypoint.AirportWaypoint;
 import ihm.waypoint.MapWaypointPainter;
 
@@ -45,6 +49,7 @@ import ihm.waypoint.MapWaypointPainter;
 import java.io.FileNotFoundException;
 
 import exceptions.InvalidCoordinateException;
+import exceptions.InvalidCoordinatesException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
 import exceptions.InvalidEntryException;
@@ -65,47 +70,16 @@ public class App extends javax.swing.JFrame {
     /**
      * The width of the application's screen
      */
-    private final static int APPLICATION_SCREEN_WIDTH = 1080;
+    public final static int APPLICATION_SCREEN_WIDTH = 1080;
 
     /**
      * The height of the application's screen
      */
-    private final static int APPLICATION_SCREEN_HEIGHT = 720;
+    public final static int APPLICATION_SCREEN_HEIGHT = 720;
 
-    /**
-     * The TestGraph, xhich is used (sometimes)
-     */
-    private TestGraph testGraph;
+    private LinkedList<AirportSet> airportSets;
 
-    /**
-     * The graph which sets all the Flights on their Layer, and avoid collisions
-     */
-    private FlightsIntersectionGraph fig;
-
-    /**
-     * The Set which contains all the Airports
-     */
-    private AirportSet airportSet;
-
-    /**
-     * The Set which contains all the MapWaypoints currently on the Map
-     */
-    private HashSet<MapWaypoint> waypointSet;
-
-    /**
-     * The WaypointPainter which paints all the Waypoints on the Map.
-     */
-    private MapWaypointPainter mapWaypointPainter;
-
-    /**
-     * The Map. No... THE Map. That's better
-     */
-    private JXMapViewer map;
-
-    /**
-     * The JComboBox xhich allows to switch betwenn the different modes of the Map (no THE... ok I'm stopping...)
-     */
-    private JComboBox<String> viewMapChooser;
+    private LinkedList<FlightsIntersectionGraph> figs;
 
     /**
      * The constructor of the App class. Creates a new App. Initiates all the differents steps before to launch the App.
@@ -119,14 +93,14 @@ public class App extends javax.swing.JFrame {
         System.setProperty("org.graphstream.ui", "swing");
         
         this.setTitle(name);
-        this.initAttributes();
+        //this.initAttributes();
 
-        this.importData();
+        //this.importData();
         this.setComponents();
-        this.placeComponents();
-        this.initEvents();
+        //this.placeComponents();
+        //this.initEvents();
 
-        this.paintWaypoints();
+        this.test();
     }
 
     /**
@@ -135,24 +109,15 @@ public class App extends javax.swing.JFrame {
      * @author Luc le Manifik
      */
     private void initAttributes() {
-
-        // Data
-        this.testGraph = new TestGraph("TestGraph");
-        this.fig = new FlightsIntersectionGraph("FlightIntersectionGraph");
-        this.airportSet = new AirportSet();
-        
-        // IHM
-        this.map = new JXMapViewer();
-        String[] viewMapOptions = new String[]{"Open Stree", "Virtual Earth", "Hybrid", "Satellites"};
-        this.viewMapChooser = new JComboBox<String>(viewMapOptions);
-
-        // Waypoints (you touch you dead)
-        this.waypointSet = new HashSet<MapWaypoint>();
-        this.mapWaypointPainter = new MapWaypointPainter();
-        this.map.setOverlayPainter(this.mapWaypointPainter);
+        this.airportSets = new LinkedList<AirportSet>();
+        this.figs = new LinkedList<FlightsIntersectionGraph>();
     }
 
     private void importData() {
+
+        // TEMP
+        AirportSet as = new AirportSet();
+        FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Waffle");
 
         double timeSecurity = 15;
 
@@ -161,8 +126,8 @@ public class App extends javax.swing.JFrame {
         String flightsFile = "data/vol-test1.csv";
         
         try {
-            this.airportSet.importAirportsFromFile(new File(airportsFile));
-            this.fig.importFlightsFromFile(new File(flightsFile), this.airportSet, timeSecurity);
+            DataImportation.importAirportsFromFile(as, fig, new File(airportsFile));
+            DataImportation.importFlightsFromFile(as, fig, new File(flightsFile), timeSecurity);
             //as.showAllAirports();
         }catch(
             FileNotFoundException |
@@ -188,12 +153,6 @@ public class App extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // The Map
-        DefaultTileFactory _defaultTileFactory = new DefaultTileFactory(new OSMTileFactoryInfo()); // Default look when the App is launched
-        this.map.setTileFactory(_defaultTileFactory);
-        this.map.setAddressLocation(new GeoPosition(45.7701836,4.8834086));
-        this.map.setZoom(6);
-
         // The viewMapChooser
         
     }
@@ -203,22 +162,40 @@ public class App extends javax.swing.JFrame {
      * Does the Layouts, etc...
      * 
      * @author Luc le Manifik
+     * @throws InvalidTimeException 
      */
-    private void placeComponents() {
+    private void test()  {
 
         // Layout
         this.getContentPane().setLayout(new BorderLayout());
 
         // Adding elements
-        this.add(this.map, BorderLayout.CENTER);
-        this.add(this.viewMapChooser, BorderLayout.NORTH);
-    }
 
+
+        // TEST
+        AirportSet as = new AirportSet();
+        FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Waffle");
+
+        try {
+            DataImportation.importAirportsFromFile(as, fig, new File("data/aeroports.csv"));
+            DataImportation.importFlightsFromFile(as, fig, new File("data/vol-test1.csv"), 15);
+        }catch(FileNotFoundException | NumberFormatException | InvalidCoordinateException | ObjectNotFoundException | InvalidEntryException | InvalidTimeException e) {
+            System.err.println(e);
+        }
+        DataImportation.setActiveAirports(as, fig);
+        
+        //as.showAllAirports();
+        
+        Map map = new Map();
+        map.paintWaypoints(as, fig);
+        this.add(map, BorderLayout.CENTER);
+    }
+/* 
     /**
      * This procedure creates all the events.
      * 
      * @author Luc le Manifik
-     */
+     *
     private void initEvents() {
 
         // Mouse listening events
@@ -251,56 +228,5 @@ public class App extends javax.swing.JFrame {
                 }
             }
         });
-    }
-
-    /**
-     * This procedure paints the MapWaypoints on the Map.
-     * the Flights are only painted id they are currently flying.
-     */
-    private void paintWaypoints() {
-
-        // removing all the current MapWaypoints from the Map
-        // this.map.removeAll();
-
-        addAirports();
-        addFlights();
-
-        this.mapWaypointPainter.setWaypoints(this.waypointSet);
-
-        for(MapWaypoint waypoint : this.waypointSet) {
-            this.map.add(waypoint.getWaypointButton()); // Adds the WaypointButtons, which are the visual for Waypoint
-        }
-    }
-
-    /**
-     * This procedure adds all the Airports which are in the airportSet.
-     * 
-     * @author Luc le Manifik
-     */
-    private void addAirports() {
-
-        for(Airport airport : this.airportSet.getAirportSet()) {
-            GeoPosition airportPosition = new GeoPosition(airport.getLatitude().getDecimalCoordinate(), airport.getLongitude().getDecimalCoordinate());
-            // Adding the airport to the waypointSet
-            this.waypointSet.add(new AirportWaypoint(airport.getName(), airportPosition));
-        }
-    }
-
-    /**
-     * This procedure adds all the Flights which are in the FIG.
-     * 
-     * @author Luc le Manifik
-     */
-    private void addFlights() {
-
-        this.fig.forEach(node -> {
-            Flight flight = (Flight)node;
-            GeoPosition currentFlightPosition = flight.getCurrentGeoPosition();
-            // The function returns null is the Flight is not currently flying
-            if(currentFlightPosition != null) {
-                this.waypointSet.add(new FlightWaypoint(flight.getId(), currentFlightPosition));
-                System.out.println("Flight added");
-            }
-        });
-    }
+    } */
 }

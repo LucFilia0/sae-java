@@ -12,7 +12,6 @@ import org.graphstream.graph.implementations.*;
 //-- Import JxMapViewer
 
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.Waypoint;
 
 //-- Import Exceptions
 
@@ -26,7 +25,7 @@ import exceptions.InvalidEntryException;
  * 
  * @author Luc le Manifik
  */
-public class Flight extends SingleNode implements Waypoint {
+public class Flight extends SingleNode {
     
     // Can only be used with the "graph.addNode()" method.
     protected Flight(AbstractGraph graph, String id) {
@@ -152,11 +151,6 @@ public class Flight extends SingleNode implements Waypoint {
      */
     public int getLayer(){
         return (int)this.getAttribute(Flight.LAYER);
-    }
-
-    @Override
-    public GeoPosition getPosition() {
-        return this.getCurrentGeoPosition(); // recalculated each time we ask for the Flight location
     }
 
     //-- Flight Setters

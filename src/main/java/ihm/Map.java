@@ -2,58 +2,48 @@ package ihm;
 
 //-- Import Java
 
+import java.util.HashSet;
+
+//-- Import AWT
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+//-- Import JxMapViewer
+
+import org.jxmapviewer.OSMTileFactoryInfo; // For default parameters of the Map
+
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.WaypointPainter;
+import org.jxmapviewer.viewer.TileFactoryInfo;
+import org.jxmapviewer.viewer.DefaultTileFactory; // For default paramters of the Map
+
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
+
+//-- Import Plane AIR
+
+import graph.FlightsIntersectionGraph;
 import graph.Flight;
 
 import util.Airport;
 import util.AirportSet;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.awt.BorderLayout;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
-
-
-//-- Import Swing
-
-import javax.swing.*;
-
-//-- Import JxMapViewer
-
-import org.jxmapviewer.viewer.*;
-
-import graph.FlightsIntersectionGraph;
-
-import org.jxmapviewer.*;
-import org.jxmapviewer.input.PanMouseInputListener;
-import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
-
-//-- Import Exceptions
-
-import java.io.IOException;
-
+import ihm.waypoint.ActiveAirportWaypoint;
+import ihm.waypoint.FlightWaypoint;
+import ihm.waypoint.InactiveAirportWaypoint;
+import ihm.waypoint.MapWaypoint;
+import ihm.waypoint.MapWaypointPainter;
 
 /**
  * This class is the Map which appears on the Application.
- * The Map in itself is a "JPanel", and it is needed to do ".getMap()" to get the real JxMapViewer object, and work with it.
+ * The Map in itself extends the {@link org.jxmapviewer.JXMapViewer JXMapViewer} object.
  * 
  * @author Luc le Manifik
  */
-public class Map extends JPanel {
+public class Map extends org.jxmapviewer.JXMapViewer {
     
     //-- Map Attributes
-
-    /**
-     * The JxMapViewer's map ({@link org.jxmapviewer.JXMapViewer}) which actually the REAL map.
-     */
-    private JXMapViewer map;
 
     /**
      * The GeoPosition which is focused when the key "Space" is pressed
@@ -65,80 +55,76 @@ public class Map extends JPanel {
      */
     private int center_zoom;
 
-    private Set<Waypoint> waypointSet;
+    /**
+     * The Set which contains all the Waypoint of the Map (Flights and Airports)
+     */
+    private HashSet<MapWaypoint> waypointSet;
 
-    private WaypointPainter<Waypoint> waypointPainter;
-
-    /*
-    private Set<Waypoint> airport_waypointSet;
-
-    private WaypointPainter<Waypoint> airport_waypointPainter;
-
-    private Set<Waypoint> flight_waypointSet;
-
-    private WaypointPainter<Waypoint> flight_waypointPainter;
-    */
+    /**
+     * The WaypointPainter which is used to draw all the Waypoints on the Map
+     */
+    private MapWaypointPainter waypointPainter;
 
     //-- Map Constructor
 
+    /**
+     * Map class's constructor. Creates a new Map.
+     * Initiates the view of the Map at the center of the France.
+     * 
+     * @author Luc le Manifik
+     */
     public Map() {
 
-        this.map = new JXMapViewer();
-        
-        // Values for the KeyEvent "Space" -> Centering the screen
-        this.center_geoPosition = new GeoPosition(47, 3);
-        this.center_zoom = 13;
-
-        this.waypointSet = new HashSet<Waypoint>();
-        this.waypointPainter = new WaypointPainter<Waypoint>();
-
-        /*
-        this.airport_waypointSet = new HashSet<Waypoint>();
-        this.flight_waypointSet = new HashSet<Waypoint>();
-
-        this.airport_waypointPainter = new WaypointPainter<Waypoint>();
-        this.airport_waypointPainter = new WaypointPainter<Waypoint>();
-        */   
-
-        // The parameters of the tiles of the Map
-        TileFactoryInfo _tileFactoryInfo = new OSMTileFactoryInfo();
-        //Setting the default tile creation to the tiles we just defined
-        DefaultTileFactory _defaultTileFactory = new DefaultTileFactory(_tileFactoryInfo);
-
-        // setting the map's 'tile factory'
-        this.map.setTileFactory(_defaultTileFactory);
-
-        // Setting up the basic controls of the map (you touch you dead :skull:)
-        PanMouseInputListener _mouseListener = new PanMouseInputListener(map);
-        this.map.addMouseListener(_mouseListener); // The mouse is detected
-        this.map.addMouseMotionListener(_mouseListener); // The map can move, when we slide the mouse
-        this.map.addMouseWheelListener(new ZoomMouseWheelListenerCursor(map)); // The map can be zoomed, when we use the wheel of the mouse
-
-        // Adding the JXMapViewer to the Map object
-        this.setLayout(new BorderLayout());
-        this.add(this.map, BorderLayout.CENTER); // In order to have the map filling the area...
-
-        // Adding the command
-        // -> When "Space" is pressed : Default view of the France
-        this.map.setFocusable(true); // Allow the map to listen a "KeyListener"
-        this.map.addKeyListener(new CenteringMapWhenSpacePressed());
+        this.initAttributes();
+        this.initEvents();
 
         // Centering the Map to it's default position
         this.center();
     }
 
-    //-- Map Getters
-
     /**
-     * Get the JxMapViewer, the REAL map inside the Map object.
-     * 
-     * @return ({@link org.jxmapviewer.JXMapViewer})
+     * Initiates the different attributes of the Map
      * 
      * @author Luc le Manifik
      */
-    public JXMapViewer getMap() {
-        return this.map;
+    private void initAttributes() {
+
+        // Default center position
+        this.center_geoPosition = new GeoPosition(47, 3);
+        this.center_zoom = 13;
+
+        // Default Waypoints stuff...
+        this.waypointSet = new HashSet<MapWaypoint>();
+        this.waypointPainter = new MapWaypointPainter();
+
+        this.setOverlayPainter(this.waypointPainter);
+
+        // Default JxMapViewer settings
+        TileFactoryInfo _tileFactoryInfo = new OSMTileFactoryInfo(); // The parameters of the tiles of the Map
+        DefaultTileFactory _defaultTileFactory = new DefaultTileFactory(_tileFactoryInfo); //Setting the default tile creation to the tiles we just defined      
+        this.setTileFactory(_defaultTileFactory); // setting the map's 'tile factory'
     }
+
+    /**
+     * Initiates the different events, for the mouse, the space bar, etc...
+     * 
+     * @author Luc le Manifik
+     */
+    private void initEvents() {
+
+        // Setting up the basic controls of the map (you touch you dead :skull:)
+        PanMouseInputListener _mouseListener = new PanMouseInputListener(this);
+        this.addMouseListener(_mouseListener); // The mouse is detected
+        this.addMouseMotionListener(_mouseListener); // The map can move, when we slide the mouse
+        this.addMouseWheelListener(new ZoomMouseWheelListenerCursor(this)); // The map can be zoomed, when we use the wheel of the mouse
+
+        // Adding the command
+        // -> When "Space" is pressed : Default view of the France
+        this.setFocusable(true); // Allow the map to listen a "KeyListener"
+        this.addKeyListener(new CenteringMapWhenSpacePressed());
+    }
+
+    //-- Map Getters
 
     /**
      * Get the default position when 'Space' is pressed
@@ -163,34 +149,22 @@ public class Map extends JPanel {
     }
 
     //-- Map Setters
-
-    /**
-     * Set the default position when 'Space' is pressed
-     * 
-     * @param center_GeoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The new GeoPosition where the focus will be made
-     * 
-     * @author Luc le Manifik
-     */
-    public void setCenterGeoPosition(GeoPosition center_GeoPosition) {
-        if(!center_GeoPosition.equals(null))
-            this.center_geoPosition = center_GeoPosition;
-    }
-
-    /**
-     * Set the default zoom when 'Space' is pressed
-     * 
-     * @param center_zoom (int) - The new default zoom value
-     * 
-     * @author Luc le Manifik
-     */
-    public void setCenterZoom(int center_zoom) {
-        if(center_zoom > 0)
-            this.center_zoom = center_zoom;
-    }
-
     
+
+    /* /**
+     * This method sets the WaypointRenderer when importing Flights or Airports, so that it becomes possible to have
+     * multiple Waypoint's design on the same overlay. It needs to change depending of what Object it's currently imported.
+     * 
+     * @param iconFile ({@link java.io.File}) - The image of the Waypoint currently imported
+     * 
+     * @see {@link #addAirports(AirportSet, File) addAirports} function
+     * @see {@link #addFlights(FlightsIntersectionGraph, File) addFlights} function
+     * 
+     * @author Luc le Manifik
+     *
     public void setWaypointPainter(File iconFile) {
-        waypointPainter.setRenderer(new WaypointRenderer<Waypoint>() {
+
+        this.waypointPainter.setRenderer(new WaypointRenderer<Waypoint>() {
             @Override
             public void paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint w)
             {
@@ -212,12 +186,72 @@ public class Map extends JPanel {
                 }
             }
         });
-    }
+    } */
 
     //-- Map Methods
 
     /**
-     * This function centers the Map at the 'center_geoposition' location, with the 'center_zoom' zoom value.
+     * This method adds the Airports' icons on the Map.
+     * 
+     * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
+     * 
+     * @author Luc le Manifik
+     */
+    public void addAirports(AirportSet airportSet) {
+
+        // Adding the active Airports
+        for(Airport airport : airportSet.getActiveAirports()) {
+            this.waypointSet.add(new ActiveAirportWaypoint(airport.getName(), airport.getGeoPosition()));
+        }
+
+        // Adding the inactive Airports
+        for(Airport airport : airportSet.getInactiveAirports()) {
+            this.waypointSet.add(new InactiveAirportWaypoint(airport.getName(), airport.getGeoPosition()));
+        }
+    }
+
+    /**
+     * This method adds all the Flights which are in the FIG.
+     * 
+     * @author Luc le Manifik
+     */
+    private void addFlights(FlightsIntersectionGraph fig) {
+
+        fig.forEach(node -> {
+            Flight flight = (Flight)node;
+            GeoPosition currentFlightPosition = flight.getCurrentGeoPosition();
+            // The function returns null is the Flight is not currently flying
+            if(currentFlightPosition != null) {
+                this.waypointSet.add(new FlightWaypoint(flight.getId(), currentFlightPosition));
+            }
+        });
+    }
+
+    /**
+     * This procedure paints the MapWaypoints on the Map.
+     * the Flights are only painted id they are currently flying.
+     */
+    public void paintWaypoints(AirportSet airportSet, FlightsIntersectionGraph fig) {
+
+        // removing all the current MapWaypoints from the Map
+        // this.map.removeAll();
+
+        this.addAirports(airportSet);
+        this.addFlights(fig);
+
+        this.waypointPainter.setWaypoints(this.waypointSet);
+
+        for(MapWaypoint waypoint : this.waypointSet) {
+            /* Adds the WaypointButtons, which are the visual for Waypoint,
+             * they need to be added manually, because JxMap is not made to have buttons, but Waypoints
+             * So it will not show them automatically
+             */
+            this.add(waypoint.getWaypointButton());
+        }
+    }
+
+    /**
+     * This method centers the Map at the 'center_geoposition' location, with the 'center_zoom' zoom value.
      * 
      * @see setCenterGeoPosition() - in {@link ihm.Map}
      * @see setCenterZoom() - in {@link ihm.Map}
@@ -225,47 +259,32 @@ public class Map extends JPanel {
      * @author Luc le Manifik
      */
     public void center() {
-        this.map.setAddressLocation(center_geoPosition);
-        this.map.setZoom(center_zoom);
+        this.setAddressLocation(center_geoPosition);
+        this.setZoom(center_zoom);
     }
 
     /**
-     * This function displays the Airport's icons on the Map.
+     * Set the default zoom when 'Space' is pressed
      * 
-     * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
-     * @param airportIconFile ({@link java.io.File}) - The Icon of the Airport's waypoint
+     * @param center_zoom (int) - The new default zoom value
      * 
      * @author Luc le Manifik
      */
-    public void addAirports(AirportSet airportSet, File airportIconFile) {
-
-        this.setWaypointPainter(airportIconFile);
-
-        Set<Airport> airports = airportSet.getAirportSet();
-
-        for(Airport airport : airports) {
-            // Add a new Waypoint which contains the actual airport's coordinates to "airports_waypointSet"
-            this.waypointSet.add(airport);
-        }
+    public void setCenterZoom(int center_zoom) {
+        if(center_zoom > 0)
+            this.center_zoom = center_zoom;
     }
 
-    public void addFlights(FlightsIntersectionGraph fig, File flightIconFile) {
-
-        this.setWaypointPainter(flightIconFile);
-
-        List<org.graphstream.graph.Node> nodeList = fig.nodes().toList();
-
-        for(org.graphstream.graph.Node node : nodeList) {
-            GeoPosition flighPosition = ((Flight) node).getCurrentGeoPosition();
-            if(flighPosition != null) {
-                this.waypointSet.add((Flight)node);
-            }
-        }
-    }
-
-    public void print() {
-        this.waypointPainter.setWaypoints(this.waypointSet);
-        this.map.setOverlayPainter(waypointPainter);
+    /**
+     * Set the default position when 'Space' is pressed
+     * 
+     * @param center_GeoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The new GeoPosition where the focus will be made
+     * 
+     * @author Luc le Manifik
+     */
+    public void setCenterGeoPosition(GeoPosition center_GeoPosition) {
+        if(!center_GeoPosition.equals(null))
+            this.center_geoPosition = center_GeoPosition;
     }
 
     //-- Map KeyListener

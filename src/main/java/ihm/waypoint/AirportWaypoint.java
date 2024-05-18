@@ -10,27 +10,27 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 /**
  * This class is the MapWaypoint which is used to represent Airports on the Map.
+ * The Airport class's Waypoints can be "active", in red, or "inactive", in gray.
+ * The active/inactive visual is made by children classes :
+ * {@link ihm.waypoint.ActiveAirportWaypoint ActiveAirportWaypoint} and {@link ihm.waypoint.InactiveAirportWaypoint InactiveAirportWaypoint}.
+ * Extends {@link ihm.waypoint.MapWaypoint MapWaypoint}
  * 
  * @author Luc le Manifik
  */
-public class AirportWaypoint extends MapWaypoint {
-    
-    //-- AirportWaypoint Attributes
+public abstract class AirportWaypoint extends MapWaypoint {
+
+    //-- AirportWaypoint Consructor
 
     /**
-     * The file which contains the icon of the airports ({@link java.io.File})
-     */
-    public static final File AIRPORT_WAYPOINT_ICON_FILE = new File("sprint/red-airport.png");
-
-    /**
-     * The AirportWaypoint class constructor. Creates a new AirportWaypoint.
+     * The AirportWaypoint class's constructor. Creates a new AirportWaypoint.
      * 
+     * @param iconFile ({@link java.io.File}) - The icon's File
      * @param name (String) - The name of the Airport
      * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The position of the Airport.
      * 
      * @author Luc le Manifik
      */
-    public AirportWaypoint(String name, GeoPosition geoPosition) {
-        super(AirportWaypoint.AIRPORT_WAYPOINT_ICON_FILE, name, geoPosition);
+    AirportWaypoint(File iconFile, String name, GeoPosition geoPosition) {
+        super(iconFile, name, geoPosition);
     }
 }

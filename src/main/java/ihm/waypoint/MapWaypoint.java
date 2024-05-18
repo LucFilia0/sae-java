@@ -1,12 +1,14 @@
 package ihm.waypoint;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 //-- Import Java
 
 import java.io.File;
 import java.io.IOException;
+
+//-- Import AWT
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 //-- Import JxMapViewer
 
@@ -18,7 +20,7 @@ import org.jxmapviewer.viewer.GeoPosition;
  * 
  * @author Luc le Manifik
  */
-public class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint {
+public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint {
     
     //-- MapWaypoint attributes
 
