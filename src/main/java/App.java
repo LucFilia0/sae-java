@@ -39,6 +39,8 @@ import java.util.HashSet;
 import java.io.File;
 import java.util.LinkedList;
 
+import graph.Automatisation;
+
 //-- Import Plane AIR
 
 import graph.Flight;
@@ -78,6 +80,9 @@ public class App extends javax.swing.JFrame {
 
         App planeAIR = new App("Plane AIR"); // Such a great name, isn't it ?
         planeAIR.setVisible(true);
+
+        String[] identifiers = {"graph-testX.txt", "graph-testX.csv"} ;
+        Automatisation.startAutomatisation("data", identifiers, 'X', "color") ;
     }
 
     /**
@@ -136,7 +141,7 @@ public class App extends javax.swing.JFrame {
 
         //String testGraphFile = "data/graph-test1.txt";
         String airportsFile = "data/aeroports.csv";
-        String flightsFile = "data/vol-test1.csv";
+        String flightsFile = "data/vol-test8.csv";
         
         try {
             DataImportation.importAirportsFromFile(as, fig, new File(airportsFile));
@@ -190,7 +195,7 @@ public class App extends javax.swing.JFrame {
 
         try {
             DataImportation.importAirportsFromFile(as, fig, new File("data/aeroports.csv"));
-            DataImportation.importFlightsFromFile(as, fig, new File("data/vol-test4.csv"), 15);
+            DataImportation.importFlightsFromFile(as, fig, new File("data/vol-test8.csv"), 15);
         }catch(FileNotFoundException | NumberFormatException | InvalidCoordinateException | ObjectNotFoundException | InvalidEntryException | InvalidTimeException e) {
             System.err.println(e);
         }
