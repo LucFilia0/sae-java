@@ -4,7 +4,9 @@ import java.awt.* ;
 import java.io.File;
 import javax.swing.* ;
 import org.graphstream.ui.swing_viewer.* ;
+
 //-- Import GraphStream
+
 import org.graphstream.graph.* ;
 
 //-- Import Exceptions
@@ -62,5 +64,8 @@ public class App {
         frame.setLayout(new BorderLayout()) ;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
         frame.add(v) ;
+
+        String[] tab = {"graph-testX.txt", "graph-testX.csv"} ;
+        Automatisation.startAutomatisation("DataTest", tab, 'X', "color") ;
     }
 }

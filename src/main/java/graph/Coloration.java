@@ -336,7 +336,7 @@ public class Coloration {
      * 
      * @autor GIRAUD Nila
      */
-    public static int[] ColorationDsatur(Graph graph, int Kmax, String attributColor){
+    public static int[] ColorationDsatur(Graph graph, String attributColor, int Kmax){
         LinkedList<Node> ListNodes = new LinkedList<Node>();
         //System.out.println("Salut");
         graph.setAttribute("nbConflit",0);
