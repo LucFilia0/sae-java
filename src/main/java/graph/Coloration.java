@@ -11,7 +11,6 @@ import org.graphstream.graph.implementations.Graphs;
 import org.graphstream.algorithm.ConnectedComponents;
 import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
 
-
 //-- Import Exceptions
 
 /**

@@ -91,10 +91,12 @@ public class Automatisation {
 
     /**
      * Loads all graphs from the folder and stores them in a LinkedList which is returned
+     * 
      * @param path the folder's path
      * @param identifiers the strings the name will be compared to
      * @param placeholder character that should be replaced by numbers for the check
      * @param threadPool current threadPool used to divide the tasks
+     * 
      * @return the list of Graphs that were imported ordered by ID
      */
     public static List<TestGraph> importDataFromFolder(String path, String[] identifiers, char placeholder) {

@@ -56,8 +56,8 @@ public class Longitude extends Coordinate {
      * @inherit-doc
      */
     public double getDecimalCoordinate() {
-        double decimalCoordinate; 
-        decimalCoordinate = this.minutes + this.seconds/60;
+        double decimalCoordinate;
+        decimalCoordinate = this.minutes + this.seconds/(double)60;
         decimalCoordinate = this.degree + decimalCoordinate/60;
 
         // If the direction is West, then it turns negative

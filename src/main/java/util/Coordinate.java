@@ -6,6 +6,9 @@ import exceptions.InvalidCoordinateException ;
  * The Coordinate class stores the different informations about the geographical localisation of the different Airports.
  * This class is defined as abstract, because the verification of the direction is made by the inherited classes (Longitude and Latitude).
  * 
+ * @see {@link util.Latitude}
+ * @see {@link util.Longitude}
+ * 
  * @author Nathan LIEGEON - Modified : Luc le Manifik
  */
 public abstract class Coordinate {

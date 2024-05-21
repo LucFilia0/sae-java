@@ -3,6 +3,7 @@ package graph;
 //-- Import Java
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import util.FlightTime;
@@ -11,16 +12,13 @@ import util.AirportSet;
 //-- Import GraphStream
 
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.graph.Node ;
-
-//-- Import Exceptions
-
-import java.io.FileNotFoundException;
 
 import exceptions.InvalidEntryException;
 import exceptions.InvalidFileFormatException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
+
+import org.graphstream.graph.Node ;
 
 
 /**
@@ -120,7 +118,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * 
      * @author Luc le Manifik
      */
-    private void setNbFlights(int nbFlights) {
+    public void setNbFlights(int nbFlights) {
         this.setAttribute(FlightsIntersectionGraph.NB_FLIGHTS, nbFlights);
     }
 
@@ -131,7 +129,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
      * 
      * @author Luc le Manifik
      */
-    private void setNbCollisions(int nbCollisions) {
+    public void setNbCollisions(int nbCollisions) {
         this.setAttribute(FlightsIntersectionGraph.NB_COLLISIONS, nbCollisions);
     }
 
