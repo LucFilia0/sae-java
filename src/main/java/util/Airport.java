@@ -7,8 +7,10 @@ import java.util.Iterator;
 //-- Import GraphStream
 
 import org.graphstream.graph.Node;
+
+//-- Import JxMapViewer
+
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.Waypoint;
 
 //-- Import Plane AIR
 

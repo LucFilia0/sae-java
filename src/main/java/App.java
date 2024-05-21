@@ -1,13 +1,24 @@
 //-- Import Swing
 
+import javax.management.JMX;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.Painter;
+
+import java.awt.BasicStroke;
 
 //-- Import AWT
 
 import java.awt.BorderLayout;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+
+import org.graphstream.ui.graphicGraph.stylesheet.Color;
+import org.jxmapviewer.JXMapViewer;
 
 //-- Import JxMapViewer
 
@@ -15,9 +26,12 @@ import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
+import org.jxmapviewer.painter.AbstractPainter;
+import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import com.lowagie.text.Rectangle;
 
 //-- Import Java
 
@@ -37,12 +51,11 @@ import util.DataImportation;
 //-- Import IHM
 
 import ihm.Map;
-import ihm.waypoint.MapWaypoint;
-import ihm.waypoint.FlightWaypoint;
-import ihm.waypoint.InactiveAirportWaypoint;
-import ihm.waypoint.ActiveAirportWaypoint;
-import ihm.waypoint.AirportWaypoint;
-import ihm.waypoint.MapWaypointPainter;
+import ihm.mapvisuals.mapwp.MapWaypoint;
+import ihm.mapvisuals.mapwp.airportwp.ActiveAirportWaypoint;
+import ihm.mapvisuals.mapwp.airportwp.AirportWaypoint;
+import ihm.mapvisuals.mapwp.airportwp.InactiveAirportWaypoint;
+import ihm.mapvisuals.mapwp.flightwp.FlightWaypoint;
 
 //-- Import Exceptions
 
@@ -162,7 +175,6 @@ public class App extends javax.swing.JFrame {
      * Does the Layouts, etc...
      * 
      * @author Luc le Manifik
-     * @throws InvalidTimeException 
      */
     private void test()  {
 
@@ -178,16 +190,17 @@ public class App extends javax.swing.JFrame {
 
         try {
             DataImportation.importAirportsFromFile(as, fig, new File("data/aeroports.csv"));
-            DataImportation.importFlightsFromFile(as, fig, new File("data/vol-test1.csv"), 15);
+            DataImportation.importFlightsFromFile(as, fig, new File("data/vol-test4.csv"), 15);
         }catch(FileNotFoundException | NumberFormatException | InvalidCoordinateException | ObjectNotFoundException | InvalidEntryException | InvalidTimeException e) {
             System.err.println(e);
         }
         DataImportation.setActiveAirports(as, fig);
-        
-        //as.showAllAirports();
+
         
         Map map = new Map();
-        map.paintWaypoints(as, fig);
+        //map.paintWaypoints(as, fig);
+        map.paintMapItems(as, fig);
+        
         this.add(map, BorderLayout.CENTER);
     }
 /* 

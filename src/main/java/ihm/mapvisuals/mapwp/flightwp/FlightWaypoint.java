@@ -1,4 +1,4 @@
-package ihm.waypoint;
+package ihm.mapvisuals.mapwp.flightwp;
 
 //-- Import Java
 
@@ -7,6 +7,8 @@ import java.io.File;
 //-- Import JxMapViewer
 
 import org.jxmapviewer.viewer.GeoPosition;
+
+import ihm.mapvisuals.mapwp.MapWaypoint;
 
 /**
  * This class is the MapWaypoint which is used to represent Flights on the Map.

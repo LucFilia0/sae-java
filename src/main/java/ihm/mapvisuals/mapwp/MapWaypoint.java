@@ -1,4 +1,4 @@
-package ihm.waypoint;
+package ihm.mapvisuals.mapwp;
 
 //-- Import Java
 
@@ -20,7 +20,7 @@ import org.jxmapviewer.viewer.GeoPosition;
  * 
  * @author Luc le Manifik
  */
-public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint {
+public abstract class MapWaypoint extends ihm.mapvisuals.MapItem {
     
     //-- MapWaypoint attributes
 
@@ -32,7 +32,7 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
     /**
      * The button with which we can interact
      */
-    protected WaypointButton waypointButton;
+    protected MapWaypointButton waypointButton;
 
     //-- MapWaypoint Constructor
 
@@ -53,7 +53,7 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
         this.waypointButton = null;
 
         try {
-            this.waypointButton = new WaypointButton(iconFile);
+            this.waypointButton = new MapWaypointButton(iconFile);
         }catch(IOException e) {
             e.printStackTrace();
         }
@@ -93,11 +93,11 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
     /**
      * Returns the WaypointButton of the MapWaypoint. The WaypointButton actually contains the visual of the MapWaypoint
      * 
-     * @return ({@link ihm.waypoint.WaypointButton}) - The WaypointButton of the MapWaypoint
+     * @return ({@link ihm.mapvisuals.mapwp.MapWaypointButton}) - The WaypointButton of the MapWaypoint
      * 
      * @author Luc le Manifik
      */
-    public WaypointButton getWaypointButton() {
+    public MapWaypointButton getWaypointButton() {
         return this.waypointButton;
     }
 
@@ -126,7 +126,7 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
     public void setButtonIcon(File iconFile) throws IOException {
         if(iconFile != null) {
             try {
-                this.waypointButton = new WaypointButton(iconFile);
+                this.waypointButton = new MapWaypointButton(iconFile);
             }catch(IOException e) {
                 throw e;
             }

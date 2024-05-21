@@ -1,4 +1,4 @@
-package ihm.waypoint;
+package ihm.mapvisuals.mapwp.airportwp;
 
 //-- Import Java
 
@@ -10,7 +10,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 /**
  * This class is a Waypoint on the {@link ihm.Map} which represents an inactive Airport.
- * Extends the {@link ihm.waypoint.AirportWaypoint AirportWaypoint} abstract class.
+ * Extends the {@link ihm.mapvisuals.mapwp.airportwp.AirportWaypoint AirportWaypoint} abstract class.
  * 
  * @author Luc le Manifik
  */

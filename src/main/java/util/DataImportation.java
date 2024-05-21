@@ -173,6 +173,14 @@ public abstract class DataImportation {
         airportSet.add(airport);
     }
 
+    /**
+     * This procedure puts the active and inactive Airports in their right Set.
+     * 
+     * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports
+     * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG which contains all the Airports
+     * 
+     * @author Luc le Manifik
+     */
     public static void setActiveAirports(AirportSet airportSet, FlightsIntersectionGraph fig) {
         
         for(Airport airport : airportSet) {

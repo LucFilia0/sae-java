@@ -1,9 +1,5 @@
 package ihm;
 
-//-- Import Java
-
-import java.util.HashSet;
-
 //-- Import AWT
 
 import java.awt.event.KeyEvent;
@@ -14,7 +10,6 @@ import java.awt.event.KeyListener;
 import org.jxmapviewer.OSMTileFactoryInfo; // For default parameters of the Map
 
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.WaypointPainter;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.DefaultTileFactory; // For default paramters of the Map
 
@@ -23,17 +18,17 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 //-- Import Plane AIR
 
-import graph.FlightsIntersectionGraph;
-import graph.Flight;
-
 import util.Airport;
 import util.AirportSet;
 
-import ihm.waypoint.ActiveAirportWaypoint;
-import ihm.waypoint.FlightWaypoint;
-import ihm.waypoint.InactiveAirportWaypoint;
-import ihm.waypoint.MapWaypoint;
-import ihm.waypoint.MapWaypointPainter;
+import graph.Flight;
+import graph.FlightsIntersectionGraph;
+
+import ihm.mapvisuals.MapItemPainter;
+import ihm.mapvisuals.mapwp.MapWaypoint;
+import ihm.mapvisuals.mapwp.flightwp.FlightWaypoint;
+import ihm.mapvisuals.mapwp.airportwp.ActiveAirportWaypoint;
+import ihm.mapvisuals.mapwp.airportwp.InactiveAirportWaypoint;
 
 /**
  * This class is the Map which appears on the Application.
@@ -55,15 +50,15 @@ public class Map extends org.jxmapviewer.JXMapViewer {
      */
     private int center_zoom;
 
-    /**
+    /* /**
      * The Set which contains all the Waypoint of the Map (Flights and Airports)
-     */
-    private HashSet<MapWaypoint> waypointSet;
+     *
+    private HashSet<MapItem> itemSet; */
 
     /**
      * The WaypointPainter which is used to draw all the Waypoints on the Map
      */
-    private MapWaypointPainter waypointPainter;
+    private MapItemPainter itemPainter;
 
     //-- Map Constructor
 
@@ -94,10 +89,12 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         this.center_zoom = 13;
 
         // Default Waypoints stuff...
-        this.waypointSet = new HashSet<MapWaypoint>();
-        this.waypointPainter = new MapWaypointPainter();
+        /*
+        this.itemSet = new HashSet<MapItem>();
+        */
+        this.itemPainter = new MapItemPainter();
 
-        this.setOverlayPainter(this.waypointPainter);
+        this.setOverlayPainter(this.itemPainter);
 
         // Default JxMapViewer settings
         TileFactoryInfo _tileFactoryInfo = new OSMTileFactoryInfo(); // The parameters of the tiles of the Map
@@ -148,46 +145,6 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         return this.center_zoom;
     }
 
-    //-- Map Setters
-    
-
-    /* /**
-     * This method sets the WaypointRenderer when importing Flights or Airports, so that it becomes possible to have
-     * multiple Waypoint's design on the same overlay. It needs to change depending of what Object it's currently imported.
-     * 
-     * @param iconFile ({@link java.io.File}) - The image of the Waypoint currently imported
-     * 
-     * @see {@link #addAirports(AirportSet, File) addAirports} function
-     * @see {@link #addFlights(FlightsIntersectionGraph, File) addFlights} function
-     * 
-     * @author Luc le Manifik
-     *
-    public void setWaypointPainter(File iconFile) {
-
-        this.waypointPainter.setRenderer(new WaypointRenderer<Waypoint>() {
-            @Override
-            public void paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint w)
-            {
-                BufferedImage img = null;
-
-                try {
-                    img = ImageIO.read(iconFile); // Setting up the visual of the Waypoints
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (img != null) {
-                    Point2D point = map.getTileFactory().geoToPixel(w.getPosition(), map.getZoom());
-                    
-                    int x = (int)point.getX() -img.getWidth() / 2;
-                    int y = (int)point.getY() -img.getHeight();
-                    
-                    g.drawImage(img, x, y, null);
-                }
-            }
-        });
-    } */
-
     //-- Map Methods
 
     /**
@@ -201,12 +158,12 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
         // Adding the active Airports
         for(Airport airport : airportSet.getActiveAirports()) {
-            this.waypointSet.add(new ActiveAirportWaypoint(airport.getName(), airport.getGeoPosition()));
+            this.itemPainter.getAirportWaypoints().add(new ActiveAirportWaypoint(airport.getName(), airport.getGeoPosition()));
         }
 
         // Adding the inactive Airports
         for(Airport airport : airportSet.getInactiveAirports()) {
-            this.waypointSet.add(new InactiveAirportWaypoint(airport.getName(), airport.getGeoPosition()));
+            this.itemPainter.getAirportWaypoints().add(new InactiveAirportWaypoint(airport.getName(), airport.getGeoPosition()));
         }
     }
 
@@ -219,10 +176,14 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
         fig.forEach(node -> {
             Flight flight = (Flight)node;
+
+            // Adding the Flight in the "currentFlights" set, in order to prompt the Flight's route, even if he's not currently flying
+            this.itemPainter.getCurrentFlights().add(flight);
+
             GeoPosition currentFlightPosition = flight.getCurrentGeoPosition();
             // The function returns null is the Flight is not currently flying
             if(currentFlightPosition != null) {
-                this.waypointSet.add(new FlightWaypoint(flight.getId(), currentFlightPosition));
+                this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight.getId(), currentFlightPosition));
             }
         });
     }
@@ -230,25 +191,30 @@ public class Map extends org.jxmapviewer.JXMapViewer {
     /**
      * This procedure paints the MapWaypoints on the Map.
      * the Flights are only painted id they are currently flying.
+     * 
+     * @author Luc le Manifik
      */
-    public void paintWaypoints(AirportSet airportSet, FlightsIntersectionGraph fig) {
-
-        // removing all the current MapWaypoints from the Map
-        // this.map.removeAll();
+    public void paintMapItems(AirportSet airportSet, FlightsIntersectionGraph fig) {
 
         this.addAirports(airportSet);
         this.addFlights(fig);
 
-        this.waypointPainter.setWaypoints(this.waypointSet);
+        /* Adds the WaypointButtons, which are the visual for Waypoint,
+        * they need to be added manually, because JxMap is not made to have buttons, but Waypoints
+        * So it will not show them automatically
+        */
+        for(MapWaypoint waypoint : this.itemPainter.getAirportWaypoints()) {
+            
+            this.add(waypoint.getWaypointButton());
+        }
 
-        for(MapWaypoint waypoint : this.waypointSet) {
-            /* Adds the WaypointButtons, which are the visual for Waypoint,
-             * they need to be added manually, because JxMap is not made to have buttons, but Waypoints
-             * So it will not show them automatically
-             */
+        for(MapWaypoint waypoint : this.itemPainter.getFlightWaypoints()) {
+
             this.add(waypoint.getWaypointButton());
         }
     }
+
+    //-- Map Methods --> Center default
 
     /**
      * This method centers the Map at the 'center_geoposition' location, with the 'center_zoom' zoom value.

@@ -1,4 +1,4 @@
-package ihm.waypoint;
+package ihm.mapvisuals.mapwp.airportwp;
 
 //-- Import Java
 
@@ -12,12 +12,12 @@ import org.jxmapviewer.viewer.GeoPosition;
  * This class is the MapWaypoint which is used to represent Airports on the Map.
  * The Airport class's Waypoints can be "active", in red, or "inactive", in gray.
  * The active/inactive visual is made by children classes :
- * {@link ihm.waypoint.ActiveAirportWaypoint ActiveAirportWaypoint} and {@link ihm.waypoint.InactiveAirportWaypoint InactiveAirportWaypoint}.
- * Extends {@link ihm.waypoint.MapWaypoint MapWaypoint}
+ * {@link ihm.mapvisuals.mapwp.airportwp.ActiveAirportWaypoint ActiveAirportWaypoint} and {@link ihm.mapvisuals.mapwp.airportwp.InactiveAirportWaypoint InactiveAirportWaypoint}.
+ * Extends {@link ihm.mapvisuals.mapwp.MapWaypoint MapWaypoint}
  * 
  * @author Luc le Manifik
  */
-public abstract class AirportWaypoint extends MapWaypoint {
+public abstract class AirportWaypoint extends ihm.mapvisuals.mapwp.MapWaypoint {
 
     //-- AirportWaypoint Consructor
 

@@ -1,8 +1,10 @@
-package ihm.waypoint;
+package ihm.mapvisuals.mapwp;
 
 //-- Import Java
 
 import java.io.File;
+
+import javax.imageio.ImageIO;
 
 //-- Import AWT
 
@@ -12,7 +14,6 @@ import java.awt.Image;
 
 //-- Import Swing
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 //-- Import Exceptions
@@ -20,12 +21,12 @@ import javax.swing.ImageIcon;
 import java.io.IOException;
 
 /**
- * This class is the button of a MapWaypoint ({@link ihm.waypoint.MapWaypoint}), and allows the user to click and interact with the
+ * This class is the button of a MapWaypoint ({@link ihm.mapvisuals.mapwp.MapWaypoint}), and allows the user to click and interact with the
  * Waypoints on the Map.
  * 
  * @author Luc le Manifik
  */
-public class WaypointButton extends javax.swing.JButton {
+public class MapWaypointButton extends javax.swing.JButton {
 
     //-- WaypointButton Attributes
 
@@ -44,13 +45,13 @@ public class WaypointButton extends javax.swing.JButton {
      * 
      * @throws IOException Throwed if the File does not exist or does not match the "image" requirements.
      */
-    public WaypointButton(File iconFile) throws IOException {
+    public MapWaypointButton(File iconFile) throws IOException {
 
         Image scaledImage = null;
 
         try {
             // The scaled image is the "resized" version of the "iconFile" image. To fit the wanted size on the map (BUTTON_SIZE)
-            scaledImage = ImageIO.read(iconFile).getScaledInstance(WaypointButton.BUTTON_SIZE, WaypointButton.BUTTON_SIZE, Image.SCALE_SMOOTH);
+            scaledImage = ImageIO.read(iconFile).getScaledInstance(MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE, Image.SCALE_SMOOTH);
         }catch(IOException e) {
             throw e; // What the heck is IOException ?? Seriously XD
         }
@@ -61,6 +62,6 @@ public class WaypointButton extends javax.swing.JButton {
 
         this.setIcon(new ImageIcon(scaledImage));
         this.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Makes a little funny hand when the button is hovered :)
-        this.setPreferredSize(new Dimension(WaypointButton.BUTTON_SIZE, WaypointButton.BUTTON_SIZE)); // Don't ask why, but "setSize" didn't work...
+        this.setPreferredSize(new Dimension(MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE)); // Don't ask why, but "setSize" didn't work...
     }
 }
