@@ -100,7 +100,7 @@ public class MapItemPainter extends WaypointPainter<MapItem> {
 
             MapWaypointButton waypointButton = flightWp.getWaypointButton();
 
-            x = flightWp_location.getX() - screen.getY() - waypointButton.getWidth()/2;
+            x = flightWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = flightWp_location.getY() - screen.getY() - waypointButton.getHeight()/2;
 
             waypointButton.setLocation(x.intValue(), y.intValue());
