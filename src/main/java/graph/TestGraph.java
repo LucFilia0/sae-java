@@ -209,19 +209,19 @@ public class TestGraph extends SingleGraph {
      * Also shows the informations of the TestGraph in the console.
      * 
      * @param file (java.io.File) - The file from where are imported all the informations of the TestGraph.
+     * @param showErrorMessages (boolean) - If true, will print the error messages
      * @throws FileNotFoundException Throwed if the file passed in parameter is not found, or does not exist.
      * @throws NumberFormatException Throwed if the cast from (String) to (int) occures with an error. It can means that the String is not in required format (presence of spaces or symbols).
      * @throws InvalidFileFormatException Throwed if the source file does not meet the required format. Like a missing information on a line.
      * 
      * @author Luc le Manifik
      */
-    public void importFromFile(File file) throws FileNotFoundException, NumberFormatException, InvalidFileFormatException {
+    public void importFromFile(File file, boolean showErrorMessages) throws FileNotFoundException, NumberFormatException, InvalidFileFormatException {
         Scanner lineScanner = null;
         try {
             lineScanner = new Scanner(file);
 
-            this.setTestGraphFrom(lineScanner);
-
+            this.setTestGraphFrom(lineScanner, showErrorMessages);
             System.out.println(this); // Print TestGraph infotmations
             lineScanner.close();
         }catch(FileNotFoundException fnfe) {
@@ -243,7 +243,7 @@ public class TestGraph extends SingleGraph {
      * 
      * @author Luc le Manifik
      */
-    private void setTestGraphInfosFrom(Scanner lineScanner) throws NumberFormatException, InvalidFileFormatException, InvalidEntryException {
+    private void setTestGraphInfosFrom(Scanner lineScanner, boolean showErrorMessages) throws NumberFormatException, InvalidFileFormatException, InvalidEntryException {
         
         String line = "";
         Scanner dataScanner = null;
@@ -268,7 +268,9 @@ public class TestGraph extends SingleGraph {
                 if(dataScanner.hasNext()) { // Check if there is an other value on the line. Then prompts an error, but continue the execution of the program
                     lineScanner.close();
                     dataScanner.close();
-                    System.err.println("Error at Line 1 : Too many informations on line");
+                    if (showErrorMessages) {
+                        System.err.println("Error at Line 1 : Too many informations on line");
+                    }
                 }
             }else { // If the first line is empty or unusable (only spaces, or just an "\n")
                 lineScanner.close();
@@ -301,7 +303,9 @@ public class TestGraph extends SingleGraph {
                 if(dataScanner.hasNext()) { // Check if there is another information on the line. Prompt a message error but continue the execution of the program 
                     lineScanner.close();
                     dataScanner.close();
-                    System.err.println("Error at Line 2 : Too many informations on line");
+                    if (showErrorMessages) {
+                        System.err.println("Error at Line 2 : Too many informations on line");
+                    }
                 }
             }else { // If the second line is empty or unusable (only spaces, or just an "\n")
                 lineScanner.close();
@@ -328,11 +332,11 @@ public class TestGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     @SuppressWarnings("resource")
-    private void setTestGraphFrom(Scanner lineScanner) throws InvalidFileFormatException, NumberFormatException, InvalidEntryException {
+    private void setTestGraphFrom(Scanner lineScanner, boolean showErrorMessages) throws InvalidFileFormatException, NumberFormatException, InvalidEntryException {
         
         // Gets the TestGraph informations, which are the number of node and k-max
         try {
-            this.setTestGraphInfosFrom(lineScanner);
+            this.setTestGraphInfosFrom(lineScanner, showErrorMessages);
         }catch(NumberFormatException nfe) {
             throw nfe;
         }catch(InvalidFileFormatException iffe) {
@@ -366,7 +370,7 @@ public class TestGraph extends SingleGraph {
                 throw new InvalidFileFormatException("line " + lineCursor);
             }
             // Checks if there is too much informations on the line, then print a message error, but continue the execution
-            if(nodeScanner.hasNext()) {
+            if(nodeScanner.hasNext() && showErrorMessages) {
                 System.err.println("Error at Line " + lineCursor + " : Too many informations on line");
             }
 
@@ -389,13 +393,19 @@ public class TestGraph extends SingleGraph {
                 // Errors are treated here, because they do not require to stop the program, and just need to prompt some informations
                 catch(IdAlreadyInUseException iaiue) {
                     // -> If an edge with the same id already exists and strict checking is enabled
-                    System.err.println("Error at Line " + lineCursor + " : Edge " + idNodeA + "-" + idNodeB + " already exists.");
+                    if (showErrorMessages) {
+                        System.err.println("Error at Line " + lineCursor + " : Edge " + idNodeA + "-" + idNodeB + " already exists.");
+                    }
                 }catch(ElementNotFoundException enfe) {
                     // -> If strict checking is enabled, and 'node1' or 'node2' are not registered in the graph
-                    System.err.println("Error at Line " + lineCursor + " : Node [" + idNodeA + "] or node [" + idNodeB + "] undeclared.");
+                    if (showErrorMessages) {
+                        System.err.println("Error at Line " + lineCursor + " : Node [" + idNodeA + "] or node [" + idNodeB + "] undeclared.");
+                    }
                 }catch(EdgeRejectedException ere) {
                     // -> If strict checking is enabled and the edge is not accepted
-                    System.err.println("Error at Line " + lineCursor + " : Trying to add edge [" + idNodeA + "-" + idNodeB + "] but edge [" + idNodeB + "-" + idNodeA + "] seems to already exist");
+                    if (showErrorMessages) {
+                        System.err.println("Error at Line " + lineCursor + " : Trying to add edge [" + idNodeA + "-" + idNodeB + "] but edge [" + idNodeB + "-" + idNodeA + "] seems to already exist");
+                    }
                 }
             }else {
                 nodeScanner.close();

@@ -64,7 +64,7 @@ public class PanelCreator {
 		// and also checks for events
 		fromViewer = viewer.newViewerPipe() ;
 		fromViewer.addViewerListener(new ViewerEventHandler()) ;
-		panel.addMouseWheelListener(new MouseWheelEventHandler()) ;
+		panel.addMouseWheelListener(new MouseEventHandler()) ;
 		panel.addMouseListener(new MouseEventHandler()) ;
 		panel.addKeyListener(new KeyboardEventHandler()) ;
 		fromViewer.addSink(graph) ;
@@ -139,7 +139,7 @@ public class PanelCreator {
 		GraphMetrics gm = cam.getMetrics() ;
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation() ;
 		Point3 res ;
-		double scaleFactor = 1 * cam.getViewPercent() ;
+		double scaleFactor = cam.getViewPercent() ;
 
 		// Retrieving important coordinates and distances
 		Point3 mousePos = cam.transformPxToGu(mouseLocation.getX(), mouseLocation.getY()) ;
@@ -159,11 +159,22 @@ public class PanelCreator {
 
 		return res ;
 	}
-	
+
 	/**
-	 * class handling events from MouseWheelEvent
+	 * Class handling only the mouseClicked method from MouseListener
+	 * and the mouseWheelMoved method from MouseWheelListener
 	 */
-	private class MouseWheelEventHandler implements MouseWheelListener {
+	private class MouseEventHandler extends MouseAdapter {
+		/**
+		 * This event handles moving around the graph by centering the camera on the point you clicked
+		 */
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			Camera cam = view.getCamera() ;
+			Point3 viewCenter = getGraphPositionFromClick(cam) ;
+			cam.setViewCenter(viewCenter.x, viewCenter.y, viewCenter.z) ;
+		}
+
 		/**
 		 * This event handles zooming on the graph from 0.1x to 2x while 
 		 * also moving the camera a bit so the zoom is less clunky to use
@@ -196,21 +207,6 @@ public class PanelCreator {
 			}
 		}
 	}
-
-	/**
-	 * Class handling only the mouseClicked event from MouseEvent
-	 */
-	private class MouseEventHandler extends MouseAdapter {
-		/**
-		 * This event handles moving around the graph by centering the camera on the point you clicked
-		 */
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			Camera cam = view.getCamera() ;
-			Point3 viewCenter = getGraphPositionFromClick(cam) ;
-			cam.setViewCenter(viewCenter.x, viewCenter.y, viewCenter.z) ;
-		}
-	}
 	
 	/**
 	 * Class handling only the keyPressed event from KeyEvent
@@ -235,7 +231,7 @@ public class PanelCreator {
 		}
 		
 		/**
-		 * Class handling events from ViewerEvent
+		 * Class handling methods from ViewerListener
 		 */
 		private class ViewerEventHandler implements ViewerListener {
 			/**

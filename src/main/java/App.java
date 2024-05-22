@@ -1,70 +1,40 @@
 //-- Import Swing
 
-import javax.management.JMX;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.Painter;
 
-import java.awt.BasicStroke;
 
 //-- Import AWT
 
 import java.awt.BorderLayout;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
 
-import org.graphstream.ui.graphicGraph.stylesheet.Color;
-import org.jxmapviewer.JXMapViewer;
 
 //-- Import JxMapViewer
 
-import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.VirtualEarthTileFactoryInfo;
-import org.jxmapviewer.input.PanMouseInputListener;
-import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
-import org.jxmapviewer.painter.AbstractPainter;
-import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.viewer.DefaultTileFactory;
-import org.jxmapviewer.viewer.GeoPosition;
 
-import com.lowagie.text.Rectangle;
 
 //-- Import Java
 
-import java.util.HashSet;
 import java.io.File;
 import java.util.LinkedList;
 
-import graph.Automatisation;
+import graph.Automation;
 
 //-- Import Plane AIR
 
-import graph.Flight;
 import graph.FlightsIntersectionGraph;
-import graph.TestGraph;
 import util.AirportSet;
-import util.Airport;
 import util.DataImportation;
 
 //-- Import IHM
 
 import ihm.Map;
-import ihm.mapvisuals.mapwp.MapWaypoint;
-import ihm.mapvisuals.mapwp.airportwp.ActiveAirportWaypoint;
-import ihm.mapvisuals.mapwp.airportwp.AirportWaypoint;
-import ihm.mapvisuals.mapwp.airportwp.InactiveAirportWaypoint;
-import ihm.mapvisuals.mapwp.flightwp.FlightWaypoint;
+
 
 //-- Import Exceptions
 
 import java.io.FileNotFoundException;
 
 import exceptions.InvalidCoordinateException;
-import exceptions.InvalidCoordinatesException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
 import exceptions.InvalidEntryException;
@@ -82,7 +52,7 @@ public class App extends javax.swing.JFrame {
         planeAIR.setVisible(true);
 
         String[] identifiers = {"graph-testX.txt", "graph-testX.csv"} ;
-        Automatisation.startAutomatisation("data", identifiers, 'X', "color") ;
+        Automation.startAutomation("data", identifiers, 'X', "color") ;
     }
 
     /**
@@ -153,8 +123,7 @@ public class App extends javax.swing.JFrame {
             InvalidTimeException |
             InvalidCoordinateException |
             ObjectNotFoundException |
-            InvalidEntryException
-            e) {
+            InvalidEntryException e) {
             System.err.println(e);
         }
     }
@@ -208,7 +177,7 @@ public class App extends javax.swing.JFrame {
         
         this.add(map, BorderLayout.CENTER);
     }
-/* 
+    /* 
     /**
      * This procedure creates all the events.
      * 
@@ -246,5 +215,6 @@ public class App extends javax.swing.JFrame {
                 }
             }
         });
-    } */
+    } 
+    */
 }

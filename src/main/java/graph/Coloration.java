@@ -244,7 +244,7 @@ public class Coloration {
         graphComponents.compute() ;
 
         // Couldn't find a better way to isolate a random Node in every Connected Component
-        //Might be highly unoptimized, need to look more into it
+        // Might be highly unoptimized, need to look more into it
         for (ConnectedComponent thisComponent : graphComponents) {
             recursiveTwoColoringNode(thisComponent.getNodeSet().iterator().next(), 1, colorAttribute) ;
         }

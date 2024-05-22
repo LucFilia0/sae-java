@@ -24,23 +24,25 @@ import org.graphstream.graph.implementations.Graphs;
 /**
  * Does the importation of graphs from a folder automatically
  */
-public class Automatisation {
+public class Automation {
 
     /**
      * Starts the importation of all the files
+     * 
      * @param path Folder from which the files will be imported
      * @param identifiers The file name structures
      * @param placeholder Character that will be replaced by numbers
      * @param colorAttribute Attribute used to color the graphs
      */
-    public static void startAutomatisation(String path, String[] identifiers, char placeholder, String colorAttribute) {
+    public static void startAutomation(String path, String[] identifiers, char placeholder, String colorAttribute) {
         ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()/2 + 1) ;
-        List<TestGraph> graphList = Automatisation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
+        List<TestGraph> graphList = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
         new File(path + "/4").mkdirs() ;
         for (TestGraph graph : graphList) {
-            Automatisation.writeToFile(graph, path, colorAttribute, threadPool) ;
+            Automation.writeToFile(graph, path, colorAttribute, threadPool) ;
         }
-        
+        System.out.println("Done importing") ;
+        threadPool.shutdown() ;
     }
 
     /**
@@ -65,13 +67,15 @@ public class Automatisation {
 
         // Imports the graphs from the filtered files
         if (files != null) {
+            
+            // Counts the number of files that have been imported
             CountDownLatch latch = new CountDownLatch(files.length) ;
             for (File file : files) {
                 threadPool.execute(new Runnable() {
                     public void run() {
-                        TestGraph temp = new TestGraph(Automatisation.isolateNumberInString(file.getName())) ;
+                        TestGraph temp = new TestGraph(Automation.isolateNumberInString(file.getName())) ;
                         try {
-                            temp.importFromFile(file) ;
+                            temp.importFromFile(file, false) ;
                             for (Node node : temp) {
                                 node.setAttribute("color", 0) ;
                             }
@@ -87,12 +91,13 @@ public class Automatisation {
                 }) ;
             }
 
+            // Waits for all files to be imported
             try {
                 latch.await() ;
             }
     
             catch (InterruptedException e) {
-                System.out.println("Dude I'm so done broooo 🦈") ;
+                System.out.println(e) ;
             }
 
             // Sorts the list by graph name
@@ -115,13 +120,14 @@ public class Automatisation {
      * @param threadPool current threadPool used to divide the tasks
      */
     public static void writeToFile(TestGraph graphIn, String path, String colorAttribute, ExecutorService threadPool) {
-        TestGraph graph = Automatisation.useBestColoringAlgorithm(graphIn, colorAttribute, threadPool) ;
+        TestGraph graph = Automation.useBestColoringAlgorithm(graphIn, colorAttribute, threadPool) ;
         try {
             File resFile = new File(path + "/4/" + "color-eval" + graph.getId() + ".txt") ;
             if (!resFile.createNewFile()) {
                 System.out.println("File #" + graph.getId() + " already exists") ;
             }
             else {
+                System.out.println("Writing file #" + graph.getId()) ;
                 FileWriter resWriter = new FileWriter(resFile) ;
                 List<Node> list = graph.nodes().collect(Collectors.toList()) ;
                 list.sort(new Comparator<Node>() {
@@ -189,24 +195,30 @@ public class Automatisation {
      * @return
      */
     public static TestGraph useBestColoringAlgorithm(TestGraph graph, String colorAttribute, ExecutorService threadPool) {
+        // Constants to clarify the code
+        final int NUMBER_OF_ALGORITHMS = 3 ;
+        final int WELSH_POWELL = 0 ;
+        final int DSATUR = 1 ;
+        final int RLF = 2 ;
+
         ArrayList<ArrayList<Integer>> resList = new ArrayList<>() ;
         ArrayList<TestGraph> graphList = new ArrayList<>() ;
-        for (int i = 0 ; i < 3 ; i++) {
+        for (int i = 0 ; i < NUMBER_OF_ALGORITHMS ; i++) {
             resList.add(new ArrayList<>()) ;
             graphList.add(new TestGraph(graph.getId())) ;
         }
 
         // Verifies all 3 threads are done before continuing
-        CountDownLatch latch = new CountDownLatch(3) ;
+        CountDownLatch latch = new CountDownLatch(NUMBER_OF_ALGORITHMS) ;
 
         // Creates the threads handling the colorations
         Runnable welshPowell = new Runnable() {
             @Override
             public void run() {
-                graphList.set(0, (TestGraph)Graphs.clone(graph)) ;
-                int[] res = (Coloration.colorWelshPowell(graphList.get(0), colorAttribute, graph.getKMax())) ;
+                graphList.set(WELSH_POWELL, (TestGraph)Graphs.clone(graph)) ;
+                int[] res = (Coloration.colorWelshPowell(graphList.get(WELSH_POWELL), colorAttribute, graph.getKMax())) ;
                 for (int val : res) {
-                    resList.get(0).add(val) ;
+                    resList.get(WELSH_POWELL).add(val) ;
                 }
                 latch.countDown() ;
             }
@@ -214,10 +226,10 @@ public class Automatisation {
 
         Runnable dsatur = new Runnable() {
             public void run() {
-                graphList.set(1, (TestGraph)Graphs.clone(graph)) ;
-                int[] res = Coloration.ColorationDsatur(graphList.get(1), colorAttribute, graph.getKMax()) ;
+                graphList.set(DSATUR, (TestGraph)Graphs.clone(graph)) ;
+                int[] res = Coloration.ColorationDsatur(graphList.get(DSATUR), colorAttribute, graph.getKMax()) ;
                 for (int val : res) {
-                    resList.get(1).add(val) ;
+                    resList.get(DSATUR).add(val) ;
                 }
                 latch.countDown() ;
             };
@@ -226,10 +238,10 @@ public class Automatisation {
         Runnable rlf = new Runnable() {
             @Override
             public void run() {
-                graphList.set(2, (TestGraph)Graphs.clone(graph)) ;
-                int[] res = Coloration.ColorationDsatur(graphList.get(2), colorAttribute, graph.getKMax()) ;
+                graphList.set(RLF, (TestGraph)Graphs.clone(graph)) ;
+                int[] res = Coloration.ColorationDsatur(graphList.get(RLF), colorAttribute, graph.getKMax()) ;
                 for (int val : res) {
-                    resList.get(2).add(val) ;
+                    resList.get(RLF).add(val) ;
                 }
                 latch.countDown() ;
             }
@@ -248,35 +260,13 @@ public class Automatisation {
 
         // Finds the best solution
 
-        int comp ;
-        if (resList.get(0).get(1) + resList.get(1).get(1) + resList.get(2).get(1) > 0) {
-            comp = Automatisation.smallestInThreeValues(resList.get(0).get(1), resList.get(1).get(1), resList.get(2).get(1)) ;
-        }
-        else {
-            comp = Automatisation.smallestInThreeValues(resList.get(0).get(0), resList.get(1).get(0), resList.get(2).get(0)) ;
-        }
+        int bestAlgorithm = findBestAlgorithmInList(resList) ;
 
-        TestGraph temp ;
-        switch(comp) {
-            case 0 :
-                temp = graphList.get(0) ;
-                break ;
-            case 1 :
-                temp = graphList.get(1) ;
-                break ;
-            case 2 :
-                temp = graphList.get(2) ;
-                break ;
-            default :
-                // Shouldn't happen 👍
-                temp = null ;
-                break ;
-        }
-
-        // We'll need that data later
-        if (temp != null) {
-            temp.setAttribute("nbColors", resList.get(comp).get(0)) ;
-            temp.setAttribute("nbConflicts", resList.get(comp).get(1)) ;
+        TestGraph temp  = null ;
+        if (bestAlgorithm < graphList.size()) {
+            temp = graphList.get(bestAlgorithm) ;
+            temp.setAttribute("nbColors", resList.get(bestAlgorithm).get(0)) ;
+            temp.setAttribute("nbConflicts", resList.get(bestAlgorithm).get(1)) ;
         }
         return temp ;
     }
@@ -355,21 +345,36 @@ public class Automatisation {
     }
 
     /**
-     * Returns which value is the smallest
+     * Returns which algorithm in the list has the best solution
      * @param arg0
      * @param arg1
      * @param arg2
-     * @return 0, 1 or 2 based on which one is the smallest
+     * @return index of the best algorithm
      */
-    public static int smallestInThreeValues(int arg0, int arg1, int arg2) {
-        if (arg0 < arg1 && arg0 < arg2) {
-            return 0 ;
-        }
-        else if (arg1 < arg0 && arg1 < arg2) {
-            return 1 ;
+    public static Integer findBestAlgorithmInList(ArrayList<ArrayList<Integer>> list) {
+        final int NB_COLORS = 0 ;
+        final int NB_CONFLICTS = 1 ;
+
+        if (list.isEmpty()) {
+            return null ;
         }
         else {
-            return 2 ;
+            Integer bestAlgorithm = 0 ;
+            Integer currentAlgorithm = 1 ;
+            boolean hasLessConflicts ;
+            boolean hasLessColors ;
+            while (currentAlgorithm < list.size()) {
+                hasLessConflicts = list.get(bestAlgorithm).get(NB_CONFLICTS) > list.get(currentAlgorithm).get(NB_CONFLICTS) ;
+                hasLessColors = list.get(bestAlgorithm).get(NB_COLORS) > list.get(currentAlgorithm).get(NB_COLORS) ;
+                if (hasLessColors || hasLessConflicts) {
+                    bestAlgorithm = currentAlgorithm ;
+                }
+                currentAlgorithm++ ;
+            }
+
+            return bestAlgorithm ;
         }
+
+
     }
 } 
