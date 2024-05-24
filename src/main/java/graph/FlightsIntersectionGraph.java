@@ -356,7 +356,7 @@ public class FlightsIntersectionGraph extends SingleGraph {
         this.showAllFlights() ;
         this.setAttribute("hidden") ;
         for (Node node : this) {
-            Flight flightNode = (Flight) node ;
+            Flight flightNode = (Flight)node ;
             if (flightNode.getLayer() != layer) {
                 flightNode.setAttribute("ui.hide") ;
                 flightNode.edges().forEach(edge -> edge.setAttribute("ui.hide")) ;

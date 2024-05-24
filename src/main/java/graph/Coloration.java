@@ -17,7 +17,10 @@ import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
  * Class handling Coloration algorithms, mostly consists of static methods
  */
 public class Coloration {
-
+    /**
+     * default size for nodes in the stylesheet 
+     */
+    public static String defaultNodeSize = "20px" ;
     
     // RLF (Recursive Larget First)
 
@@ -591,7 +594,7 @@ public class Coloration {
      * @param colorAttribute key of the attribute handling colors
      */
     public static void setGraphStyle(Graph graph, int nbColor, String colorAttribute) {
-        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : 20px ; }\n") ;
+        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : " + defaultNodeSize + " ; }\n") ;
 
         for (Node coloringNode : graph) {
             Integer color = (Integer)coloringNode.getAttribute(colorAttribute) ;

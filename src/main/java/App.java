@@ -2,6 +2,7 @@
 
 import javax.swing.JFrame;
 
+import org.graphstream.graph.Node;
 
 //-- Import AWT
 
@@ -16,12 +17,13 @@ import java.awt.BorderLayout;
 
 import java.io.File;
 import java.util.LinkedList;
-
-import graph.Automation;
+import graph.Coloration;
 
 //-- Import Plane AIR
 
 import graph.FlightsIntersectionGraph;
+import graph.PanelCreator;
+import graph.TestGraph;
 import util.AirportSet;
 import util.DataImportation;
 
@@ -47,12 +49,28 @@ import exceptions.InvalidEntryException;
 public class App extends javax.swing.JFrame {
 
     public static void main(String[] args) {
+        // DON'T TOUCH THAT IT'S VERY IMPORTANT
+        System.setProperty("sun.java2d.uiScale", "100%") ;
+        System.setProperty("org.graphstream.ui", "swing") ;
 
-        App planeAIR = new App("Plane AIR"); // Such a great name, isn't it ?
-        planeAIR.setVisible(true);
+        /* App planeAIR = new App("Plane AIR"); // Such a great name, isn't it ?
+        planeAIR.setVisible(true); */
 
-        String[] identifiers = {"graph-testX.txt", "graph-testX.csv"} ;
-        Automation.startAutomation("data", identifiers, 'X', "color") ;
+        TestGraph tg = new TestGraph("graph") ;
+        try {
+            tg.importFromFile(new File("data/graph-test2.txt"), false) ;
+        }
+
+        catch (Exception e) {
+            System.err.println(e) ;
+        }
+
+        for (Node n : tg) {
+            n.setAttribute("color", 0) ;
+        }
+        int[] res = Coloration.ColorationDsatur(tg, "color", tg.getKMax()) ;
+        Coloration.setGraphStyle(tg,res[0], "color") ;
+        PanelCreator renderer = new PanelCreator(tg, true) ;
     }
 
     /**

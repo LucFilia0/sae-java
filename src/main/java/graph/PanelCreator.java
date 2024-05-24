@@ -2,6 +2,9 @@ package graph ;
 import java.awt.* ;
 import java.awt.event.* ;
 
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import org.graphstream.graph.* ;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.view.* ;
@@ -46,16 +49,24 @@ public class PanelCreator {
 	protected View view ;
 
 	/**
-	 * Opens the graph in a JFrame and handles mouse events
-	 * @param graph graph you are trying to render
-	 * @see ViewPanel 
+	 * Calls the default constructor with inOwnFrame set to false
+	 * @param graph
 	 */
 	public PanelCreator(Graph graph) {
+		this(graph, false) ;
+	}
+	/**
+	 * Opens the graph in a JFrame and handles mouse events
+	 * @param graph graph you are trying to render
+	 * @param inOwnFrame 
+	 * @see ViewPanel 
+	 */
+	public PanelCreator(Graph graph, boolean inOwnFrame) {
 		this.graph = graph ;
 
 		// Generates the ViewPanel containing the graph
 		viewer = new SwingViewer(graph, ThreadingModel.GRAPH_IN_ANOTHER_THREAD) ;
-		panel = (ViewPanel)viewer.addDefaultView(false) ;
+		panel = (ViewPanel)viewer.addDefaultView(inOwnFrame) ;
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
 		viewer.getDefaultView().enableMouseOptions() ;
@@ -134,30 +145,41 @@ public class PanelCreator {
 	 * @param cam The View Camera
 	 * @return The Point representing the mouse's effective Position
 	 */
-	public Point3 getGraphPositionFromClick(Camera cam) {
+	public Point3 getGraphPositionFromClick(Camera cam, Point mousePosPx) {
 		//Initialisation
 		GraphMetrics gm = cam.getMetrics() ;
-		Point mouseLocation = MouseInfo.getPointerInfo().getLocation() ;
 		Point3 res ;
 		double scaleFactor = cam.getViewPercent() ;
+		offsetMousePosition(panel, mousePosPx) ;
 
 		// Retrieving important coordinates and distances
-		Point3 mousePos = cam.transformPxToGu(mouseLocation.getX(), mouseLocation.getY()) ;
+		Point3 mousePosGU = cam.transformPxToGu(mousePosPx.getX(), mousePosPx.getY()) ;
 		Point3 center = new Point3((gm.hi.x + gm.lo.x)/2, (gm.hi.y + gm.lo.y)/2) ;
 		double maxDistance = (gm.diagonal/2)*scaleFactor ;
-		double clickDistance = mousePos.distance(center) ;
+		double clickDistance = mousePosGU.distance(center) ;
 		
 		// Restricts the movements of the user around the graph
 		if (clickDistance < maxDistance) {
-			res = mousePos ;
+			res = mousePosGU ;
 		}
 		// If the user clicked outside the authorized region, he will be snapped to the border
 		else {
 			// I don't think clickDistance can be equal to zero here so it should be fine
-			res = center.interpolate(mousePos, maxDistance/clickDistance) ;
+			res = center.interpolate(mousePosGU, maxDistance/clickDistance) ;
 		}
 
 		return res ;
+	}
+
+	/**
+	 * Offsets the mouse position based on the panel's position relative to the screen
+	 * @param panel parent panel 
+	 * @param mousePosition position of the mouse relative to the screen
+	 * @return position of the mouse relative to panel
+	 */
+	public Point offsetMousePosition(JPanel panel, Point mousePosition) {
+		SwingUtilities.convertPointFromScreen(mousePosition, panel) ;
+		return mousePosition ;
 	}
 
 	/**
@@ -171,7 +193,7 @@ public class PanelCreator {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			Camera cam = view.getCamera() ;
-			Point3 viewCenter = getGraphPositionFromClick(cam) ;
+			Point3 viewCenter = getGraphPositionFromClick(cam, e.getLocationOnScreen()) ;
 			cam.setViewCenter(viewCenter.x, viewCenter.y, viewCenter.z) ;
 		}
 
@@ -192,9 +214,14 @@ public class PanelCreator {
 
 				if (me.getUnitsToScroll() < 0) {
 					// Moves the ViewCenter closer to the mouse pointer while zooming in
-					Point3 mousePos = getGraphPositionFromClick(cam) ;
+					Point mousePosPx = me.getLocationOnScreen() ;
+					Point3 mousePos = getGraphPositionFromClick(cam, mousePosPx) ;
+
+					// Based on the function (x+1)^2/5 - 0.4x^1.3 where x is the viewPercent of the camera (yes I graphed it on Desmos)
+					// This function is increasing and has values in the interval [0.2 ; 0.815] for x in the interval [0 ; 2]
+					// Basically makes it so the more zoomed in the camera is, the less it will move around the plane while zooming
 					finalCamPos = camPos.interpolate(mousePos, 
-						cam.getViewPercent()/(10 * (1 + cam.getViewPercent()/10))) ;
+						Math.pow((cam.getViewPercent() + 1),2)/5 - 0.4*Math.pow(cam.getViewPercent(), 1.2)) ;
 					cam.setViewCenter(finalCamPos.x, finalCamPos.y, finalCamPos.z) ;
 				}
 
@@ -221,60 +248,60 @@ public class PanelCreator {
 			GraphMetrics gm = cam.getMetrics() ;
 			switch (arg0.getKeyCode()) {
 				case KeyEvent.VK_SPACE:
-				Point3 center = new Point3((gm.hi.x + gm.lo.x)/2, (gm.hi.y + gm.lo.y)/2) ;
+					Point3 center = new Point3((gm.hi.x + gm.lo.x)/2, (gm.hi.y + gm.lo.y)/2) ;
 					cam.setViewCenter(center.x, center.y, center.z) ;
 					break ;
-					default:
+				default:
 					break ;
-				}
 			}
+		}
+	}
+		
+	/**
+	 * Class handling methods from ViewerListener
+	 */
+	private class ViewerEventHandler implements ViewerListener {
+		/**
+		 * Terminates the thread when the graph window is closed.
+		 */
+		@Override
+		public void viewClosed(String id) {
+			loop = false;
 		}
 		
 		/**
-		 * Class handling methods from ViewerListener
+		 * Makes nodes bigger when hovering over them
 		 */
-		private class ViewerEventHandler implements ViewerListener {
-			/**
-			 * Terminates the thread when the graph window is closed.
-			 */
-			@Override
-			public void viewClosed(String id) {
-				loop = false;
-			}
-			
-			/**
-			 * Makes nodes bigger when hovering over them
-			 */
-			@Override
-			public void mouseOver(String id) {
-				Node n = graph.getNode(id) ;
-				n.removeAttribute("ui.style") ;
-				n.setAttribute("ui.style", "size : 40px ;") ;
-			}
-	
-			/**
-			 * Returns the nodes to their original size
-			 */
-			@Override
-			public void mouseLeft(String id) {
-				Node n = graph.getNode(id) ;
-				n.removeAttribute("ui.style") ;
-				n.setAttribute("ui.style", "size : 20px ;") ;
-			}
-	
-			/**
-			 * Unused
-			 */
-			@Override
-			public void buttonPushed(String id) {
-			}
-	
-			/**
-			 * Unused
-			 */
-			@Override
-			public void buttonReleased(String id) {
-			}
+		@Override
+		public void mouseOver(String id) {
+			Node n = graph.getNode(id) ;
+			n.removeAttribute("ui.style") ;
+			n.setAttribute("ui.style", "size : 40px ;") ;
 		}
+
+		/**
+		 * Returns the nodes to their original size
+		 */
+		@Override
+		public void mouseLeft(String id) {
+			Node n = graph.getNode(id) ;
+			n.removeAttribute("ui.style") ;
+			n.setAttribute("ui.style", "size : " + Coloration.defaultNodeSize + " ;") ;
+		}
+
+		/**
+		 * Unused
+		 */
+		@Override
+		public void buttonPushed(String id) {
+		}
+
+		/**
+		 * Unused
+		 */
+		@Override
+		public void buttonReleased(String id) {
+		}
+	}
 
 }

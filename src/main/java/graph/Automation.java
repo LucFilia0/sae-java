@@ -34,12 +34,17 @@ public class Automation {
      * @param placeholder Character that will be replaced by numbers
      * @param colorAttribute Attribute used to color the graphs
      */
-    public static void startAutomation(String path, String[] identifiers, char placeholder, String colorAttribute) {
-        ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()/2 + 1) ;
+    public static void startAutomation(String path, String[] identifiers, char placeholder, String colorAttribute, int numberOfCores) {
+        ExecutorService threadPool = Executors.newFixedThreadPool(numberOfCores) ;
         List<TestGraph> graphList = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
         new File(path + "/4").mkdirs() ;
         for (TestGraph graph : graphList) {
-            Automation.writeToFile(graph, path, colorAttribute, threadPool) ;
+            threadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Automation.writeToFile(graph, path, colorAttribute, threadPool) ;
+                }
+            }) ;
         }
         System.out.println("Done importing") ;
         threadPool.shutdown() ;
