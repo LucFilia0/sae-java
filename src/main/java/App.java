@@ -31,6 +31,12 @@ import util.DataImportation;
 
 import ihm.Map;
 
+import org.graphstream.ui.swing_viewer.* ;
+
+
+
+import org.graphstream.graph.implementations.* ;
+import org.graphstream.graph.* ;
 
 //-- Import Exceptions
 
@@ -41,6 +47,10 @@ import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
 import exceptions.InvalidEntryException;
 
+import util.* ;
+import graph.* ;
+import composants.*;
+
 /**
  * This class loads the application.
  * 
@@ -50,6 +60,7 @@ public class App extends javax.swing.JFrame {
 
     public static void main(String[] args) {
         // DON'T TOUCH THAT IT'S VERY IMPORTANT
+        /*System.setProperty("org.graphstream.ui", "swing") ;
         System.setProperty("sun.java2d.uiScale", "100%") ;
         System.setProperty("org.graphstream.ui", "swing") ;
 
@@ -71,6 +82,10 @@ public class App extends javax.swing.JFrame {
         int[] res = Coloration.ColorationDsatur(tg, "color", tg.getKMax()) ;
         Coloration.setGraphStyle(tg,res[0], "color") ;
         PanelCreator renderer = new PanelCreator(tg, true) ;
+
+        NHomePage homePage = new NHomePage();
+        homePage.setVisible(true);
+        homePage.addComposants();
     }
 
     /**
@@ -235,4 +250,12 @@ public class App extends javax.swing.JFrame {
         });
     } 
     */
+
+
+    /*NPrincipaleFrameApp fenPrin = new NPrincipaleFrameApp();
+    //fenPrin.addCardPanel();
+    fenPrin.addComposants();
+    fenPrin.addEvents();
+    fenPrin.setVisible(true);*/
+
 }
