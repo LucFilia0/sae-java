@@ -9,6 +9,9 @@ import javax.swing.plaf.FontUIResource;
 
 import org.graphstream.graph.Node;
 import org.graphstream.ui.swing_viewer.* ;
+
+
+
 import org.graphstream.graph.implementations.* ;
 import org.graphstream.graph.* ;
 
@@ -24,10 +27,11 @@ import exceptions.InvalidEntryException;
 
 import util.* ;
 import graph.* ;
+import composants.*;
 
 public class App {
     public static void main(String[] args) {
-        System.setProperty("org.graphstream.ui", "swing") ;
+        /*System.setProperty("org.graphstream.ui", "swing") ;
         System.setProperty("sun.java2d.uiScale", "100%") ;
 
         FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Yep");
@@ -112,5 +116,23 @@ public class App {
         p2.add(v2) ;
         frame.add(p2) ;
         
-    }
+    }*/
+
+
+    /*NPrincipaleFrameApp fenPrin = new NPrincipaleFrameApp();
+    //fenPrin.addCardPanel();
+    fenPrin.addComposants();
+    fenPrin.addEvents();
+    fenPrin.setVisible(true);*/
+
+    try { 
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.Windows"); 
+    } catch(Exception ignored){}
+
+    NHomePage homePage = new NHomePage();
+    homePage.setVisible(true);
+    homePage.addComposants();
+
+}
+
 }
