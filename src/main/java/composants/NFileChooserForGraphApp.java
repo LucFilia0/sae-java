@@ -11,7 +11,7 @@ public class NFileChooserForGraphApp {
     private File file = null;
     private boolean isSelected = false;
 
-    NFileChooserForGraphApp(){
+    NFileChooserForGraphApp(int fileType){
 
     JFileChooser chooser = new JFileChooser();
     chooser.addChoosableFileFilter(new FileNameExtensionFilter("Fichier CSV (*.csv)", "csv"));

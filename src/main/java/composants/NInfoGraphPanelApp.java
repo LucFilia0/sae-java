@@ -165,5 +165,104 @@ public class NInfoGraphPanelApp extends JPanel{
         this.setVisible(true);
     }
 
+
+
+    public JPanel getInfoGraphGridLayout() {
+        return this.infoGraphGridLayout;
+    }
+
+    public void setInfoGraphGridLayout(JPanel infoGraphGridLayout) {
+        this.infoGraphGridLayout = infoGraphGridLayout;
+    }
+
+    public JPanel getDegreePanel() {
+        return this.degreePanel;
+    }
+
+    public void setDegreePanel(JPanel degreePanel) {
+        this.degreePanel = degreePanel;
+    }
+
+    public JLabel getTitleDegreeAvg() {
+        return this.titleDegreeAvg;
+    }
+
+    public void setTitleDegreeAvg(JLabel titleDegreeAvg) {
+        this.titleDegreeAvg = titleDegreeAvg;
+    }
+
+    public JPanel getCompPanel() {
+        return this.compPanel;
+    }
+
+    public void setCompPanel(JPanel compPanel) {
+        this.compPanel = compPanel;
+    }
+
+    public JLabel getTitleComp() {
+        return this.titleComp;
+    }
+
+    public void setTitleComp(JLabel titleComp) {
+        this.titleComp = titleComp;
+    }
+
+    public JPanel getNodesPanel() {
+        return this.nodesPanel;
+    }
+
+    public void setNodesPanel(JPanel nodesPanel) {
+        this.nodesPanel = nodesPanel;
+    }
+
+    public JLabel getTitleNodes() {
+        return this.titleNodes;
+    }
+
+    public void setTitleNodes(JLabel titleNodes) {
+        this.titleNodes = titleNodes;
+    }
+
+    public JPanel getEdgesPanel() {
+        return this.edgesPanel;
+    }
+
+    public void setEdgesPanel(JPanel edgesPanel) {
+        this.edgesPanel = edgesPanel;
+    }
+
+    public JLabel getTitleEdges() {
+        return this.titleEdges;
+    }
+
+    public void setTitleEdges(JLabel titleEdges) {
+        this.titleEdges = titleEdges;
+    }
+
+    public JPanel getDiameterPanel() {
+        return this.diameterPanel;
+    }
+
+    public void setDiameterPanel(JPanel diameterPanel) {
+        this.diameterPanel = diameterPanel;
+    }
+
+    public JLabel getTitleDiameter() {
+        return this.titleDiameter;
+    }
+
+    public void setTitleDiameter(JLabel titleDiameter) {
+        this.titleDiameter = titleDiameter;
+    }
+
+    public JPanel getPadding() {
+        return this.padding;
+    }
+
+    public void setPadding(JPanel padding) {
+        this.padding = padding;
+    }
+
+
     
 }

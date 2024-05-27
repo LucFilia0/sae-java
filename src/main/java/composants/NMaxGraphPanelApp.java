@@ -34,28 +34,28 @@ public class NMaxGraphPanelApp extends JFrame{
 
     //LEFT
     
-    /**
-     * Create an Empty Panel for forcing the ButtonZoom to go in bottom
-     */
-    JPanel empty2 = new JPanel();
+    // /**
+    //  * Create an Empty Panel for forcing the ButtonZoom to go in bottom
+    //  */
+    // JPanel empty2 = new JPanel();
 
-    /**
-     * Contain the panel of Zoom
-     * Add Border
-     */
-    JPanel spaceBorderZoomPanel = new JPanel();
+    // /**
+    //  * Contain the panel of Zoom
+    //  * Add Border
+    //  */
+    // JPanel spaceBorderZoomPanel = new JPanel();
 
-    /**
-     * Contain an Empty Panel and spaceBorderZoomPanel
-     * Forcing bottom
-     */
-    JPanel zoomButtonLeftBottom = new JPanel();
+    // /**
+    //  * Contain an Empty Panel and spaceBorderZoomPanel
+    //  * Forcing bottom
+    //  */
+    // JPanel zoomButtonLeftBottom = new JPanel();
 
-     /**
-     * Create an Empty Panel for forcing the Buttonimport to go in bottom
-     * When there is no MinGraph + InfoGraph
-     */
-    JPanel empty = new JPanel();
+    //  /**
+    //  * Create an Empty Panel for forcing the Buttonimport to go in bottom
+    //  * When there is no MinGraph + InfoGraph
+    //  */
+    // JPanel empty = new JPanel();
 
     /**
      * Panel of the graph (Bigger than NInfoGraphPanelApp)

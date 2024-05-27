@@ -31,6 +31,12 @@ import javax.swing.BoxLayout;
  */
 public class NButtonImportPanelApp extends JPanel {
 
+    public static final int AIRPORT_FILE = 0;
+    public static final int TEST_GRAPH_FILE = 1;
+    public static final int FLIGHT_FILE = 12;
+    
+    
+
     /**
      * Button de choix
      * Vols/Aeroports
@@ -178,8 +184,8 @@ public class NButtonImportPanelApp extends JPanel {
         });
 
         choixGraph.addActionListener((ActionEvent e) -> {
-            NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp();
-            if(fileChosser.getIsSelected()){
+            NFileChooserForGraphApp fileChooser = new NFileChooserForGraphApp(TEST_GRAPH_FILE);
+            if(fileChooser.getIsSelected()){
                 homePage.addBodyPanelPrinc(this);
                 this.setVisible(false);
             }
@@ -206,7 +212,7 @@ public class NButtonImportPanelApp extends JPanel {
 
 
         buttonAeroport.addActionListener((ActionEvent e) -> {
-        NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp();
+        NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp(AIRPORT_FILE);
         if(fileChosser.getIsSelected()){
             homePage.addBodyPanelPrinc(this);
             this.setVisible(false);
@@ -227,7 +233,7 @@ public class NButtonImportPanelApp extends JPanel {
         } );
 
         buttonVols.addActionListener((ActionEvent e) -> {
-        NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp();
+        NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp(FLIGHT_FILE);
         if(fileChosser.getIsSelected()){
             homePage.addBodyPanelPrinc(this);
             this.setVisible(false);
