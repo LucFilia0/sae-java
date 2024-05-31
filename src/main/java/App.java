@@ -46,7 +46,7 @@ import exceptions.InvalidCoordinateException;
 import exceptions.InvalidTimeException;
 import exceptions.ObjectNotFoundException;
 import exceptions.InvalidEntryException;
-
+import exceptions.InvalidFileFormatException;
 import util.* ;
 import graph.* ;
 import composants.*;
@@ -67,25 +67,28 @@ public class App extends javax.swing.JFrame {
         /* App planeAIR = new App("Plane AIR"); // Such a great name, isn't it ?
         planeAIR.setVisible(true); */
 
-        TestGraph tg = new TestGraph("graph") ;
+        /* TestGraph tg = new TestGraph("graph") ;
         try {
             tg.importFromFile(new File("data/graph-test2.txt"), false) ;
         }
 
         catch (Exception e) {
             System.err.println(e) ;
-        }
+        } */
 
-        for (Node n : tg) {
+        /* for (Node n : tg) {
             n.setAttribute("color", 0) ;
         }
         int[] res = Coloration.ColorationDsatur(tg, "color", tg.getKMax()) ;
         Coloration.setGraphStyle(tg,res[0], "color") ;
-        PanelCreator renderer = new PanelCreator(tg, true) ;
+        PanelCreator renderer = new PanelCreator(tg, true) ;*/
 
-        NHomePage homePage = new NHomePage();
+        /* NHomePage homePage = new NHomePage();
         homePage.setVisible(true);
-        homePage.addComposants();
+        homePage.addComposants(); */
+
+        App app = new App("Hello");
+        
     }
 
     /**
@@ -143,7 +146,7 @@ public class App extends javax.swing.JFrame {
         double timeSecurity = 15;
 
         //String testGraphFile = "data/graph-test1.txt";
-        String airportsFile = "data/aeroports.csv";
+        String airportsFile = "data/aeroports.txt";
         String flightsFile = "data/vol-test8.csv";
         
         try {
@@ -153,9 +156,6 @@ public class App extends javax.swing.JFrame {
         }catch(
             FileNotFoundException |
             NumberFormatException |
-            InvalidTimeException |
-            InvalidCoordinateException |
-            ObjectNotFoundException |
             InvalidEntryException e) {
             System.err.println(e);
         }
@@ -185,30 +185,18 @@ public class App extends javax.swing.JFrame {
      */
     private void test()  {
 
-        // Layout
-        this.getContentPane().setLayout(new BorderLayout());
-
-        // Adding elements
-
-
-        // TEST
-        AirportSet as = new AirportSet();
-        FlightsIntersectionGraph fig = new FlightsIntersectionGraph("Waffle");
+        System.setProperty("org.graphstream.ui", "swing");
+        TestGraph graph = new TestGraph("Hello");
 
         try {
-            DataImportation.importAirportsFromFile(as, fig, new File("data/aeroports.csv"));
-            DataImportation.importFlightsFromFile(as, fig, new File("data/vol-test8.csv"), 15);
-        }catch(FileNotFoundException | NumberFormatException | InvalidCoordinateException | ObjectNotFoundException | InvalidEntryException | InvalidTimeException e) {
+            DataImportation.importTestGraphFromFile(graph, new File("data/graph-test0.txt"), true);
+        }catch(FileNotFoundException | InvalidFileFormatException e) {
             System.err.println(e);
         }
-        DataImportation.setActiveAirports(as, fig);
 
-        
-        Map map = new Map();
-        //map.paintWaypoints(as, fig);
-        map.paintMapItems(as, fig);
-        
-        this.add(map, BorderLayout.CENTER);
+        System.out.println(graph);
+
+        graph.display();
     }
     /* 
     /**

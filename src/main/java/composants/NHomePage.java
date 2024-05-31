@@ -63,12 +63,12 @@ public class NHomePage extends JFrame {
      * Button Importation
      * vols.csv
      */
-    JButton buttonVols = new JButton("vols.csv");
+    JButton buttonVols = new JButton("Vols.csv");
     /**
      * Button Importation
      * aeroport.csv
      */
-    JButton buttonAeroport = new JButton("aeroport.csv");
+    JButton buttonAeroport = new JButton("Aeroport.csv");
     /**
      * Button Importation
      * graph.csv
@@ -180,6 +180,7 @@ public class NHomePage extends JFrame {
     }
 
     public void removeBodyPanelPrinc(NPrincipaleFrameApp framePrinc){
+        
         this.setTitle("Plane AIR | PAGE D'IMPORTATION");
 
         NButtonImportPanelApp buttonImportAf = new NButtonImportPanelApp(this) ;

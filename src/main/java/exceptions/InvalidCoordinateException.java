@@ -2,11 +2,11 @@ package exceptions;
 
 import util.Coordinate ;
 
-    /**
-     * This exception is throwed if the values which define the Coordinates are not correct.
-     * 
-     * @author Nathan LIEGEON - Modified : Luc le Manifik
-     */
+/**
+ * This exception is throwed if the values which define the Coordinates are not correct.
+ * 
+ * @author Nathan LIEGEON - Modified : Luc le Manifik
+ */
 public class InvalidCoordinateException extends Exception {
     
     public InvalidCoordinateException(Coordinate co) {

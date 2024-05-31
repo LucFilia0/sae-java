@@ -74,7 +74,7 @@ public class NButtonImportPanelApp extends JPanel {
     /**
      * Button for valided aerorort
      */
-    JButton valideAer = new JButton("Valider");
+    JButton valider = new JButton("Valider");
 
     /**
      * Button for valided vols
@@ -147,9 +147,9 @@ public class NButtonImportPanelApp extends JPanel {
         buttonsPanel.add(choixGraph);
         buttonsPanel.setBackground(Color.YELLOW);
 
-        valideAer.setForeground(Color.WHITE);
-        valideAer.setPreferredSize(new Dimension(50,40));
-        valideAer.setBackground(Color.BLACK);
+        valider.setForeground(Color.WHITE);
+        valider.setPreferredSize(new Dimension(50,40));
+        valider.setBackground(Color.BLACK);
 
         valideVol.setForeground(Color.WHITE);
         valideVol.setPreferredSize(new Dimension(50,40));
@@ -176,8 +176,8 @@ public class NButtonImportPanelApp extends JPanel {
             buttonsPanel.removeAll();
             this.remove(valideStart);
             buttonsPanel.add(buttonAeroport);
-            this.add(valideAer);
-            valideAer.setAlignmentX(Component.CENTER_ALIGNMENT);
+            this.add(valider);
+            valider.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.add(Box.createRigidArea(new Dimension(0, 5)));
             homePage.setVisible(true);
 
@@ -191,10 +191,10 @@ public class NButtonImportPanelApp extends JPanel {
             }
         });
 
-        valideAer.addActionListener((ActionEvent e) -> {
+        valider.addActionListener((ActionEvent e) -> {
             buttonsPanel.removeAll();
             this.remove(valideStart);
-            this.remove(valideAer);
+            this.remove(valider);
             buttonsPanel.add(buttonVols);
             this.add(valideVol);
             valideVol.setAlignmentX(Component.CENTER_ALIGNMENT);

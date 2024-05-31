@@ -13,29 +13,27 @@ public class NFileChooserForGraphApp {
 
     NFileChooserForGraphApp(int fileType){
 
-    JFileChooser chooser = new JFileChooser();
-    chooser.addChoosableFileFilter(new FileNameExtensionFilter("Fichier CSV (*.csv)", "csv"));
-    chooser.setDialogTitle("Enregistrer sous");
-    chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-    chooser.setApproveButtonText("Ouvrir");
-    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    chooser.setMultiSelectionEnabled(false);
-    int result = chooser.showSaveDialog(null);
-    if(result == JFileChooser.APPROVE_OPTION){
-        file = chooser.getSelectedFile();
-        //LUC IMPORTATION
-        if(!isSelected){
-            JOptionPane.showMessageDialog(null, "Le fichier importé ne corresponds pas au type demandé", "Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+        JFileChooser chooser = new JFileChooser();
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Fichier TXT (*.txt)", "txt"));
+        chooser.setDialogTitle("Enregistrer sous");
+        chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+        chooser.setApproveButtonText("Ouvrir");
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setMultiSelectionEnabled(false);
+        int result = chooser.showSaveDialog(null);
+        if(result == JFileChooser.APPROVE_OPTION){
+            file = chooser.getSelectedFile();
+            //LUC IMPORTATION
+            if(!isSelected){
+                JOptionPane.showMessageDialog(null, "Le fichier importé ne corresponds pas au type demandé", "Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                // est ce qu'on met une message de succes ?
+            }
+            
+        }else if(result == JFileChooser.ERROR_OPTION){
+            JOptionPane.showMessageDialog(null, "Erreur d'importation", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
-        else{
-            // est ce qu'on met une message de succes ?
-        }
-        
-    }else if(result == JFileChooser.ERROR_OPTION){
-        JOptionPane.showMessageDialog(null, "Erreur d'importation", "Erreur", JOptionPane.ERROR_MESSAGE);
-    }
-
-
     }
 
     public File getFile() {

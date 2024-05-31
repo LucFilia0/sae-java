@@ -21,6 +21,8 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.Graphs;
 
+import util.DataImportation;
+
 /**
  * Does the importation of graphs from a folder automatically
  */
@@ -80,7 +82,7 @@ public class Automation {
                     public void run() {
                         TestGraph temp = new TestGraph(Automation.isolateNumberInString(file.getName())) ;
                         try {
-                            temp.importFromFile(file, false) ;
+                            DataImportation.importTestGraphFromFile(temp, file, false);
                             for (Node node : temp) {
                                 node.setAttribute("color", 0) ;
                             }

@@ -9,7 +9,7 @@ public class InvalidFileFormatException extends Error {
         super("Source file does not match the required format of data");
     }
 
-    public InvalidFileFormatException(String comment) {
-        super("Source file does not match the required format of data : " + comment);
+    public InvalidFileFormatException(int currentLine, String comment) {
+        super("Source file does not match the required format of data : Line " + currentLine + " : " + comment);
     }
 }
