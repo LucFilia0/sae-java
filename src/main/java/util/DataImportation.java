@@ -72,7 +72,12 @@ public abstract class DataImportation {
     public static final String REGEX_FLIGHTS_AIRPORTS = "[^;0-9a-zA-Z]";
 
     /**
-     * Adds the spaces for the importation of the Nodes, in the TestGraphs
+     * The RegEx which can be used to clean when only expecting numbers
+     */
+    public static final String REGEX_NUMBERS = "[^0-9]";
+
+    /**
+     * The RegEx which is used to clean the TestGraph files' lines
      */
     public static final String REGEX_TEST_GRAPH = "[^ 0-9]";
 
@@ -398,25 +403,25 @@ public abstract class DataImportation {
                     s_location = string_attribute;
                     break;
                 case 2 :
-                    s_latitudeDegree = string_attribute;
+                    s_latitudeDegree = string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, "");
                     break;
                 case 3 :
-                    s_latitudeMinutes = string_attribute;
+                    s_latitudeMinutes = string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, "");
                     break;
                 case 4 :
-                    s_latitudeSeconds = string_attribute;
+                    s_latitudeSeconds = string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, "");
                     break;
                 case 5 :
                     s_latitudeDirection = string_attribute.toUpperCase().charAt(0);
                     break;
                 case 6 :
-                    s_longitudeDegree = string_attribute;
+                    s_longitudeDegree = string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, "");
                     break;
                 case 7 :
-                    s_longitudeMinutes = string_attribute;
+                    s_longitudeMinutes = string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, "");
                     break;
                 case 8 :
-                    s_longitudeSeconds = string_attribute;
+                    s_longitudeSeconds = string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, "");
                     break;
                 case 9 :
                     s_longitudeDirection = string_attribute.toUpperCase().charAt(0);
@@ -462,29 +467,6 @@ public abstract class DataImportation {
         // Adding the Airport to the AirportSet        
         Airport airport = new Airport(s_name, s_location, latitude, longitude);
         airportSet.add(airport);
-    }
-
-    /**
-     * This procedure puts the active and inactive Airports in their right Set.
-     * It must be called after the Flights' importation, because it needs the Flights to know
-     * if it's used or not.
-     * 
-     * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports
-     * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG which contains all the Airports
-     * 
-     * @author Luc le Manifik
-     */
-    public static void setActiveAirports(AirportSet airportSet, FlightsIntersectionGraph fig) {
-        
-        for(Airport airport : airportSet) {
-
-            // Adding the airport in the right Set, used later to print Waypoints on the Map (the red ones and the grey ones)
-            if(airport.mustBeActive(fig)) {
-                airportSet.getActiveAirports().add(airport);
-            }else {
-                airportSet.getInactiveAirports().add(airport);
-            }
-        }
     }
 
 
@@ -561,7 +543,7 @@ public abstract class DataImportation {
      */
     private static Flight createFlightFrom(AirportSet airportSet, FlightsIntersectionGraph fig, String line, int currentLine) throws InvalidFileFormatException {
 
-        String okLine = line.replaceAll(" ", "");
+        String okLine = line.replaceAll(DataImportation.REGEX_FLIGHTS_AIRPORTS, "");
 
         Scanner scanData = new Scanner(okLine);
         scanData.useDelimiter("[;\0]");
@@ -575,10 +557,9 @@ public abstract class DataImportation {
         FlightTime departureTime = null;
 
         while(scanData.hasNext()) {
+            
             string_attribute = scanData.next(); // store the current Flight's data (name, then departureAirport, then ...)
-            
-            string_attribute = string_attribute.replaceAll(DataImportation.REGEX_FLIGHTS_AIRPORTS, ""); // Remove useless characters -> Avoid little errors
-            
+                        
             try {
                 switch(currentAttribute) {
                     case 0 :
@@ -591,13 +572,13 @@ public abstract class DataImportation {
                         s_arrival = string_attribute;
                         break;
                     case 3 :
-                        departureTime_h = Integer.parseInt(string_attribute);
+                        departureTime_h = Integer.parseInt(string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, ""));
                         break;
                     case 4 :
-                        departureTime_m = Integer.parseInt(string_attribute);
+                        departureTime_m = Integer.parseInt(string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, ""));
                         break;
                     case 5 :
-                        duration = Integer.parseInt(string_attribute);
+                        duration = Integer.parseInt(string_attribute.replaceAll(DataImportation.REGEX_NUMBERS, ""));
                         break;
                     default : 
                         System.err.println("Error at Line " + currentLine + " : More informations than required.");

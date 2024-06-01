@@ -4,6 +4,7 @@ package ihm.mapvisuals;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.lang.Math;
 
 //-- Import AWT
 
@@ -100,10 +101,10 @@ public class MapItemPainter extends WaypointPainter<MapItem> {
 
             MapWaypointButton waypointButton = flightWp.getWaypointButton();
 
-            x = flightWp_location.getX() - screen.getY() - waypointButton.getWidth()/2;
+            x = flightWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = flightWp_location.getY() - screen.getY() - waypointButton.getHeight()/2;
 
-            waypointButton.setLocation(x.intValue(), y.intValue());
+            waypointButton.setLocation((int) Math.round(x), (int) Math.round(y)); // The more accurate we can do T_T
         }
 
         /*

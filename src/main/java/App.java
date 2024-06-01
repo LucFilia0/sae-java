@@ -194,9 +194,34 @@ public class App extends javax.swing.JFrame {
             System.err.println(e);
         }
 
-        System.out.println(graph);
+        //System.out.println(graph);
 
-        graph.display();
+        //graph.display();
+
+        // ============================================================
+
+        FlightsIntersectionGraph fig = new FlightsIntersectionGraph("ok");
+        AirportSet as = new AirportSet();
+
+        Map map = new Map();
+
+        this.getContentPane().setLayout(new BorderLayout());
+        this.getContentPane().add(map, BorderLayout.CENTER);
+
+        try {
+            DataImportation.importAirportsFromFile(as, fig, new File("data/aeroports.csv"));
+            DataImportation.importFlightsFromFile(as, fig, new File("data/vol-test3.csv"), 15);
+        }catch(Exception e) {
+            System.err.println(e);
+        }
+
+        System.out.println(fig);
+
+        as.setActiveAirportsFrom(fig);
+
+        map.paintMapItems(as, fig);
+
+        this.setVisible(true);
     }
     /* 
     /**

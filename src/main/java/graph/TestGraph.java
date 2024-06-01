@@ -22,22 +22,22 @@ public class TestGraph extends SingleGraph {
     /**
      * The String identifier that represents the max allowed number of colors (int)
      */
-    private final String K_MAX = "kMax";
+    private static final String K_MAX = "kMax";
 
     /**
      * The String identifier that represents the max allowed number of Nodes (int)
      */
-    private final String NB_MAX_NODES = "nbMaxNodes";
+    private static final String NB_MAX_NODES = "nbMaxNodes";
 
     /**
      * The String identifier that represents the current number of Nodes (int)
      */
-    private final String NB_NODES = "nbNodes";
+    private static final String NB_NODES = "nbNodes";
 
     /**
      * The String identifier that represents the current number of edges (int)
      */
-    private final String NB_EDGES = "nbEdges";
+    private static final String NB_EDGES = "nbEdges";
 
     //-- TestGraph Constructor
 
@@ -51,10 +51,10 @@ public class TestGraph extends SingleGraph {
      */
     public TestGraph(String id) {
         super(id);
-        this.setAttribute(this.K_MAX, 0);
-        this.setAttribute(this.NB_MAX_NODES, 0);
-        this.setAttribute(this.NB_NODES, 0);
-        this.setAttribute(this.NB_EDGES, 0);
+        this.setAttribute(TestGraph.K_MAX, 0);
+        this.setAttribute(TestGraph.NB_MAX_NODES, 0);
+        this.setAttribute(TestGraph.NB_NODES, 0);
+        this.setAttribute(TestGraph.NB_EDGES, 0);
     }
 
     //-- TestGraph toString()
@@ -92,7 +92,7 @@ public class TestGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     public int getKMax() {
-        return (int)this.getAttribute(this.K_MAX);
+        return (int)this.getAttribute(TestGraph.K_MAX);
     }
 
     /**
@@ -103,7 +103,7 @@ public class TestGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     public int getNbMaxNodes() {
-        return (int)this.getAttribute(this.NB_MAX_NODES);
+        return (int)this.getAttribute(TestGraph.NB_MAX_NODES);
     }
 
     /**
@@ -114,7 +114,7 @@ public class TestGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     public int getNbNodes() {
-        return (int)this.getAttribute(this.NB_NODES);
+        return (int)this.getAttribute(TestGraph.NB_NODES);
     }
 
     /**
@@ -125,7 +125,7 @@ public class TestGraph extends SingleGraph {
      * @author Luc le Manifik
      */
     public int getNbEdges() {
-        return (int)this.getAttribute(this.NB_EDGES);
+        return (int)this.getAttribute(TestGraph.NB_EDGES);
     }
 
     //-- TestGraph Setters
@@ -142,7 +142,7 @@ public class TestGraph extends SingleGraph {
         if(kMax < 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute(this.K_MAX, kMax);;
+        this.setAttribute(TestGraph.K_MAX, kMax);;
     }
 
     /**
@@ -157,7 +157,7 @@ public class TestGraph extends SingleGraph {
         if(nbMaxNodes < 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute(this.NB_MAX_NODES, nbMaxNodes);
+        this.setAttribute(TestGraph.NB_MAX_NODES, nbMaxNodes);
     }
 
     /**
@@ -172,7 +172,7 @@ public class TestGraph extends SingleGraph {
         if(nbNodes < 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute(this.NB_NODES, nbNodes);
+        this.setAttribute(TestGraph.NB_NODES, nbNodes);
     }
 
     /**
@@ -187,7 +187,7 @@ public class TestGraph extends SingleGraph {
         if(nbEdges < 0) {
             throw new InvalidEntryException();
         }
-        this.setAttribute(this.NB_EDGES, nbEdges);
+        this.setAttribute(TestGraph.NB_EDGES, nbEdges);
     }
     
 }

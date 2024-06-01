@@ -7,6 +7,7 @@ import java.util.HashSet;
 //-- Import Exceptions
 
 import exceptions.ObjectNotFoundException;
+import graph.FlightsIntersectionGraph;
 
 /**
  * The AirportSet class is a container for the Airport class.
@@ -93,6 +94,28 @@ public class AirportSet extends HashSet<Airport> {
     public void showAllAirports() {
         for(Airport airport : this) {
             System.out.println(airport);
+        }
+    }
+
+    /**
+     * This procedure puts the active and inactive Airports in their right Set.
+     * It must be called after the Flights' importation, because it needs the Flights to know
+     * if it's used or not.
+     * 
+     * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG which contains all the Airports
+     * 
+     * @author Luc le Manifik
+     */
+    public void setActiveAirportsFrom(FlightsIntersectionGraph fig) {
+        
+        for(Airport airport : this) {
+
+            // Adding the airport in the right Set, used later to print Waypoints on the Map (the red ones and the grey ones)
+            if(airport.mustBeActive(fig)) {
+                this.activeAirports.add(airport);
+            }else {
+                this.inactiveAirports.add(airport);
+            }
         }
     }
 }

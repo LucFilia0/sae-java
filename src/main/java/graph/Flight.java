@@ -441,8 +441,8 @@ public class Flight extends SingleNode {
         GeoPosition currentGeoPosition = null;
 
         // Get the current time (from milliseconds to minutes)
-        long currentTimeInMinutes = System.currentTimeMillis() / 60000;
-        //long currentTimeInMinutes = 8 * 60; // 8h
+        //long currentTimeInMinutes = System.currentTimeMillis() / 60000;
+        long currentTimeInMinutes = 17 * 60 + 40; // 8h
 
         int flightDepartureTime = this.getDepartureTime().getHourValueInMinutes();
         int flightArrivalTime = flightDepartureTime + this.getFlightDuration();
