@@ -118,8 +118,6 @@ public class NMenuPanelApp extends JPanel{
     JButton okButton = new JButton("OK");
     
     
-
-
     /**
      * Constructor of NMenuPanelApp
      * @param kmax
@@ -127,114 +125,6 @@ public class NMenuPanelApp extends JPanel{
     NMenuPanelApp(int kmax, JComboBox altitudesMax){
 
         this.setBackground(Color.YELLOW);
-
-       /* this.setLayout(new BoxLayout(this , BoxLayout.Y_AXIS));
-        
-        this.setPreferredSize(new Dimension(260,335));
-
-        
-
-        setAltitudeComboBox(kmax);
-
-        //KMAX
-        sliderKmax.setMinimum(2);
-        sliderKmax.setMaximum(kmax + 30);
-        sliderPanel.add(sliderKmax);
-
-        for(int i = 2 ; i <= kmax + 30 ; i++  ){
-            choixAltitudesMax.addItem(i);
-        }
-        choixAltitudesMax.setSelectedItem(kmax);
-
-        choixAltitudesMax.setForeground(Color.WHITE);
-        choixAltitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
-        choixAltitudesMax.setBackground(Color.BLACK);
-        choixAltitudesMax.setOpaque(true);
-        sliderPanel.add(choixAltitudesMax);
-        empty.setBackground(Color.YELLOW);
-        sliderPanel.add(empty);
-        sliderKmax.setBackground(Color.YELLOW);
-        sliderPanel.setBackground(Color.YELLOW);
-        sliderKmax.setValue(kmax);
-
-
-        //ALTITUDES
-        altitudeComboBox.setBackground(Color.YELLOW);
-
-        //CONFLITS
-        nbConflits.setForeground(Color.WHITE);
-        nbConflits.setFont(new Font("Arial", Font.BOLD, 25));
-        nbConflits.setBackground(Color.BLACK);
-        nbConflits.setOpaque(true);
-
-        //ALGORITHMES
-        buttonsLayout.add(dsatur);
-        dsatur.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttonsLayout.add(Box.createRigidArea(new Dimension(0, 5)));
-        buttonsLayout.add(rlf);
-        rlf.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        buttonsLayout.setBackground(Color.YELLOW);
-
-        // Color of the background (BLACK)
-        dsatur.setBackground(Color.BLACK);
-        rlf.setBackground(Color.BLACK);
-        
-        //  Size  width : 100  height : 125 
-        dsatur.setPreferredSize(new Dimension(85,75));
-        rlf.setPreferredSize(new Dimension(85,75));
-
-        // Color of the text (WHITE)
-        dsatur.setForeground(Color.WHITE);
-        rlf.setForeground(Color.WHITE);
-
-        //add
-
-        //TITLE
-
-        titleMenu.setFont(new Font("Arial", Font.BOLD, 20));
-        this.add(titleMenu);
-        titleMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-
-        this.add(Box.createRigidArea(new Dimension(0, 8)));
-
-        //KMAX
-        changeKmax.setFont(new Font("Arial", Font.BOLD, 18));
-        this.add(changeKmax);
-        changeKmax.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.add(Box.createRigidArea(new Dimension(0, 5)));
-        this.add(sliderPanel);
-        sliderPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        //ALTITUDES
-        nbAltitudes.setFont(new Font("Arial", Font.BOLD, 18));
-        this.add(nbAltitudes);
-        nbAltitudes.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.add(Box.createRigidArea(new Dimension(0, 5)));
-        altitudeComboBox.setPreferredSize(new Dimension(0,25));
-        this.add(altitudeComboBox);
-        altitudeComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        this.add(Box.createRigidArea(new Dimension(0, 6)));
-
-        //CONFLITS
-        nbConflitsTitle.setFont(new Font("Arial", Font.BOLD, 18));
-        this.add(nbConflitsTitle);
-        nbConflitsTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.add(Box.createRigidArea(new Dimension(0, 5)));
-        this.add(nbConflits);
-        nbConflits.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        this.add(Box.createRigidArea(new Dimension(0, 8)));
-
-        //ALGORITHMS
-        algorithmes.setFont(new Font("Arial", Font.BOLD, 18));
-        this.add(algorithmes);
-        algorithmes.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.add(Box.createRigidArea(new Dimension(0, 2)));
-        this.add(buttonsLayout);
-        buttonsLayout.setAlignmentX(Component.CENTER_ALIGNMENT);*/
 
         this.setLayout( new GridBagLayout());
 
@@ -299,8 +189,6 @@ public class NMenuPanelApp extends JPanel{
         algoOption.add(algorithmes);
         algoOption.add(buttonLayout);
 
-
-
         //ADD
 
         GridBagConstraints GridBagC = new GridBagConstraints(); 
@@ -327,18 +215,9 @@ public class NMenuPanelApp extends JPanel{
         GridBagC.gridy = 3;
         this.add(altitudeMaxOption, GridBagC);
 
-       
         //ALGO
         GridBagC.gridy = 4;
         this.add(algoOption,GridBagC);
-
-        
-
-
-
-
-
-
 
     }
     

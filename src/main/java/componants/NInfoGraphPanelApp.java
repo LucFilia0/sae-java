@@ -1,4 +1,4 @@
-package composants;
+package componants;
 
 // Import swing composants
 import javax.swing.JPanel;
@@ -6,11 +6,9 @@ import javax.swing.JLabel;
 
 // Import awt composants
 import java.awt.Color;
-import java.awt.Dimension;
 // Import Layout
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 /**
  * Class which create a panel of INFO GRAPH

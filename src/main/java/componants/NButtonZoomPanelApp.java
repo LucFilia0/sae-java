@@ -1,28 +1,28 @@
-package composants;
-/**
- * Import of SWING composants
- */
+package componants;
+
+//Import of SWING composants
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/**
- * Import Layout
- */
+//Import Layout
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Font;
 
-
-
-
+/**
+ * Panel for zoom the map of the App
+ */
 public class NButtonZoomPanelApp extends JPanel {
 
     /**
-     * 2 button
-     * 1) the "+" of the ZOOM
-     * 2) the "-" of the ZOOM
+     * button : +
+     * Location : first in Y-axis
      */
     JButton ButtonPlus = new JButton("+");
+    /**
+     * button : -
+     * Location : second in Y-axis
+     */
     JButton ButtonMinus = new JButton("−");
 
     /**
@@ -35,44 +35,26 @@ public class NButtonZoomPanelApp extends JPanel {
 
     public NButtonZoomPanelApp(){
 
-        /**
-         * Set Panel's Background color (BLACK)
-         */
         this.setBackground(Color.BLACK);
 
-
-        /**
-         * Having YELLOW background according to the Panel GridButtonPanel
-         * Just see the caracter
-         */
         ButtonPlus.setBackground(Color.BLACK);
         ButtonPlus.setBorderPainted(false);
         
         ButtonMinus.setBackground(Color.BLACK);
         ButtonMinus.setBorderPainted(false);
 
-        /**
-         * Text appareance
-         * Name : Arial
-         * Font : Bold
-         * Size : 30
-         */
+        //  * Text appareance
+        //  * Name : Arial
+        //  * Font : Bold
+        //  * Size : 30
         ButtonPlus.setFont(new Font("Arial", Font.BOLD, 30));
         ButtonPlus.setForeground(Color.WHITE);
         ButtonMinus.setFont(new Font("Arial", Font.BOLD, 30));
         ButtonMinus.setForeground(Color.WHITE);
 
-        /**
-         * Add button of Grid Panel
-         * 1) +
-         * 2) -
-         */
         GridButtonPanel.add(ButtonPlus);
         GridButtonPanel.add(ButtonMinus);
 
         this.add(GridButtonPanel);
-
-
-    }
-    
+    } 
 }
