@@ -1,4 +1,4 @@
-package planeair.composants;
+package planeair.components;
 
 // Import swing composants
 import javax.swing.JPanel;
@@ -17,7 +17,6 @@ import java.awt.FlowLayout;
 public class NMinGraphPanelApp extends JPanel {
 
     //STRUCT
-
     /**
      * GridLayout
      * nb LINE : 2  (Graph + ButtonAgr)
@@ -52,11 +51,9 @@ public class NMinGraphPanelApp extends JPanel {
         gridPanelMinGraph.setBackground(Color.YELLOW);
 
         /*FIRST COMPOSANT */
-
         
         //Insert Graph representation in FlowPanelGraph
          
-
         /*SECOND COMPOSANT */
 
         buttonAgr.setBackground(Color.BLACK);

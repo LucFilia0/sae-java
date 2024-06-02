@@ -3,6 +3,8 @@ package planeair;
 //-- Import Swing
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 import org.graphstream.graph.Node;
 
@@ -35,7 +37,7 @@ import planeair.ihm.Map;
 
 import org.graphstream.ui.swing_viewer.* ;
 
-
+import planeair.components.*;
 
 import org.graphstream.graph.implementations.* ;
 import org.graphstream.graph.* ;
@@ -51,7 +53,7 @@ import planeair.exceptions.InvalidEntryException;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.util.* ;
 import planeair.graph.* ;
-import planeair.composants.*;
+
 
 /**
  * This class loads the application.
@@ -59,6 +61,36 @@ import planeair.composants.*;
  * @author Luc le Manifik
  */
 public class App extends javax.swing.JFrame {
+
+    /**
+     * Page of selection of import file
+     * It's the first that you see when you open the map
+     */
+    NImportPanelApp importPanel = new NImportPanelApp(this);
+
+    /**
+     * The panel principale of the App, where there is the map, the graph
+     * and how change them
+     */
+    NPrincipalePanelApp framePrinc = new NPrincipalePanelApp(this);
+
+
+    App(){
+
+        this.setTitle("Plane AIR | PAGE D'IMPORTATION");
+        this.setSize(900,600);
+        
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new BorderLayout());
+
+        importPanel.addComposants();
+
+        framePrinc.addComposants();
+        framePrinc.addEvents();
+        
+        
+        this.add(importPanel);
+    }
 
     public static void main(String[] args) {
         // DON'T TOUCH THAT IT'S VERY IMPORTANT
@@ -85,12 +117,30 @@ public class App extends javax.swing.JFrame {
         Coloration.setGraphStyle(tg,res[0], "color") ;
         PanelCreator renderer = new PanelCreator(tg, true) ;*/
 
-        /* NHomePage homePage = new NHomePage();
-        homePage.setVisible(true);
-        homePage.addComposants(); */
-
-        App app = new App("Hello");
+        App app = new App();
         
+    }
+
+    /**
+     * Switch from importPanel to principalePanel
+     */
+    public void addBodyPanelPrinc(){
+        this.setTitle("Plane AIR");
+        this.add(framePrinc);
+
+        framePrinc.setVisible(true);
+        this.setVisible(true);
+    }
+
+    /**
+     * Switch from principalePanel to importPanel
+     */
+    public void removeBodyPanelPrinc(NPrincipalePanelApp framePrinc){
+        this.setTitle("Plane AIR | PAGE D'IMPORTATION");
+        this.add(importPanel);
+
+        importPanel.setVisible(true);
+        this.setVisible(true);
     }
 
     /**
