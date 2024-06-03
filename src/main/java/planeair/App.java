@@ -36,6 +36,7 @@ import planeair.util.DataImportation;
 import planeair.ihm.Map;
 
 import org.graphstream.ui.swing_viewer.* ;
+import org.miv.mbox.Test;
 
 import planeair.components.*;
 
@@ -66,10 +67,20 @@ import planeair.graph.* ;
 public class App extends javax.swing.JFrame {
 
     /**
+     * The width of the application's screen
+     */
+    public final static int APPLICATION_SCREEN_WIDTH = 1080;
+
+    /**
+     * The height of the application's screen
+     */
+    public final static int APPLICATION_SCREEN_HEIGHT = 720;
+
+    /**
      * Page of selection of import file
      * It's the first that you see when you open the map
      */
-    NImportPanelApp importPanel = new NImportPanelApp(this);
+    NImportPanelApp importPanel;
 
     /**
      * The panel principale of the App, where there is the map, the graph
@@ -77,11 +88,33 @@ public class App extends javax.swing.JFrame {
      */
     NPrincipalePanelApp framePrinc = new NPrincipalePanelApp(this);
 
+    /**
+     * the TestGraph that loads testGraphs files
+     */
+    private TestGraph testGraph;
+
+    /**
+     * The AirportSet which contains all the Airports
+     */
+    private AirportSet airportSet;
+
+    /**
+     * The FIG which contains all the Flights
+     */
+    private FlightsIntersectionGraph fig;
+
+    /**
+     * The time security
+     */
+    private double timeSecurity = 15;
+
 
     App(){
 
         this.setTitle("Plane AIR | PAGE D'IMPORTATION");
         this.setSize(900,600);
+
+        this.initAttributes();
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
@@ -94,7 +127,8 @@ public class App extends javax.swing.JFrame {
 
         this.setVisible(true);
         
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);        
+
     }
 
     public static void main(String[] args) {
@@ -152,49 +186,17 @@ public class App extends javax.swing.JFrame {
     }
 
     /**
-     * The width of the application's screen
-     */
-    public final static int APPLICATION_SCREEN_WIDTH = 1080;
-
-    /**
-     * The height of the application's screen
-     */
-    public final static int APPLICATION_SCREEN_HEIGHT = 720;
-
-    private LinkedList<AirportSet> airportSets;
-
-    private LinkedList<FlightsIntersectionGraph> figs;
-
-    /**
-     * The constructor of the App class. Creates a new App. Initiates all the differents steps before to launch the App.
-     * 
-     * @param name (String) - The name of the Application
-     * 
-     * @author Luc le Manifik
-     */
-    App(String name) {
-        
-        System.setProperty("org.graphstream.ui", "swing");
-        
-        this.setTitle(name);
-        //this.initAttributes();
-
-        //this.importData();
-        this.setComponents();
-        //this.placeComponents();
-        //this.initEvents();
-
-        this.test();
-    }
-
-    /**
      * This procedure initalize all the application's components.
      * 
      * @author Luc le Manifik
      */
     private void initAttributes() {
-        this.airportSets = new LinkedList<AirportSet>();
-        this.figs = new LinkedList<FlightsIntersectionGraph>();
+        this.airportSet = new AirportSet();
+        this.fig = new FlightsIntersectionGraph("FIG");
+        this.testGraph = new TestGraph("TestGraph");
+
+        this.importPanel = new NImportPanelApp(this);
+        this.framePrinc = new NPrincipalePanelApp(this);
     }
 
     private void importData() {
@@ -283,52 +285,21 @@ public class App extends javax.swing.JFrame {
 
         this.setVisible(true);
     }
-    /* 
-    /**
-     * This procedure creates all the events.
-     * 
-     * @author Luc le Manifik
-     *
-    private void initEvents() {
+    
+    public TestGraph getTestGraph() {
+        return this.testGraph;
+    }
 
-        // Mouse listening events
-        PanMouseInputListener _mouseListener = new PanMouseInputListener(map);
-        this.map.addMouseListener(_mouseListener);
-        this.map.addMouseMotionListener(_mouseListener);
-        this.map.addMouseWheelListener(new ZoomMouseWheelListenerCursor(map));
+    public AirportSet getAirportSet() {
+        return this.airportSet;
+    }
 
-        // ViewMapChooser
-        this.viewMapChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                int index = viewMapChooser.getSelectedIndex();
-                switch(index) {
-                    case 0 :
-                        map.setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
-                        break;
-                    case 1 :
-                        map.setTileFactory(new DefaultTileFactory(new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP)));
-                        break;
-                    case 2 :
-                        map.setTileFactory(new DefaultTileFactory(new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID)));
-                        break;
-                    case 3 :
-                        map.setTileFactory(new DefaultTileFactory(new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.SATELLITE)));
-                        break;
-                    default :
-                        System.err.println("Omg what did you do ??");
-                        break;
-                }
-            }
-        });
-    } 
-    */
+    public FlightsIntersectionGraph getFig() {
+        return this.fig;
+    }
 
-
-    /*NPrincipaleFrameApp fenPrin = new NPrincipaleFrameApp();
-    //fenPrin.addCardPanel();
-    fenPrin.addComposants();
-    fenPrin.addEvents();
-    fenPrin.setVisible(true);*/
+    public double getTimeSecurity() {
+        return this.timeSecurity;
+    }
 
 }

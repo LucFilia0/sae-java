@@ -3,12 +3,15 @@ package planeair.components;
 // Import of SWING composants
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 // Import of AWT composants
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 
@@ -17,27 +20,13 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 
 import planeair.App;
+import planeair.exceptions.InvalidFileFormatException;
+import planeair.util.DataImportation;
 
 /**
  * Create a JPanel of importation for vols and aeroports
  */
 public class NButtonImportPanelApp extends JPanel {
-
-    /**
-     * CONSTANT for know what type of file you have to import
-     * This one is for airoport.txt
-     */
-    public static final int AIRPORT_FILE = 0;
-    /**
-     * CONSTANT for know what type of file you have to import
-     * This one is for graph-test.txt
-     */
-    public static final int TEST_GRAPH_FILE = 1;
-    /**
-     * CONSTANT for know what type of file you have to import
-     * This one is for vol-test.csv
-     */
-    public static final int FLIGHT_FILE = 12;
 
     /**
      * Button de choix
@@ -53,17 +42,19 @@ public class NButtonImportPanelApp extends JPanel {
     JButton choiceGraph = new JButton("<html>Importer un fichier <br> graphes.csv</html>");
     
     /**
-     * Button Importation
-     * vol-test.csv
-     * Location : after pushing the button buttonAirport
-     */
-    JButton buttonFlight = new JButton("vol-test.csv");
-    /**
      * Button Importation for flight
      * aeroport.txt
      * Location : after pushing the button choiceFlight
      */
     JButton buttonAirport = new JButton("aeroport.csv");
+
+    /**
+     * Button Importation
+     * vol-test.csv
+     * Location : after pushing the button buttonAirport
+     */
+    JButton buttonFlight = new JButton("vol-test.csv");
+
     /**
      * Button Importation
      * graph-test.txt
@@ -101,6 +92,12 @@ public class NButtonImportPanelApp extends JPanel {
      * Import the Frame of the App
      */
     App app;
+
+    private boolean flightsImported;
+
+    private boolean airportsImported;
+
+    private boolean graphImported;
     
     /**
      * Create an Import panel
@@ -112,6 +109,10 @@ public class NButtonImportPanelApp extends JPanel {
      */
     public NButtonImportPanelApp(App app){
         this.app = app;
+
+        this.flightsImported = false;
+        this.airportsImported = false;
+        this.graphImported = false;
 
         this.setLayout(new BoxLayout(this , BoxLayout.Y_AXIS));
         this.setBackground(Color.YELLOW);
@@ -164,7 +165,7 @@ public class NButtonImportPanelApp extends JPanel {
      */
     public void addEvents(){
         valideStart.addActionListener((ActionEvent e) -> {
-        this.app.addBodyPanelPrinc();
+            this.app.addBodyPanelPrinc();
             
         });
 
@@ -180,10 +181,17 @@ public class NButtonImportPanelApp extends JPanel {
         });
 
         choiceGraph.addActionListener((ActionEvent e) -> {
-            NFileChooserForGraphApp fileChooser = new NFileChooserForGraphApp(TEST_GRAPH_FILE);
-            if(fileChooser.getIsSelected()){
-                this.app.addBodyPanelPrinc();
-                this.setVisible(false);
+
+            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
+            fileChooser.userImportFile();
+
+            if(!fileChooser.getFile().equals(null)) {
+                try {
+                    DataImportation.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
+                    this.graphImported = true;
+                }catch(InvalidFileFormatException | FileNotFoundException error) {
+                    JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -205,20 +213,42 @@ public class NButtonImportPanelApp extends JPanel {
         });
 
         buttonAirport.addActionListener((ActionEvent e) -> {
-        NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp(AIRPORT_FILE);
-        if(fileChosser.getIsSelected()){
-            this.setVisible(false);
-        }
+            
+            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.AIRPORT_FILE);
+            fileChooser.userImportFile();
+            
+            if(!fileChooser.getFile().equals(null)) {
+                try {
+                    DataImportation.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
+                    this.airportsImported = true;
+                }catch(InvalidFileFormatException | FileNotFoundException error) {
+                    JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                }
+            }
 
         } );
 
         buttonFlight.addActionListener((ActionEvent e) -> {
-        NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp(FLIGHT_FILE);
-        if(fileChosser.getIsSelected()){
-            this.app.addBodyPanelPrinc();
-            this.setVisible(false);
-        } });
+    
+            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.FLIGHT_FILE);
+            fileChooser.userImportFile();
+            
+            if(!fileChooser.getFile().equals(null)) {
+                try {
+                    DataImportation.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());
+                    this.flightsImported = true;
+                    this.loadPrincipalPanel();
+                }catch(InvalidFileFormatException | FileNotFoundException error) {
+                    JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+    
+        });
     } 
+
+    private void loadPrincipalPanel() {
+        
+    }
  
     /**
      * Restart the Panel for when we will open it again
