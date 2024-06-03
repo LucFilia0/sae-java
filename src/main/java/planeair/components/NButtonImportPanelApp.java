@@ -215,39 +215,48 @@ public class NButtonImportPanelApp extends JPanel {
         buttonAirport.addActionListener((ActionEvent e) -> {
             
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.AIRPORT_FILE);
-            fileChooser.userImportFile();
-            
-            if(!fileChooser.getFile().equals(null)) {
-                try {
+
+            try {
+                fileChooser.userImportFile();
+                if(!fileChooser.getFile().equals(null)) {
+
                     DataImportation.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
                     this.airportsImported = true;
-                }catch(InvalidFileFormatException | FileNotFoundException error) {
-                    JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                 }
-            }
+            }catch(InvalidFileFormatException | FileNotFoundException error) {
+                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+            }   
 
         } );
 
         buttonFlight.addActionListener((ActionEvent e) -> {
     
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.FLIGHT_FILE);
-            fileChooser.userImportFile();
-            
-            if(!fileChooser.getFile().equals(null)) {
-                try {
+        
+            try {
+                fileChooser.userImportFile();
+                if(!fileChooser.getFile().equals(null)) {
+
                     DataImportation.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());
                     this.flightsImported = true;
-                    this.loadPrincipalPanel();
-                }catch(InvalidFileFormatException | FileNotFoundException error) {
-                    JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                    if(this.airportsImported && this.flightsImported) {
+                        this.loadPrincipalPanel();
+                    }
                 }
+            }catch(InvalidFileFormatException | FileNotFoundException error) {
+                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
             }
     
         });
     } 
 
+    /**
+     * Called to set up the map, once all the importations are ok
+     */
     private void loadPrincipalPanel() {
-        
+        this.app.addBodyPanelPrinc();
+        this.setVisible(false);
+        this.app.getPrincFrame().setMap();
     }
  
     /**

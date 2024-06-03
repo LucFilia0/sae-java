@@ -132,6 +132,7 @@ public class App extends javax.swing.JFrame {
     }
 
     public static void main(String[] args) {
+        
         // DON'T TOUCH THAT IT'S VERY IMPORTANT
         System.setProperty("org.graphstream.ui", "swing") ;
         System.setProperty("sun.java2d.uiScale", "100%") ;
@@ -195,8 +196,9 @@ public class App extends javax.swing.JFrame {
         this.fig = new FlightsIntersectionGraph("FIG");
         this.testGraph = new TestGraph("TestGraph");
 
-        this.importPanel = new NImportPanelApp(this);
         this.framePrinc = new NPrincipalePanelApp(this);
+        this.importPanel = new NImportPanelApp(this);
+
     }
 
     private void importData() {
@@ -279,9 +281,7 @@ public class App extends javax.swing.JFrame {
 
         System.out.println(fig);
 
-        as.setActiveAirportsFrom(fig);
-
-        map.paintMapItems(as, fig);
+        
 
         this.setVisible(true);
     }
@@ -300,6 +300,10 @@ public class App extends javax.swing.JFrame {
 
     public double getTimeSecurity() {
         return this.timeSecurity;
+    }
+
+    public NPrincipalePanelApp getPrincFrame() {
+        return this.framePrinc;
     }
 
 }

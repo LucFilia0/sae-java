@@ -83,13 +83,13 @@ public class NFileChooser extends JFileChooser {
      * 
      * @author Luc le Manifik
      */
-    public void userImportFile() {
+    public void userImportFile() throws InvalidFileFormatException {
 
-        int result = this.showOpenDialog(getParent());
+        int result = this.showOpenDialog(this.app);
         if(result == JFileChooser.APPROVE_OPTION){
             this.file = this.getSelectedFile();
-        }else if(result == JFileChooser.ERROR_OPTION){
-            JOptionPane.showMessageDialog(this.app, "Erreur d'importation", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }else if(result == JFileChooser.ERROR){
+            throw new InvalidFileFormatException();
         }
     }
 

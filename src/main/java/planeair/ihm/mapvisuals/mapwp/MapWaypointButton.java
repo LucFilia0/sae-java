@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Rectangle;
 
 //-- Import Swing
 
@@ -59,6 +60,7 @@ public class MapWaypointButton extends javax.swing.JButton {
         // Sets the background of the button unfilled, and makes the border disapear
         this.setContentAreaFilled(false);
         this.setBorder(null);
+        this.setBounds(new Rectangle(MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE));
 
         this.setIcon(new ImageIcon(scaledImage));
         this.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Makes a little funny hand when the button is hovered :)

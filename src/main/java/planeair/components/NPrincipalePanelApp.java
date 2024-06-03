@@ -51,7 +51,7 @@ public class NPrincipalePanelApp extends JPanel{
      * Panel situe in the CENTER of the Frame's borderLayout 
      * For view the map even if we have the different Panel
      */
-    Map body = new Map();
+    Map body;
 
     /**
      * Layout for the BorderLayout CENTER of body
@@ -248,7 +248,7 @@ public class NPrincipalePanelApp extends JPanel{
      * Having acces to homePage (setVisible elements change)
      * the panel NPrincipalePanelApp is put in this frame
      */
-    App app; 
+    App app;
 
     /**
      * Constructor of NPrincipalePanelApp
@@ -257,6 +257,8 @@ public class NPrincipalePanelApp extends JPanel{
     public NPrincipalePanelApp (App app){
 
         this.app = app;
+        this.body = new Map();
+
         this.setLayout(new BorderLayout());
 
         body.setLayout(new BorderLayout());
@@ -392,6 +394,11 @@ public class NPrincipalePanelApp extends JPanel{
         body.add(article,BorderLayout.WEST);
 
     };
+
+    public void setMap() {
+        this.app.getAirportSet().setActiveAirportsFrom(this.app.getFig());
+        this.body.paintMapItems(this.app.getAirportSet(), this.app.getFig());
+    }
 
     /**
      * Method adding events of the JFrame
