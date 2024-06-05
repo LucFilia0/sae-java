@@ -295,18 +295,18 @@ public class NMenuGraphPanelApp extends JPanel{
                 
                 if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
                     if (lastAlgoSelected != null) {
-                        Coloration.removeCurrentColoring(graph, TestGraph.COLOR_ATTRIBUTE, TestGraph.CONFLICT_ATTRIBUTE) ;
+                        Coloration.removeCurrentColoring(graph) ;
                     }
                     lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
-                    Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem(), TestGraph.COLOR_ATTRIBUTE) ;
-                    Coloration.setGraphStyle(graph, currentKMax, TestGraph.COLOR_ATTRIBUTE) ;
+                    Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
+                    Coloration.setGraphStyle(graph, currentKMax) ;
                 }
                 
                 else {
                     if (oldKmax < currentKMax || graph.getNbColors() > currentKMax) {
-                        Coloration.removeCurrentColoring(graph, TestGraph.COLOR_ATTRIBUTE, TestGraph.CONFLICT_ATTRIBUTE) ;
-                        Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem(), TestGraph.COLOR_ATTRIBUTE) ;
-                        Coloration.setGraphStyle(graph, currentKMax, TestGraph.COLOR_ATTRIBUTE) ;
+                        Coloration.removeCurrentColoring(graph) ;
+                        Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
+                        Coloration.setGraphStyle(graph, currentKMax) ;
                     }
                 }
             }

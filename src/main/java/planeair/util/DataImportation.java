@@ -12,13 +12,13 @@ import org.graphstream.graph.EdgeRejectedException;
 import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
-import org.miv.mbox.Test;
 
 //-- Import Plane AIR
 
 import planeair.graph.Flight;
 import planeair.graph.FlightFactory;
 import planeair.graph.FlightsIntersectionGraph;
+import planeair.graph.GraphSAE;
 import planeair.graph.TestGraph;
 
 //-- Import Exceptions
@@ -276,13 +276,13 @@ public abstract class DataImportation {
             // Adds the nodes and increment node number if they do not already exist
             if(testGraph.getNode(idNodeA) == null) {
                 nodeAdded = testGraph.addNode(idNodeA);
-                nodeAdded.setAttribute(TestGraph.COLOR_ATTRIBUTE, 0) ;
+                nodeAdded.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
                 nodeAdded.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
                 ++nbNodes;
             }
             if(testGraph.getNode(idNodeB) == null) {
                 nodeAdded = testGraph.addNode(idNodeB);
-                nodeAdded.setAttribute(TestGraph.COLOR_ATTRIBUTE, 0) ;
+                nodeAdded.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
                 nodeAdded.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
                 ++nbNodes;
             }
@@ -532,7 +532,7 @@ public abstract class DataImportation {
                 }
             }
         }
-        fig.setNbFlights(nbFlight); // Sets the number of Flights
+        fig.setNbNodes(nbFlight); // Sets the number of Flights
 
         scanLine.close();
     }

@@ -16,7 +16,6 @@ import java.awt.Toolkit;
  * Import awt composants
  */
 import java.awt.Color;
-import java.awt.Dimension;
 
 
 /**

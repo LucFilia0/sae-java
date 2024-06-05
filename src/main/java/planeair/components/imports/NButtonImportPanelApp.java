@@ -3,6 +3,9 @@ package planeair.components.imports;
 // Import of SWING composants
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+
+import org.graphstream.graph.Node;
+
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -200,7 +203,6 @@ public class NButtonImportPanelApp extends JPanel {
                     DataImportation.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
                     initDefaultGraphImportation() ;
                     this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
-                    System.out.println(this.app.getTestGraph().getKMax());
                     this.app.getPrincFrame().getMenuGraphPanel().setAltitudeValues(this.app.getTestGraph().getKMax()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);

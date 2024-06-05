@@ -53,7 +53,7 @@ public class PanelCreator {
 	 * Calls the default constructor with inOwnFrame set to false
 	 * @param graph
 	 */
-	public PanelCreator(Graph graph) {
+	public PanelCreator(GraphSAE graph) {
 		this(graph, false) ;
 	}
 	/**
@@ -62,7 +62,7 @@ public class PanelCreator {
 	 * @param inOwnFrame 
 	 * @see ViewPanel 
 	 */
-	public PanelCreator(Graph graph, boolean inOwnFrame) {
+	public PanelCreator(GraphSAE graph, boolean inOwnFrame) {
 		this.graph = graph ;
 
 		// Generates the ViewPanel containing the graph
@@ -71,7 +71,7 @@ public class PanelCreator {
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
 		viewer.getDefaultView().enableMouseOptions() ;
-		Coloration.setGraphStyle(graph, 0, null) ;
+		Coloration.setGraphStyle(graph, 0) ;
 
 		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
 		// and also checks for events

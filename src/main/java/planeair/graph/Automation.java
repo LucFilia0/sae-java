@@ -40,9 +40,8 @@ public class Automation {
      * @param path Folder from which the files will be imported
      * @param identifiers The file name structures
      * @param placeholder Character that will be replaced by numbers
-     * @param colorAttribute Attribute used to color the graphs
      */
-    public static void startAutomation(String path, String[] identifiers, char placeholder, String colorAttribute, int numberOfCores) {
+    public static void startAutomation(String path, String[] identifiers, char placeholder, int numberOfCores) {
         ExecutorService threadPool = Executors.newFixedThreadPool(numberOfCores) ;
         List<TestGraph> graphList = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
         new File(path + "/4").mkdirs() ;
@@ -50,7 +49,7 @@ public class Automation {
             threadPool.execute(new Runnable() {
                 @Override
                 public void run() {
-                    Automation.writeToFile(graph, path, colorAttribute, threadPool) ;
+                    Automation.writeToFile(graph, path, threadPool) ;
                 }
             }) ;
         }
@@ -129,11 +128,10 @@ public class Automation {
      * Writes the relevant data to the graph files
      * @param graph Graph whose data is written down
      * @param path Parent folder where the importation took place
-     * @param colorAttribute Attributed used to color the graph
      * @param threadPool current threadPool used to divide the tasks
      */
-    public static void writeToFile(TestGraph graphIn, String path, String colorAttribute, ExecutorService threadPool) {
-        TestGraph graph = Automation.useBestColoringAlgorithm(graphIn, colorAttribute, threadPool) ;
+    public static void writeToFile(TestGraph graphIn, String path, ExecutorService threadPool) {
+        TestGraph graph = Automation.useBestColoringAlgorithm(graphIn, threadPool) ;
         try {
             File resFile = new File(path + "/4/" + "color-eval" + graph.getId() + ".txt") ;
             if (!resFile.createNewFile()) {
@@ -151,7 +149,7 @@ public class Automation {
                 }) ;
 
                 for (Node node : list) {
-                    resWriter.write(node.getId() + " ; " + node.getAttribute(colorAttribute) + '\n') ;
+                    resWriter.write(node.getId() + " ; " + node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) + '\n') ;
                 }
 
                 resWriter.close() ;
@@ -203,11 +201,10 @@ public class Automation {
     /**
      * Finds the best coloring algorithm and returns its solution
      * @param graph Graph that was colored
-     * @param colorAttribute Attribute used to color the graph
      * @param threadPool List of threads currently used
      * @return
      */
-    public static TestGraph useBestColoringAlgorithm(TestGraph graph, String colorAttribute, ExecutorService threadPool) {
+    public static TestGraph useBestColoringAlgorithm(TestGraph graph, ExecutorService threadPool) {
 
         ArrayList<ArrayList<Integer>> resList = new ArrayList<>() ;
         ArrayList<TestGraph> graphList = new ArrayList<>() ;
@@ -223,20 +220,20 @@ public class Automation {
         Runnable welshPowell = new Runnable() {
             @Override
             public void run() {
-                setValuesInLists(graph, graphList, resList, WELSH_POWELL, colorAttribute, latch) ;
+                setValuesInLists(graph, graphList, resList, WELSH_POWELL, latch) ;
             }
         } ;
 
         Runnable dsatur = new Runnable() {
             public void run() {
-                setValuesInLists(graph, graphList, resList, DSATUR, colorAttribute, latch) ;
+                setValuesInLists(graph, graphList, resList, DSATUR, latch) ;
             };
         } ;
 
         Runnable rlf = new Runnable() {
             @Override
             public void run() {
-                setValuesInLists(graph, graphList, resList, RLF, colorAttribute, latch) ;
+                setValuesInLists(graph, graphList, resList, RLF, latch) ;
             }
         } ;
 
@@ -324,13 +321,12 @@ public class Automation {
      * @param graphList
      * @param resList
      * @param algorithm
-     * @param colorAttribute
      * @param latch
      * 
      */
-    public static void setValuesInLists(TestGraph graph, ArrayList<TestGraph> graphList, ArrayList<ArrayList<Integer>> resList, int algorithm, String colorAttribute, CountDownLatch latch) {
+    public static void setValuesInLists(TestGraph graph, ArrayList<TestGraph> graphList, ArrayList<ArrayList<Integer>> resList, int algorithm, CountDownLatch latch) {
         graphList.set(algorithm, (TestGraph)Graphs.clone(graph)) ;
-        Coloration.colorationDsatur(graphList.get(DSATUR), colorAttribute, graph.getKMax()) ;
+        Coloration.colorationDsatur(graphList.get(DSATUR)) ;
         resList.get(algorithm).add(graph.getNbColors()) ;
         resList.get(algorithm).add(graph.getNbConflicts()) ;
         latch.countDown() ;

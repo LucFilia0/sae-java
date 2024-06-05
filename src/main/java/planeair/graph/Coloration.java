@@ -8,8 +8,7 @@ import java.util.stream.Collectors;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
-import org.graphstream.algorithm.ConnectedComponents;
-import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
+import org.miv.mbox.Test;
 
 //-- Import Exceptions
 
@@ -91,7 +90,7 @@ public class Coloration {
      * 
      * @author Nathan LIEGEON
      */
-    public static void colorNodesFromSetOfAddableNodes(Graph graph, Map<Integer, HashSet<Node>> colorMap, 
+    public static void colorNodesFromSetOfAddableNodes(GraphSAE graph, Map<Integer, HashSet<Node>> colorMap, 
     Integer color, Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
         Node nextNode = null ;
         Node tempNode ;
@@ -112,19 +111,18 @@ public class Coloration {
      * 
      * @param graph graph you are trying to color
      * @param node node you are trying to color 
-     * @param colorAttribute key of the attribute used for coloring
      * @return array consisting of 2 values, the color assigned to the node and the number of conflicts it generated
      * 
      * @author Nathan LIEGEON
      */
-    public static int[] getLeastConflictingColor(Graph graph, Node node, String colorAttribute) {
+    public static int[] getLeastConflictingColor(GraphSAE graph, Node node) {
         int[] minConflict = {-1, -1} ;
         int[] currentConflict  = new int[2];
         HashMap<Integer, Integer> conflictCount = new HashMap<>() ;
 
         node.neighborNodes().forEach(neighbor -> {
-            if ((Integer) graph.getNode(neighbor.getId()).getAttribute(colorAttribute) != 0) {
-                conflictCount.merge((Integer)neighbor.getAttribute(colorAttribute), 1, Integer::sum) ;
+            if ((Integer) graph.getNode(neighbor.getId()).getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) != 0) {
+                conflictCount.merge((Integer)neighbor.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE), 1, Integer::sum) ;
             }
         }) ;
 
@@ -145,12 +143,11 @@ public class Coloration {
      * 
      * @param graph Graph we are trying to color
      * @param node Node currently being colored
-     * @param colorAttribute key of the attribute used for coloring
      * @return number of conflicts caused by the node
      */
-    public static int colorWithLeastConflicts(Graph graph, Node node, String colorAttribute) {
-        int[] res = getLeastConflictingColor(graph, node, colorAttribute) ;
-        node.setAttribute(colorAttribute, res[0]) ;
+    public static int colorWithLeastConflicts(GraphSAE graph, Node node) {
+        int[] res = getLeastConflictingColor(graph, node) ;
+        node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, res[0]) ;
         node.setAttribute("ui.class", "color" + res[0]) ;
         return res[1] ;
     }
@@ -160,14 +157,14 @@ public class Coloration {
      * While adding them it also looks for the one with the highest degree then returns it at the end.
      * Can return null if no node is loaded into the set.
      *
-     * @param graph Graph from which you will load the nodes
+     * @param graph GraphSAE from which you will load the nodes
      * @param setOfAddableNodes Set in which you will load the nodes
      * @return Node with the highest degree, can be null.
      * 
      * @author Nathan LIEGEON
      * 
      */
-    public static Node loadGraphNodesIntoSetOfAddableNodes(Graph graph, Set<Node> setOfAddableNodes) {
+    public static Node loadGraphNodesIntoSetOfAddableNodes(GraphSAE graph, Set<Node> setOfAddableNodes) {
         Node currentNode = null ;
         for (Node node : graph) {
             if (currentNode == null) {
@@ -191,14 +188,18 @@ public class Coloration {
      * If the number of colors used reaches kMax, a different algorithm will be used to minimize conflicts.
      * 
      * @param graph Graph which will be colored
-     * @param colorAttribute 
      * @return array consisting of 2 values : first one being the number of colors used, second being the number of conflicts
      * 
      * @author Nathan LIEGEON
      */
-    public static int[] colorGraphRLF(Graph graph, String colorAttribute, int kMax) {
+    public static int[] colorGraphRLF(GraphSAE graph) {
+        int kMax = -1 ;
+        if (graph instanceof TestGraph) {
+            TestGraph testGraph = (TestGraph)graph ;
+            kMax = testGraph.getKMax() ;
+        }
 
-        Graph newGraph = Graphs.clone(graph) ;
+        GraphSAE newGraph = (GraphSAE)Graphs.clone(graph) ;
         HashMap<Integer, HashSet<Node>> colorMap = new HashMap<>() ;
         HashSet<Node> setOfAddableNodes ;
         HashSet<Node> setOfNeighborsOfFirstNode ;
@@ -224,7 +225,7 @@ public class Coloration {
 
             //Adds the colors to the real graph
             for (Node coloringNode : colorMap.get(color)) { 
-                coloringNode.setAttribute(colorAttribute, color) ;
+                coloringNode.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, color) ;
                 newGraph.removeNode(newGraph.getNode(coloringNode.getId())) ;
             }
             
@@ -237,59 +238,11 @@ public class Coloration {
         if (newGraph.getNodeCount() != 0) {
             for (Node node : newGraph) {
                 node = graph.getNode(node.getId()) ;
-                infoTab[1] = infoTab[1] + colorWithLeastConflicts(graph, node, colorAttribute) ;
+                infoTab[1] += colorWithLeastConflicts(graph, node) ;
             }
         }
 
         return infoTab ;
-    }
-
-    
-    // TWO-COLORING
-
-
-    /**
-     * Colors the graph with only 2 colors
-     * The graph has to be 2-Colorable, else the algorithm will stop once two adjacent nodes have the same color.
-     * 
-     * @param node starting Node that will be colored
-     * @param colorAttribute key of the attribute used to store colors
-     * 
-     * @author Nathan LIEGEON
-     */
-    public static void twoColorGraph(Graph graph, String colorAttribute) {
-        ConnectedComponents graphComponents = new ConnectedComponents(graph) ;
-        graphComponents.compute() ;
-
-        // Couldn't find a better way to isolate a random Node in every Connected Component
-        // Might be highly unoptimized, need to look more into it
-        for (ConnectedComponent thisComponent : graphComponents) {
-            recursiveTwoColoringNode(thisComponent.getNodeSet().iterator().next(), 1, colorAttribute) ;
-        }
-    }
-
-    /**
-     * Recursively 2-colors startingNode's connected component by coloring startingNode with currentColor then calling the function on all of startingNodes' neighbors.
-     * 
-     * @param startingNode Node that will be colored
-     * @param initialColor Color that will be applied (1 or 2)
-     * @param colorAttribute key of the attribute used to store colors
-     * @return boolean true if the coloration encountered no problem, else false
-     * 
-     * @author Nathan LIEGEON
-     */
-    public static void recursiveTwoColoringNode(Node startingNode, Integer initialColor, String colorAttribute) {
-        int nodeColor = (int) startingNode.getAttribute("color") ;
-        if (nodeColor == 0) {
-            startingNode.setAttribute(colorAttribute, initialColor) ;
-            startingNode.setAttribute("ui.class", "color" + initialColor) ;
-            
-            startingNode.neighborNodes().forEach(neighbor -> {
-                if ((int) neighbor.getAttribute("color") == 0) {
-                    recursiveTwoColoringNode(neighbor, initialColor%2 + 1, colorAttribute) ;
-                }
-            });
-        }
     }
     
     // WELSH & POWELL
@@ -299,11 +252,15 @@ public class Coloration {
      * If it cannot do so, it will try to minimize conflicts
      * 
      * @param graph Graph getting colored
-     * @param colorAttribute Attribute used to store colors in the graph
      * @param kMax Maximum number of colors allowed
      * @return array consisting of 2 values : first one being the number of colors used, second being the number of conflicts
      */
-    public static int[] colorWelshPowell(Graph graph, String colorAttribute, int kMax) {
+    public static void colorWelshPowell(GraphSAE graph) {
+        int kMax = -1 ;
+        if (graph instanceof TestGraph) {
+            TestGraph testGraph = (TestGraph)graph ;
+            kMax = testGraph.getKMax() ;
+        }
         int[] infoTab = {0,0} ;
         LinkedList<Node> nodeList = new LinkedList<>() ;
         Set<Node> nodeSet ;
@@ -317,28 +274,29 @@ public class Coloration {
         }) ;
 
         // Implementation of the algorithm
-        while (!nodeList.isEmpty() && infoTab[0] < kMax) {
+        while (!nodeList.isEmpty() && infoTab[0] < kMax || kMax < 0) {
             nodeSet = new HashSet<>() ;
             infoTab[0]++ ;
             ListIterator<Node> itr = nodeList.listIterator() ;
             while (itr.hasNext()) {
                 Node currentNode = itr.next() ;
-                if ((int)currentNode.getAttribute(colorAttribute) == 0 && !nodeSet.contains(currentNode)) {
+                if ((int)currentNode.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) == 0 && !nodeSet.contains(currentNode)) {
                     itr.previous() ;
                     itr.remove() ;
-                    currentNode.setAttribute(colorAttribute, infoTab[0]) ;
+                    currentNode.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, infoTab[0]) ;
                     nodeSet.addAll(currentNode.neighborNodes().collect(Collectors.toSet())) ;
                 }
             }
         }
 
         // Conflicts management
-        if (!nodeList.isEmpty()) {
+        if (graph instanceof TestGraph && !nodeList.isEmpty()) {
             for (Node node : nodeList) {
-                infoTab[1] += Coloration.colorWithLeastConflicts(graph, node, colorAttribute) ;
+                infoTab[1] += Coloration.colorWithLeastConflicts(graph, node) ;
             }
+            graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, infoTab[1]) ;
         }
-        return infoTab ;
+        graph.setAttribute(GraphSAE.COLOR_ATTRIBUTE, infoTab[0]) ;
     }
 
 
@@ -347,40 +305,39 @@ public class Coloration {
      * Give a graph's coloration with less colision we can, use graph saturation principle (degree).
      * 
      * @param graph Graph that will be tested.
-     * @param Kmax Max color we can use.
-     * @param attributColor the name of the attribut have a graph's dependance
      * @return max array consisting of 2 values, 1 : number of colors used, 2 : number of conflicts
      * 
      * @autor GIRAUD Nila
      */
-    public static void colorationDsatur(Graph graph, String attributColor, int Kmax){
+    public static void colorationDsatur(GraphSAE graph) {
         LinkedList<Node> ListNodes = new LinkedList<Node>();
+        int kMax = -1 ;
         graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE,0);
+        if (graph instanceof TestGraph) {
+            TestGraph testGraph = (TestGraph)graph ;
+            kMax = testGraph.getKMax() ;
+        }
 
         //Put all Nodes in a LinkedList
         for (Node node : graph) {
-            node.setAttribute(attributColor, 0);
+            node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0);
             node.setAttribute("DSATUR", node.getDegree());
             
             insertSorted(ListNodes, node); // Descendent Sort
         }
 
-        //Color 
-        int[] color = new int[Kmax];
-
-
-        recursifDSATUR(ListNodes, color, graph, attributColor);
+        // Recursive call
+        recursifDSATUR(ListNodes, graph);
 
         for (Node node : graph){
-
             node.removeAttribute("DSATUR");
-            node.setAttribute("ui.class", attributColor + node.getAttribute(attributColor));
+            node.setAttribute("ui.class", "color" + node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE));
         }
 
         int[] res = {0,0};
         for(Node node : graph){
-            if((int)node.getAttribute(attributColor) > res[0]){
-                res[0] = (int)node.getAttribute(attributColor);
+            if((int)node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) > res[0]){
+                res[0] = (int)node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE);
             }
         }
         graph.setAttribute(TestGraph.COLOR_ATTRIBUTE, res[0]) ;
@@ -391,105 +348,78 @@ public class Coloration {
      * Recursif methode for ColorationDSATUR, take a node and find and finds an optimized color.
      * Stop when there are no more nodes.
      * @param ListNodes LinkedList of Graph's Nodes, with descendent sort (with one less node at each recursive call)
-     * @param attributColor the name of the attribut have a graph's dependance
      * @param color Color tab wich give a resum of Adjacents Node's colors
      * 
      * @author GIRAUD Nila
      */
 
-    private static void recursifDSATUR(LinkedList<Node> ListNodes, int[] color, Graph graph, String attributColor){
+    private static void recursifDSATUR(LinkedList<Node> ListNodes, GraphSAE graph){
 
-         if(!ListNodes.isEmpty()){
-            
+        if(!ListNodes.isEmpty()){
+            int kMax = -1 ;
+            if (graph instanceof TestGraph) {
+                TestGraph testGraph = (TestGraph)graph ;
+                kMax = testGraph.getKMax() ;
+            }
             //Step1
             Node nodeP = MaxNodeDSATUR(ListNodes);
- 
-             //Initialisation of color tab
-            initColor(color);
+
+            HashMap<Integer, Integer> color = new HashMap<>() ;
+            int minColor = 0 ;
+            int currentColor ;
 
             //Step2
-            for(Node nodeAdj : nodeP.neighborNodes().collect(Collectors.toSet()) ){
- 
-                 if((int)nodeAdj.getAttribute(attributColor) != 0){
-                     color[(int)nodeAdj.getAttribute(attributColor) - 1] ++;
-                 }
-             }
+            nodeP.neighborNodes().forEach(nodeAdj -> {
+                int colorFound = (int)nodeAdj.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) ;
+                if (colorFound != 0) {
+                    color.merge(colorFound, 1, Integer::sum) ;
+                }
+            }) ;
 
-            int j = 0;
-
-            while(j!= (color.length) && color[j] != 0 ){ j++; };
-
-            if (j == (color.length) ){
-                nodeP.setAttribute(attributColor, minGiveColorTab(color));
-                int nbConflict = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE);
-                graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, nbConflict + color[(int)nodeP.getAttribute(attributColor)-1]);
+            if (!(graph instanceof TestGraph) && color.keySet().size() != kMax) {
+                nodeP.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 
+                    Collections.min(color.keySet(), (int1, int2) -> Integer.compare(color.get(int1), color.get(int2)))) ;
+                if (graph instanceof TestGraph) {
+                    int nbConflict = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE);
+                    graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, nbConflict + color.get((int)nodeP.getAttribute(GraphSAE.COLOR_ATTRIBUTE)));
+                }
             }
-            else{ nodeP.setAttribute(attributColor, j+1); };
+            else{
+                for (Integer key : color.keySet()) {
+                    currentColor = color.get(key) ;
+                    if (currentColor == 0) {
+                        if (!color.containsKey(minColor) || minColor > currentColor) {
+                            minColor = currentColor ;
+                        }
+                    }
+                }
+                nodeP.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, minColor) ;
+            }
 
             //Step3
-            for(Node nodeAdj : nodeP.neighborNodes().collect(Collectors.toSet()) ){
-                initColor(color);
+            nodeP.neighborNodes().forEach(nodeAdj -> {
+                HashMap<Integer, Integer> buffer = new HashMap<>() ;
 
                 for(Node nodeAdj2 : nodeAdj.neighborNodes().collect(Collectors.toSet())){
-                    if((int)nodeAdj2.getAttribute(attributColor) != 0 && nodeAdj2 != nodeP){
-                        color[(int)nodeAdj2.getAttribute(attributColor) - 1] = 1;
+                    if((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) != 0 && nodeAdj2 != nodeP){
+                        buffer.put((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE), 1) ;
                     }    
                 }
-                int nbColor = nbColorAdj(color);
+                int nbColor = buffer.values().size() ;
                 if( nbColor!= 0){
-                    nodeAdj.setAttribute("DSATUR", nbColor); }
-            }
+                    nodeAdj.setAttribute("DSATUR", nbColor); 
+                }
+            });
             ListNodes.remove(nodeP);
             
 
             //Step4
-            recursifDSATUR(ListNodes,color, graph,attributColor);
-         }
-
-    }
-
-    /**
-     * Give the less use color of NodeP's adjacents nodes
-     * @param color Color tab wich give a resum of Adjacents Node's colors
-     * @return min Least used color
-     * 
-     * @autor GIRAUD Nila
-     */
-    private static int minGiveColorTab(int color[]){
-        int min = 0;
-        for(int i = 1; i < color.length ; i++){
-            if(color[i] < color[min] ){
-                min = i;
-            }
+            recursifDSATUR(ListNodes, graph);
         }
 
-        return min + 1;
-
     }
 
-    /**
-     * Initialise the Color tab at 0
-     * @param color Color tab wich give a resum of Adjacents Node's colors
-     * 
-     * @autor GIRAUD Nila
-     */
-    private static void initColor(int[] color){
-        for(int j = 0; j < color.length; j++){
-            color [j] = 0;   
-    }
-}
 
-    private static int nbColorAdj(int[] color){
-        int nb = 0;
-        for(int i = 0; i< color.length; i++){
-            if(color[i] != 0){
-                nb ++;
-            }
-        }
-
-        return nb;
-
-    }
 
     /**
      * Find the node with the DSAT max
@@ -520,13 +450,13 @@ public class Coloration {
     public static void insertSorted(LinkedList<Node> ListNodes, Node nodeP) {
         int i = 0;
         if(!ListNodes.isEmpty()){
-        for(Node node : ListNodes ) {
-            if ((int)node.getAttribute("DSATUR") <= (int)nodeP.getAttribute("DSATUR")) {
-                ListNodes.add(i,nodeP);
-                return;
+            for(Node node : ListNodes ) {
+                if ((int)node.getAttribute("DSATUR") <= (int)nodeP.getAttribute("DSATUR")) {
+                    ListNodes.add(i,nodeP);
+                    return;
+                }
+                i++;
             }
-            i++;
-        }
         }
         ListNodes.addLast(nodeP);
        
@@ -545,11 +475,11 @@ public class Coloration {
      * 
      * @author Nathan LIEGEON
      */
-    public static int testColorationGraph(Graph graph, String colorAttribute) {
+    public static int testColorationGraph(GraphSAE graph) {
         int nbProblems = 0 ;
         for (Node node : graph) {
             for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
-                if (node.getAttribute(colorAttribute) == neighbor.getAttribute(colorAttribute)) {
+                if (node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) == neighbor.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE)) {
                     nbProblems++ ;
                     System.out.println("Probleme entre " + node + " et " + neighbor) ;
                 }
@@ -560,18 +490,17 @@ public class Coloration {
     }
 
     /**
-     * Reads the colorAttribute of the nodes to give them an actual color on the display by editing its stylesheet
+     * Reads the color attribute of the nodes to give them an actual color on the display by editing its stylesheet
      * 
      * @param graph graph getting colored
      * @param nbColor number of colors the graph has
-     * @param colorAttribute key of the attribute handling colors
      */
-    public static void setGraphStyle(Graph graph, int nbColor, String colorAttribute) {
+    public static void setGraphStyle(GraphSAE graph, int nbColor) {
         StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : " + DEFAULT_NODE_SIZE + " ; }\n") ;
 
         if (nbColor > 0) {
             for (Node coloringNode : graph) {
-                Integer color = (Integer)coloringNode.getAttribute(colorAttribute) ;
+                Integer color = (Integer)coloringNode.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) ;
                 coloringNode.setAttribute("ui.class", "color" + color) ;
             }
             
@@ -608,15 +537,22 @@ public class Coloration {
     /**
      * Removes all attributes linked to the coloration of this graph
      * @param graph
-     * @param colorAttribute
      * @param conflictAttribute
      */
-    public static void removeCurrentColoring(Graph graph, String colorAttribute, String conflictAttribute) {
-        graph.setAttribute(colorAttribute, 0) ;
-        graph.setAttribute(conflictAttribute, 0) ;
-        for (Node node : graph) {
-            node.setAttribute(colorAttribute, 0) ;
-            node.setAttribute(conflictAttribute, 0) ;
+    public static void removeCurrentColoring(GraphSAE graph) {
+        graph.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
+
+        if (graph instanceof TestGraph) {
+            graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
+            for (Node node : graph) {
+                node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
+                node.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
+            }
+        }
+        else {
+            for (Node node : graph) {
+                node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
+            }
         }
     }
 
@@ -624,19 +560,18 @@ public class Coloration {
      * Calls the correct coloring method with the right algorithm
      * @param graph
      * @param algorithm
-     * @param colorAttribute
      * @return
      */
-    public static void colorGraphWithChosenAlgorithm(Graph graph, String algorithm, String colorAttribute) {
+    public static void colorGraphWithChosenAlgorithm(GraphSAE graph, String algorithm) {
         switch (algorithm) {
                 case DSATUR :
-                    colorationDsatur(graph, colorAttribute, (int)graph.getAttribute(TestGraph.K_MAX)) ;
+                    colorationDsatur(graph) ;
                     break ;
                 case WELSH_POWELL :
-                    colorWelshPowell(graph, colorAttribute, (int)graph.getAttribute(TestGraph.K_MAX)) ;
+                    colorWelshPowell(graph) ;
                     break ;
                 case RLF :
-                    colorGraphRLF(graph, colorAttribute, (int)graph.getAttribute(TestGraph.K_MAX)) ;
+                    colorGraphRLF(graph) ;
                     break ;
                 default :
         }
