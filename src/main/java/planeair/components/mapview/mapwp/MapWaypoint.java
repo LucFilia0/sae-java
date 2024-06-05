@@ -1,4 +1,4 @@
-package planeair.ihm.mapvisuals.mapwp;
+package planeair.components.mapview.mapwp;
 
 //-- Import Java
 
@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-import planeair.ihm.Map;
+import planeair.components.mapview.Map;
 
 
 /**
@@ -23,7 +23,7 @@ import planeair.ihm.Map;
  * 
  * @author Luc le Manifik
  */
-public abstract class MapWaypoint extends planeair.ihm.mapvisuals.MapItem {
+public abstract class MapWaypoint extends planeair.components.mapview.MapItem {
 
     //-- MapWaypoint attributes
 

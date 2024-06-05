@@ -1,10 +1,11 @@
-package planeair.components;
+package planeair.components.graphview;
 
 /**
  * Import swing composants
  */
 import javax.swing.JPanel;
 
+import planeair.components.menu.NInfoGraphPanelApp;
 import planeair.graph.PanelCreator;
 
 import javax.swing.JFrame;
@@ -29,18 +30,18 @@ public class NMaxGraphFrameApp extends JFrame{
      * Panel of the graph (Bigger than NInfoGraphPanelApp)
      * Location : all in the frame
      */
-    JPanel graph ;
+    private JPanel graph = new JPanel();
     /**
      * NInfoGraphPanelApp created, have parameter of the graph
      * Location : In the left at the bottom of the graph
      */
-    NInfoGraphPanelApp infoGraph = new NInfoGraphPanelApp();
+    private NInfoGraphPanelApp infoGraph = new NInfoGraphPanelApp();
 
 
     /**
      * Constructor of NMaxGraphPanelApp
      */
-    NMaxGraphFrameApp(PanelCreator graphRenderer){
+    public NMaxGraphFrameApp(PanelCreator graphRenderer){
         if (graphRenderer == null) {
             graph = new JPanel() ;
         }
@@ -50,6 +51,7 @@ public class NMaxGraphFrameApp extends JFrame{
         graph.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize()) ;
         graph.setBackground(Color.GREEN);
 
+        infoGraph.addComponents();
         graph.add(infoGraph);
         this.add(graph);
 

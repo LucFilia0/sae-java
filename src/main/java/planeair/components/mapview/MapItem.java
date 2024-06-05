@@ -1,4 +1,4 @@
-package planeair.ihm.mapvisuals;
+package planeair.components.mapview;
 
 //-- Import JxMapViewer
 

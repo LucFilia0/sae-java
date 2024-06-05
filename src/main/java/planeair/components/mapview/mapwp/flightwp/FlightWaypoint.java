@@ -1,4 +1,4 @@
-package planeair.ihm.mapvisuals.mapwp.flightwp;
+package planeair.components.mapview.mapwp.flightwp;
 
 //-- Import Java
 
@@ -8,7 +8,7 @@ import java.io.File;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-import planeair.ihm.mapvisuals.mapwp.MapWaypoint;
+import planeair.components.mapview.mapwp.MapWaypoint;
 import planeair.graph.Flight;
 
 /**

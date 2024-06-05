@@ -1,14 +1,17 @@
-package planeair.components;
+package planeair.components.menu;
 
 // Import swing composants
 import javax.swing.JPanel;
+
+import planeair.App;
+
 import javax.swing.JLabel;
 
-// Import awt composants
-import java.awt.Color;
 // Import Layout
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 /**
  * Class which create a panel of INFO GRAPH
@@ -16,16 +19,8 @@ import java.awt.BorderLayout;
  * 
  * @author GIRAUD Nila
  */
-public class NInfoGraphPanelApp extends JPanel{
+public class NInfoGraphPanelApp extends JPanel {
 
-    //STRUCT
-    /**
-     * Layout's Panel for INFO
-     * Grid Layout
-     * nb LINE : 5
-     * nb COLUMN : 1 (Name Info + Info)
-     */
-    private JPanel infoGraphGridLayout = new JPanel(new GridLayout(5, 1));
 
     // LINE 1
 
@@ -38,10 +33,6 @@ public class NInfoGraphPanelApp extends JPanel{
      * Degree of the graph
      */
     private JLabel titleDegreeAvg = new JLabel("Degré moyen: " + "-");
-    /**
-     * Degree in the graph
-     */
-    // JLabel degreeAvg = new JLabel("test ");
 
     // LINE 2
 
@@ -54,10 +45,6 @@ public class NInfoGraphPanelApp extends JPanel{
      * Nb related composants
      */
     private JLabel titleComp = new JLabel("Nb comp. connexes: " + "-");
-    /**
-     * Degree in the graph
-     */
-    // JLabel relatedComp = new JLabel("test ");
 
     // LINE 3
 
@@ -70,10 +57,6 @@ public class NInfoGraphPanelApp extends JPanel{
      * NbNodes
      */
     private JLabel titleNodes = new JLabel("Nb noeuds: " + "-");
-    /**
-     * Degree in the graph
-     */
-    // JLabel nbNodes = new JLabel("test ");
 
     // LINE 4
 
@@ -86,10 +69,6 @@ public class NInfoGraphPanelApp extends JPanel{
      *  Nb edges of the graph
      */
     private JLabel titleEdges = new JLabel("Nb arretes: " + "-");
-    /**
-     * Degree in the graph
-     */
-    // JLabel nbEdges = new JLabel("test ");
 
     // LINE 5
 
@@ -97,6 +76,7 @@ public class NInfoGraphPanelApp extends JPanel{
      * Add an empty border for titleDiameter
      */
     private JPanel diameterPanel = new JPanel();
+
     /**
      * Title of the LINE five
      * Diameter of the graph
@@ -108,42 +88,74 @@ public class NInfoGraphPanelApp extends JPanel{
      */
     public NInfoGraphPanelApp(){
 
-        this.setBackground(Color.YELLOW);
+        this.setBackground(App.KINDAYELLOW);
 
-        this.setLayout(new BorderLayout());
-        this.setAlignmentX(LEFT_ALIGNMENT) ;
+        this.setLayout(new GridBagLayout());
 
-        degreePanel.setBackground(Color.YELLOW);
-        compPanel.setBackground(Color.YELLOW);
-        nodesPanel.setBackground(Color.YELLOW);
-        edgesPanel.setBackground(Color.YELLOW);
-        diameterPanel.setBackground(Color.YELLOW);
+        degreePanel.setBackground(App.KINDAYELLOW);
+        titleDegreeAvg.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
 
+        compPanel.setBackground(App.KINDAYELLOW);
+        titleComp.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+
+        nodesPanel.setBackground(App.KINDAYELLOW);
+        titleNodes.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+
+        edgesPanel.setBackground(App.KINDAYELLOW);
+        titleEdges.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+
+        diameterPanel.setBackground(App.KINDAYELLOW);
+        titleDiameter.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+
+
+        this.setMaximumSize(new Dimension(225,200));
+       
+        this.setVisible(true);
+
+    }
+
+    /**
+     * Add Components in the panel
+     */
+    public void addComponents(){
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = -1; // colonne 1
+        gbc.gridy = 0; // ligne 0
+        gbc.anchor = GridBagConstraints.WEST;
         //LINE 1
         degreePanel.add(titleDegreeAvg);
-        infoGraphGridLayout.add(degreePanel);
+        this.add(degreePanel,gbc);
+
+        gbc.gridx = 0; // colonne 1
+        gbc.gridy = 1; // ligne 0
 
 
         //Line 2
         compPanel.add(titleComp);
-        infoGraphGridLayout.add(compPanel);
+        this.add(compPanel,gbc);
+
+        gbc.gridx = 0; // colonne 1
+        gbc.gridy = 2; // ligne 0
 
         //Line 3
         nodesPanel.add(titleNodes);
-        infoGraphGridLayout.add(nodesPanel);
+        this.add(nodesPanel,gbc);
+
+        gbc.gridx = 0; // colonne 1
+        gbc.gridy = 3; // ligne 0
 
         //Line 4
         edgesPanel.add(titleEdges);
-        infoGraphGridLayout.add(edgesPanel);
+        this.add(edgesPanel,gbc);
+
+        gbc.gridx = 0; // colonne 1
+        gbc.gridy = 4; // ligne 0
 
         //Line 5
         diameterPanel.add(titleDiameter);
-        infoGraphGridLayout.add(diameterPanel);
+        this.add(diameterPanel,gbc);
 
-        infoGraphGridLayout.setBackground(Color.YELLOW);
-        this.add(infoGraphGridLayout,BorderLayout.CENTER);
-
-        this.setVisible(true);
     }
 
      /**

@@ -7,6 +7,12 @@ import javax.swing.JFrame;
 //-- Import AWT
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+
+//-- Import JxMapViewer
+
+
 
 //-- Import Java
 
@@ -20,11 +26,9 @@ import planeair.util.DataImportation;
 import planeair.graph.FlightsIntersectionGraph;
 import planeair.graph.PanelCreator;
 import planeair.graph.TestGraph;
-
-//-- Import IHM
-
-import planeair.ihm.Map;
 import planeair.components.*;
+import planeair.components.imports.NImportPanelApp;
+import planeair.components.mapview.Map;
 
 //-- Import Exceptions
 
@@ -54,13 +58,18 @@ public class App extends javax.swing.JFrame {
      * Page of selection of import file
      * It's the first that you see when you open the map
      */
-    NImportPanelApp importPanel;
+    private NImportPanelApp importPanel = new NImportPanelApp(this);
 
     /**
      * The panel principale of the App, where there is the map, the graph
      * and how change them
      */
-    NPrincipalePanelApp framePrinc = new NPrincipalePanelApp(this);
+    private NPrincipalePanelApp framePrinc = new NPrincipalePanelApp(this);
+
+    /**
+     * THE COLOR OF THE APP (not really yellow but quand même)
+     */
+    public static final Color KINDAYELLOW = new Color(242, 219, 7);
 
     /**
      * the TestGraph that loads testGraphs files
@@ -91,8 +100,8 @@ public class App extends javax.swing.JFrame {
     App(){
 
         this.setTitle("Plane AIR | PAGE D'IMPORTATION");
-        this.setSize(900,600);
-
+        this.setSize(1200,700);
+        this.setMinimumSize(new Dimension(1200,700));
         this.initAttributes();
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,14 +109,13 @@ public class App extends javax.swing.JFrame {
 
         framePrinc.addComposants();
         framePrinc.addEvents();
-        
+
+        importPanel.addComponents();
         
         this.add(importPanel);
 
         this.setVisible(true);
-        
-        this.setLocationRelativeTo(null);        
-
+        this.setLocationRelativeTo(null);
     }
 
     public static void main(String[] args) {

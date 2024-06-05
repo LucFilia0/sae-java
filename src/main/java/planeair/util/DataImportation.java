@@ -612,7 +612,13 @@ public abstract class DataImportation {
 
         // Setting up the FlightFactory to create Flight nodes
         fig.setNodeFactory(new FlightFactory()); // IDK if it's correct but Inch'Allah
-        Flight flight = (Flight)fig.addNode(s_name);
+        
+        Flight flight = null;
+        try {
+            flight = (Flight)fig.addNode(s_name);
+        }catch(IdAlreadyInUseException e) {
+            throw new InvalidFileFormatException(currentLine, "Id deja utilise plus haut.");
+        }
 
         try {
             flight.setFlightAttributes(airportSet.getAirport(s_departure), airportSet.getAirport(s_arrival), departureTime, duration);

@@ -1,4 +1,4 @@
-package planeair.ihm;
+package planeair.components.mapview;
 
 //-- Import AWT
 
@@ -20,16 +20,13 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import planeair.util.Airport;
 import planeair.util.AirportSet;
-
+import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
+import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
+import planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.components.menu.NInfoPanel;
 import planeair.graph.Flight;
 import planeair.graph.FlightsIntersectionGraph;
-import planeair.ihm.infopanel.NInfoPanel;
-import planeair.ihm.mapvisuals.MapItemPainter;
-import planeair.ihm.mapvisuals.mapwp.MapWaypoint;
-import planeair.ihm.mapvisuals.mapwp.flightwp.FlightWaypoint;
-import planeair.ihm.mapvisuals.mapwp.airportwp.ActiveAirportWaypoint;
-import planeair.ihm.mapvisuals.mapwp.airportwp.AirportWaypoint;
-import planeair.ihm.mapvisuals.mapwp.airportwp.InactiveAirportWaypoint;
 
 /**
  * This class is the Map which appears on the Application.
@@ -171,6 +168,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         for(Airport airport : airportSet.getInactiveAirports()) {
             this.itemPainter.getAirportWaypoints().add(new InactiveAirportWaypoint(airport, airport.getGeoPosition()));
         }
+
     }
 
     /**

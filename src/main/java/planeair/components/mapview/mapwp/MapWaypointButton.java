@@ -1,4 +1,4 @@
-package planeair.ihm.mapvisuals.mapwp;
+package planeair.components.mapview.mapwp;
 
 //-- Import Java
 
@@ -77,7 +77,7 @@ public class MapWaypointButton extends javax.swing.JButton {
     /**
      * Returns the MapWaypoint which is linked to the MapWaypointButton
      * 
-     * @return ({@link planeair.ihm.mapvisuals.mapwp.MapWaypoint MapWaypoint})
+     * @return ({@link planeair.components.mapview.mapwp.MapWaypoint MapWaypoint})
      */
     public MapWaypoint getMapWaypoint() {
         return this.mapWaypoint;

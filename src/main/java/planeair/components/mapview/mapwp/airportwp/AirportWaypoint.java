@@ -1,4 +1,4 @@
-package planeair.ihm.mapvisuals.mapwp.airportwp;
+package planeair.components.mapview.mapwp.airportwp;
 
 //-- Import Java
 
@@ -19,7 +19,7 @@ import planeair.util.Airport;
  * 
  * @author Luc le Manifik
  */
-public abstract class AirportWaypoint extends planeair.ihm.mapvisuals.mapwp.MapWaypoint {
+public abstract class AirportWaypoint extends planeair.components.mapview.mapwp.MapWaypoint {
 
 	//-- Airport Waypoint Attributes
 	

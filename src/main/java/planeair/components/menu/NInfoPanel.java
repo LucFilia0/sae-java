@@ -1,4 +1,4 @@
-package planeair.ihm.infopanel;
+package planeair.components.menu;
 
 import java.awt.event.ActionListener;
 
@@ -10,12 +10,9 @@ import javax.swing.BoxLayout;
 
 import javax.swing.JLabel;
 
-import planeair.ihm.Map;
-
-//-- Import PlaneAIR
-
-import planeair.ihm.mapvisuals.mapwp.MapWaypoint;
-import planeair.ihm.mapvisuals.mapwp.MapWaypointButton;
+import planeair.components.mapview.Map;
+import planeair.components.mapview.mapwp.MapWaypoint;
+import planeair.components.mapview.mapwp.MapWaypointButton;
 
 /**
  * The JPannel that is prompted when a MapItem is pressed, showing all the required informations

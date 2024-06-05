@@ -1,50 +1,31 @@
-package planeair.components;
+package planeair.components.menu;
 
-/**
- * Import swing composants
- */
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JSlider;
-import javax.swing.SwingConstants;
-import javax.swing.Box;
-
-/**
- * Import awt composants
- */
 
 // Import swing composants
+import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.SwingConstants;
 
-import planeair.App;
-import planeair.graph.Coloration;
-import planeair.graph.TestGraph;
 
 // Import awt composants
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-/**
- * Import Layout
- */
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-
-
-
 
 //Import Layout
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
+
+import planeair.App;
+import planeair.graph.Coloration;
+import planeair.graph.TestGraph;
 
 /**
  * Class which create a JPanel of MENU for the graph 
@@ -53,90 +34,76 @@ import java.awt.event.ActionListener;
  * 
  * @author GIRAUD Nila
  */
-public class NMenuPanelApp extends JPanel{
+public class NMenuGraphPanelApp extends JPanel{
 
     /**
      * JLabel for the title of the Panel NMenuPanelApp
      */
-    JLabel titleMenu = new JLabel("MENU", SwingConstants.CENTER);
+    private JLabel titleMenu = new JLabel("MENU GRAPHE", SwingConstants.CENTER);
 
     //KMAX
 
     /**
      * Panel for Kmax option
      */
-    JPanel kmaxOption = new JPanel();
+    private JPanel kmaxOption = new JPanel();
 
     /**
      * JLabel change KMax
      */
-    JLabel changeKmax = new JLabel("Changer Kmax", SwingConstants.CENTER);
+    private JLabel changeKmax = new JLabel("Changer Kmax", SwingConstants.CENTER);
 
     /**
      * Panel for create an empty border to the JComboBox Kmax
      */
-    JPanel borderPanelKmax = new JPanel();
+    private JPanel borderPanelKmax = new JPanel();
 
     //ALTITUDES
 
     /**
      * Panel for altitudeMax option
      */
-    JPanel altitudeMaxOption = new JPanel();
+    private JPanel altitudeMaxOption = new JPanel();
     /**
-     * Title of the choose slider
+     * Title of the choose ComboBox 
      */
-    JLabel nbAltitudes = new JLabel("Choix des altitudes", SwingConstants.CENTER);
-    
+    private JLabel nbAltitudes = new JLabel("Choix des altitudes", SwingConstants.CENTER);
     /**
-     * JComboBox to choose the altitude (or show all of them)
+     * JComboBox for choose the altitude (or everyone)
+     * "Toutes" -> for everyone
+     * A number between [first altitude; last altitude]
      */
-    JComboBox<Integer> altitudeComboBox = new JComboBox<>();
+    private JComboBox<Integer> altitudeComboBox = new JComboBox<>();
 
     /**
      * Panel for create an empty border to the JComboBox altitude
      */
-    JPanel borderPanelAlt = new JPanel();
-
-    //CONFLITS
-    
-     /**
-     * Panel for conflict option
-     */
-    //JPanel conflictOption = new JPanel();
-    /**
-     * title of conflict numbers
-     */
-    //JLabel nbConflitsTitle = new JLabel("Nombres de conflits");
-    /**
-     * JLabel of the number of conflicts
-     */
-    //JLabel nbConflits = new JLabel("  12  ", SwingConstants.CENTER);
+    private JPanel borderPanelAlt = new JPanel();
 
     //ALGORITHMES
 
     /**
      * Panel for algo option
      */
-    JPanel algoOption = new JPanel();
+    private JPanel algoOption = new JPanel();
     /**
      * JLabel title for algorithmes (DSATUR + RLF)
      */
-    JLabel algorithmes = new JLabel("Algorithmes", SwingConstants.CENTER );
+    private JLabel algorithmes = new JLabel("Algorithmes", SwingConstants.CENTER );
     /**
-     * JPanel for put the button (DSTAUR) next to the button (RLF)
+     * JPanel for put the JComboBox (choose algo) next to JButton (validate) 
      */
-    JPanel buttonLayout = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    private JPanel layoutAlgo = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
     /**
      * JcomboBox that help too choose an algo for the coloration
      */
     JComboBox<String> algoChoice = new JComboBox<>();
-    
     /**
-     * Use the algo of the ComboBox
+     * Use the algo of the ComboBox (validate)
+     * For help the PC to not automatally have to change of coloration all the time the user change of SelectedItem
      */
-    JButton okButton = new JButton("OK");
+    private JButton okButton = new JButton("OK");
 
     /**
      * ComboBox containing kMax 
@@ -147,87 +114,110 @@ public class NMenuPanelApp extends JPanel{
 
     private App app ;
 
+
     /**
      * Constructor of NMenuPanelApp
      * @param kmax
      */
-    NMenuPanelApp(App app, int kmax, JComboBox<Integer> altitudesMax){
+    public NMenuGraphPanelApp(App app, int kmax, JComboBox<Integer> altitudesMax){
+
         this.app = app ;
         this.altitudesMax = altitudesMax ;
-        this.setBackground(Color.YELLOW);
 
-        this.setLayout( new GridLayout(5,1));
+        this.setBackground(App.KINDAYELLOW);
+
+        this.setLayout(new GridLayout(4,1));
 
         //TITLE
-        titleMenu.setFont(new Font("Arial", Font.BOLD, 20));
+        titleMenu.setFont(new Font("Arial", Font.BOLD, 26));
 
         //KMAX
         kmaxOption.setLayout( new GridLayout(2,1));
 
+        // Title
+        changeKmax.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+        kmaxOption.setBackground(App.KINDAYELLOW);
+
+        
+        //  ComboBox
+        setAltitudeComboBox(kmax);
         this.setAltitudeValues(kmax) ;
         
-        this.altitudesMax.setSelectedItem(kmax);
-        this.altitudesMax.setForeground(Color.WHITE);
-        this.altitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
-        this.altitudesMax.setBackground(Color.BLACK);
-        this.altitudesMax.setOpaque(true);
+        altitudesMax.setSelectedItem(kmax);
+        altitudesMax.setForeground(Color.WHITE);
+        altitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
+        altitudesMax.setBackground(Color.BLACK);
+        altitudesMax.setPreferredSize(new Dimension(100,30));
 
         kmaxOption.add(changeKmax);
-        changeKmax.setAlignmentX(Component.CENTER_ALIGNMENT);
+        kmaxOption.add(altitudesMax);
 
-        kmaxOption.add(this.altitudesMax);
+        borderPanelKmax.setBackground(App.KINDAYELLOW);
+        borderPanelKmax.setPreferredSize(new Dimension(225,30));
 
-        kmaxOption.setBackground(Color.YELLOW);
-        borderPanelKmax.setBackground(Color.YELLOW);
+        borderPanelKmax.add(kmaxOption);
 
         //ALTITUDES
-
         altitudeMaxOption.setLayout(new GridLayout(2,1));
-        altitudeMaxOption.add(nbAltitudes);
+        altitudeMaxOption.setBackground(App.KINDAYELLOW);
 
-        altitudeComboBox.setPreferredSize(new Dimension(0,25));
+        // Titre
+        nbAltitudes.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+
+        // ComboBox
+        // Democraty doesn't work in times of war. DO NOT TOUCH (or i will put a pipe bomb in your mail).
+        altitudeComboBox.setForeground(Color.WHITE);
+        altitudeComboBox.setFont(new Font("Arial", Font.BOLD, 18));
+        altitudeComboBox.setBackground(Color.BLACK);
+        altitudeComboBox.setPreferredSize(new Dimension(100,30));
+
+        altitudeMaxOption.add(nbAltitudes);
         altitudeMaxOption.add(altitudeComboBox);
 
-        altitudeMaxOption.setBackground(Color.YELLOW);
-
-        borderPanelAlt.setBackground(Color.YELLOW);
+        borderPanelAlt.setBackground(App.KINDAYELLOW);
+        borderPanelAlt.setPreferredSize(new Dimension(225,30));
 
         //CONFLITS
 
         //ALGO
-
         algoOption.setLayout(new GridLayout(2,1));
-        algoOption.setBackground(Color.YELLOW);
-        
-        buttonLayout.setBackground(Color.YELLOW);
+        algoOption.setBackground(App.KINDAYELLOW);
 
-        buttonLayout.add(algoChoice);
-        buttonLayout.add(okButton);
+        // Titre
+        algorithmes.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+
+        // JComboBox + JButton
+
+        algoChoice.setForeground(Color.WHITE);
+        algoChoice.setFont(new Font("Arial", Font.BOLD, 18));
+        algoChoice.setBackground(Color.BLACK);
+
+        okButton.setForeground(Color.WHITE);
+        okButton.setFont(new Font("Arial", Font.BOLD, 14));
+        okButton.setBackground(Color.BLACK);
+        okButton.setPreferredSize(new Dimension(55,45));
+
+        layoutAlgo.setLayout(new FlowLayout());
+        layoutAlgo.setBackground(App.KINDAYELLOW);
+        layoutAlgo.add(algoChoice);
+        layoutAlgo.add(okButton);
 
         algoOption.add(algorithmes);
-        algoOption.add(buttonLayout);
+        algoOption.add(layoutAlgo);
 
         algoChoice.addItem(Coloration.DSATUR);
         algoChoice.addItem(Coloration.RLF);
-        //algoChoice.addItem(Coloration.WELSH_POWELL) ;
-        algoChoice.setSelectedItem(null) ;
+        algoChoice.addItem(Coloration.WELSH_POWELL);
+
+        
 
         //ADD
-
         this.add(titleMenu);
-
         //KMAX
-        
-        borderPanelKmax.add(kmaxOption);
-
         this.add(borderPanelKmax);
-
-
         //ALTITUDES
-
         borderPanelAlt.add(altitudeMaxOption);
         this.add(borderPanelAlt);
-        this.setAltitudeComboBox(kmax);
 
         //ALGO
         this.add(algoOption);
@@ -235,7 +225,7 @@ public class NMenuPanelApp extends JPanel{
         //LISTENERS
         initListeners() ;
     }
-    
+
     public void setAltitudeComboBox(int kmax){
         altitudeComboBox.removeAllItems();
         altitudeComboBox.setRenderer(new ListCellRenderer<Integer>() {
@@ -243,6 +233,11 @@ public class NMenuPanelApp extends JPanel{
             public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index,
                     boolean isSelected, boolean cellHasFocus) {
                 JLabel cell = new JLabel() ;
+                cell.setForeground(Color.WHITE);
+                cell.setFont(new Font("Arial", Font.BOLD, 18));
+                cell.setBackground(Color.BLACK);
+                cell.setPreferredSize(new Dimension(100,30));
+
                 if (value == 0) {
                     cell.setText("Toutes") ;
                 }
@@ -317,4 +312,6 @@ public class NMenuPanelApp extends JPanel{
             }
         });
     }
+    
+ 
 }

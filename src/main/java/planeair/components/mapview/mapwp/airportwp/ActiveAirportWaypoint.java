@@ -1,4 +1,4 @@
-package planeair.ihm.mapvisuals.mapwp.airportwp;
+package planeair.components.mapview.mapwp.airportwp;
 
 //-- Import Java
 
