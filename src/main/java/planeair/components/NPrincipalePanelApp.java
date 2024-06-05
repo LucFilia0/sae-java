@@ -451,6 +451,10 @@ public class NPrincipalePanelApp extends JPanel{
         return this.menuGraph ;
     }
 
+    public NInfoGraphPanelApp getInfoGraphPanel() {
+        return this.infoGraph ;
+    }
+
     public void initMap() {
         this.app.getAirportSet().setActiveAirportsFrom(this.app.getFig());
         this.body.paintMapItems(this.app.getAirportSet(), this.app.getFig());

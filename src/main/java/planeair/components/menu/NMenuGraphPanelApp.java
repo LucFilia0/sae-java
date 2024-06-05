@@ -288,6 +288,7 @@ public class NMenuGraphPanelApp extends JPanel{
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                boolean colorationChanged = false ;
                 TestGraph graph = app.getTestGraph() ;
                 int oldKmax = graph.getKMax() ;
                 int currentKMax = (int)altitudesMax.getSelectedItem() ;
@@ -298,16 +299,24 @@ public class NMenuGraphPanelApp extends JPanel{
                         Coloration.removeCurrentColoring(graph) ;
                     }
                     lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
-                    Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
-                    Coloration.setGraphStyle(graph, currentKMax) ;
+                    colorationChanged = true ;
                 }
                 
                 else {
-                    if (oldKmax < currentKMax || graph.getNbColors() > currentKMax) {
-                        Coloration.removeCurrentColoring(graph) ;
-                        Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
-                        Coloration.setGraphStyle(graph, currentKMax) ;
+                    if (oldKmax > currentKMax || oldKmax < currentKMax && graph.getNbConflicts() > 0 || graph.getNbColors() > currentKMax) {
+                        colorationChanged = true ;
                     }
+                }
+
+                if (colorationChanged) {
+                    if (lastAlgoSelected != null) {
+                        Coloration.removeCurrentColoring(graph) ;
+                    }
+                    Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
+                    Coloration.setGraphStyle(graph, currentKMax) ;
+                    NInfoGraphPanelApp panel = app.getPrincFrame().getInfoGraphPanel() ;
+                    panel.setNbColorsUsed(graph.getNbColors()) ;
+                    panel.setNbConflictsOccurred(graph.getNbConflicts()) ;
                 }
             }
         });

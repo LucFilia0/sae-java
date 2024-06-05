@@ -1,7 +1,5 @@
 package planeair.components.menu;
 
-import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
 
 //-- Import AWT
@@ -9,6 +7,7 @@ import javax.swing.BoxLayout;
 //-- Import Swing
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import planeair.components.mapview.Map;
 import planeair.components.mapview.mapwp.MapWaypoint;
@@ -18,7 +17,7 @@ import planeair.components.mapview.mapwp.MapWaypoint;
  *
  * @author Luc le Manifik
  */
-public class NInfoPanel extends javax.swing.JPanel {
+public class NInfoPanel extends JPanel {
     
     /**
      * The first line of the prompt

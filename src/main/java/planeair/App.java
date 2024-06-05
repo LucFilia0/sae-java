@@ -101,7 +101,7 @@ public class App extends javax.swing.JFrame {
 
         this.setTitle("Plane AIR | PAGE D'IMPORTATION");
         this.setSize(1200,700);
-        this.setMinimumSize(new Dimension(1200,700));
+        this.setMinimumSize(new Dimension(1200,800));
         this.initAttributes();
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

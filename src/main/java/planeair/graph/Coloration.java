@@ -38,150 +38,6 @@ public class Coloration {
     
     // RLF (Recursive Larget First)
 
-
-    /** 
-     * Selects the next node to add to the set of colored Nodes by getting the one with the highest number of common
-     * neighbors with the first node that was added to this color's set.
-     * 
-     * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently worked on
-     * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently worked on
-     * @return Node which is : 
-     * 1. the one with the highest number of common neighbors with the first node of the color 
-     * 2. in setOfAddableNodes
-     * 
-     * @author Nathan LIEGEON
-     */
-    public static Node selectNextNodeToAdd(Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
-        HashMap<Node, Integer> nodeMap = new HashMap<>() ;
-
-        for (Node nodeInSet : setOfAddableNodes) {
-            nodeMap.put(nodeInSet, 0) ;
-        }
-
-        for (Node node : setOfNeighborsOfFirstNode) {
-            node.neighborNodes().forEach(neighborOfNode -> {
-                if (setOfAddableNodes.contains(neighborOfNode)) {
-                    // If not in map => Sets value to 1, else adds one to the value
-                    nodeMap.merge(neighborOfNode, 1, Integer::sum) ;
-                }
-            }) ;
-        }
-
-        Node max = null ;
-
-        for (Node key : nodeMap.keySet()) {
-            if (max == null || nodeMap.get(max) > nodeMap.get(key)) {
-                max = key ;
-            }
-        }
-
-        return max ;
-    }
-
-    /**
-     * Colors all the nodes in setOfAddableNodes until it is empty
-     *
-     * @param graph graph you are trying to color
-     * @param colorMap map storing for each color (Integer key) 
-     * the set of all nodes that have that color (HashSet value)
-     * @param color integer the color currently being worked on
-     * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently being worked on
-     * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently being worked on
-     * 
-     * @author Nathan LIEGEON
-     */
-    public static void colorNodesFromSetOfAddableNodes(GraphSAE graph, Map<Integer, HashSet<Node>> colorMap, 
-    Integer color, Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
-        Node nextNode = null ;
-        Node tempNode ;
-        while (!setOfAddableNodes.isEmpty()) {
-            nextNode = selectNextNodeToAdd(setOfNeighborsOfFirstNode, setOfAddableNodes) ;
-            if (nextNode != null) {
-                tempNode = graph.getNode(nextNode.getId()) ;
-                colorMap.get(color).add(tempNode) ;
-                
-                setOfAddableNodes.remove(nextNode) ;
-                setOfAddableNodes.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
-            }
-        }
-    }
-    
-    /**
-     * Colors a node by minimizing conflicts (2 nodes with the same color touching each other)
-     * 
-     * @param graph graph you are trying to color
-     * @param node node you are trying to color 
-     * @return array consisting of 2 values, the color assigned to the node and the number of conflicts it generated
-     * 
-     * @author Nathan LIEGEON
-     */
-    public static int[] getLeastConflictingColor(GraphSAE graph, Node node) {
-        int[] minConflict = {-1, -1} ;
-        int[] currentConflict  = new int[2];
-        HashMap<Integer, Integer> conflictCount = new HashMap<>() ;
-
-        node.neighborNodes().forEach(neighbor -> {
-            if ((Integer) graph.getNode(neighbor.getId()).getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) != 0) {
-                conflictCount.merge((Integer)neighbor.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE), 1, Integer::sum) ;
-            }
-        }) ;
-
-        for (Integer color : conflictCount.keySet()) {
-            currentConflict[0] = color ;
-            currentConflict[1] = conflictCount.get(color) ;
-            if (minConflict[0] == -1 || minConflict[1] > currentConflict[1]) {
-                minConflict = currentConflict ;
-            }
-
-        }
-
-        return minConflict ;
-    }
-
-    /**
-     * Applies the color returned by {@link getLeastConflictingColor} and returns the number of conflicts it generated
-     * 
-     * @param graph Graph we are trying to color
-     * @param node Node currently being colored
-     * @return number of conflicts caused by the node
-     */
-    public static int colorWithLeastConflicts(GraphSAE graph, Node node) {
-        int[] res = getLeastConflictingColor(graph, node) ;
-        node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, res[0]) ;
-        node.setAttribute("ui.class", "color" + res[0]) ;
-        return res[1] ;
-    }
-
-    /** 
-     * Loads every single node from the graph into setOfAddableNodes for future manipulations.
-     * While adding them it also looks for the one with the highest degree then returns it at the end.
-     * Can return null if no node is loaded into the set.
-     *
-     * @param graph GraphSAE from which you will load the nodes
-     * @param setOfAddableNodes Set in which you will load the nodes
-     * @return Node with the highest degree, can be null.
-     * 
-     * @author Nathan LIEGEON
-     * 
-     */
-    public static Node loadGraphNodesIntoSetOfAddableNodes(GraphSAE graph, Set<Node> setOfAddableNodes) {
-        Node currentNode = null ;
-        for (Node node : graph) {
-            if (currentNode == null) {
-                currentNode = node ;
-            }
-
-            else {
-                if (currentNode.getDegree() < node.getDegree()) {
-                    currentNode = node ;
-                }
-            }
-            setOfAddableNodes.add(node) ;
-        }
-
-        return currentNode ;
-    }
-    
     /** 
      * Colors the graph using the RLF (Recursive Larget First) Algorithm
      * Implemented iteratively contrary to its name, could be modified later.
@@ -192,7 +48,7 @@ public class Coloration {
      * 
      * @author Nathan LIEGEON
      */
-    public static int[] colorGraphRLF(GraphSAE graph) {
+    public static void colorGraphRLF(GraphSAE graph) {
         int kMax = -1 ;
         if (graph instanceof TestGraph) {
             TestGraph testGraph = (TestGraph)graph ;
@@ -234,15 +90,113 @@ public class Coloration {
         if (infoTab[0] > kMax) {
             infoTab[0] = kMax ;
         }
+        if (graph instanceof TestGraph) {
+            if (newGraph.getNodeCount() != 0) {
+                for (Node node : newGraph) {
+                    node = graph.getNode(node.getId()) ;
+                    infoTab[1] += colorWithLeastConflicts(graph, node) ;
+                }
+            }
+            graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, infoTab[1]) ;
+        }
+        graph.setNbColors(infoTab[0]) ;
+    }
 
-        if (newGraph.getNodeCount() != 0) {
-            for (Node node : newGraph) {
-                node = graph.getNode(node.getId()) ;
-                infoTab[1] += colorWithLeastConflicts(graph, node) ;
+    /** 
+     * Selects the next node to add to the set of colored Nodes by getting the one with the highest number of common
+     * neighbors with the first node that was added to this color's set.
+     * 
+     * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently worked on
+     * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently worked on
+     * @return Node which is : 
+     * 1. the one with the highest number of common neighbors with the first node of the color 
+     * 2. in setOfAddableNodes
+     * 
+     * @author Nathan LIEGEON
+     */
+    private static Node selectNextNodeToAdd(Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
+        HashMap<Node, Integer> nodeMap = new HashMap<>() ;
+
+        for (Node nodeInSet : setOfAddableNodes) {
+            nodeMap.put(nodeInSet, 0) ;
+        }
+
+        for (Node node : setOfNeighborsOfFirstNode) {
+            node.neighborNodes().forEach(neighborOfNode -> {
+                if (setOfAddableNodes.contains(neighborOfNode)) {
+                    // If not in map => Sets value to 1, else adds one to the value
+                    nodeMap.merge(neighborOfNode, 1, Integer::sum) ;
+                }
+            }) ;
+        }
+
+        Node max = null ;
+
+        for (Node key : nodeMap.keySet()) {
+            if (max == null || nodeMap.get(max) > nodeMap.get(key)) {
+                max = key ;
             }
         }
 
-        return infoTab ;
+        return max ;
+    }
+
+    /**
+     * Colors all the nodes in setOfAddableNodes until it is empty
+     *
+     * @param graph graph you are trying to color
+     * @param colorMap map storing for each color (Integer key) 
+     * the set of all nodes that have that color (HashSet value)
+     * @param color integer the color currently being worked on
+     * @param setOfNeighborsOfFirstNode Contains the neighbors of the first node added to the color currently being worked on
+     * @param setOfAddableNodes Contains all the nodes that could be colored with the color currently being worked on
+     * 
+     * @author Nathan LIEGEON
+     */
+    private static void colorNodesFromSetOfAddableNodes(GraphSAE graph, Map<Integer, HashSet<Node>> colorMap, 
+    Integer color, Set<Node> setOfNeighborsOfFirstNode, Set<Node> setOfAddableNodes) {
+        Node nextNode = null ;
+        Node tempNode ;
+        while (!setOfAddableNodes.isEmpty()) {
+            nextNode = selectNextNodeToAdd(setOfNeighborsOfFirstNode, setOfAddableNodes) ;
+            if (nextNode != null) {
+                tempNode = graph.getNode(nextNode.getId()) ;
+                colorMap.get(color).add(tempNode) ;
+                
+                setOfAddableNodes.remove(nextNode) ;
+                setOfAddableNodes.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
+            }
+        }
+    }
+
+    /** 
+     * Loads every single node from the graph into setOfAddableNodes for future manipulations.
+     * While adding them it also looks for the one with the highest degree then returns it at the end.
+     * Can return null if no node is loaded into the set.
+     *
+     * @param graph GraphSAE from which you will load the nodes
+     * @param setOfAddableNodes Set in which you will load the nodes
+     * @return Node with the highest degree, can be null.
+     * 
+     * @author Nathan LIEGEON
+     * 
+     */
+    private static Node loadGraphNodesIntoSetOfAddableNodes(GraphSAE graph, Set<Node> setOfAddableNodes) {
+        Node currentNode = null ;
+        for (Node node : graph) {
+            if (currentNode == null) {
+                currentNode = node ;
+            }
+
+            else {
+                if (currentNode.getDegree() < node.getDegree()) {
+                    currentNode = node ;
+                }
+            }
+            setOfAddableNodes.add(node) ;
+        }
+
+        return currentNode ;
     }
     
     // WELSH & POWELL
@@ -311,12 +265,7 @@ public class Coloration {
      */
     public static void colorationDsatur(GraphSAE graph) {
         LinkedList<Node> ListNodes = new LinkedList<Node>();
-        int kMax = -1 ;
         graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE,0);
-        if (graph instanceof TestGraph) {
-            TestGraph testGraph = (TestGraph)graph ;
-            kMax = testGraph.getKMax() ;
-        }
 
         //Put all Nodes in a LinkedList
         for (Node node : graph) {
@@ -328,11 +277,6 @@ public class Coloration {
 
         // Recursive call
         recursifDSATUR(ListNodes, graph);
-
-        for (Node node : graph){
-            node.removeAttribute("DSATUR");
-            node.setAttribute("ui.class", "color" + node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE));
-        }
 
         int[] res = {0,0};
         for(Node node : graph){
@@ -364,33 +308,34 @@ public class Coloration {
             //Step1
             Node nodeP = MaxNodeDSATUR(ListNodes);
 
-            HashMap<Integer, Integer> color = new HashMap<>() ;
-            int minColor = 0 ;
-            int currentColor ;
+            // Used to store the colors of each neighbors of this node
+            // The Keys are the color, the values are the number of times a neighbor of this node has it.
+            HashMap<Integer, Integer> neighborColorMap = new HashMap<>() ;
+            int minColor = 1 ;
 
             //Step2
+            // We loop through all of the nodes of this neighbor and we store their color in the HashMap
             nodeP.neighborNodes().forEach(nodeAdj -> {
                 int colorFound = (int)nodeAdj.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) ;
                 if (colorFound != 0) {
-                    color.merge(colorFound, 1, Integer::sum) ;
+                    // If color not in map, set value to 1, else add 1 to current value
+                    neighborColorMap.merge(colorFound, 1, Integer::sum) ;
                 }
             }) ;
 
-            if (!(graph instanceof TestGraph) && color.keySet().size() != kMax) {
+            if (neighborColorMap.keySet().size() >= kMax) {
                 nodeP.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 
-                    Collections.min(color.keySet(), (int1, int2) -> Integer.compare(color.get(int1), color.get(int2)))) ;
-                if (graph instanceof TestGraph) {
-                    int nbConflict = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE);
-                    graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, nbConflict + color.get((int)nodeP.getAttribute(GraphSAE.COLOR_ATTRIBUTE)));
-                }
+                    Collections.min(neighborColorMap.keySet(), (int1, int2) -> 
+                    Integer.compare(neighborColorMap.get(int1), neighborColorMap.get(int2)))) ;
+
+                int nbConflict = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE);
+                graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, nbConflict + 
+                    neighborColorMap.get((int)nodeP.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE)));
             }
             else{
-                for (Integer key : color.keySet()) {
-                    currentColor = color.get(key) ;
-                    if (currentColor == 0) {
-                        if (!color.containsKey(minColor) || minColor > currentColor) {
-                            minColor = currentColor ;
-                        }
+                for (Integer key : neighborColorMap.keySet()) {
+                    if (key == minColor) {
+                        minColor++ ;
                     }
                 }
                 nodeP.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, minColor) ;
@@ -398,14 +343,14 @@ public class Coloration {
 
             //Step3
             nodeP.neighborNodes().forEach(nodeAdj -> {
-                HashMap<Integer, Integer> buffer = new HashMap<>() ;
+                HashSet<Integer> buffer = new HashSet<>() ;
 
                 for(Node nodeAdj2 : nodeAdj.neighborNodes().collect(Collectors.toSet())){
                     if((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) != 0 && nodeAdj2 != nodeP){
-                        buffer.put((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE), 1) ;
+                        buffer.add((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE)) ;
                     }    
                 }
-                int nbColor = buffer.values().size() ;
+                int nbColor = buffer.size() ;
                 if( nbColor!= 0){
                     nodeAdj.setAttribute("DSATUR", nbColor); 
                 }
@@ -497,10 +442,10 @@ public class Coloration {
      */
     public static void setGraphStyle(GraphSAE graph, int nbColor) {
         StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : " + DEFAULT_NODE_SIZE + " ; }\n") ;
-
+        Integer color ;
         if (nbColor > 0) {
             for (Node coloringNode : graph) {
-                Integer color = (Integer)coloringNode.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) ;
+                color = (Integer)coloringNode.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) ;
                 coloringNode.setAttribute("ui.class", "color" + color) ;
             }
             
@@ -511,7 +456,7 @@ public class Coloration {
             int currentHexValue ;
 
             for (int i = 0 ; i < nbColor ; i++) {
-                currentHexValue = (maxHexValue/(nbColor))*i ;
+                currentHexValue = (int)Math.round(maxHexValue*Math.random()) ;
                 stylesheet.append("node.color" + (i+1) + "{fill-color : #" + toValidHex(Integer.toHexString(currentHexValue)) + " ; }\n") ;
             }
         }
@@ -575,5 +520,51 @@ public class Coloration {
                     break ;
                 default :
         }
+    }
+
+    /**
+     * Colors a node by minimizing conflicts (2 nodes with the same color touching each other)
+     * 
+     * @param graph graph you are trying to color
+     * @param node node you are trying to color 
+     * @return array consisting of 2 values, the color assigned to the node and the number of conflicts it generated
+     * 
+     * @author Nathan LIEGEON
+     */
+    public static int[] getLeastConflictingColor(GraphSAE graph, Node node) {
+        int[] minConflict = {-1, -1} ;
+        int[] currentConflict  = new int[2];
+        HashMap<Integer, Integer> conflictCount = new HashMap<>() ;
+
+        node.neighborNodes().forEach(neighbor -> {
+            if ((Integer) graph.getNode(neighbor.getId()).getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) != 0) {
+                conflictCount.merge((Integer)neighbor.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE), 1, Integer::sum) ;
+            }
+        }) ;
+
+        for (Integer color : conflictCount.keySet()) {
+            currentConflict[0] = color ;
+            currentConflict[1] = conflictCount.get(color) ;
+            if (minConflict[0] == -1 || minConflict[1] > currentConflict[1]) {
+                minConflict = currentConflict ;
+            }
+
+        }
+
+        return minConflict ;
+    }
+
+    /**
+     * Applies the color returned by {@link getLeastConflictingColor} and returns the number of conflicts it generated
+     * 
+     * @param graph Graph we are trying to color
+     * @param node Node currently being colored
+     * @return number of conflicts caused by the node
+     */
+    public static int colorWithLeastConflicts(GraphSAE graph, Node node) {
+        int[] res = getLeastConflictingColor(graph, node) ;
+        node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, res[0]) ;
+        node.setAttribute("ui.class", "color" + res[0]) ;
+        return res[1] ;
     }
 }
