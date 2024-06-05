@@ -23,7 +23,7 @@ import planeair.components.mapview.Map;
  * 
  * @author Luc le Manifik
  */
-public abstract class MapWaypoint extends planeair.components.mapview.MapItem {
+public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint {
 
     //-- MapWaypoint attributes
 

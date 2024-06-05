@@ -1,7 +1,5 @@
 package planeair.components.menu;
 
-import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
 
 //-- Import AWT
@@ -12,7 +10,6 @@ import javax.swing.JLabel;
 
 import planeair.components.mapview.Map;
 import planeair.components.mapview.mapwp.MapWaypoint;
-import planeair.components.mapview.mapwp.MapWaypointButton;
 
 /**
  * The JPannel that is prompted when a MapItem is pressed, showing all the required informations

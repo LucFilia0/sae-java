@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 
 // Import Layout
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -93,19 +92,19 @@ public class NInfoGraphPanelApp extends JPanel {
         this.setLayout(new GridBagLayout());
 
         degreePanel.setBackground(App.KINDAYELLOW);
-        titleDegreeAvg.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+        titleDegreeAvg.setFont(App.KINDANORMAL);
 
         compPanel.setBackground(App.KINDAYELLOW);
-        titleComp.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+        titleComp.setFont(App.KINDANORMAL);
 
         nodesPanel.setBackground(App.KINDAYELLOW);
-        titleNodes.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+        titleNodes.setFont(App.KINDANORMAL);
 
         edgesPanel.setBackground(App.KINDAYELLOW);
-        titleEdges.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+        titleEdges.setFont(App.KINDANORMAL);
 
         diameterPanel.setBackground(App.KINDAYELLOW);
-        titleDiameter.setFont(new Font("Arial", Font.CENTER_BASELINE, 14));
+        titleDiameter.setFont(App.KINDANORMAL);
 
 
         this.setMaximumSize(new Dimension(225,200));

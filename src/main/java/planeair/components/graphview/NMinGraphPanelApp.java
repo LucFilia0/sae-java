@@ -2,19 +2,16 @@ package planeair.components.graphview;
 
 // Import swing composants
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.graphstream.ui.swing_viewer.ViewPanel;
 
 import planeair.App;
-import planeair.graph.Coloration;
 import planeair.graph.PanelCreator;
 
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 
 import java.awt.BorderLayout;
 // Import awt composants
@@ -25,7 +22,6 @@ import java.awt.Font;
 
 // Import Layout
 import java.awt.GridLayout;
-import java.awt.FlowLayout;
 
 /**
  * This class create a Panel for see the graph 

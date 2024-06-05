@@ -12,7 +12,6 @@ import org.graphstream.graph.EdgeRejectedException;
 import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
-import org.miv.mbox.Test;
 
 //-- Import Plane AIR
 

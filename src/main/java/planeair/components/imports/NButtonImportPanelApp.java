@@ -21,16 +21,19 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 
 import planeair.App;
-import planeair.components.imports.buttons.NButtonConfirmOrReturnImportApp;
-import planeair.components.imports.buttons.NButtonImportFileApp;
+import planeair.components.buttons.NButtonImportFileApp;
+import planeair.components.buttons.NFilledButton;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.TestGraph;
 import planeair.util.DataImportation;
 
 /**
- * Create a JPanel of importation for vols and aeroports
+ * Creates a JPanel of importation for Flights and Airports4
+ * @author GIRAUD Nila
  */
 public class NButtonImportPanelApp extends JPanel {
+
+    // CONSTANTS
 
     /**
      * CONSTANT for know what type of file you have to import
@@ -48,36 +51,39 @@ public class NButtonImportPanelApp extends JPanel {
      */
     public static final int FLIGHT_FILE = 12;
 
+    // ATTRIBUTES
+
     /**
      * Border Title for know what to do
      */
-    TitledBorder  border = new TitledBorder("Title");
+    TitledBorder border = new TitledBorder("Title");
 
     /**
-     * Button de choix
+     * Choice button
+     * Graph
+     * Location : second button in the center of the frame, right to Flight/Airport one
+     */
+    private NButtonImportFileApp choiceGraphImportation = new NButtonImportFileApp("<html>Importer un fichier <br> graph-test</html>");
+
+    /**
+     * Choice button
      * Vols/Aeroports
      * Location : first button in the center of the frame, left to graph one
      */
-    private NButtonImportFileApp choiceFlight = new NButtonImportFileApp("<html>Importer des fichiers <br> vols/aeroports</html>");
-    /**
-     * Button de choix
-     * Graph
-     * Location : second button in the center of the frame, right to vol/aeroprt one
-     */
-    private NButtonImportFileApp choiceGraph = new NButtonImportFileApp("<html>Importer un fichier <br> graphes.csv</html>");
+    private NButtonImportFileApp choiceFlightImportation = new NButtonImportFileApp("<html>Importer des fichiers <br> vols/aeroports</html>");
     
     /**
-     * Button Importation
+     * Importation button
      * vol-test.csv
      * Location : after pushing the button buttonAirport
      */
-    private NButtonImportFileApp buttonFlight = new NButtonImportFileApp("vol-test.csv");
+    private NButtonImportFileApp buttonFlightFileSelection = new NButtonImportFileApp("vol-test.csv");
     /**
-     * Button Importation for flight
+     * Importation Button for Flights
      * aeroport.txt
      * Location : after pushing the button choiceFlight
      */
-    private NButtonImportFileApp buttonAirport = new NButtonImportFileApp("aeroport.csv");
+    private NButtonImportFileApp buttonAirportFileSelection = new NButtonImportFileApp("aeroport.csv");
 
     /**
      * The panel which their there is buttons 
@@ -95,11 +101,11 @@ public class NButtonImportPanelApp extends JPanel {
      * Button for valided aerorort
      * Location : below buttonAirport
      */
-    private NButtonConfirmOrReturnImportApp confirmAir = new NButtonConfirmOrReturnImportApp("Valider");
+    private NFilledButton confirmAirports;
     /**
-     * Button for annule return back to the step the user is
+     * Button for return back to the step the user were
      */
-    private NButtonConfirmOrReturnImportApp returnBackAir = new NButtonConfirmOrReturnImportApp("Annuler");
+    private NFilledButton returnBackAirports;
 
     /**
      * Panel for returnBack + valideFlight
@@ -110,18 +116,17 @@ public class NButtonImportPanelApp extends JPanel {
      * Button for valide vols
      * Location : below buttonFlight
      */
-    private NButtonConfirmOrReturnImportApp confirmFlight = new NButtonConfirmOrReturnImportApp("Valider");
+    private NFilledButton confirmFlights;
     /**
      * Button for annule return back to the step the user is
      */
-    private NButtonConfirmOrReturnImportApp returnBackFlight = new NButtonConfirmOrReturnImportApp("Annuler");
-
+    private NFilledButton returnBackFlights;
 
     /**
      * Test pour rajouter un boutton valider au début
      * Location : below buttons choice
      */
-    private NButtonConfirmOrReturnImportApp confirmStart = new NButtonConfirmOrReturnImportApp("Valider");
+    private NFilledButton confirmStart;
 
     /**
      * Import the Frame of the App
@@ -137,35 +142,57 @@ public class NButtonImportPanelApp extends JPanel {
      * @author GIRAUD Nila
      */
     public NButtonImportPanelApp(App app){
+
         this.app = app;
 
-        this.setLayout(new BoxLayout(this , BoxLayout.Y_AXIS));
-        this.setBackground(App.KINDAYELLOW);
+        this.initComponents();
+        this.placeComponents();
+        this.addComponents();
+        this.addEvents();
+    }
 
+    /**
+     * Initiates all the components of the NButtonImportPanelApp
+     * 
+     * @author Luc le Manifik
+     */
+    private void initComponents() {
+
+        this.setBackground(App.KINDAYELLOW);
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5,true));
 
+        this.buttonsPanel.setBackground(App.KINDAYELLOW);
+        this.panelReturnConfirmAir.setBackground(App.KINDAYELLOW);
+        this.panelReturnConfirmFlight.setBackground(App.KINDAYELLOW);
+
+        this.confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+    }
+
+    /**
+     * Places all the components
+     */
+    private void placeComponents() {
+
+        this.setLayout(new BoxLayout(this , BoxLayout.Y_AXIS));
     }
 
     /**
      * Method adding components on the Panel
      */
-    public void addComponents(){
+    private void addComponents() {
 
-        buttonsPanel.add(choiceFlight);
-        buttonsPanel.add(choiceGraph);
-        buttonsPanel.setBackground(App.KINDAYELLOW);
+        buttonsPanel.add(choiceFlightImportation);
+        buttonsPanel.add(choiceGraphImportation);
 
-        panelReturnConfirmAir.setBackground(App.KINDAYELLOW);
-        panelReturnConfirmAir.add(returnBackAir);
-        panelReturnConfirmAir.add(confirmAir);
+        panelReturnConfirmAir.add(returnBackAirports);
+        panelReturnConfirmAir.add(confirmAirports);
 
-        panelReturnConfirmFlight.setBackground(App.KINDAYELLOW);
-        panelReturnConfirmFlight.add(returnBackFlight);
-        panelReturnConfirmFlight.add(confirmFlight);
+        panelReturnConfirmFlight.add(returnBackFlights);
+        panelReturnConfirmFlight.add(confirmFlights);
 
         this.add(buttonsPanel);
         this.add(confirmStart);
-        confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         this.add(Box.createRigidArea(new Dimension(0, 5)));
     }
 
@@ -173,23 +200,23 @@ public class NButtonImportPanelApp extends JPanel {
      * Add events for the frame
      * Importation and return back
      */
-    public void addEvents(){
+    private void addEvents(){
 
         confirmStart.addActionListener((ActionEvent e) -> {
-            this.app.addBodyPanelPrinc(); 
+            this.app.switchToMainScreen(); 
         });
         
-        choiceFlight.addActionListener((ActionEvent e) -> {
+        choiceFlightImportation.addActionListener((ActionEvent e) -> {
             buttonsPanel.removeAll();
             this.remove(confirmStart);
-            buttonsPanel.add(buttonAirport);
+            buttonsPanel.add(buttonAirportFileSelection);
             this.add(panelReturnConfirmAir);
             panelReturnConfirmAir.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.app.setVisible(true);
 
         });
     
-        choiceGraph.addActionListener((ActionEvent e) -> {
+        choiceGraphImportation.addActionListener((ActionEvent e) -> {
 
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
             fileChooser.userImportFile();
@@ -208,39 +235,39 @@ public class NButtonImportPanelApp extends JPanel {
             }
         });
     
-        confirmAir.addActionListener((ActionEvent e) -> {
+        confirmAirports.addActionListener((ActionEvent e) -> {
             buttonsPanel.removeAll();
             this.remove(confirmStart);
-            buttonsPanel.add(buttonFlight);
+            buttonsPanel.add(buttonFlightFileSelection);
             this.remove(panelReturnConfirmAir);
             this.add(panelReturnConfirmFlight);
             panelReturnConfirmFlight.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.app.setVisible(true);
         });
 
-        returnBackAir.addActionListener((ActionEvent e) -> {
-            resetPanel(panelReturnConfirmAir, buttonAirport);
+        returnBackAirports.addActionListener((ActionEvent e) -> {
+            resetPanel(panelReturnConfirmAir, buttonAirportFileSelection);
             this.app.setVisible(true);
         });
     
-        confirmFlight.addActionListener((ActionEvent e) -> {
-            this.resetPanel(panelReturnConfirmFlight, buttonFlight);
-            this.app.addBodyPanelPrinc();
+        confirmFlights.addActionListener((ActionEvent e) -> {
+            this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
+            this.app.switchToMainScreen();
             this.app.getPrincFrame().initMap();
         });
     
-        returnBackFlight.addActionListener((ActionEvent e) -> {
+        returnBackFlights.addActionListener((ActionEvent e) -> {
             buttonsPanel.removeAll();
             this.remove(panelReturnConfirmFlight);
-            this.remove(buttonFlight);
+            this.remove(buttonFlightFileSelection);
 
-            buttonsPanel.add(buttonAirport);
+            buttonsPanel.add(buttonAirportFileSelection);
             this.add(panelReturnConfirmAir);
             panelReturnConfirmAir.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.repaint();
         });
     
-        buttonAirport.addActionListener((ActionEvent e) -> {
+        buttonAirportFileSelection.addActionListener((ActionEvent e) -> {
             
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.AIRPORT_FILE);
 
@@ -257,7 +284,7 @@ public class NButtonImportPanelApp extends JPanel {
 
         } );
     
-        buttonFlight.addActionListener((ActionEvent e) -> {
+        buttonFlightFileSelection.addActionListener((ActionEvent e) -> {
     
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.FLIGHT_FILE);
         
@@ -283,8 +310,8 @@ public class NButtonImportPanelApp extends JPanel {
         this.remove(panel);
         this.remove(button);
 
-        buttonsPanel.add(choiceFlight);
-        buttonsPanel.add(choiceGraph);
+        buttonsPanel.add(choiceFlightImportation);
+        buttonsPanel.add(choiceGraphImportation);
         this.add(buttonsPanel);
         this.add(confirmStart);
         confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);

@@ -1,23 +1,19 @@
 package planeair.components.graphview;
 
-/**
- * Import swing composants
- */
+//-- Import Swing
+
 import javax.swing.JPanel;
+import javax.swing.JFrame;
+
+//-- Import AWT
+
+import java.awt.Color;
+import java.awt.Toolkit;
+
+//-- Import PlaneAIR
 
 import planeair.components.menu.NInfoGraphPanelApp;
 import planeair.graph.PanelCreator;
-
-import javax.swing.JFrame;
-
-import java.awt.Toolkit;
-
-/**
- * Import awt composants
- */
-import java.awt.Color;
-import java.awt.Dimension;
-
 
 /**
  * Create a Panel for MaxGraph, it's a frame for seeing the graph bigger (with informations)
@@ -31,17 +27,18 @@ public class NMaxGraphFrameApp extends JFrame{
      * Location : all in the frame
      */
     private JPanel graph = new JPanel();
+
     /**
      * NInfoGraphPanelApp created, have parameter of the graph
      * Location : In the left at the bottom of the graph
      */
     private NInfoGraphPanelApp infoGraph = new NInfoGraphPanelApp();
 
-
     /**
      * Constructor of NMaxGraphPanelApp
      */
-    public NMaxGraphFrameApp(PanelCreator graphRenderer){
+    public NMaxGraphFrameApp(PanelCreator graphRenderer) {
+        
         if (graphRenderer == null) {
             graph = new JPanel() ;
         }

@@ -20,13 +20,16 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import planeair.util.Airport;
 import planeair.util.AirportSet;
+
+import planeair.graph.Flight;
+import planeair.graph.FlightsIntersectionGraph;
+
+import planeair.components.mapview.mapwp.MapWaypointPainter;
 import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
 import planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 import planeair.components.menu.NInfoPanel;
-import planeair.graph.Flight;
-import planeair.graph.FlightsIntersectionGraph;
 
 /**
  * This class is the Map which appears on the Application.
@@ -61,7 +64,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
     /**
      * The WaypointPainter which is used to draw all the Waypoints on the Map
      */
-    private MapItemPainter itemPainter;
+    private MapWaypointPainter itemPainter;
 
     //-- Map Constructor
 
@@ -95,7 +98,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         /*
         this.itemSet = new HashSet<MapItem>();
         */
-        this.itemPainter = new MapItemPainter();
+        this.itemPainter = new MapWaypointPainter();
 
         this.setOverlayPainter(this.itemPainter);
 

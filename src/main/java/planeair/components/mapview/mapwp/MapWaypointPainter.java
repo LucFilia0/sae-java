@@ -1,4 +1,4 @@
-package planeair.components.mapview;
+package planeair.components.mapview.mapwp;
 
 //-- Import Java
 
@@ -17,23 +17,22 @@ import java.awt.geom.Point2D;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import planeair.components.mapview.mapwp.MapWaypointButton;
-import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
-import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-
 //-- Import Plane AIR
 
 import planeair.graph.Flight;
 
+import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+
 /**
  * This class paints the different Waypoints on a Map object.
- * It paints Airports, which are putted a little above, to allow their pic to point towards the exact location of the Airports.
+ * It paints Airports, which are putted a little above, to allow their pic to point towards the exact location of the coordinate.
  * Flights, which have their image centered.
  * FlightRoutes, which are made by reading the FIG.
  * 
  * @author Luc le Manifik
  */
-public class MapItemPainter extends WaypointPainter<MapItem> {
+public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     
     /**
      * The Set which contains all the AirportWaypoints
@@ -55,7 +54,7 @@ public class MapItemPainter extends WaypointPainter<MapItem> {
      * 
      * @author Luc le Manifik
      */
-    public MapItemPainter() {
+    public MapWaypointPainter() {
         this.airportWaypointSet = new HashSet<AirportWaypoint>();
         this.flightWaypointSet = new HashSet<FlightWaypoint>();
         this.currentFlightSet = new HashSet<Flight>();
@@ -163,7 +162,7 @@ public class MapItemPainter extends WaypointPainter<MapItem> {
      * This overrided method does not allow to get the Waypoints of the WaypointPainter<MapItem>
      */
     @Override
-    public Set<MapItem> getWaypoints() {
+    public Set<MapWaypoint> getWaypoints() {
         return null;
     }
 }

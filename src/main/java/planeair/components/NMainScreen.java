@@ -34,11 +34,11 @@ import planeair.components.time.NTimePanelApp;
 
 
 /**
- * This class create the principale panel of the App where you can see the map and the graph
+ * This class creates the principal panel of the App where you can see the map and the graph
  * 
  * @author GIRAUD Nila
  */
-public class NPrincipalePanelApp extends JPanel{
+public class NMainScreen extends JPanel{
 
     //STRUCT
 
@@ -65,8 +65,8 @@ public class NPrincipalePanelApp extends JPanel{
     /**
      * Panel situe in the WEST of the body's borderLayout
      * Two MENU can appeair here
-     * 1) NMEnuGraphPanelApp
-     * 2) NMEnuMapPanelApp
+     * 1) NMenuGraphPanelApp
+     * 2) NMenuMapPanelApp
      */
     private JPanel article = new JPanel();
 
@@ -74,8 +74,6 @@ public class NPrincipalePanelApp extends JPanel{
      * Panel situe in the EAST of the body's borderLayout
      */
     private JPanel aside = new JPanel(new GridLayout());
-
-
 
     // HEADER COMPOSANTS 
     
@@ -117,7 +115,6 @@ public class NPrincipalePanelApp extends JPanel{
      */
     private JButton buttonMenuGraph = new JButton(iconMenuGraph);
 
-
     /**
      * Icon of the Button menu Map
      * Description :  A cross
@@ -136,7 +133,6 @@ public class NPrincipalePanelApp extends JPanel{
      */
     private JButton buttonMenuMap = new JButton(iconMenuMap);
 
-
     /**
      * Icon for import button
      */
@@ -146,8 +142,6 @@ public class NPrincipalePanelApp extends JPanel{
      * Location : third button in the nav
      */
     private JButton leaveButtonToImport = new JButton(iconFolder);
-
-
 
     /**
      * Label for App's name + Logo
@@ -192,8 +186,8 @@ public class NPrincipalePanelApp extends JPanel{
      */
     private NMenuMapPanelApp menuMap;
 
-
     //RIGHT
+
     /**
      * Contain the panel of MinGraph + InfoGraph
      * Add Border
@@ -234,9 +228,10 @@ public class NPrincipalePanelApp extends JPanel{
      * Constructor of NPrincipalePanelApp
      * @param app the frame where this panel is put
      */
-    public NPrincipalePanelApp (App app){
+    public NMainScreen (App app){
 
         this.app = app;
+
         this.setLayout(new BorderLayout());
 
         body.setLayout(new BorderLayout());
@@ -259,12 +254,7 @@ public class NPrincipalePanelApp extends JPanel{
         leaveButtonToImport.setBorderPainted(false);
         leaveButtonToImport.setContentAreaFilled(false);
 
-
-        // Set logo with Name of the App in PanelNav
-        // Description : France representation with graph composants
-        // Source : ./src/main/java/Graph France.png
         labelLogoName.setIcon(new ImageIcon("./src/main/java/planeair/icons/GraphFrance.png"));
-        //Size Label LOGO Name
         labelLogoName.setFont(new Font("Arial", Font.ITALIC, 25));
         labelLogoName.setPreferredSize(new Dimension(WIDTH,70));
 
@@ -275,11 +265,6 @@ public class NPrincipalePanelApp extends JPanel{
         timePanel.addEvents();
 
         //ARTICLE
-
-        // zoomButtonLeftBottom.setLayout(new BoxLayout(zoomButtonLeftBottom, BoxLayout.Y_AXIS));
-        // spaceBorderZoomPanel.setOpaque(false);
-        // zoomButtonLeftBottom.setOpaque(false);
-        // empty2.setOpaque(false);
         
         bodyCenter.setOpaque(false);
         article.setOpaque(false);
@@ -304,7 +289,7 @@ public class NPrincipalePanelApp extends JPanel{
     /**
      * Method adding components on the Panel
      */
-    public void addComposants(){
+    public void addComponents(){
 
         //HEADER COMPOSANTS
         panelButton.add(buttonMenuGraph);
@@ -433,7 +418,7 @@ public class NPrincipalePanelApp extends JPanel{
         });
 
         leaveButtonToImport.addActionListener((ActionEvent e) ->{
-                this.app.removeBodyPanelPrinc(this);
+                this.app.switchToMainScreen();
                 this.app.setVisible(true);
         });
 
