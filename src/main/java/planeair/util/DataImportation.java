@@ -378,7 +378,7 @@ public abstract class DataImportation {
      */
     private static void createAirportFrom(AirportSet airportSet, FlightsIntersectionGraph fig, String line, int currentLine) throws InvalidFileFormatException {
 
-        String okLine = line.replaceAll(DataImportation.REGEX_FLIGHTS_AIRPORTS, ""); // Suppress all the useless spaces
+        String okLine = line.replaceAll(DataImportation.REGEX_FLIGHTS_AIRPORTS, ""); // Suppress all the useless characters
 
         Scanner scanAirport = new Scanner(okLine);
         scanAirport.useDelimiter("[;\0]");

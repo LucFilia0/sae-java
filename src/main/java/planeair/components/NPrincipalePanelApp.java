@@ -25,9 +25,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.BoxLayout;
 
+//-- Import PlaneAIR
+
 import planeair.ihm.Map;
 import planeair.App;
-
+import planeair.ihm.infopanel.NInfoPanel;
 
 /**
  * This class create the principale panel of the App where you can see the map and the graph
@@ -125,20 +127,22 @@ public class NPrincipalePanelApp extends JPanel{
      * Layout Panel For hour's panel, link to the GridLayout of header
      */
     JPanel hourPanelComboBox = new JPanel();
-
     
     /**
      * JComboBox for choose hour
      */
     JComboBox hourChoice = new JComboBox();
+
     /**
      * Label with " : " between hour ComboBox and minutes ComboBox
      */
     JLabel betweenTime = new JLabel(" : ");
+    
     /**
      * JComboBox for choose minutes
      */
     JComboBox minChoice = new JComboBox();
+
     /**
      * Panel that contain ComboBox with hour
      * FlowLayout at CENTER
@@ -146,21 +150,23 @@ public class NPrincipalePanelApp extends JPanel{
      */
     JPanel hourPanelCenter = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-
     /**
      * Panel for the time's Slider
      * FlowLayout at CENTER
      */
     JPanel hourSliderPanelCENTER = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
     /**
      * Slider for Hour 
      * Location : Top of the center of the frame, below the comboBox
      */
     JSlider sliderTime = new JSlider();
+
     /**
      * Icon for the playing button
      */
     Icon iconPlay = new ImageIcon("./src/main/java/planeair/icons/play.png");
+
     /**
      * Button for playing the simulation 
      * Location : right to the slider
@@ -170,24 +176,6 @@ public class NPrincipalePanelApp extends JPanel{
     /*BODY COMPOSANTS*/
 
     // CENTER
-
-    // /**
-    //  * Contain the panel of Zoom
-    //  * Add Border
-    //  */
-    // JPanel spaceBorderZoomPanel = new JPanel();
-
-    // /**
-    //  * Contain an Empty Panel and spaceBorderZoomPanel
-    //  * Forcing bottom
-    //  */
-    // JPanel zoomButtonLeftBottom = new JPanel();
-
-    // /**
-    //  * Create an Empty Panel for forcing the ButtonZoom to go in bottom
-    //  * When there is no MinGraph + InfoGraph
-    //  */
-    // JPanel empty2 = new JPanel();
 
     /**
      * Slider that make access to change the number of altitudes max
@@ -251,10 +239,18 @@ public class NPrincipalePanelApp extends JPanel{
     App app;
 
     /**
+     *
+     */
+    private NInfoPanel infoPanel;
+
+    /**
      * Constructor of NPrincipalePanelApp
      * @param app the frame where this panel is put
      */
     public NPrincipalePanelApp (App app){
+	
+	this.infoPanel = new NInfoPanel();
+	this.infoPanel.setPrincipal();
 
         this.app = app;
         this.body = new Map();
@@ -387,6 +383,9 @@ public class NPrincipalePanelApp extends JPanel{
         body.add(graphLRightBottom,BorderLayout.EAST);
    
         article.setPreferredSize(new Dimension(160,100));
+
+	//INFOPANEL
+	this.body.add(this.infoPanel, BorderLayout.SOUTH);
 
         //ADD structure to BorderLayout
         this.add(header, BorderLayout.NORTH);

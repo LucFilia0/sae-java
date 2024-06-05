@@ -73,6 +73,7 @@ public class NFileChooser extends JFileChooser {
         this.setDialogTitle("Enregistrer sous");
         this.setDialogType(JFileChooser.SAVE_DIALOG);
         this.setApproveButtonText("Ouvrir");
+        this.setCurrentDirectory(new File("./data"));
         this.setFileSelectionMode(JFileChooser.FILES_ONLY);
         this.setMultiSelectionEnabled(false);
     }

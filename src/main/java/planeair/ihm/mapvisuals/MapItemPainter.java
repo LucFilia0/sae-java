@@ -89,7 +89,7 @@ public class MapItemPainter extends WaypointPainter<MapItem> {
             x = airportWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = airportWp_location.getY() - screen.getY() - waypointButton.getHeight();
 
-            waypointButton.setLocation(x.intValue(), y.intValue());
+            waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
         }
 
         /*
@@ -104,7 +104,8 @@ public class MapItemPainter extends WaypointPainter<MapItem> {
             x = flightWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = flightWp_location.getY() - screen.getY() - waypointButton.getHeight()/2;
 
-            waypointButton.setLocation((int) Math.round(x), (int) Math.round(y)); // The more accurate we can do T_T
+            //waypointButton.setLocation((int) Math.round(x), (int) Math.round(y)); // The more accurate we can do T_
+            waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
         }
 
         /*

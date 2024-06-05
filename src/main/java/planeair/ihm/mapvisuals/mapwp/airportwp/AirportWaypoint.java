@@ -8,6 +8,8 @@ import java.io.File;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
+import planeair.util.Airport;
+
 /**
  * This class is the MapWaypoint which is used to represent Airports on the Map.
  * The Airport class's Waypoints can be "active", in red, or "inactive", in gray.
@@ -18,6 +20,10 @@ import org.jxmapviewer.viewer.GeoPosition;
  * @author Luc le Manifik
  */
 public abstract class AirportWaypoint extends planeair.ihm.mapvisuals.mapwp.MapWaypoint {
+
+	//-- Airport Waypoint Attributes
+	
+	private Airport airport;
 
     //-- AirportWaypoint Consructor
 
@@ -30,7 +36,34 @@ public abstract class AirportWaypoint extends planeair.ihm.mapvisuals.mapwp.MapW
      * 
      * @author Luc le Manifik
      */
-    AirportWaypoint(File iconFile, String name, GeoPosition geoPosition) {
-        super(iconFile, name, geoPosition);
+    AirportWaypoint(File iconFile, Airport airport, GeoPosition geoPosition) {
+        super(iconFile, geoPosition);
+		this.airport = airport;
     }
+
+	//-- AirportWaypoint Getters
+	
+	/**
+	 * Returns the Airport represented by the AirportWaypoint
+	 */
+	public Airport getAirport() {
+		return this.airport;
+	}
+
+	/**
+	 * Sets the Aiprort which is represented by the AirportWaypoint
+	 */
+	public void setAirport(Airport airport) {
+		if(airport != null) {
+			this.airport = airport;
+		}
+	}
+
+	/**
+	 * Returns the prompt of the infos Airports
+	 */
+	public String toString() {
+		return this.airport.toString();
+	}
+
 }
