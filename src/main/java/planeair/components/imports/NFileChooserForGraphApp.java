@@ -1,4 +1,4 @@
-package planeair.components;
+package planeair.components.imports;
 
 import java.io.File;
 
@@ -24,7 +24,7 @@ public class NFileChooserForGraphApp {
      * He will be different 
      * Depends of the fileType
      */
-    JFileChooser chooser = new JFileChooser();
+    private JFileChooser chooser = new JFileChooser();
 
     /**
      * Constructor of NFileChooserForGraphApp

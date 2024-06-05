@@ -19,12 +19,12 @@ public class NButtonZoomPanelApp extends JPanel {
      * button : +
      * Location : first in Y-axis
      */
-    JButton ButtonPlus = new JButton("+");
+    private JButton ButtonPlus = new JButton("+");
     /**
      * button : -
      * Location : second in Y-axis
      */
-    JButton ButtonMinus = new JButton("−");
+    private JButton ButtonMinus = new JButton("−");
 
     /**
      * Panel for ButtonPlus + ButtonMinus
@@ -32,7 +32,7 @@ public class NButtonZoomPanelApp extends JPanel {
      * nb LINE : 2
      * nb COLUMN : 1
      */
-    JPanel GridButtonPanel = new JPanel(new GridLayout(2,1));
+    private JPanel GridButtonPanel = new JPanel(new GridLayout(2,1));
 
     public NButtonZoomPanelApp(){
 

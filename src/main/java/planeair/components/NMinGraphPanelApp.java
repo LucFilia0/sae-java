@@ -2,10 +2,17 @@ package planeair.components;
 
 // Import swing composants
 import javax.swing.JPanel;
+
+import planeair.App;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 
 // Import awt composants
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 
 
@@ -29,7 +36,8 @@ public class NMinGraphPanelApp extends JPanel {
      * hgap : 0
      * vgap : 30
      */
-    JPanel gridPanelMinGraph = new JPanel(new GridLayout(2,1,0,30));
+    // private JPanel gridPanelMinGraph = new JPanel(new GridLayout(2,1,0,30));
+    private JPanel gridPanelMinGraph = new JPanel();
 
 
     /*FIRST COMPOSANT */
@@ -38,9 +46,17 @@ public class NMinGraphPanelApp extends JPanel {
      * Panel of the graph representation
      * FlowLayout CENTER
      */
-    JPanel FlowPanelGraph = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    private JPanel FlowPanelGraph = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-    /*SECOND COMPOSANT */
+    /*SECOND COMPOSANT */ 
+    /**
+     * Expand Button for graph
+     * Open a new Frame with the graph and this information
+     * Location : in the panel Mingraph --> need here for Events
+     */
+    private JButton buttonAgr = new JButton("AGRANDIR");
+
+    private JPanel buttonCenter = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
     
     /**
@@ -48,16 +64,24 @@ public class NMinGraphPanelApp extends JPanel {
      */
     NMinGraphPanelApp(JButton buttonAgr){
 
-        this.setBackground(Color.YELLOW);
+        this.buttonAgr = buttonAgr;
+
+
+        this.setBackground(App.KINDAYELLOW);
+
+
 
         //STRUCT
         
         //GridPanel Background Color (YELLOW)
-        gridPanelMinGraph.setBackground(Color.YELLOW);
+        gridPanelMinGraph.setBackground(App.KINDAYELLOW);
+        gridPanelMinGraph.setLayout(new BoxLayout(gridPanelMinGraph, BoxLayout.Y_AXIS));
 
         /*FIRST COMPOSANT */
         
         //Insert Graph representation in FlowPanelGraph pour Nathan liegounettt
+        this.setMaximumSize(new Dimension(350,400));
+        FlowPanelGraph.setPreferredSize(new Dimension(325,325));
          
         /*SECOND COMPOSANT */
 
@@ -66,14 +90,22 @@ public class NMinGraphPanelApp extends JPanel {
         buttonAgr.setFont(new Font("Arial", Font.BOLD, 20));
         buttonAgr.setBorderPainted(false);
 
-
-         /*FIRST COMPOSANT */
-         gridPanelMinGraph.add(FlowPanelGraph);
-
-         /*SECOND COMPOSANT */
-         gridPanelMinGraph.add(buttonAgr);
- 
-         this.add(gridPanelMinGraph);
+        buttonCenter.setBackground(App.KINDAYELLOW);
     }
     
+    public void addComponents(){
+
+        /*FIRST COMPOSANT */
+        gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,5)));
+        gridPanelMinGraph.add(FlowPanelGraph);
+        gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,10)));
+
+        /*SECOND COMPOSANT */
+        buttonCenter.add(buttonAgr);
+        gridPanelMinGraph.add(buttonCenter);
+        gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,10)));
+
+        this.add(gridPanelMinGraph);
+   }
+
 }

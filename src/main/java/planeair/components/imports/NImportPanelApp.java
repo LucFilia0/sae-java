@@ -1,4 +1,4 @@
-package planeair.components;
+package planeair.components.imports;
 
 //import SWING composants
 import javax.swing.JLabel;
@@ -32,31 +32,31 @@ public class NImportPanelApp extends JPanel {
     /**
      * Panel header, explication of the App
      */
-    JPanel header = new JPanel();
+    private JPanel header = new JPanel();
 
     /**
      * Panel body of the Frame
      * Center bouttonsImport panel
      */
-    JPanel body = new JPanel(new GridBagLayout());
+    private JPanel body = new JPanel(new GridBagLayout());
 
     //HEADER
     /**
      * Description of the App (part 1)
      * Location : in the header of the panel
      */
-    JLabel descriptionApp1 = new JLabel("<html><i> Information</i> : Cette application a pour but de simuler</html>", SwingConstants.CENTER );
+    private JLabel descriptionApp1 = new JLabel("<html><i> Information</i> : Cette application a pour but de simuler</html>", SwingConstants.CENTER );
     /**
      * Description of the App (part 2)
      * Location : in the header of the panel
      */
-    JLabel descriptionApp2 = new JLabel("<html>une journée de vols pour detecter de possibles collisions</html>", SwingConstants.CENTER);
+    private JLabel descriptionApp2 = new JLabel("<html>une journée de vols pour detecter de possibles collisions</html>", SwingConstants.CENTER);
 
     /**
      * Import Button Panel
      * Location : In the center of the panel (with gridBagLayouts)
      */
-    NButtonImportPanelApp buttonImport;
+    private NButtonImportPanelApp buttonImport;
 
     // /**
     //  * Label for logo
@@ -71,20 +71,26 @@ public class NImportPanelApp extends JPanel {
 
         buttonImport = new NButtonImportPanelApp(app) ;
 
+        buttonImport.addComponents();
+        buttonImport.addEvents();
+
         descriptionApp1.setFont(new Font("Arial", Font.BOLD, 20));
         descriptionApp2.setFont(new Font("Arial", Font.BOLD, 20));
 
-        buttonImport.addEvents();
+        header.setBackground(App.KINDAYELLOW);
+        body.setBackground(App.KINDAYELLOW);
 
-        header.setBackground(Color.YELLOW);
-        body.setBackground(Color.YELLOW);
+        
+    }
+
+    public void addComponents(){
 
         //HEADER
         header.add(Box.createRigidArea(new Dimension(0, 30)));
         header.add(descriptionApp1);
         header.add(descriptionApp2);
 
-
+        // BODY
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -93,10 +99,12 @@ public class NImportPanelApp extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
         body.add(buttonImport,gbc);
-        gbc.gridx = 2;
-        //ADD to CONTENT PANE
 
+        //ADD to CONTENT PANE
         this.add(header, BorderLayout.NORTH);
         this.add(body, BorderLayout.CENTER);
+
+
+
     }
 }

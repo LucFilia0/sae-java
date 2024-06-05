@@ -11,7 +11,8 @@ import org.graphstream.graph.Node;
 //-- Import AWT
 
 import java.awt.BorderLayout;
-
+import java.awt.Color;
+import java.awt.Dimension;
 
 //-- Import JxMapViewer
 
@@ -38,6 +39,7 @@ import planeair.ihm.Map;
 import org.graphstream.ui.swing_viewer.* ;
 
 import planeair.components.*;
+import planeair.components.imports.NImportPanelApp;
 
 import org.graphstream.graph.implementations.* ;
 import org.graphstream.graph.* ;
@@ -69,31 +71,37 @@ public class App extends javax.swing.JFrame {
      * Page of selection of import file
      * It's the first that you see when you open the map
      */
-    NImportPanelApp importPanel = new NImportPanelApp(this);
+    private NImportPanelApp importPanel = new NImportPanelApp(this);
 
     /**
      * The panel principale of the App, where there is the map, the graph
      * and how change them
      */
-    NPrincipalePanelApp framePrinc = new NPrincipalePanelApp(this);
+    private NPrincipalePanelApp framePrinc = new NPrincipalePanelApp(this);
+
+    /**
+     * THE COLOR OF THE APP (not really yellow but quand même)
+     */
+    public static final Color KINDAYELLOW = new Color(242, 219, 7);
 
 
     App(){
 
         this.setTitle("Plane AIR | PAGE D'IMPORTATION");
-        this.setSize(900,600);
+        this.setSize(1200,700);
+        this.setMinimumSize(new Dimension(1200,700));
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
         framePrinc.addComposants();
         framePrinc.addEvents();
-        
+
+        importPanel.addComponents();
         
         this.add(importPanel);
 
         this.setVisible(true);
-        
         this.setLocationRelativeTo(null);
     }
 
@@ -101,7 +109,6 @@ public class App extends javax.swing.JFrame {
         // DON'T TOUCH THAT IT'S VERY IMPORTANT
         System.setProperty("org.graphstream.ui", "swing") ;
         System.setProperty("sun.java2d.uiScale", "100%") ;
-        System.setProperty("org.graphstream.ui", "swing") ;
 
         /* App planeAIR = new App("Plane AIR"); // Such a great name, isn't it ?
         planeAIR.setVisible(true); */

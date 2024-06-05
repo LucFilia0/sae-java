@@ -21,12 +21,12 @@ public class NMaxGraphFrameApp extends JFrame{
      * Panel of the graph (Bigger than NInfoGraphPanelApp)
      * Location : all in the frame
      */
-    JPanel graph = new JPanel();
+    private JPanel graph = new JPanel();
     /**
      * NInfoGraphPanelApp created, have parameter of the graph
      * Location : In the left at the bottom of the graph
      */
-    NInfoGraphPanelApp infoGraph = new NInfoGraphPanelApp();
+    private NInfoGraphPanelApp infoGraph = new NInfoGraphPanelApp();
 
 
     /**
@@ -36,6 +36,8 @@ public class NMaxGraphFrameApp extends JFrame{
 
         graph.setPreferredSize(new Dimension(500,350));
         graph.setBackground(Color.GREEN);
+
+        infoGraph.addComponents();
 
         graph.add(infoGraph);
         this.add(graph);

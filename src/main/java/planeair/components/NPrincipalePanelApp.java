@@ -13,20 +13,19 @@ import javax.swing.Box;
 
 // Import of AWT composants
 import java.awt.Dimension;
-import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 // Import of LAYOUT
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import javax.swing.BoxLayout;
 
 import planeair.ihm.Map;
 import planeair.App;
+import planeair.components.time.NTimePanelApp;
 
 
 /**
@@ -45,26 +44,32 @@ public class NPrincipalePanelApp extends JPanel{
      * hgap : 0
      * vgap : 0
      */
-    JPanel header = new JPanel(new GridLayout(1,1,0,0));
+    private JPanel header = new JPanel(new GridLayout(1,1,0,0));
 
     /**
      * Panel situe in the CENTER of the Frame's borderLayout 
      * For view the map even if we have the different Panel
      */
-    Map body = new Map();
+    private Map body = new Map();
 
     /**
      * Layout for the BorderLayout CENTER of body
      */
-    JPanel bodyCenter = new JPanel();
+    private JPanel bodyCenter = new JPanel();
 
     /**
-     * Panel situe in the WEST of the Frame's borderLayout
-     * CardLayout : 
-     * 1) NButtonZoomPanleApp (ZoomPanelCardArticleApp)
-     * 2) NButtonZoomPanleApp + NMenuPanelApp (MenuPanelCardArticleApp)
+     * Panel situe in the WEST of the body's borderLayout
+     * Two MENU can appeair here
+     * 1) NMEnuGraphPanelApp
+     * 2) NMEnuMapPanelApp
      */
-    JPanel article = new JPanel(new GridBagLayout());
+    private JPanel article = new JPanel();
+
+    /**
+     * Panel situe in the EAST of the body's borderLayout
+     */
+    private JPanel aside = new JPanel(new GridLayout());
+
 
 
     // HEADER COMPOSANTS 
@@ -77,21 +82,11 @@ public class NPrincipalePanelApp extends JPanel{
      * vgap : 0
      * Location : top of the frame (represent the header)
      */
-    JPanel panelNav = new JPanel(new GridLayout(1,3,0,0));
+    private JPanel panelNav = new JPanel(new GridLayout(1,3,0,0));
 
-    /**
-     * Icon of the Button menu
-     * Description : three horizontal lines
-     * Source : ./src/main/java/menu.png
-     */
-    Icon iconMenu = new ImageIcon("./src/main/java/planeair/icons/menu.png");
 
-    /**
-     * Icon of the Button menu
-     * Description : three horizontal lines
-     * Source : ./src/main/java/close.png
-     */
-    Icon iconClose = new ImageIcon("./src/main/java/planeair/icons/close.png");
+
+    
 
     /**
      * Panel for put all buttons in the nav
@@ -100,76 +95,78 @@ public class NPrincipalePanelApp extends JPanel{
      * COLUMN : 2 (menu + import)
      * Location : left ine the header
      */
-    JPanel panelButton = new JPanel(new GridLayout(1,2));
+    private JPanel panelButton = new JPanel(new GridLayout(1,3));
+
+    /**
+     * Icon of the Button menu graph
+     * Description : A cross
+     * Source : ./src/main/java/close.png
+     */
+    private Icon iconCloseGraph = new ImageIcon("./src/main/java/planeair/icons/close.png");
+
+     /**
+     * Icon of the Button menu Graph
+     * Description : three horizontal lines
+     * Source : ./src/main/java/menu.png
+     */
+    private Icon iconMenuGraph = new ImageIcon("./src/main/java/planeair/icons/graph.png");
     /**
      * Button with their Icon
      * Location : first button in the nav
      */
-    JButton buttonMenu = new JButton(iconMenu);
+    private JButton buttonMenuGraph = new JButton(iconMenuGraph);
+
+
+    /**
+     * Icon of the Button menu Map
+     * Description :  A cross
+     * Source : ./src/main/java/close.png
+     */
+    private Icon iconCloseMap = new ImageIcon("./src/main/java/planeair/icons/close.png");
+     /**
+     * Icon of the Button menu Map
+     * Description : A mini Map
+     * Source : ./src/main/java/map.png
+     */
+    private Icon iconMenuMap = new ImageIcon("./src/main/java/planeair/icons/map.png");
+    /**
+     * Button with their Icon
+     * Location : second button in the nav
+     */
+    private JButton buttonMenuMap = new JButton(iconMenuMap);
+
 
     /**
      * Icon for import button
      */
-    Icon iconFolder = new ImageIcon("./src/main/java/planeair/icons/folder-input.png");
+    private Icon iconFolder = new ImageIcon("./src/main/java/planeair/icons/folder-input.png");
     /**
      * Button for return with importButtons
-     * Location : second button in the nav
+     * Location : third button in the nav
      */
-    JButton leaveButtonToImport = new JButton(iconFolder);
+    private JButton leaveButtonToImport = new JButton(iconFolder);
+
+
+
     /**
      * Label for App's name + Logo
      */
-    JLabel labelLogoName = new JLabel("Plane AIR",JLabel.CENTER);
+    private JLabel labelLogoName = new JLabel("Plane AIR",JLabel.CENTER);
 
-    /**
-     * Layout Panel For hour's panel, link to the GridLayout of header
-     */
-    JPanel hourPanelComboBox = new JPanel();
-
-    
-    /**
-     * JComboBox for choose hour
-     */
-    JComboBox hourChoice = new JComboBox();
-    /**
-     * Label with " : " between hour ComboBox and minutes ComboBox
-     */
-    JLabel betweenTime = new JLabel(" : ");
-    /**
-     * JComboBox for choose minutes
-     */
-    JComboBox minChoice = new JComboBox();
-    /**
-     * Panel that contain ComboBox with hour
-     * FlowLayout at CENTER
-     * Location : Top of the center of the frame
-     */
-    JPanel hourPanelCenter = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-
-    /**
-     * Panel for the time's Slider
-     * FlowLayout at CENTER
-     */
-    JPanel hourSliderPanelCENTER = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    /**
-     * Slider for Hour 
-     * Location : Top of the center of the frame, below the comboBox
-     */
-    JSlider sliderTime = new JSlider();
-    /**
-     * Icon for the playing button
-     */
-    Icon iconPlay = new ImageIcon("./src/main/java/planeair/icons/play.png");
-    /**
-     * Button for playing the simulation 
-     * Location : right to the slider
-     */
-    JButton buttonPlay = new JButton(iconPlay);
 
     /*BODY COMPOSANTS*/
 
     // CENTER
+
+    /**
+     * The slider and comboBox for time
+     * Localisation : Top of the center of the frame
+     * The user can move time (because it's a simulation)
+     */
+    private NTimePanelApp timePanel = new NTimePanelApp();
+    /**
+     * 
+     */
 
     // /**
     //  * Contain the panel of Zoom
@@ -193,62 +190,65 @@ public class NPrincipalePanelApp extends JPanel{
      * Slider that make access to change the number of altitudes max
      * Location : in the panel menu --> need here for Events
      */
-    JSlider sliderKmax = new JSlider();
+    private JSlider sliderKmax = new JSlider();
     /**
      * JLabel for see the number altitudes choose
      * Location : in the panel menu --> need here for Events
      */
-    JComboBox choixAltitudesMax = new JComboBox(); 
+    private JComboBox<String> choixAltitudesMax = new JComboBox<>(); 
+
+     // LEFT 
     /**
-     * A pael for forcing all their is in the center to be in top
+     * Menu for changing graph composition
+     * Appear after push the button with the icon menu.png
+     * Location : left in the frame
      */
-    JPanel topEmptyPanel = new JPanel();
+    private NMenuGraphPanelApp menuGraph; 
+
+    /**
+     * Menu for changing graph composition
+     * Appear after push the button with the icon menu.png
+     * Location : left in the frame
+     */
+    private NMenuMapPanelApp menuMap;
+
 
     //RIGHT
     /**
      * Contain the panel of MinGraph + InfoGraph
      * Add Border
      */
-    JPanel spaceBorderGraph = new JPanel();
-    /**
-     * Panel in the bodyCenter Layout for the combo box and slider for TIME
-     * Location : center of the Frame
-     * LINE : 3
-     * CULUMN : 1
-     */
-    JPanel panelCenterWithTimeComboAndSlider = new JPanel(new GridLayout(3,1));
-
-    // LEFT 
-    /**
-     * Menu for changing graph composition
-     * Appear after push the button with the icon menu.png
-     * Location : left in the frame
-     */
-    NMenuPanelApp menu; 
-
-    // RIGHT
+    private JPanel spaceBorderGraph = new JPanel();
     /**
      * Contain an Empty Panel and spaceBorderButtonImport
      * Forcing bottom
      */
-    JPanel graphLRightBottom = new JPanel();
+    private JPanel graphLRightBottom = new JPanel();
+    /**
+     * Panel for min graphPanel
+     */
+    private NMinGraphPanelApp minGraphPanel; 
     /**
      * Expand Button for graph
      * Open a new Frame with the graph and this information
      * Location : in the panel Mingraph --> need here for Events
      */
-    JButton buttonAgr = new JButton("AGRANDIR");
+    private JButton buttonAgr = new JButton("AGRANDIR");
+    /**
+     * Info the graph show
+     */
+    private NInfoGraphPanelApp infoGraph =  new NInfoGraphPanelApp();
     /**
      * A frame for NMaxGraphPanelApp
      * Put directly in the frame with information
      */
-    NMaxGraphFrameApp maxGraphPanel; //maybe transform the class to JFramr directly
+    private NMaxGraphFrameApp maxGraphPanel; //maybe transform the class to JFrame directly
 
     /**
      * Having acces to homePage (setVisible elements change)
      * the panel NPrincipalePanelApp is put in this frame
      */
-    App app; 
+    private App app; 
 
     /**
      * Constructor of NPrincipalePanelApp
@@ -263,64 +263,36 @@ public class NPrincipalePanelApp extends JPanel{
 
         bodyCenter.setLayout(new BoxLayout(bodyCenter, BoxLayout.Y_AXIS));
 
-        /*HEADER COMPOSANTS */
+        // HEADER COMPONENTS
         
         //Color of the header's panel
-        panelNav.setBackground(Color.YELLOW);
-        panelButton.setBackground(Color.YELLOW);
-
+        panelNav.setBackground(App.KINDAYELLOW);
+        panelButton.setBackground(App.KINDAYELLOW);
 
         // Set ButtonsMenu
-        buttonMenu.setBorderPainted(false);
-        buttonMenu.setContentAreaFilled(false);
+        buttonMenuGraph.setBorderPainted(false);
+        buttonMenuGraph.setContentAreaFilled(false);
+
+        buttonMenuMap.setBorderPainted(false);
+        buttonMenuMap.setContentAreaFilled(false);
 
         leaveButtonToImport.setBorderPainted(false);
         leaveButtonToImport.setContentAreaFilled(false);
 
-        
+
         // Set logo with Name of the App in PanelNav
         // Description : France representation with graph composants
         // Source : ./src/main/java/Graph France.png
         labelLogoName.setIcon(new ImageIcon("./src/main/java/planeair/icons/GraphFrance.png"));
         //Size Label LOGO Name
+        labelLogoName.setFont(new Font("Arial", Font.ITALIC, 25));
         labelLogoName.setPreferredSize(new Dimension(WIDTH,70));
 
-        // Color of The HourPanelCenter variable
-        hourPanelCenter.setBackground(Color.YELLOW);
-        
-        menu = new NMenuPanelApp(10, choixAltitudesMax);
+        // BODY COMPONENTS
 
-        for(int i = 0; i <= 23; i++){
-            hourChoice.addItem(i);
-        }
-        hourChoice.setBackground(Color.YELLOW);
-
-        for(int i = 0; i <= 59; i++){
-            minChoice.addItem(i);
-        }
-        minChoice.setBackground(Color.YELLOW);
-
-        sliderTime.setOpaque(false);
-        hourSliderPanelCENTER.setOpaque(false);
-        hourPanelComboBox.setOpaque(false);
-        panelCenterWithTimeComboAndSlider.setOpaque(false);
-        article.setOpaque(false);
-
-        //SLIDER
-        sliderTime.setMinimum(0);
-        sliderTime.setMaximum(2359);
-        sliderTime.setPreferredSize(new Dimension(500,15));
-        sliderTime.setValue(0000);
-        //BUTTON PLAY
-        buttonPlay.setBackground(Color.YELLOW);
-        buttonPlay.setBorderPainted(false);
-        buttonPlay.setPreferredSize(new Dimension(35,35));
-
-        hourPanelComboBox.setPreferredSize(new Dimension(0,0));
-        hourSliderPanelCENTER.setPreferredSize(new Dimension(0,0));
-
-        topEmptyPanel.setPreferredSize(new Dimension(900,100));
-        topEmptyPanel.setOpaque(false);
+        // CENTER
+        timePanel.addComponents();
+        timePanel.addEvents();
 
         //ARTICLE
 
@@ -330,83 +302,104 @@ public class NPrincipalePanelApp extends JPanel{
         // empty2.setOpaque(false);
         
         bodyCenter.setOpaque(false);
+        article.setOpaque(false);
+        article.setPreferredSize(new Dimension(385,100));
 
         //ASIDE
+        minGraphPanel = new NMinGraphPanelApp(buttonAgr);
+        minGraphPanel.addComponents();
+
+        infoGraph = new NInfoGraphPanelApp();
+        infoGraph.addComponents();
+
         graphLRightBottom.setLayout(new BoxLayout(graphLRightBottom, BoxLayout.Y_AXIS));
         graphLRightBottom.setOpaque(false);
+
         spaceBorderGraph.setOpaque(false);
+
+        aside.setPreferredSize(new Dimension(385,100));
+        aside.setOpaque(false);
     }
 
     /**
-     * Method adding compostans of the Panel
+     * Method adding components on the Panel
      */
     public void addComposants(){
 
         //HEADER COMPOSANTS
-        panelButton.add(buttonMenu);
+        panelButton.add(buttonMenuGraph);
+        panelButton.add(buttonMenuMap);
         panelButton.add(leaveButtonToImport);
+
        
         panelNav.add(panelButton);
         panelNav.add(labelLogoName);
 
         JPanel empty = new JPanel();
-        empty.setBackground(Color.YELLOW);
+        empty.setBackground(App.KINDAYELLOW);
         panelNav.add(empty);
 
         header.add(panelNav);
 
         //BODY
+        body.add(timePanel, BorderLayout.CENTER);
+
+        menuGraph = new NMenuGraphPanelApp(10, choixAltitudesMax);
+        menuMap = new NMenuMapPanelApp(body);
         
-        //Hour COMBOBOX
-        hourPanelCenter.add(hourChoice);
-        hourPanelCenter.add(betweenTime);
-        hourPanelCenter.add(minChoice);
-        hourPanelComboBox.add(hourPanelCenter);
-
-
-        //TIME SLIDER
-        hourSliderPanelCENTER.add(sliderTime);
-        hourSliderPanelCENTER.add(buttonPlay);
-
-        //BODY CENTER
-        bodyCenter.add(hourPanelComboBox);
-        bodyCenter.add(hourSliderPanelCENTER);
-
-        bodyCenter.add(topEmptyPanel);
-
-        body.add(bodyCenter);
+        // LEFT
+        body.add(article,BorderLayout.WEST);
 
         //RIGHT
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        graphLRightBottom.add(new NMinGraphPanelApp(buttonAgr));
+        graphLRightBottom.add(minGraphPanel);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        graphLRightBottom.add(new NInfoGraphPanelApp());
-        graphLRightBottom.add(spaceBorderGraph);
-        body.add(graphLRightBottom,BorderLayout.EAST);
-   
-        article.setPreferredSize(new Dimension(160,100));
+        graphLRightBottom.add(infoGraph);
+        graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
+        aside.add(graphLRightBottom);
+        body.add(aside,BorderLayout.EAST);
 
         //ADD structure to BorderLayout
         this.add(header, BorderLayout.NORTH);
         this.add(body, BorderLayout.CENTER);
-        body.add(article,BorderLayout.WEST);
-
     };
 
     /**
-     * Method adding events of the JFrame
+     * Method adding events of the Panel
      */
     public void addEvents(){
 
-        buttonMenu.addActionListener((ActionEvent e) -> {
+        buttonMenuGraph.addActionListener((ActionEvent e) -> {
 
-            if(buttonMenu.getIcon().equals(iconMenu)){
+            if(buttonMenuGraph.getIcon().equals(iconMenuGraph)){
+
+                if(buttonMenuMap.getIcon().equals(iconMenuMap)){
+
                 GridBagConstraints GridBagC = new GridBagConstraints(); 
                 GridBagC.insets = new Insets(0, 10, 10, 0);
-                article.add(menu ,GridBagC);
-                buttonMenu.setIcon(iconClose);
-                this.app.revalidate();
+                article.add(menuGraph, GridBagC);
+                article.paintComponents(article.getGraphics());
 
+                buttonMenuGraph.setIcon(iconCloseGraph);
+                this.app.revalidate();
+                }
+                else{
+                    body.remove(article);
+                    this.app.setVisible(true);
+                    article.removeAll();
+
+                    GridBagConstraints GridBagC = new GridBagConstraints(); 
+                    GridBagC.insets = new Insets(0, 10, 10, 0);
+                    article.add(menuGraph, GridBagC);
+                    article.paintComponents(article.getGraphics());
+
+                    body.add(article,BorderLayout.WEST);
+
+                    buttonMenuMap.setIcon(iconMenuMap);
+                    buttonMenuGraph.setIcon(iconCloseGraph);
+
+                    this.app.revalidate();
+                }               
             }
             else{
                 body.remove(article);
@@ -414,7 +407,47 @@ public class NPrincipalePanelApp extends JPanel{
                 article.removeAll();
                 body.add(article,BorderLayout.WEST); 
                 this.app.setVisible(true);
-                buttonMenu.setIcon(iconMenu);
+                buttonMenuGraph.setIcon(iconMenuGraph);
+            }
+
+        });
+
+        buttonMenuMap.addActionListener((ActionEvent e) -> {
+
+            if(buttonMenuMap.getIcon().equals(iconMenuMap)){
+
+                if(buttonMenuGraph.getIcon().equals(iconMenuGraph)){
+                    article.add(menuMap);
+                    article.paintComponents(article.getGraphics());
+;
+                    buttonMenuMap.setIcon(iconCloseMap);
+                    this.app.revalidate();
+                }
+                else{
+                    body.remove(article);
+                    this.app.setVisible(true);
+                    article.removeAll();
+
+                    GridBagConstraints GridBagC = new GridBagConstraints(); 
+                    GridBagC.insets = new Insets(0, 10, 10, 0);
+                    article.add(menuMap, GridBagC);
+                    article.paintComponents(article.getGraphics());
+
+                    body.add(article,BorderLayout.WEST);
+
+                    buttonMenuGraph.setIcon(iconMenuGraph);
+                    buttonMenuMap.setIcon(iconCloseMap);
+                    this.app.revalidate();
+
+                }               
+            }
+            else{
+                body.remove(article);
+                this.app.setVisible(true);
+                article.removeAll();
+                body.add(article,BorderLayout.WEST); 
+                this.app.setVisible(true);
+                buttonMenuMap.setIcon(iconMenuMap);
             }
 
         });
@@ -423,29 +456,6 @@ public class NPrincipalePanelApp extends JPanel{
                 this.app.removeBodyPanelPrinc(this);
                 this.app.setVisible(true);
         });
-
-        hourChoice.addActionListener((ActionEvent e) -> {
-         
-            int hour = (int)hourChoice.getSelectedItem();
-            int newValSlid = (sliderTime.getValue()%100) + hour*100;
-            sliderTime.setValue(newValSlid);
-        });
-   
-        minChoice.addActionListener((ActionEvent e) -> {
-            
-            int min = (int)minChoice.getSelectedItem();
-            int newValSlid = (sliderTime.getValue()/100)*100 + min;
-            sliderTime.setValue(newValSlid);
-        });
-
-        sliderTime.addChangeListener((ChangeEvent e) -> {
-            int time = sliderTime.getValue();
-            int hour = time/100;
-            int minutes = time%100;
-            hourChoice.setSelectedItem(hour);
-            minChoice.setSelectedItem(minutes);
-            ;
-         });  
 
         buttonAgr.addActionListener((ActionEvent e) -> {
             maxGraphPanel = new NMaxGraphFrameApp();
