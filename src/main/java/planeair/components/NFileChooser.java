@@ -51,6 +51,7 @@ public class NFileChooser extends JFileChooser {
         // Attributes settings
         this.file = null;
         this.app = app;
+        this.setCurrentDirectory(new File(".")) ;
 
         // Filter
         FileNameExtensionFilter extensionFilter = null;

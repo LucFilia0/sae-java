@@ -25,19 +25,19 @@ public class NInfoGraphPanelApp extends JPanel{
      * nb LINE : 5
      * nb COLUMN : 1 (Name Info + Info)
      */
-    JPanel infoGraphGridLayout = new JPanel(new GridLayout(5, 1));
+    private JPanel infoGraphGridLayout = new JPanel(new GridLayout(5, 1));
 
     // LINE 1
 
     /**
      * Add an empty border for titleDegreeAvg
      */
-    JPanel degreePanel = new JPanel();
+    private JPanel degreePanel = new JPanel();
     /**
      * Title of the first LINE
      * Degree of the graph
      */
-    JLabel titleDegreeAvg = new JLabel("Degré moyen: " + "-");
+    private JLabel titleDegreeAvg = new JLabel("Degré moyen: " + "-");
     /**
      * Degree in the graph
      */
@@ -48,12 +48,12 @@ public class NInfoGraphPanelApp extends JPanel{
     /**
      * Add an empty border for titleComp
      */
-    JPanel compPanel = new JPanel();
+    private JPanel compPanel = new JPanel();
     /**
      * Title of the second LINE
      * Nb related composants
      */
-    JLabel titleComp = new JLabel("Nb comp. connexes: " + "-");
+    private JLabel titleComp = new JLabel("Nb comp. connexes: " + "-");
     /**
      * Degree in the graph
      */
@@ -64,12 +64,12 @@ public class NInfoGraphPanelApp extends JPanel{
     /**
      * Add an empty border for titleNodes
      */
-    JPanel nodesPanel = new JPanel();
+    private JPanel nodesPanel = new JPanel();
     /**
      * Title of the third LINE
      * NbNodes
      */
-    JLabel titleNodes = new JLabel("Nb noeuds: " + "-");
+    private JLabel titleNodes = new JLabel("Nb noeuds: " + "-");
     /**
      * Degree in the graph
      */
@@ -80,12 +80,12 @@ public class NInfoGraphPanelApp extends JPanel{
     /**
      * Add an empty border for titleEdges
      */
-    JPanel edgesPanel = new JPanel();
+    private JPanel edgesPanel = new JPanel();
     /**
      * Title of the LINE four
      *  Nb edges of the graph
      */
-    JLabel titleEdges = new JLabel("Nb arretes: " + "-");
+    private JLabel titleEdges = new JLabel("Nb arretes: " + "-");
     /**
      * Degree in the graph
      */
@@ -96,12 +96,12 @@ public class NInfoGraphPanelApp extends JPanel{
     /**
      * Add an empty border for titleDiameter
      */
-    JPanel diameterPanel = new JPanel();
+    private JPanel diameterPanel = new JPanel();
     /**
      * Title of the LINE five
      * Diameter of the graph
      */
-    JLabel titleDiameter = new JLabel("Diametre: " + "-");
+    private JLabel titleDiameter = new JLabel("Diametre: " + "-");
 
     /**
      * Contructor of NInfoGraphPanelApp
@@ -111,6 +111,7 @@ public class NInfoGraphPanelApp extends JPanel{
         this.setBackground(Color.YELLOW);
 
         this.setLayout(new BorderLayout());
+        this.setAlignmentX(LEFT_ALIGNMENT) ;
 
         degreePanel.setBackground(Color.YELLOW);
         compPanel.setBackground(Color.YELLOW);
@@ -220,6 +221,4 @@ public class NInfoGraphPanelApp extends JPanel{
     public void setTitleDiameter(JLabel titleDiameter) {
         this.titleDiameter = titleDiameter;
     }
-
-    
 }

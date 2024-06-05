@@ -11,6 +11,8 @@ import java.util.Scanner;
 import org.graphstream.graph.EdgeRejectedException;
 import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.IdAlreadyInUseException;
+import org.graphstream.graph.Node;
+import org.miv.mbox.Test;
 
 //-- Import Plane AIR
 
@@ -245,6 +247,8 @@ public abstract class DataImportation {
         String idNodeA = null;
         String idNodeB = null;
 
+        Node nodeAdded ;
+
         while(lineScanner.hasNextLine()) {
 
             ++currentLine;
@@ -271,11 +275,15 @@ public abstract class DataImportation {
 
             // Adds the nodes and increment node number if they do not already exist
             if(testGraph.getNode(idNodeA) == null) {
-                testGraph.addNode(idNodeA);
+                nodeAdded = testGraph.addNode(idNodeA);
+                nodeAdded.setAttribute(TestGraph.COLOR_ATTRIBUTE, 0) ;
+                nodeAdded.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
                 ++nbNodes;
             }
             if(testGraph.getNode(idNodeB) == null) {
-                testGraph.addNode(idNodeB);
+                nodeAdded = testGraph.addNode(idNodeB);
+                nodeAdded.setAttribute(TestGraph.COLOR_ATTRIBUTE, 0) ;
+                nodeAdded.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
                 ++nbNodes;
             }
 

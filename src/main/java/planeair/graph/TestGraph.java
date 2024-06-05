@@ -22,22 +22,31 @@ public class TestGraph extends SingleGraph {
     /**
      * The String identifier that represents the max allowed number of colors (int)
      */
-    private static final String K_MAX = "kMax";
+    public static final String K_MAX = "kMax";
 
     /**
      * The String identifier that represents the max allowed number of Nodes (int)
      */
-    private static final String NB_MAX_NODES = "nbMaxNodes";
+    public static final String NB_MAX_NODES = "nbMaxNodes";
 
     /**
      * The String identifier that represents the current number of Nodes (int)
      */
-    private static final String NB_NODES = "nbNodes";
+    public static final String NB_NODES = "nbNodes";
 
     /**
      * The String identifier that represents the current number of edges (int)
      */
-    private static final String NB_EDGES = "nbEdges";
+    public static final String NB_EDGES = "nbEdges";
+
+    /**
+     * The String identifier that represents the current number of colors (int)
+     */
+    public static final String COLOR_ATTRIBUTE = "color" ;
+    /**
+     * The String identifier that represents the current number of conflicts (int)
+     */
+    public static final String CONFLICT_ATTRIBUTE = "nbConflicts" ; 
 
     //-- TestGraph Constructor
 
@@ -55,6 +64,8 @@ public class TestGraph extends SingleGraph {
         this.setAttribute(TestGraph.NB_MAX_NODES, 0);
         this.setAttribute(TestGraph.NB_NODES, 0);
         this.setAttribute(TestGraph.NB_EDGES, 0);
+        this.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0);
+        this.setAttribute(TestGraph.COLOR_ATTRIBUTE, 0) ;
     }
 
     //-- TestGraph toString()
@@ -128,6 +139,24 @@ public class TestGraph extends SingleGraph {
         return (int)this.getAttribute(TestGraph.NB_EDGES);
     }
 
+    /**
+     * Returns the number of colors used to color the graph
+     * 
+     * @return
+     */
+    public int getNbColors() {
+        return (int)this.getAttribute(TestGraph.COLOR_ATTRIBUTE) ;
+    }
+
+    /**
+     * Returns the number of conflicts that occurred while coloring the graph
+     * 
+     * @return
+     */
+    public int getNbConflicts() {
+        return (int)this.getAttribute(TestGraph.CONFLICT_ATTRIBUTE) ;
+    }
+
     //-- TestGraph Setters
 
     /**
@@ -189,7 +218,29 @@ public class TestGraph extends SingleGraph {
         }
         this.setAttribute(TestGraph.NB_EDGES, nbEdges);
     }
+
+    /**
+     * Sets the total number of colors used to color the graph
+     * @param nbConflicts new number of colors
+     */
+    public void setNbColors(int nbColors) {
+        if (nbColors < 0) {
+            throw new InvalidEntryException() ;
+        }
+        this.setAttribute(COLOR_ATTRIBUTE, nbColors) ;
+    }
     
+    /**
+     * Sets the total number of conflicts the graph has
+     * An edge counts as a conflict is both of its nodes have the same color.
+     * @param nbConflicts new number of conflicts
+     */
+    public void setNbConflicts(int nbConflicts) {
+        if (nbConflicts < 0) {
+            throw new InvalidEntryException() ;
+        }
+        this.setAttribute(CONFLICT_ATTRIBUTE, nbConflicts) ;
+    }
 }
 
    

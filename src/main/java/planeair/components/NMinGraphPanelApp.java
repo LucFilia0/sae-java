@@ -2,10 +2,16 @@ package planeair.components;
 
 // Import swing composants
 import javax.swing.JPanel;
+
+import planeair.App;
+import planeair.graph.Coloration;
+import planeair.graph.PanelCreator;
+
 import javax.swing.JButton;
 
 // Import awt composants
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 
 
@@ -38,7 +44,13 @@ public class NMinGraphPanelApp extends JPanel {
      * Panel of the graph representation
      * FlowLayout CENTER
      */
-    JPanel FlowPanelGraph = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    JPanel FlowPanelGraph ;
+
+    /**
+     * Having acces to homePage (setVisible elements change)
+     * the panel NPrincipalePanelApp is put in this frame
+     */
+    App app;
 
     /*SECOND COMPOSANT */
 
@@ -46,8 +58,8 @@ public class NMinGraphPanelApp extends JPanel {
     /**
      * Constructor of NMinGraphPanelApp
      */
-    NMinGraphPanelApp(JButton buttonAgr){
-
+    NMinGraphPanelApp(App app, JButton buttonAgr) {
+        this.app = app ;
         this.setBackground(Color.YELLOW);
 
         //STRUCT
@@ -67,13 +79,19 @@ public class NMinGraphPanelApp extends JPanel {
         buttonAgr.setBorderPainted(false);
 
 
-         /*FIRST COMPOSANT */
-         gridPanelMinGraph.add(FlowPanelGraph);
+        /*FIRST COMPOSANT */
+        FlowPanelGraph = new JPanel() ;
+        FlowPanelGraph.setLayout(new FlowLayout(FlowLayout.CENTER)) ;
+        gridPanelMinGraph.add(FlowPanelGraph);
 
-         /*SECOND COMPOSANT */
-         gridPanelMinGraph.add(buttonAgr);
- 
-         this.add(gridPanelMinGraph);
+        /*SECOND COMPOSANT */
+        gridPanelMinGraph.add(buttonAgr);
+
+        this.add(gridPanelMinGraph);
+    }
+
+    public void addGraphToPanel(PanelCreator graphRenderer) {
+        this.FlowPanelGraph = graphRenderer.getViewPanel() ;  
     }
     
 }

@@ -3,10 +3,7 @@ package planeair;
 //-- Import Swing
 
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 
-import org.graphstream.graph.Node;
 
 //-- Import AWT
 
@@ -20,8 +17,7 @@ import java.awt.BorderLayout;
 //-- Import Java
 
 import java.io.File;
-import java.util.LinkedList;
-import planeair.graph.Coloration;
+
 
 //-- Import Plane AIR
 
@@ -35,28 +31,16 @@ import planeair.util.DataImportation;
 
 import planeair.ihm.Map;
 
-import org.graphstream.ui.swing_viewer.* ;
-import org.miv.mbox.Test;
-
 import planeair.components.*;
 
-import org.graphstream.graph.implementations.* ;
-import org.graphstream.graph.* ;
+
 
 //-- Import Exceptions
 
 import java.io.FileNotFoundException;
 
-import planeair.exceptions.InvalidCoordinateException;
-import planeair.exceptions.InvalidTimeException;
-import planeair.exceptions.ObjectNotFoundException;
 import planeair.exceptions.InvalidEntryException;
 import planeair.exceptions.InvalidFileFormatException;
-import planeair.util.* ;
-import planeair.graph.* ;
-
-import planeair.util.* ;
-import planeair.graph.* ;
 
 
 /**
@@ -91,7 +75,12 @@ public class App extends javax.swing.JFrame {
     /**
      * the TestGraph that loads testGraphs files
      */
-    private TestGraph testGraph;
+    private TestGraph testGraph = null;
+
+    /**
+     * PanelCreator object used to render the graph
+     */
+    private PanelCreator testGraphRenderer ;
 
     /**
      * The AirportSet which contains all the Airports
@@ -136,19 +125,19 @@ public class App extends javax.swing.JFrame {
         // DON'T TOUCH THAT IT'S VERY IMPORTANT
         System.setProperty("org.graphstream.ui", "swing") ;
         System.setProperty("sun.java2d.uiScale", "100%") ;
-        System.setProperty("org.graphstream.ui", "swing") ;
 
         /* App planeAIR = new App("Plane AIR"); // Such a great name, isn't it ?
         planeAIR.setVisible(true); */
 
         /* TestGraph tg = new TestGraph("graph") ;
         try {
-            tg.importFromFile(new File("data/graph-test2.txt"), false) ;
+            DataImportation.importTestGraphFromFile(tg, new File("data/graph-test10.txt"), false) ;
         }
 
         catch (Exception e) {
             System.err.println(e) ;
-        } */
+        }
+        */
 
         /* for (Node n : tg) {
             n.setAttribute("color", 0) ;
@@ -281,13 +270,24 @@ public class App extends javax.swing.JFrame {
 
         System.out.println(fig);
 
-        
-
         this.setVisible(true);
     }
     
     public TestGraph getTestGraph() {
         return this.testGraph;
+    }
+
+    public void setTestGraph(TestGraph testGraph) {
+        this.testGraph = testGraph ;
+        this.initTestGraphRenderer() ;
+    }
+
+    public PanelCreator getTestGraphRenderer() {
+        return this.testGraphRenderer ;
+    }
+
+    public void initTestGraphRenderer() {
+        this.testGraphRenderer = new PanelCreator(this.testGraph) ;
     }
 
     public AirportSet getAirportSet() {

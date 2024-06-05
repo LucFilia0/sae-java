@@ -21,6 +21,7 @@ import javax.swing.BoxLayout;
 
 import planeair.App;
 import planeair.exceptions.InvalidFileFormatException;
+import planeair.graph.TestGraph;
 import planeair.util.DataImportation;
 
 /**
@@ -86,7 +87,7 @@ public class NButtonImportPanelApp extends JPanel {
      * Test pour rajouter un boutton valider au début
      * Location : below buttons choice
      */
-    JButton valideStart = new JButton("Valider");
+    JButton confirmStart = new JButton("Valider");
 
     /**
      * Import the Frame of the App
@@ -148,13 +149,13 @@ public class NButtonImportPanelApp extends JPanel {
         valideFlight.setPreferredSize(new Dimension(50,40));
         valideFlight.setBackground(Color.BLACK);
 
-        valideStart.setForeground(Color.WHITE);
-        valideStart.setPreferredSize(new Dimension(50,40));
-        valideStart.setBackground(Color.BLACK);
+        confirmStart.setForeground(Color.WHITE);
+        confirmStart.setPreferredSize(new Dimension(50,40));
+        confirmStart.setBackground(Color.BLACK);
 
         this.add(buttonsPanel);
-        this.add(valideStart);
-        valideStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.add(confirmStart);
+        confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(Box.createRigidArea(new Dimension(0, 5)));
 
     }
@@ -164,14 +165,14 @@ public class NButtonImportPanelApp extends JPanel {
      * Importation and return back
      */
     public void addEvents(){
-        valideStart.addActionListener((ActionEvent e) -> {
+        confirmStart.addActionListener((ActionEvent e) -> {
             this.app.addBodyPanelPrinc();
             
         });
 
         choiceFlight.addActionListener((ActionEvent e) -> {
             buttonsPanel.removeAll();
-            this.remove(valideStart);
+            this.remove(confirmStart);
             buttonsPanel.add(buttonAirport);
             this.add(valideAr);
             valideAr.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -187,8 +188,10 @@ public class NButtonImportPanelApp extends JPanel {
 
             if(!fileChooser.getFile().equals(null)) {
                 try {
+                    this.app.setTestGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     DataImportation.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
-                    this.graphImported = true;
+                    initDefaultGraphImportation() ;
+                    this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                 }
@@ -197,7 +200,7 @@ public class NButtonImportPanelApp extends JPanel {
 
         valideAr.addActionListener((ActionEvent e) -> {
             buttonsPanel.removeAll();
-            this.remove(valideStart);
+            this.remove(confirmStart);
             this.remove(valideAr);
             buttonsPanel.add(buttonFlight);
             this.add(valideFlight);
@@ -270,8 +273,15 @@ public class NButtonImportPanelApp extends JPanel {
         buttonsPanel.add(choiceFlight);
         buttonsPanel.add(choiceGraph);
         this.add(buttonsPanel);
-        this.add(valideStart);
-        valideStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.add(confirmStart);
+        confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(Box.createRigidArea(new Dimension(0, 5)));
+    }
+
+    public void initDefaultGraphImportation() {
+        
+        this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
+        this.app.getPrincFrame().getMenuPanel().setAltitudeValues(this.app.getTestGraph().getKMax()) ;
+        this.graphImported = true;
     }
 }

@@ -126,11 +126,10 @@ public class NPrincipalePanelApp extends JPanel{
      */
     JPanel hourPanelComboBox = new JPanel();
 
-    
     /**
      * JComboBox for choose hour
      */
-    JComboBox hourChoice = new JComboBox();
+    JComboBox<Integer> hourChoice = new JComboBox<>();
     /**
      * Label with " : " between hour ComboBox and minutes ComboBox
      */
@@ -138,7 +137,7 @@ public class NPrincipalePanelApp extends JPanel{
     /**
      * JComboBox for choose minutes
      */
-    JComboBox minChoice = new JComboBox();
+    JComboBox<Integer> minChoice = new JComboBox<>();
     /**
      * Panel that contain ComboBox with hour
      * FlowLayout at CENTER
@@ -195,12 +194,12 @@ public class NPrincipalePanelApp extends JPanel{
      */
     JSlider sliderKmax = new JSlider();
     /**
-     * JLabel for see the number altitudes choose
+     * JLabel to see the altitude chosen
      * Location : in the panel menu --> need here for Events
      */
-    JComboBox choixAltitudesMax = new JComboBox(); 
+    JComboBox<Integer> choixAltitudesMax = new JComboBox<>(); 
     /**
-     * A pael for forcing all their is in the center to be in top
+     * A panel for forcing all their is in the center to be in top
      */
     JPanel topEmptyPanel = new JPanel();
 
@@ -224,7 +223,12 @@ public class NPrincipalePanelApp extends JPanel{
      * Appear after push the button with the icon menu.png
      * Location : left in the frame
      */
-    NMenuPanelApp menu; 
+    private NMenuPanelApp menu; 
+
+    /**
+     * Panel containing information on the graphs
+     */
+    private NInfoGraphPanelApp infoGraph ;
 
     // RIGHT
     /**
@@ -238,6 +242,10 @@ public class NPrincipalePanelApp extends JPanel{
      * Location : in the panel Mingraph --> need here for Events
      */
     JButton buttonAgr = new JButton("AGRANDIR");
+    /**
+     * Panel containing a minimized view of the graph
+     */
+    private NMinGraphPanelApp minGraphPanel ;
     /**
      * A frame for NMaxGraphPanelApp
      * Put directly in the frame with information
@@ -290,7 +298,7 @@ public class NPrincipalePanelApp extends JPanel{
         // Color of The HourPanelCenter variable
         hourPanelCenter.setBackground(Color.YELLOW);
         
-        menu = new NMenuPanelApp(10, choixAltitudesMax);
+        menu = new NMenuPanelApp(this.app, 10, choixAltitudesMax) ;
 
         for(int i = 0; i <= 23; i++){
             hourChoice.addItem(i);
@@ -380,9 +388,11 @@ public class NPrincipalePanelApp extends JPanel{
 
         //RIGHT
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        graphLRightBottom.add(new NMinGraphPanelApp(buttonAgr));
+        minGraphPanel = new NMinGraphPanelApp(this.app, buttonAgr) ;
+        graphLRightBottom.add(minGraphPanel);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        graphLRightBottom.add(new NInfoGraphPanelApp());
+        infoGraph = new NInfoGraphPanelApp() ;
+        graphLRightBottom.add(infoGraph);
         graphLRightBottom.add(spaceBorderGraph);
         body.add(graphLRightBottom,BorderLayout.EAST);
    
@@ -455,7 +465,7 @@ public class NPrincipalePanelApp extends JPanel{
          });  
 
         buttonAgr.addActionListener((ActionEvent e) -> {
-            maxGraphPanel = new NMaxGraphFrameApp();
+            maxGraphPanel = new NMaxGraphFrameApp(this.app.getTestGraphRenderer()) ;
         });
 
         sliderKmax.addChangeListener((ChangeEvent e) -> {
@@ -463,8 +473,33 @@ public class NPrincipalePanelApp extends JPanel{
         } );
        
         choixAltitudesMax.addActionListener((ActionEvent e) -> {
-            sliderKmax.setValue((int)choixAltitudesMax.getSelectedItem());
+            if (choixAltitudesMax.getSelectedItem() != null) {
+                sliderKmax.setValue((int)choixAltitudesMax.getSelectedItem());
+            }
+            else {
+                sliderKmax.setValue(0) ;
+            }
         });
 
+    }
+
+    public NMinGraphPanelApp getMinGraphPanel() {
+        return this.minGraphPanel ;
+    }
+
+    public NInfoGraphPanelApp getInfoGraph() {
+        return this.infoGraph ;
+    }
+
+    public NMenuPanelApp getMenuPanel() {
+        return this.menu ;
+    }
+
+    /**
+     * Sets the range of values and the default value of the kMax comboBox in the menu
+     * @param kMax new KMax value
+     */
+    public void setInfo(int kMax) {
+        this.getMenuPanel().setAltitudeValues(kMax) ;
     }
 }
