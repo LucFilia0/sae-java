@@ -93,7 +93,7 @@ public class Flight extends SingleNode {
      * @return (String)
      */
     public String toString() {
-        return "-- Flight\nName : " + super.getId() + "\nDeparture Airport : " + this.getAttribute("departureAirport") + "\nArrival Airport : " + this.getAttribute("arrivalAirport") + "\nDeparture Time : " + this.getAttribute("departureTime") + "\nDuration Flight : " + this.getAttribute("durationFlight") + "\nLayer : " + this.getAttribute("layer");
+        return "<html>-- Flight<br><strong>Name :</strong> " + super.getId() + "<br><strong>Departure Airport :</strong> " + this.getAttribute(Flight.DEPARTURE_AIRPORT) + "<br><strong>Arrival Airport :</strong> " + this.getAttribute(Flight.ARRIVAL_AIRPORT) + "<br><strong>Departure Time :</strong> " + this.getAttribute(Flight.DEPARTURE_TIME) + "<br><strong>Duration Flight :</strong> " + this.getAttribute(Flight.FLIGHT_DURATION) + "<br><strong>Layer :</strong> " + this.getAttribute(Flight.LAYER);
     }
 
     //-- Flight Getters
@@ -441,8 +441,8 @@ public class Flight extends SingleNode {
         GeoPosition currentGeoPosition = null;
 
         // Get the current time (from milliseconds to minutes)
-        //long currentTimeInMinutes = System.currentTimeMillis() / 60000;
-        long currentTimeInMinutes = 17 * 60 + 40; // 8h
+        long currentTimeInMinutes = System.currentTimeMillis() / 60000;
+        //long currentTimeInMinutes = 8 * 60; // 8h
 
         int flightDepartureTime = this.getDepartureTime().getHourValueInMinutes();
         int flightArrivalTime = flightDepartureTime + this.getFlightDuration();

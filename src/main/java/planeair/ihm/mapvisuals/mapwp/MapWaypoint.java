@@ -14,6 +14,9 @@ import java.awt.event.ActionListener;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
+import planeair.ihm.Map;
+
+
 /**
  * This class is made to put interactive Waypoints on the Application's map.
  * The MapWaypoints are Waypoints with a JButton and an icon, which make it possible to iteract with.
@@ -21,13 +24,8 @@ import org.jxmapviewer.viewer.GeoPosition;
  * @author Luc le Manifik
  */
 public abstract class MapWaypoint extends planeair.ihm.mapvisuals.MapItem {
-    
-    //-- MapWaypoint attributes
 
-    /**
-     * The name of the MapWaypoint
-     */
-    protected String name;
+    //-- MapWaypoint attributes
 
     /**
      * The button with which we can interact
@@ -47,13 +45,12 @@ public abstract class MapWaypoint extends planeair.ihm.mapvisuals.MapItem {
      * 
      * @author Luc le Manifik
      */
-    public MapWaypoint(File iconFile, String name, GeoPosition geoPosition) {
+    public MapWaypoint(File iconFile, GeoPosition geoPosition) {
         super(geoPosition);
-        this.setName(name);
         this.waypointButton = null;
 
         try {
-            this.waypointButton = new MapWaypointButton(iconFile);
+            this.waypointButton = new MapWaypointButton(iconFile, this);
         }catch(IOException e) {
             e.printStackTrace();
         }
@@ -68,27 +65,38 @@ public abstract class MapWaypoint extends planeair.ihm.mapvisuals.MapItem {
      */
     private void initEvents() {
 
+        /* this.waypointButton.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent arg0) {
+                switch(arg0.getStateChange()) {
+                    case ItemEvent.SELECTED : 
+                        System.out.println("SELECTED");
+                        infoPanel.showInfos(((MapWaypointButton)arg0.getSource()).getMapWaypoint());
+                        break;
+                    case ItemEvent.DESELECTED : 
+                        System.out.println("DESELECTED");
+                        infoPanel.hideInfos();
+                        break;
+                    default : break;
+                }
+            }
+            
+        }); */
+
         this.waypointButton.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println("MapWaypoint : " + name);
+            public void actionPerformed(ActionEvent e) {
+                MapWaypointButton mwp = (MapWaypointButton) e.getSource();
+                Map.infoPanel.showInfos(mwp.getMapWaypoint());
             }
+            
         });
+
     }
 
     //-- MapWaypoint Getters
-
-    /**
-     * Returns the name of the MapWaypoint
-     * 
-     * @return (String) - The name of the MapWaypoint
-     * 
-     * @author Luc le Manifik
-     */
-    public String getName() {
-        return this.name;
-    }
 
     /**
      * Returns the WaypointButton of the MapWaypoint. The WaypointButton actually contains the visual of the MapWaypoint
@@ -104,17 +112,6 @@ public abstract class MapWaypoint extends planeair.ihm.mapvisuals.MapItem {
     //-- MapWaypoint Setters
 
     /**
-     * Sets the name of the MapWaypoint
-     * 
-     * @param name (String) - The new name of the MapWaypoint
-     * 
-     * @author Luc le Manifik
-     */
-    public void setName(String name) {
-        if(name != null) this.name = name;
-    }
-
-    /**
      * Sets the icon of the MapWaypoint's WaypointButton (which is the visual of the MapWaypoint).
      * 
      * @param iconFile ({@link java.io.File}) - The new icon's File
@@ -126,10 +123,12 @@ public abstract class MapWaypoint extends planeair.ihm.mapvisuals.MapItem {
     public void setButtonIcon(File iconFile) throws IOException {
         if(iconFile != null) {
             try {
-                this.waypointButton = new MapWaypointButton(iconFile);
+                this.waypointButton = new MapWaypointButton(iconFile, this);
             }catch(IOException e) {
                 throw e;
             }
         }
     }
+
+    public abstract String toString();
 }

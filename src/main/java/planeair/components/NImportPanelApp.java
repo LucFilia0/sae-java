@@ -23,6 +23,12 @@ import javax.swing.BoxLayout;
 import planeair.ihm.Map;
 import planeair.App;
 
+/**
+ * This class create a panel for information of the App and importantion of files necesseray
+ * It's the first panel you see when you open the App
+ * 
+ * @author GIRAUD Nila
+ */
 public class NImportPanelApp extends JPanel {
 
     //STRUCT
@@ -54,7 +60,7 @@ public class NImportPanelApp extends JPanel {
      * Import Button Panel
      * Location : In the center of the panel (with gridBagLayouts)
      */
-    NButtonImportPanelApp buttonImport = new NButtonImportPanelApp(this) ;
+    NButtonImportPanelApp buttonImport;
 
     // /**
     //  * Label for logo
@@ -66,6 +72,8 @@ public class NImportPanelApp extends JPanel {
 
         this.setLayout(new BorderLayout());
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+
+        buttonImport = new NButtonImportPanelApp(app) ;
 
         descriptionApp1.setFont(new Font("Arial", Font.BOLD, 20));
         descriptionApp2.setFont(new Font("Arial", Font.BOLD, 20));
@@ -80,7 +88,7 @@ public class NImportPanelApp extends JPanel {
     /**
      * This method adding componant to the panel
      */
-    public void addComposants(){
+    public void addComponents(){
 
         //HEADER
         // header.add(logoApp);

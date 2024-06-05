@@ -25,10 +25,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.BoxLayout;
 
+//-- Import PlaneAIR
+
 import planeair.ihm.Map;
 import planeair.App;
+import planeair.ihm.infopanel.NInfoPanel;
 
-public class NPrincipalePanelApp extends JPanel{
+/**
+ * This class create the principale panel of the App where you can see the map and the graph
+ * 
+ * @author GIRAUD Nila
+ */
+public class NPrincipalePanelApp extends JPanel {
 
     //STRUCT
 
@@ -45,7 +53,7 @@ public class NPrincipalePanelApp extends JPanel{
      * Panel situe in the CENTER of the Frame's borderLayout 
      * For view the map even if we have the different Panel
      */
-    Map body = new Map();
+    Map body;
 
     /**
      * Layout for the BorderLayout CENTER of body
@@ -78,14 +86,14 @@ public class NPrincipalePanelApp extends JPanel{
      * Description : three horizontal lines
      * Source : ./src/main/java/menu.png
      */
-    Icon iconMenu = new ImageIcon("./src/main/java/Icons/menu.png");
+    Icon iconMenu = new ImageIcon("./src/main/java/planeair/icons/menu.png");
 
     /**
      * Icon of the Button menu
      * Description : three horizontal lines
      * Source : ./src/main/java/close.png
      */
-    Icon iconClose = new ImageIcon("./src/main/java/Icons/close.png");
+    Icon iconClose = new ImageIcon("./src/main/java/planeair/icons/close.png");
 
     /**
      * Panel for put all buttons in the nav
@@ -104,7 +112,7 @@ public class NPrincipalePanelApp extends JPanel{
     /**
      * Icon for import button
      */
-    Icon iconFolder = new ImageIcon("./src/main/java/Icons/folder-input.png");
+    Icon iconFolder = new ImageIcon("./src/main/java/planeair/icons/folder-input.png");
     /**
      * Button for return with importButtons
      * Location : second button in the nav
@@ -124,15 +132,17 @@ public class NPrincipalePanelApp extends JPanel{
     /**
      * JComboBox for choose hour
      */
-    JComboBox hourChoice = new JComboBox();
+    JComboBox<Integer> hourChoice = new JComboBox<>();
     /**
      * Label with " : " between hour ComboBox and minutes ComboBox
      */
     JLabel betweenTime = new JLabel(" : ");
+    
     /**
      * JComboBox for choose minutes
      */
-    JComboBox minChoice = new JComboBox();
+    JComboBox<Integer> minChoice = new JComboBox<>();
+    
     /**
      * Panel that contain ComboBox with hour
      * FlowLayout at CENTER
@@ -140,21 +150,23 @@ public class NPrincipalePanelApp extends JPanel{
      */
     JPanel hourPanelCenter = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-
     /**
      * Panel for the time's Slider
      * FlowLayout at CENTER
      */
     JPanel hourSliderPanelCENTER = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
     /**
      * Slider for Hour 
      * Location : Top of the center of the frame, below the comboBox
      */
     JSlider sliderTime = new JSlider();
+
     /**
      * Icon for the playing button
      */
-    Icon iconPlay = new ImageIcon("./src/main/java/Icons/play.png");
+    Icon iconPlay = new ImageIcon("./src/main/java/planeair/icons/play.png");
+
     /**
      * Button for playing the simulation 
      * Location : right to the slider
@@ -165,36 +177,20 @@ public class NPrincipalePanelApp extends JPanel{
 
     // CENTER
 
-    // /**
-    //  * Contain the panel of Zoom
-    //  * Add Border
-    //  */
-    // JPanel spaceBorderZoomPanel = new JPanel();
-
-    // /**
-    //  * Contain an Empty Panel and spaceBorderZoomPanel
-    //  * Forcing bottom
-    //  */
-    // JPanel zoomButtonLeftBottom = new JPanel();
-
-    // /**
-    //  * Create an Empty Panel for forcing the ButtonZoom to go in bottom
-    //  * When there is no MinGraph + InfoGraph
-    //  */
-    // JPanel empty2 = new JPanel();
-
     /**
      * Slider that make access to change the number of altitudes max
      * Location : in the panel menu --> need here for Events
      */
     JSlider sliderKmax = new JSlider();
+    
     /**
-     * JLabel for see the number altitudes choose
+     * JLabel to see the altitude chosen
      * Location : in the panel menu --> need here for Events
      */
-    JComboBox choixAltitudesMax = new JComboBox(); 
+    JComboBox<Integer> choixAltitudesMax = new JComboBox<>(); 
+
     /**
-     * A pael for forcing all their is in the center to be in top
+     * A panel for forcing all their is in the center to be in top
      */
     JPanel topEmptyPanel = new JPanel();
 
@@ -204,6 +200,7 @@ public class NPrincipalePanelApp extends JPanel{
      * Add Border
      */
     JPanel spaceBorderGraph = new JPanel();
+    
     /**
      * Panel in the bodyCenter Layout for the combo box and slider for TIME
      * Location : center of the Frame
@@ -218,7 +215,12 @@ public class NPrincipalePanelApp extends JPanel{
      * Appear after push the button with the icon menu.png
      * Location : left in the frame
      */
-    NMenuPanelApp menu; 
+    private NMenuPanelApp menu; 
+
+    /**
+     * Panel containing information on the graphs
+     */
+    private NInfoGraphPanelApp infoGraph ;
 
     // RIGHT
     /**
@@ -226,12 +228,19 @@ public class NPrincipalePanelApp extends JPanel{
      * Forcing bottom
      */
     JPanel graphLRightBottom = new JPanel();
+
     /**
      * Expand Button for graph
      * Open a new Frame with the graph and this information
      * Location : in the panel Mingraph --> need here for Events
      */
     JButton buttonAgr = new JButton("AGRANDIR");
+    
+    /**
+     * Panel containing a minimized view of the graph
+     */
+    private NMinGraphPanelApp minGraphPanel ;
+    
     /**
      * A frame for NMaxGraphPanelApp
      * Put directly in the frame with information
@@ -242,15 +251,25 @@ public class NPrincipalePanelApp extends JPanel{
      * Having acces to homePage (setVisible elements change)
      * the panel NPrincipalePanelApp is put in this frame
      */
-    App app; 
+    App app;
+
+    /**
+     * The NInfoPanel which prompts the informations of the clicked MapWaypoint
+     */
+    private NInfoPanel infoPanel;
 
     /**
      * Constructor of NPrincipalePanelApp
      * @param app the frame where this panel is put
      */
     public NPrincipalePanelApp (App app){
+	
+	this.infoPanel = new NInfoPanel();
+	this.infoPanel.setPrincipal();
 
         this.app = app;
+        this.body = new Map();
+
         this.setLayout(new BorderLayout());
 
         body.setLayout(new BorderLayout());
@@ -275,14 +294,14 @@ public class NPrincipalePanelApp extends JPanel{
         // Set logo with Name of the App in PanelNav
         // Description : France representation with graph composants
         // Source : ./src/main/java/Graph France.png
-        labelLogoName.setIcon(new ImageIcon("./src/main/java/Icons/GraphFrance.png"));
+        labelLogoName.setIcon(new ImageIcon("./src/main/java/planeair/icons/GraphFrance.png"));
         //Size Label LOGO Name
         labelLogoName.setPreferredSize(new Dimension(WIDTH,70));
 
         // Color of The HourPanelCenter variable
         hourPanelCenter.setBackground(Color.YELLOW);
         
-        menu = new NMenuPanelApp(10, choixAltitudesMax);
+        menu = new NMenuPanelApp(this.app, 10, choixAltitudesMax) ;
 
         for(int i = 0; i <= 23; i++){
             hourChoice.addItem(i);
@@ -372,13 +391,18 @@ public class NPrincipalePanelApp extends JPanel{
 
         //RIGHT
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        graphLRightBottom.add(new NMinGraphPanelApp(buttonAgr));
+        minGraphPanel = new NMinGraphPanelApp(this.app, buttonAgr) ;
+        graphLRightBottom.add(minGraphPanel);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        graphLRightBottom.add(new NInfoGraphPanelApp());
+        infoGraph = new NInfoGraphPanelApp() ;
+        graphLRightBottom.add(infoGraph);
         graphLRightBottom.add(spaceBorderGraph);
         body.add(graphLRightBottom,BorderLayout.EAST);
    
         article.setPreferredSize(new Dimension(160,100));
+
+        //INFOPANEL
+        this.body.add(this.infoPanel, BorderLayout.SOUTH);
 
         //ADD structure to BorderLayout
         this.add(header, BorderLayout.NORTH);
@@ -386,6 +410,11 @@ public class NPrincipalePanelApp extends JPanel{
         body.add(article,BorderLayout.WEST);
 
     };
+
+    public void setMap() {
+        this.app.getAirportSet().setActiveAirportsFrom(this.app.getFig());
+        this.body.paintMapItems(this.app.getAirportSet(), this.app.getFig());
+    }
 
     /**
      * Method adding events of the JFrame
@@ -442,7 +471,7 @@ public class NPrincipalePanelApp extends JPanel{
          });  
 
         buttonAgr.addActionListener((ActionEvent e) -> {
-            maxGraphPanel = new NMaxGraphFrameApp();
+            maxGraphPanel = new NMaxGraphFrameApp(this.app.getTestGraphRenderer()) ;
         });
 
         sliderKmax.addChangeListener((ChangeEvent e) -> {
@@ -450,146 +479,33 @@ public class NPrincipalePanelApp extends JPanel{
         } );
        
         choixAltitudesMax.addActionListener((ActionEvent e) -> {
-            sliderKmax.setValue((int)choixAltitudesMax.getSelectedItem());
+            if (choixAltitudesMax.getSelectedItem() != null) {
+                sliderKmax.setValue((int)choixAltitudesMax.getSelectedItem());
+            }
+            else {
+                sliderKmax.setValue(0) ;
+            }
         });
 
     }
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //CardLayout Solution (obscelete)
-    
-      /**
-     * CardPanel with Import + (not all time) GraphInfos
-     * Card Name : Min
-     * GridLayout 
-     * nb LINE : 3  (NMinGraphPanelApp + NInfoGraphPanel + NButtonImportPanelApp)
-     * nb COLUMN : 1
-     */
-    
-        //ARTICLE
-
-    /**
-     * CardPanel with Zoom
-     * Card Name : Zoom
-     * GridBagLayout
-     */
-    //JPanel  zoomPanelCardArticleApp = new JPanel(new GridBagLayout()) ;
-
-    /** 
-     * CardPanel with MENU + Zoom --> After push the MENU button
-     * Card Name : Menu
-     */
-   // JPanel menuPanelCardArticleApp = new JPanel(new GridBagLayout());
-    
-    
-    
-    
-    public void addCardPanel(){
-
-        //ARTICLE COMPOSANTS
-
-        //MENU CARD
-
-        /**
-         * Paramater Layout
-         */
-        /*GridBagConstraints GridBagC = new GridBagConstraints();*/
-
-        /**
-         * ZoomPanelCardArticleApp
-         * When you open the menu this Panel is show
-         */  
-         /*GridBagC.gridx = 0;
-         GridBagC.gridy = 0;
-
-         menuPanelCardArticleApp.add(new NMenuPanelApp(), GridBagC);
-
-         GridBagC.gridx = 1;
-         GridBagC.gridy = 1;
-
-         menuPanelCardArticleApp.add(new NButtonZoomPanelApp(), GridBagC);
-
-         article.add(menuPanelCardArticleApp, "Menu");*/
-         
-        //ZOOM CARD
-
-        /**
-         * ZoomPanelCardArticleApp
-         * When you open the widow or you close the MENU this Panel is show
-         */   
-        /*GridBagC.insets = new Insets(110, 0, 0, 0);   
-        GridBagC.gridx = 0;
-        GridBagC.gridy = 1;
-
-        zoomPanelCardArticleApp.add(new JPanel(), GridBagC);
-
-        GridBagC.gridx = 4;
-        GridBagC.gridy = 2;
- 
-        zoomPanelCardArticleApp.add(new NButtonZoomPanelApp(), GridBagC);
-
-        article.add(zoomPanelCardArticleApp,"Zoom");  */
-        
-        /**
-         * Panel with just zoom is the one choose by default
-         */
-        /*cardArticleLayout.show(article, "Zoom");*/
-        
-        /*ASIDE COMPOSANTS*/
-
-        //MAX CARD
-        
-        /*containMaxPanel.add(new NMaxGraphPanelApp());
-
-        aside.add(containMaxPanel, "Max");
-
-        // MIN CARD
-
-         /**
-          * Create an Empty Panel for force the NButtonImportPanel's Panel to bottom
-          */
-         /*JPanel Empty = new JPanel();
-         Empty.setPreferredSize(new Dimension(200,200));
-         zoomButtonLeftBottom.add(Empty);
-         SpaceBorderZoomPanel.add(new NButtonImportPanelApp(1));
-         zoomButtonLeftBottom.add(SpaceBorderZoomPanel);
-
-         aside.add(zoomButtonLeftBottom, "Min");
-        
-
-         /**
-         * Panel with just Import button(s) is the one choose by default
-         */
-        /*cardAsideLayout.show(aside, "Min");*/
-
+    public NMinGraphPanelApp getMinGraphPanel() {
+        return this.minGraphPanel ;
     }
 
+    public NInfoGraphPanelApp getInfoGraph() {
+        return this.infoGraph ;
+    }
 
+    public NMenuPanelApp getMenuPanel() {
+        return this.menu ;
+    }
+
+    /**
+     * Sets the range of values and the default value of the kMax comboBox in the menu
+     * @param kMax new KMax value
+     */
+    public void setInfo(int kMax) {
+        this.getMenuPanel().setAltitudeValues(kMax) ;
+    }
 }

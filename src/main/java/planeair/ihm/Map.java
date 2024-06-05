@@ -23,11 +23,12 @@ import planeair.util.AirportSet;
 
 import planeair.graph.Flight;
 import planeair.graph.FlightsIntersectionGraph;
-
+import planeair.ihm.infopanel.NInfoPanel;
 import planeair.ihm.mapvisuals.MapItemPainter;
 import planeair.ihm.mapvisuals.mapwp.MapWaypoint;
 import planeair.ihm.mapvisuals.mapwp.flightwp.FlightWaypoint;
 import planeair.ihm.mapvisuals.mapwp.airportwp.ActiveAirportWaypoint;
+import planeair.ihm.mapvisuals.mapwp.airportwp.AirportWaypoint;
 import planeair.ihm.mapvisuals.mapwp.airportwp.InactiveAirportWaypoint;
 
 /**
@@ -37,6 +38,11 @@ import planeair.ihm.mapvisuals.mapwp.airportwp.InactiveAirportWaypoint;
  * @author Luc le Manifik
  */
 public class Map extends org.jxmapviewer.JXMapViewer {
+
+    /**
+     * The NInfoPanel which will prompt all the infos of the MapWaypoints*
+     */
+    public static NInfoPanel infoPanel = null;
     
     //-- Map Attributes
 
@@ -158,12 +164,12 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
         // Adding the active Airports
         for(Airport airport : airportSet.getActiveAirports()) {
-            this.itemPainter.getAirportWaypoints().add(new ActiveAirportWaypoint(airport.getName(), airport.getGeoPosition()));
+            this.itemPainter.getAirportWaypoints().add(new ActiveAirportWaypoint(airport, airport.getGeoPosition()));
         }
 
         // Adding the inactive Airports
         for(Airport airport : airportSet.getInactiveAirports()) {
-            this.itemPainter.getAirportWaypoints().add(new InactiveAirportWaypoint(airport.getName(), airport.getGeoPosition()));
+            this.itemPainter.getAirportWaypoints().add(new InactiveAirportWaypoint(airport, airport.getGeoPosition()));
         }
     }
 
@@ -183,7 +189,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             GeoPosition currentFlightPosition = flight.getCurrentGeoPosition();
             // The function returns null is the Flight is not currently flying
             if(currentFlightPosition != null) {
-                this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight.getId(), currentFlightPosition));
+                this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight, currentFlightPosition));
             }
         });
     }
@@ -203,12 +209,12 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         * they need to be added manually, because JxMap is not made to have buttons, but Waypoints
         * So it will not show them automatically
         */
-        for(MapWaypoint waypoint : this.itemPainter.getAirportWaypoints()) {
+        for(AirportWaypoint waypoint : this.itemPainter.getAirportWaypoints()) {
             
             this.add(waypoint.getWaypointButton());
         }
 
-        for(MapWaypoint waypoint : this.itemPainter.getFlightWaypoints()) {
+        for(FlightWaypoint   waypoint : this.itemPainter.getFlightWaypoints()) {
 
             this.add(waypoint.getWaypointButton());
         }

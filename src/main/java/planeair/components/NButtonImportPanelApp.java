@@ -3,12 +3,15 @@ package planeair.components;
 // Import of SWING composants
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 // Import of AWT composants
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 
@@ -17,27 +20,14 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 
 import planeair.App;
+import planeair.exceptions.InvalidFileFormatException;
+import planeair.graph.TestGraph;
+import planeair.util.DataImportation;
 
 /**
  * Create a JPanel of importation for vols and aeroports
  */
 public class NButtonImportPanelApp extends JPanel {
-
-    /**
-     * CONSTANT for know what type of file you have to import
-     * This one is for airoport.txt
-     */
-    public static final int AIRPORT_FILE = 0;
-    /**
-     * CONSTANT for know what type of file you have to import
-     * This one is for graph-test.txt
-     */
-    public static final int TEST_GRAPH_FILE = 1;
-    /**
-     * CONSTANT for know what type of file you have to import
-     * This one is for vol-test.csv
-     */
-    public static final int FLIGHT_FILE = 12;
 
     /**
      * Button de choix
@@ -53,17 +43,19 @@ public class NButtonImportPanelApp extends JPanel {
     JButton choiceGraph = new JButton("<html>Importer un fichier <br> graphes.csv</html>");
     
     /**
-     * Button Importation
-     * vol-test.csv
-     * Location : after pushing the button buttonAirport
-     */
-    JButton butonFlight = new JButton("vol-test.csv");
-    /**
      * Button Importation for flight
      * aeroport.txt
      * Location : after pushing the button choiceFlight
      */
     JButton buttonAirport = new JButton("aeroport.csv");
+
+    /**
+     * Button Importation
+     * vol-test.csv
+     * Location : after pushing the button buttonAirport
+     */
+    JButton buttonFlight = new JButton("vol-test.csv");
+
     /**
      * Button Importation
      * graph-test.txt
@@ -95,15 +87,19 @@ public class NButtonImportPanelApp extends JPanel {
      * Test pour rajouter un boutton valider au début
      * Location : below buttons choice
      */
-    JButton valideStart = new JButton("Valider");
+    JButton confirmStart = new JButton("Valider");
 
     /**
      * Import the Frame of the App
      */
     App app;
+
+    private boolean flightsImported;
+
+    private boolean airportsImported;
+
+    private boolean graphImported;
     
-
-
     /**
      * Create an Import panel
      * In the constructor you have to specify the number of button
@@ -114,6 +110,10 @@ public class NButtonImportPanelApp extends JPanel {
      */
     public NButtonImportPanelApp(App app){
         this.app = app;
+
+        this.flightsImported = false;
+        this.airportsImported = false;
+        this.graphImported = false;
 
         this.setLayout(new BoxLayout(this , BoxLayout.Y_AXIS));
         this.setBackground(Color.YELLOW);
@@ -128,9 +128,9 @@ public class NButtonImportPanelApp extends JPanel {
         buttonAirport.setPreferredSize(new Dimension(200,125));
         buttonAirport.setBackground(Color.BLACK);
 
-        butonFlight.setForeground(Color.WHITE);
-        butonFlight.setPreferredSize(new Dimension(200,125));
-        butonFlight.setBackground(Color.BLACK);
+        buttonFlight.setForeground(Color.WHITE);
+        buttonFlight.setPreferredSize(new Dimension(200,125));
+        buttonFlight.setBackground(Color.BLACK);
 
 
         choiceGraph.setForeground(Color.WHITE);
@@ -149,13 +149,13 @@ public class NButtonImportPanelApp extends JPanel {
         valideFlight.setPreferredSize(new Dimension(50,40));
         valideFlight.setBackground(Color.BLACK);
 
-        valideStart.setForeground(Color.WHITE);
-        valideStart.setPreferredSize(new Dimension(50,40));
-        valideStart.setBackground(Color.BLACK);
+        confirmStart.setForeground(Color.WHITE);
+        confirmStart.setPreferredSize(new Dimension(50,40));
+        confirmStart.setBackground(Color.BLACK);
 
         this.add(buttonsPanel);
-        this.add(valideStart);
-        valideStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.add(confirmStart);
+        confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(Box.createRigidArea(new Dimension(0, 5)));
 
     }
@@ -165,14 +165,14 @@ public class NButtonImportPanelApp extends JPanel {
      * Importation and return back
      */
     public void addEvents(){
-        valideStart.addActionListener((ActionEvent e) -> {
-            this.app.addBodyPanelPrinc(this);
-            this.setVisible(false);
+        confirmStart.addActionListener((ActionEvent e) -> {
+            this.app.addBodyPanelPrinc();
+            
         });
 
         choiceFlight.addActionListener((ActionEvent e) -> {
             buttonsPanel.removeAll();
-            this.remove(valideStart);
+            this.remove(confirmStart);
             buttonsPanel.add(buttonAirport);
             this.add(valideAr);
             valideAr.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -182,18 +182,27 @@ public class NButtonImportPanelApp extends JPanel {
         });
 
         choiceGraph.addActionListener((ActionEvent e) -> {
-            NFileChooserForGraphApp fileChooser = new NFileChooserForGraphApp(TEST_GRAPH_FILE);
-            if(fileChooser.getIsSelected()){
-                this.app.addBodyPanelPrinc(this);
-                this.setVisible(false);
+
+            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
+            fileChooser.userImportFile();
+
+            if(!fileChooser.getFile().equals(null)) {
+                try {
+                    this.app.setTestGraph(new TestGraph(fileChooser.getFile().getName())) ;
+                    DataImportation.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
+                    initDefaultGraphImportation() ;
+                    this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
+                }catch(InvalidFileFormatException | FileNotFoundException error) {
+                    JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
         valideAr.addActionListener((ActionEvent e) -> {
             buttonsPanel.removeAll();
-            this.remove(valideStart);
+            this.remove(confirmStart);
             this.remove(valideAr);
-            buttonsPanel.add(butonFlight);
+            buttonsPanel.add(buttonFlight);
             this.add(valideFlight);
             valideFlight.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -201,23 +210,78 @@ public class NButtonImportPanelApp extends JPanel {
         });
 
         valideFlight.addActionListener((ActionEvent e) -> {
-            this.app.addBodyPanelPrinc(this);
-            this.setVisible(false);
+            this.resetPanel();
+            this.app.addBodyPanelPrinc();
+            
         });
 
         buttonAirport.addActionListener((ActionEvent e) -> {
-        NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp(AIRPORT_FILE);
-        if(fileChosser.getIsSelected()){
-            this.setVisible(false);
-        }
+            
+            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.AIRPORT_FILE);
+
+            try {
+                fileChooser.userImportFile();
+                if(!fileChooser.getFile().equals(null)) {
+
+                    DataImportation.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
+                    this.airportsImported = true;
+                }
+            }catch(InvalidFileFormatException | FileNotFoundException error) {
+                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+            }   
 
         } );
 
-        butonFlight.addActionListener((ActionEvent e) -> {
-        NFileChooserForGraphApp fileChosser = new NFileChooserForGraphApp(FLIGHT_FILE);
-        if(fileChosser.getIsSelected()){
-            this.app.addBodyPanelPrinc(this);
-            this.setVisible(false);
-        } });
-    }  
+        buttonFlight.addActionListener((ActionEvent e) -> {
+    
+            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.FLIGHT_FILE);
+        
+            try {
+                fileChooser.userImportFile();
+                if(!fileChooser.getFile().equals(null)) {
+
+                    DataImportation.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());
+                    this.flightsImported = true;
+                    if(this.airportsImported && this.flightsImported) {
+                        this.loadPrincipalPanel();
+                    }
+                }
+            }catch(InvalidFileFormatException | FileNotFoundException error) {
+                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+            }
+    
+        });
+    } 
+
+    /**
+     * Called to set up the map, once all the importations are ok
+     */
+    private void loadPrincipalPanel() {
+        this.app.addBodyPanelPrinc();
+        this.setVisible(false);
+        this.app.getPrincFrame().setMap();
+    }
+ 
+    /**
+     * Restart the Panel for when we will open it again
+     */
+    public void resetPanel(){
+        buttonsPanel.removeAll();
+        this.remove(valideFlight);
+        this.remove(buttonFlight);
+
+        buttonsPanel.add(choiceFlight);
+        buttonsPanel.add(choiceGraph);
+        this.add(buttonsPanel);
+        this.add(confirmStart);
+        confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.add(Box.createRigidArea(new Dimension(0, 5)));
+    }
+
+    public void initDefaultGraphImportation() {
+        
+        this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
+        this.app.getPrincFrame().getMenuPanel().setAltitudeValues(this.app.getTestGraph().getKMax()) ;
+        this.graphImported = true;
+    }
 }

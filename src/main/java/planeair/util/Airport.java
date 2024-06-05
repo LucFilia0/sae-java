@@ -74,7 +74,7 @@ public class Airport {
      * @author Luc le Manifik
      */
     public String toString() {
-        return "-- Airport\nName : " + this.name + "\nLocation : " + this.location + "\nLatitude : " + this.latitude + "\nLongitude : " + this.longitude + "\n";
+        return "<html><strong>-- Airport :</strong> " + this.name + "<br><strong>Location :</strong> " + this.location + "<br><strong>Latitude :</strong> " + this.latitude + "<br><strong>Longitude :</strong> " + this.longitude + "</html>";
     }
 
     //-- Airport Getters

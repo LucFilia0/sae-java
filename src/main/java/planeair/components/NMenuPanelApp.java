@@ -14,6 +14,17 @@ import javax.swing.Box;
 /**
  * Import awt composants
  */
+
+// Import swing composants
+import javax.swing.ListCellRenderer;
+import javax.swing.JList;
+
+import planeair.App;
+import planeair.graph.Coloration;
+import planeair.graph.TestGraph;
+
+// Import awt composants
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -31,9 +42,16 @@ import javax.swing.BoxLayout;
 
 
 
+//Import Layout
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  * Class which create a JPanel of MENU for the graph 
  * Change parameter of the graph
+ * Location : Left to the Frame
+ * 
+ * @author GIRAUD Nila
  */
 public class NMenuPanelApp extends JPanel{
 
@@ -53,15 +71,11 @@ public class NMenuPanelApp extends JPanel{
      * JLabel change KMax
      */
     JLabel changeKmax = new JLabel("Changer Kmax", SwingConstants.CENTER);
+
     /**
-     * JPanel for put the slider (sliderKmax) next to the label (choixAltitudes)
+     * Panel for create an empty border to the JComboBox Kmax
      */
-    //JPanel sliderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    
-    /**
-     * Empty Slider
-     */
-    //JPanel empty = new JPanel();
+    JPanel borderPanelKmax = new JPanel();
 
     //ALTITUDES
 
@@ -73,10 +87,16 @@ public class NMenuPanelApp extends JPanel{
      * Title of the choose slider
      */
     JLabel nbAltitudes = new JLabel("Choix des altitudes", SwingConstants.CENTER);
+    
     /**
-     * JComboBox for choose the altitude (or everyone)
+     * JComboBox to choose the altitude (or show all of them)
      */
-    JComboBox altitudeComboBox = new JComboBox();
+    JComboBox<Integer> altitudeComboBox = new JComboBox<>();
+
+    /**
+     * Panel for create an empty border to the JComboBox altitude
+     */
+    JPanel borderPanelAlt = new JPanel();
 
     //CONFLITS
     
@@ -109,69 +129,68 @@ public class NMenuPanelApp extends JPanel{
     JPanel buttonLayout = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
     /**
-     * JcomboBox that help too choose an algo for the coloation
+     * JcomboBox that help too choose an algo for the coloration
      */
-    JComboBox choixAlgo = new JComboBox();
+    JComboBox<String> algoChoice = new JComboBox<>();
+    
     /**
      * Use the algo of the ComboBox
      */
     JButton okButton = new JButton("OK");
-    
-    
+
+    /**
+     * ComboBox containing kMax 
+     */
+    JComboBox<Integer> altitudesMax ;
+
+    private String lastAlgoSelected = null ;
+
+    private App app ;
+
     /**
      * Constructor of NMenuPanelApp
      * @param kmax
      */
-    NMenuPanelApp(int kmax, JComboBox altitudesMax){
-
+    NMenuPanelApp(App app, int kmax, JComboBox<Integer> altitudesMax){
+        this.app = app ;
+        this.altitudesMax = altitudesMax ;
         this.setBackground(Color.YELLOW);
 
-        this.setLayout( new GridBagLayout());
-
-        
+        this.setLayout( new GridLayout(5,1));
 
         //TITLE
         titleMenu.setFont(new Font("Arial", Font.BOLD, 20));
 
-
         //KMAX
         kmaxOption.setLayout( new GridLayout(2,1));
 
-        for(int i = 2 ; i <= kmax + 30 ; i++  ){
-            altitudesMax.addItem(i);
-        }
+        this.setAltitudeValues(kmax) ;
         
-        altitudesMax.setSelectedItem(kmax);
-        altitudesMax.setForeground(Color.WHITE);
-        altitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
-        altitudesMax.setBackground(Color.BLACK);
-        altitudesMax.setOpaque(true);
+        this.altitudesMax.setSelectedItem(kmax);
+        this.altitudesMax.setForeground(Color.WHITE);
+        this.altitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
+        this.altitudesMax.setBackground(Color.BLACK);
+        this.altitudesMax.setOpaque(true);
 
         kmaxOption.add(changeKmax);
         changeKmax.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-       // kmaxOption.add(Box.createRigidArea(new Dimension(0, 5)));
-
-        kmaxOption.add(altitudesMax);
-        //altitudesMax.setAlignmentX(Component.CENTER_ALIGNMENT);
+        kmaxOption.add(this.altitudesMax);
 
         kmaxOption.setBackground(Color.YELLOW);
+        borderPanelKmax.setBackground(Color.YELLOW);
 
         //ALTITUDES
 
         altitudeMaxOption.setLayout(new GridLayout(2,1));
-
-        //nbAltitudes.setFont(new Font("Arial", Font.BOLD, 18));
         altitudeMaxOption.add(nbAltitudes);
-        //nbAltitudes.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        //altitudeMaxOption.add(Box.createRigidArea(new Dimension(0, 5)));
 
         altitudeComboBox.setPreferredSize(new Dimension(0,25));
         altitudeMaxOption.add(altitudeComboBox);
-        //altitudeComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         altitudeMaxOption.setBackground(Color.YELLOW);
+
+        borderPanelAlt.setBackground(Color.YELLOW);
 
         //CONFLITS
 
@@ -179,53 +198,123 @@ public class NMenuPanelApp extends JPanel{
 
         algoOption.setLayout(new GridLayout(2,1));
         algoOption.setBackground(Color.YELLOW);
-
-        buttonLayout.setLayout(new FlowLayout());
+        
         buttonLayout.setBackground(Color.YELLOW);
 
-        buttonLayout.add(choixAlgo);
+        buttonLayout.add(algoChoice);
         buttonLayout.add(okButton);
 
         algoOption.add(algorithmes);
         algoOption.add(buttonLayout);
 
+        algoChoice.addItem(Coloration.DSATUR);
+        algoChoice.addItem(Coloration.RLF);
+        //algoChoice.addItem(Coloration.WELSH_POWELL) ;
+        algoChoice.setSelectedItem(null) ;
+
         //ADD
 
-        GridBagConstraints GridBagC = new GridBagConstraints(); 
-        GridBagC.insets = new Insets(10, 20, 10, 20);
-
-        GridBagC.fill = GridBagConstraints.BOTH;
-
-        //TITLE
-        GridBagC.gridx = 1;
-        GridBagC.gridy = 0;
-
-        this.add(titleMenu, GridBagC);
-        //titleMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.add(titleMenu);
 
         //KMAX
-
-        GridBagC.gridy = 2;
         
-        this.add(kmaxOption, GridBagC);
-        //kmaxOption.setAlignmentX(Component.CENTER_ALIGNMENT);
+        borderPanelKmax.add(kmaxOption);
+
+        this.add(borderPanelKmax);
+
 
         //ALTITUDES
 
-        GridBagC.gridy = 3;
-        this.add(altitudeMaxOption, GridBagC);
+        borderPanelAlt.add(altitudeMaxOption);
+        this.add(borderPanelAlt);
+        this.setAltitudeComboBox(kmax);
 
         //ALGO
-        GridBagC.gridy = 4;
-        this.add(algoOption,GridBagC);
+        this.add(algoOption);
 
+        //LISTENERS
+        initListeners() ;
     }
     
     public void setAltitudeComboBox(int kmax){
         altitudeComboBox.removeAllItems();
-        altitudeComboBox.addItem("Toutes");
-        for(int i = 1; i <= kmax; i++ ){
+        altitudeComboBox.setRenderer(new ListCellRenderer<Integer>() {
+            @Override
+            public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                JLabel cell = new JLabel() ;
+                if (value == 0) {
+                    cell.setText("Toutes") ;
+                }
+
+                else {
+                    cell.setText(Integer.toString(value)) ;
+                }
+
+                return cell ;
+            }
+        });
+
+        for(int i = 0; i <= kmax; i++ ){
             altitudeComboBox.addItem(i);
         }
+    }
+
+    public JComboBox<Integer> getAltitudeMax() {
+        return this.altitudesMax ;
+    }
+
+    public JComboBox<String> getAlgoChoice() {
+        return this.algoChoice ;
+    }
+
+    /**
+     * Sets the range of values and the default value of the kMax comboBox in the menu
+     * @param kMax new KMax value
+     */
+    public void setAltitudeValues(int kMax) {
+        this.altitudesMax.removeAllItems() ;
+        for (int i = 2; i < (int)kMax*2 ; i++) {
+            this.altitudesMax.addItem(i) ;
+        }
+
+        this.altitudesMax.setSelectedItem(kMax) ;
+    }
+
+    public Integer getCurrentKMax() {
+        return (Integer)this.altitudesMax.getSelectedItem() ;
+    }
+
+    public String getCurrentAlgorithm() {
+        return (String)this.algoChoice.getSelectedItem() ;
+    }
+
+    private void initListeners() {
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TestGraph graph = app.getTestGraph() ;
+                int oldKmax = graph.getKMax() ;
+                int currentKMax = (int)altitudesMax.getSelectedItem() ;
+                graph.setKMax(currentKMax) ;
+                
+                if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
+                    if (lastAlgoSelected != null) {
+                        Coloration.removeCurrentColoring(graph, TestGraph.COLOR_ATTRIBUTE, TestGraph.CONFLICT_ATTRIBUTE) ;
+                    }
+                    lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
+                    Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem(), TestGraph.COLOR_ATTRIBUTE) ;
+                    Coloration.setGraphStyle(graph, currentKMax, TestGraph.COLOR_ATTRIBUTE) ;
+                }
+                
+                else {
+                    if (oldKmax < currentKMax || graph.getNbColors() > currentKMax) {
+                        Coloration.removeCurrentColoring(graph, TestGraph.COLOR_ATTRIBUTE, TestGraph.CONFLICT_ATTRIBUTE) ;
+                        Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem(), TestGraph.COLOR_ATTRIBUTE) ;
+                        Coloration.setGraphStyle(graph, currentKMax, TestGraph.COLOR_ATTRIBUTE) ;
+                    }
+                }
+            }
+        });
     }
 }

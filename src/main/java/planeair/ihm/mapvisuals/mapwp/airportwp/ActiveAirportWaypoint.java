@@ -8,6 +8,8 @@ import java.io.File;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
+import planeair.util.Airport;
+
 /**
  * This class is a Waypoint on the {@link ihm.Map} which represents an active Airport.
  * Extends the {@link ihm.mapvisuals.mapwp.airportwp.AirportWaypoint AirportWaypoint} class.
@@ -33,7 +35,7 @@ public class ActiveAirportWaypoint extends AirportWaypoint {
      * 
      * @author Luc le Manifik
      */
-    public ActiveAirportWaypoint(String name, GeoPosition position) {
-        super(ActiveAirportWaypoint.ACTIVE_AIRPORT_WAYPOINT_ICON_FILE, name, position);
+    public ActiveAirportWaypoint(Airport airport, GeoPosition position) {
+        super(ActiveAirportWaypoint.ACTIVE_AIRPORT_WAYPOINT_ICON_FILE, airport, position);
     }
 }

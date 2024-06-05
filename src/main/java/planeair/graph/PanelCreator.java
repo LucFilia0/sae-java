@@ -71,6 +71,7 @@ public class PanelCreator {
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
 		viewer.getDefaultView().enableMouseOptions() ;
+		Coloration.setGraphStyle(graph, 0, null) ;
 
 		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
 		// and also checks for events
@@ -222,7 +223,7 @@ public class PanelCreator {
 					// This function is increasing and has values in the interval [0.2 ; 0.815] for x in the interval [0 ; 2]
 					// Basically makes it so the more zoomed in the camera is, the less it will move around the plane while zooming
 					finalCamPos = camPos.interpolate(mousePos, 
-						Math.pow((cam.getViewPercent() + 1),2)/5 - 0.4*Math.pow(cam.getViewPercent(), 1.2)) ;
+						Math.pow((cam.getViewPercent() + 1),2)/5 - 0.4*Math.pow(cam.getViewPercent(), 1.3)/1.5) ;
 					cam.setViewCenter(finalCamPos.x, finalCamPos.y, finalCamPos.z) ;
 				}
 
@@ -287,7 +288,7 @@ public class PanelCreator {
 		public void mouseLeft(String id) {
 			Node n = graph.getNode(id) ;
 			n.removeAttribute("ui.style") ;
-			n.setAttribute("ui.style", "size : " + Coloration.defaultNodeSize + " ;") ;
+			n.setAttribute("ui.style", "size : " + Coloration.DEFAULT_NODE_SIZE + " ;") ;
 		}
 
 		/**

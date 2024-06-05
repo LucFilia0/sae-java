@@ -35,6 +35,11 @@ public class MapWaypointButton extends javax.swing.JButton {
      */
     public static final int BUTTON_SIZE = 30;
 
+    /**
+     * The MapWaypoint which is linked to the button
+     */
+    private MapWaypoint mapWaypoint;
+
     //-- WaypointButton Constructor
 
     /**
@@ -45,7 +50,9 @@ public class MapWaypointButton extends javax.swing.JButton {
      * 
      * @throws IOException Throwed if the File does not exist or does not match the "image" requirements.
      */
-    public MapWaypointButton(File iconFile) throws IOException {
+    public MapWaypointButton(File iconFile, MapWaypoint mapWaypoint) throws IOException {
+
+        this.mapWaypoint = mapWaypoint;
 
         Image scaledImage = null;
 
@@ -57,11 +64,23 @@ public class MapWaypointButton extends javax.swing.JButton {
         }
 
         // Sets the background of the button unfilled, and makes the border disapear
-        this.setContentAreaFilled(false);
+        this.setContentAreaFilled(true);
         this.setBorder(null);
 
         this.setIcon(new ImageIcon(scaledImage));
         this.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Makes a little funny hand when the button is hovered :)
-        this.setPreferredSize(new Dimension(MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE)); // Don't ask why, but "setSize" didn't work...
+        this.setPreferredSize(new Dimension(MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE)); // Don't ask why, but "setSize" didn't work..
     }
+
+    //-- MapWaypointButton Getters
+
+    /**
+     * Returns the MapWaypoint which is linked to the MapWaypointButton
+     * 
+     * @return ({@link planeair.ihm.mapvisuals.mapwp.MapWaypoint MapWaypoint})
+     */
+    public MapWaypoint getMapWaypoint() {
+        return this.mapWaypoint;
+    }
+
 }

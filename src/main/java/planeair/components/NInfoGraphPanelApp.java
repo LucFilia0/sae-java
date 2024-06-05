@@ -12,30 +12,32 @@ import java.awt.BorderLayout;
 
 /**
  * Class which create a panel of INFO GRAPH
+ * The panel is situe in right bottom to the frame
+ * 
+ * @author GIRAUD Nila
  */
 public class NInfoGraphPanelApp extends JPanel{
 
-    //Define attribut
-
+    //STRUCT
     /**
      * Layout's Panel for INFO
      * Grid Layout
      * nb LINE : 5
      * nb COLUMN : 1 (Name Info + Info)
      */
-    JPanel infoGraphGridLayout = new JPanel(new GridLayout(5, 1));
+    private JPanel infoGraphGridLayout = new JPanel(new GridLayout(5, 1));
 
     // LINE 1
 
     /**
-     * Add a padding in left of titleDegreeAvg
+     * Add an empty border for titleDegreeAvg
      */
-    JPanel degreePanel = new JPanel();
+    private JPanel degreePanel = new JPanel();
     /**
      * Title of the first LINE
      * Degree of the graph
      */
-    JLabel titleDegreeAvg = new JLabel("Degré moyen: " + "-");
+    private JLabel titleDegreeAvg = new JLabel("Degré moyen: " + "-");
     /**
      * Degree in the graph
      */
@@ -44,14 +46,14 @@ public class NInfoGraphPanelApp extends JPanel{
     // LINE 2
 
     /**
-     * Add a padding in left of titleComp
+     * Add an empty border for titleComp
      */
-    JPanel compPanel = new JPanel();
+    private JPanel compPanel = new JPanel();
     /**
      * Title of the second LINE
      * Nb related composants
      */
-    JLabel titleComp = new JLabel("Nb comp. connexes: " + "-");
+    private JLabel titleComp = new JLabel("Nb comp. connexes: " + "-");
     /**
      * Degree in the graph
      */
@@ -60,14 +62,14 @@ public class NInfoGraphPanelApp extends JPanel{
     // LINE 3
 
     /**
-     * Add a padding in left of titleNodes
+     * Add an empty border for titleNodes
      */
-    JPanel nodesPanel = new JPanel();
+    private JPanel nodesPanel = new JPanel();
     /**
      * Title of the third LINE
      * NbNodes
      */
-    JLabel titleNodes = new JLabel("Nb noeuds: " + "-");
+    private JLabel titleNodes = new JLabel("Nb noeuds: " + "-");
     /**
      * Degree in the graph
      */
@@ -76,14 +78,14 @@ public class NInfoGraphPanelApp extends JPanel{
     // LINE 4
 
     /**
-     * Add a padding in left of titleEdges
+     * Add an empty border for titleEdges
      */
-    JPanel edgesPanel = new JPanel();
+    private JPanel edgesPanel = new JPanel();
     /**
      * Title of the LINE four
      *  Nb edges of the graph
      */
-    JLabel titleEdges = new JLabel("Nb arretes: " + "-");
+    private JLabel titleEdges = new JLabel("Nb arretes: " + "-");
     /**
      * Degree in the graph
      */
@@ -92,23 +94,14 @@ public class NInfoGraphPanelApp extends JPanel{
     // LINE 5
 
     /**
-     * Add a padding in left of titleDiameter
+     * Add an empty border for titleDiameter
      */
-    JPanel diameterPanel = new JPanel();
+    private JPanel diameterPanel = new JPanel();
     /**
      * Title of the LINE five
      * Diameter of the graph
      */
-    JLabel titleDiameter = new JLabel("Diametre: " + "-");
-    /**
-     * Degree in the graph
-     */
-    // JLabel diameter = new JLabel("test ");
-
-    /**
-     * Empty Panel, the padding
-     */
-    JPanel padding = new JPanel();
+    private JLabel titleDiameter = new JLabel("Diametre: " + "-");
 
     /**
      * Contructor of NInfoGraphPanelApp
@@ -118,8 +111,7 @@ public class NInfoGraphPanelApp extends JPanel{
         this.setBackground(Color.YELLOW);
 
         this.setLayout(new BorderLayout());
-
-        //this.add(new JButton());
+        this.setAlignmentX(LEFT_ALIGNMENT) ;
 
         degreePanel.setBackground(Color.YELLOW);
         compPanel.setBackground(Color.YELLOW);
@@ -128,34 +120,25 @@ public class NInfoGraphPanelApp extends JPanel{
         diameterPanel.setBackground(Color.YELLOW);
 
         //LINE 1
-        // degreePanel.add(padding);
         degreePanel.add(titleDegreeAvg);
         infoGraphGridLayout.add(degreePanel);
-        // infoGraphGridLayout.add(degreeAvg);
+
 
         //Line 2
-        // compPanel.add(padding);
         compPanel.add(titleComp);
         infoGraphGridLayout.add(compPanel);
-        // infoGraphGridLayout.add(relatedComp);
 
         //Line 3
-        // nodesPanel.add(padding);
         nodesPanel.add(titleNodes);
         infoGraphGridLayout.add(nodesPanel);
-        // infoGraphGridLayout.add(nbNodes);
 
         //Line 4
-        // edgesPanel.add(padding);
         edgesPanel.add(titleEdges);
         infoGraphGridLayout.add(edgesPanel);
-        // infoGraphGridLayout.add(nbEdges);
 
         //Line 5
-        // diameterPanel.add(padding);
         diameterPanel.add(titleDiameter);
         infoGraphGridLayout.add(diameterPanel);
-        // infoGraphGridLayout.add(diameter);
 
         infoGraphGridLayout.setBackground(Color.YELLOW);
         this.add(infoGraphGridLayout,BorderLayout.CENTER);
@@ -163,104 +146,79 @@ public class NInfoGraphPanelApp extends JPanel{
         this.setVisible(true);
     }
 
-
-
-    public JPanel getInfoGraphGridLayout() {
-        return this.infoGraphGridLayout;
-    }
-
-    public void setInfoGraphGridLayout(JPanel infoGraphGridLayout) {
-        this.infoGraphGridLayout = infoGraphGridLayout;
-    }
-
-    public JPanel getDegreePanel() {
-        return this.degreePanel;
-    }
-
-    public void setDegreePanel(JPanel degreePanel) {
-        this.degreePanel = degreePanel;
-    }
-
+     /**
+     * get TitleDegreeAvg
+     * @return TitleDegreeAvg
+     */
     public JLabel getTitleDegreeAvg() {
         return this.titleDegreeAvg;
     }
 
+    /**
+     * set TitleDegreeAvg
+     */
     public void setTitleDegreeAvg(JLabel titleDegreeAvg) {
         this.titleDegreeAvg = titleDegreeAvg;
     }
 
-    public JPanel getCompPanel() {
-        return this.compPanel;
-    }
 
-    public void setCompPanel(JPanel compPanel) {
-        this.compPanel = compPanel;
-    }
-
+    /**
+     * get TitleComp
+     * @return TitleComp
+     */
     public JLabel getTitleComp() {
         return this.titleComp;
     }
 
+    /**
+     * set TitleComp
+     */
     public void setTitleComp(JLabel titleComp) {
         this.titleComp = titleComp;
     }
 
-    public JPanel getNodesPanel() {
-        return this.nodesPanel;
-    }
-
-    public void setNodesPanel(JPanel nodesPanel) {
-        this.nodesPanel = nodesPanel;
-    }
-
+    /**
+     * get TitleNodes
+     * @return TitleNodes
+     */
     public JLabel getTitleNodes() {
         return this.titleNodes;
     }
 
+     /**
+     * set TitleNodes
+     */
     public void setTitleNodes(JLabel titleNodes) {
         this.titleNodes = titleNodes;
     }
 
-    public JPanel getEdgesPanel() {
-        return this.edgesPanel;
-    }
-
-    public void setEdgesPanel(JPanel edgesPanel) {
-        this.edgesPanel = edgesPanel;
-    }
-
+     /**
+     * get TitleEdges
+     * @return TitleEdges
+     */
     public JLabel getTitleEdges() {
         return this.titleEdges;
     }
 
+    /**
+     * set TitleEdges
+     */
     public void setTitleEdges(JLabel titleEdges) {
         this.titleEdges = titleEdges;
     }
 
-    public JPanel getDiameterPanel() {
-        return this.diameterPanel;
-    }
-
-    public void setDiameterPanel(JPanel diameterPanel) {
-        this.diameterPanel = diameterPanel;
-    }
-
+     /**
+     * get TitleDiameter
+     * @return TitleDiameter
+     */
     public JLabel getTitleDiameter() {
         return this.titleDiameter;
     }
 
+    /**
+     * set TitleDiameter
+     */
     public void setTitleDiameter(JLabel titleDiameter) {
         this.titleDiameter = titleDiameter;
     }
-
-    public JPanel getPadding() {
-        return this.padding;
-    }
-
-    public void setPadding(JPanel padding) {
-        this.padding = padding;
-    }
-
-
-    
 }

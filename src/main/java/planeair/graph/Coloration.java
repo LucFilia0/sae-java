@@ -20,7 +20,22 @@ public class Coloration {
     /**
      * default size for nodes in the stylesheet 
      */
-    public static String defaultNodeSize = "20px" ;
+    public static final String DEFAULT_NODE_SIZE = "20px" ;
+
+    /**
+     * String Identifier for the DSATUR algorithm
+     */
+    public static final String DSATUR = "DSATUR" ;
+
+    /**
+     * String Identifier for the RLF algorithm
+     */
+    public static final String RLF = "RLF" ;
+
+    /**
+     * String Identifier for the Welsh & Powell algorithm
+     */
+    public static final String WELSH_POWELL = "WELSH POWELL" ;
     
     // RLF (Recursive Larget First)
 
@@ -338,10 +353,9 @@ public class Coloration {
      * 
      * @autor GIRAUD Nila
      */
-    public static int[] ColorationDsatur(Graph graph, String attributColor, int Kmax){
+    public static void colorationDsatur(Graph graph, String attributColor, int Kmax){
         LinkedList<Node> ListNodes = new LinkedList<Node>();
-        //System.out.println("Salut");
-        graph.setAttribute("nbConflit",0);
+        graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE,0);
 
         //Put all Nodes in a LinkedList
         for (Node node : graph) {
@@ -350,31 +364,10 @@ public class Coloration {
             
             insertSorted(ListNodes, node); // Descendent Sort
         }
-        /*
-        for (Node node : ListNodes){
-            System.out.println(node.getAttribute("DSATUR"));
-            System.out.println(node.getAttribute(attributColor));
-            System.out.println("\n");
-        }
-        */
 
         //Color 
         int[] color = new int[Kmax];
 
-        /*  Ascendent Sort
-        Collections.sort(ListNodes, new Comparator<Node>() {
-            
-            @Override
-            public int compare(Node n1, Node n2) {
-                if (n1.getAttribute("DSATUR") != n2.getAttribute("DSATUR")) {
-                    return Integer.compare((int)n1.getAttribute("DSATUR"),(int)n2.getAttribute("DSATUR"));
-                }
-                return Integer.compare((int)n1.getAttribute("id") ,(int)n2.getAttribute("id"));
-            }
-        });
-
-        // Descendent Sort
-        Collections.sort(ListNodes, Collections.reverseOrder());*/
 
         recursifDSATUR(ListNodes, color, graph, attributColor);
 
@@ -390,10 +383,8 @@ public class Coloration {
                 res[0] = (int)node.getAttribute(attributColor);
             }
         }
-
-        res[1] = (int)graph.getAttribute("nbConflit");
-
-        return res;
+        graph.setAttribute(TestGraph.COLOR_ATTRIBUTE, res[0]) ;
+        res[1] = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE) ;
     }
 
     /**
@@ -409,20 +400,9 @@ public class Coloration {
     private static void recursifDSATUR(LinkedList<Node> ListNodes, int[] color, Graph graph, String attributColor){
 
          if(!ListNodes.isEmpty()){
-            /*
-            for (Node node : ListNodes){
-                System.out.println("\n" + node.getAttribute("DSATUR"));
-                System.out.println(node.getAttribute(attributColor));
-                System.out.println(node);
-                
-                System.out.println("\n");
-            }
-            System.out.println("Salut");
-            */
             
             //Step1
             Node nodeP = MaxNodeDSATUR(ListNodes);
-            //System.out.println(nodeP + " | " + nodeP.getAttribute("DSATUR") + " | " + nodeP.getAttribute(attributColor));
  
              //Initialisation of color tab
             initColor(color);
@@ -441,12 +421,10 @@ public class Coloration {
 
             if (j == (color.length) ){
                 nodeP.setAttribute(attributColor, minGiveColorTab(color));
-                //il peu etre judicieux de rajouter un attribut conflit au avion qui risque de se percuter
-                int nbConflit = (int)graph.getAttribute("nbConflit");
-                graph.setAttribute("nbConflit", nbConflit + color[(int)nodeP.getAttribute(attributColor)-1]);
+                int nbConflict = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE);
+                graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, nbConflict + color[(int)nodeP.getAttribute(attributColor)-1]);
             }
             else{ nodeP.setAttribute(attributColor, j+1); };
-            //System.out.println("color :" + nodeP.getAttribute(attributColor));
 
             //Step3
             for(Node nodeAdj : nodeP.neighborNodes().collect(Collectors.toSet()) ){
@@ -461,11 +439,6 @@ public class Coloration {
                 if( nbColor!= 0){
                     nodeAdj.setAttribute("DSATUR", nbColor); }
             }
-            /*
-            System.out.println(nodeP + " | " + nodeP.getAttribute("DSATUR") +  " | " + nodeP.getAttribute(attributColor));
-
-            System.out.println(nodeP + " | " + nodeP.getAttribute("DSATUR") +  " | " + nodeP.getAttribute(attributColor));
-            */
             ListNodes.remove(nodeP);
             
 
@@ -482,7 +455,7 @@ public class Coloration {
      * 
      * @autor GIRAUD Nila
      */
-    private static int minGiveColorTab(int color[] ){
+    private static int minGiveColorTab(int color[]){
         int min = 0;
         for(int i = 1; i < color.length ; i++){
             if(color[i] < color[min] ){
@@ -594,22 +567,24 @@ public class Coloration {
      * @param colorAttribute key of the attribute handling colors
      */
     public static void setGraphStyle(Graph graph, int nbColor, String colorAttribute) {
-        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : " + defaultNodeSize + " ; }\n") ;
+        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : " + DEFAULT_NODE_SIZE + " ; }\n") ;
 
-        for (Node coloringNode : graph) {
-            Integer color = (Integer)coloringNode.getAttribute(colorAttribute) ;
-            coloringNode.setAttribute("ui.class", "color" + color) ;
-        }
-        
-        // FFFFFF in decimal (i asked Google 👍)
-        int maxHexValue = 16777215 ;
-        
-        // Hexadecimal value used for the color stored as an int
-        int currentHexValue ;
+        if (nbColor > 0) {
+            for (Node coloringNode : graph) {
+                Integer color = (Integer)coloringNode.getAttribute(colorAttribute) ;
+                coloringNode.setAttribute("ui.class", "color" + color) ;
+            }
+            
+            // FFFFFF in decimal (i asked Google 👍)
+            int maxHexValue = 16777215 ;
+            
+            // Hexadecimal value used for the color stored as an int
+            int currentHexValue ;
 
-        for (int i = 0 ; i < nbColor ; i++) {
-            currentHexValue = (maxHexValue/(nbColor))*i ;
-            stylesheet.append("node.color" + (i+1) + "{fill-color : #" + toValidHex(Integer.toHexString(currentHexValue)) + " ; }\n") ;
+            for (int i = 0 ; i < nbColor ; i++) {
+                currentHexValue = (maxHexValue/(nbColor))*i ;
+                stylesheet.append("node.color" + (i+1) + "{fill-color : #" + toValidHex(Integer.toHexString(currentHexValue)) + " ; }\n") ;
+            }
         }
 
         graph.setAttribute("ui.stylesheet", stylesheet.toString()) ;
@@ -628,5 +603,42 @@ public class Coloration {
             res.append("0") ;
         }
         return res.append(str).toString() ;
+    }
+
+    /**
+     * Removes all attributes linked to the coloration of this graph
+     * @param graph
+     * @param colorAttribute
+     * @param conflictAttribute
+     */
+    public static void removeCurrentColoring(Graph graph, String colorAttribute, String conflictAttribute) {
+        graph.setAttribute(colorAttribute, 0) ;
+        graph.setAttribute(conflictAttribute, 0) ;
+        for (Node node : graph) {
+            node.setAttribute(colorAttribute, 0) ;
+            node.setAttribute(conflictAttribute, 0) ;
+        }
+    }
+
+    /**
+     * Calls the correct coloring method with the right algorithm
+     * @param graph
+     * @param algorithm
+     * @param colorAttribute
+     * @return
+     */
+    public static void colorGraphWithChosenAlgorithm(Graph graph, String algorithm, String colorAttribute) {
+        switch (algorithm) {
+                case DSATUR :
+                    colorationDsatur(graph, colorAttribute, (int)graph.getAttribute(TestGraph.K_MAX)) ;
+                    break ;
+                case WELSH_POWELL :
+                    colorWelshPowell(graph, colorAttribute, (int)graph.getAttribute(TestGraph.K_MAX)) ;
+                    break ;
+                case RLF :
+                    colorGraphRLF(graph, colorAttribute, (int)graph.getAttribute(TestGraph.K_MAX)) ;
+                    break ;
+                default :
+        }
     }
 }

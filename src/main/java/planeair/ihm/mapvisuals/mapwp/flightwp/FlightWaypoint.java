@@ -9,6 +9,7 @@ import java.io.File;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import planeair.ihm.mapvisuals.mapwp.MapWaypoint;
+import planeair.graph.Flight;
 
 /**
  * This class is the MapWaypoint which is used to represent Flights on the Map.
@@ -17,12 +18,16 @@ import planeair.ihm.mapvisuals.mapwp.MapWaypoint;
  */
 public class FlightWaypoint extends MapWaypoint {
     
-    //-- FlightWaypoint Attributes
+    //-- FlightWaypoint Constants
 
     /**
      * The file which contains the icon of the flights ({@link java.io.File})
      */
     public static final File FLIGHT_WAYPOINT_ICON_FILE = new File("sprint/plane.png");
+
+    //-- FlightWaypoint Attributes
+
+    private Flight flight;
 
     //-- FlightWaypoint Constructor
 
@@ -34,7 +39,33 @@ public class FlightWaypoint extends MapWaypoint {
      * 
      * @author Luc le Manifik
      */
-    public FlightWaypoint(String name, GeoPosition geoPosition) {
-        super(FlightWaypoint.FLIGHT_WAYPOINT_ICON_FILE, name, geoPosition);
+    public FlightWaypoint(Flight flight, GeoPosition geoPosition) {
+        super(FlightWaypoint.FLIGHT_WAYPOINT_ICON_FILE, geoPosition);
+        this.flight = flight;
+    }
+
+	//-- FlightWaypoint Getters
+	
+	/**
+	 * Returns the Flight represented by the FlightWaypoint
+	 *
+	 */
+	public Flight getFlight() {
+		return this.flight;
+	}
+
+	//-- FlightWaypoint Setters
+	
+	/**
+	 * Sets the new value of the flight represented by the FlightWaypoint
+	 */
+	public void setFlight(Flight flight) {
+		if(flight != null) {
+			this.flight = flight;
+		}
+	}
+
+    public String toString() {
+        return this.flight.toString();
     }
 }

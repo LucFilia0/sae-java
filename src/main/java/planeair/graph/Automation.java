@@ -27,7 +27,13 @@ import planeair.util.DataImportation;
  * Does the importation of graphs from a folder automatically
  */
 public class Automation {
-
+    private static final int NUMBER_OF_ALGORITHMS = 3 ;
+    private static final int WELSH_POWELL = 0 ;
+    private static final int DSATUR = 1 ;
+    private static final int RLF = 2 ;
+    private static final int NB_COLORS = 0 ;
+    private static final int NB_CONFLICTS = 1 ;
+        
     /**
      * Starts the importation of all the files
      * 
@@ -154,7 +160,7 @@ public class Automation {
             File conflictFile = new File(path + "/4/coloration-groupe1.4.csv") ;
             FileWriter conflictWriter = new FileWriter(conflictFile, true) ;
             
-            conflictWriter.write(resFile.getName() + ';' + graph.getAttribute("nbConflicts").toString() + '\n') ;
+            conflictWriter.write(resFile.getName() + ';' + Integer.toString(graph.getNbConflicts()) + '\n') ;
             conflictWriter.close() ;
         }
 
@@ -202,11 +208,6 @@ public class Automation {
      * @return
      */
     public static TestGraph useBestColoringAlgorithm(TestGraph graph, String colorAttribute, ExecutorService threadPool) {
-        // Constants to clarify the code
-        final int NUMBER_OF_ALGORITHMS = 3 ;
-        final int WELSH_POWELL = 0 ;
-        final int DSATUR = 1 ;
-        final int RLF = 2 ;
 
         ArrayList<ArrayList<Integer>> resList = new ArrayList<>() ;
         ArrayList<TestGraph> graphList = new ArrayList<>() ;
@@ -222,35 +223,20 @@ public class Automation {
         Runnable welshPowell = new Runnable() {
             @Override
             public void run() {
-                graphList.set(WELSH_POWELL, (TestGraph)Graphs.clone(graph)) ;
-                int[] res = (Coloration.colorWelshPowell(graphList.get(WELSH_POWELL), colorAttribute, graph.getKMax())) ;
-                for (int val : res) {
-                    resList.get(WELSH_POWELL).add(val) ;
-                }
-                latch.countDown() ;
+                setValuesInLists(graph, graphList, resList, WELSH_POWELL, colorAttribute, latch) ;
             }
         } ;
 
         Runnable dsatur = new Runnable() {
             public void run() {
-                graphList.set(DSATUR, (TestGraph)Graphs.clone(graph)) ;
-                int[] res = Coloration.ColorationDsatur(graphList.get(DSATUR), colorAttribute, graph.getKMax()) ;
-                for (int val : res) {
-                    resList.get(DSATUR).add(val) ;
-                }
-                latch.countDown() ;
+                setValuesInLists(graph, graphList, resList, DSATUR, colorAttribute, latch) ;
             };
         } ;
 
         Runnable rlf = new Runnable() {
             @Override
             public void run() {
-                graphList.set(RLF, (TestGraph)Graphs.clone(graph)) ;
-                int[] res = Coloration.ColorationDsatur(graphList.get(RLF), colorAttribute, graph.getKMax()) ;
-                for (int val : res) {
-                    resList.get(RLF).add(val) ;
-                }
-                latch.countDown() ;
+                setValuesInLists(graph, graphList, resList, RLF, colorAttribute, latch) ;
             }
         } ;
 
@@ -332,6 +318,25 @@ public class Automation {
     }
 
     /**
+     * Colors the graph with the selected algorithm, puts it in the graphList and stores the number of colors and 
+     * the number of conflicts in resList
+     * @param graph
+     * @param graphList
+     * @param resList
+     * @param algorithm
+     * @param colorAttribute
+     * @param latch
+     * 
+     */
+    public static void setValuesInLists(TestGraph graph, ArrayList<TestGraph> graphList, ArrayList<ArrayList<Integer>> resList, int algorithm, String colorAttribute, CountDownLatch latch) {
+        graphList.set(algorithm, (TestGraph)Graphs.clone(graph)) ;
+        Coloration.colorationDsatur(graphList.get(DSATUR), colorAttribute, graph.getKMax()) ;
+        resList.get(algorithm).add(graph.getNbColors()) ;
+        resList.get(algorithm).add(graph.getNbConflicts()) ;
+        latch.countDown() ;
+    }
+
+    /**
      * Tells whether or not a file is of a similar form to one of the identifiers
      * ex : identifier is "testGraphX.txt" filename is "testGraph12.txt", placeholder is 'X'
      * The function will return true for the example
@@ -359,8 +364,6 @@ public class Automation {
      * @return index of the best algorithm
      */
     public static Integer findBestAlgorithmInList(ArrayList<ArrayList<Integer>> list) {
-        final int NB_COLORS = 0 ;
-        final int NB_CONFLICTS = 1 ;
 
         if (list.isEmpty()) {
             return null ;
