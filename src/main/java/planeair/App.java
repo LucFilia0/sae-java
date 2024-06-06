@@ -3,6 +3,8 @@ package planeair;
 //-- Import Swing
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.border.Border;
 
 //-- Import AWT
 
@@ -73,6 +75,11 @@ public class App extends javax.swing.JFrame {
      * The default Font for the entire App
      */
     public static final Font KINDANORMAL = new Font("Arial", Font.CENTER_BASELINE, 14);
+
+    /**
+     * The default italic font
+     */
+    public static final Font KINDANOBLE = new Font("Arial", Font.ITALIC, 25);
 
     // FRAMES
 
@@ -164,7 +171,7 @@ public class App extends javax.swing.JFrame {
     private void addComponents() {
         
         this.getContentPane().setLayout(new BorderLayout());
-        this.add(importScreen); // Starts with import screen
+        this.add(this.importScreen, BorderLayout.CENTER); // Starts with import screen
     }
 
     //-- PANEL SWITCH METHODS

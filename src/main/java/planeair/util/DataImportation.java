@@ -88,6 +88,13 @@ public abstract class DataImportation {
      * ===============================================
      */
 
+    /**
+     * Imports 
+     * @param testGraph
+     * @param testGraphFile
+     * @param showErrorMessages
+     * @throws FileNotFoundException
+     */
     public static void importTestGraphFromFile(TestGraph testGraph, File testGraphFile, boolean showErrorMessages) throws FileNotFoundException {
 
         boolean kMaxImported = false;
@@ -123,7 +130,6 @@ public abstract class DataImportation {
         }catch(InvalidFileFormatException iffe) {
             throw iffe;
         }
-
 
     }
 

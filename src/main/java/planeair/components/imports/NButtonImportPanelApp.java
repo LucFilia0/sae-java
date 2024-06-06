@@ -51,6 +51,16 @@ public class NButtonImportPanelApp extends JPanel {
      */
     public static final int FLIGHT_FILE = 12;
 
+    /**
+     * The default String which is prompted on the confirmation buttons
+     */
+    public static final String CONFIRM_MESSAGE = "Valider";
+
+    /**
+     * The default message which is prompted on the rejection buttons
+     */
+    public static final String REJECT_MESSAGE = "Annuler";
+
     // ATTRIBUTES
 
     /**
@@ -58,32 +68,34 @@ public class NButtonImportPanelApp extends JPanel {
      */
     TitledBorder border = new TitledBorder("Title");
 
+    // CHOOSING THE TYPE OF IMPORTATION
+
     /**
      * Choice button
      * Graph
      * Location : second button in the center of the frame, right to Flight/Airport one
      */
-    private NButtonImportFileApp choiceGraphImportation = new NButtonImportFileApp("<html>Importer un fichier <br> graph-test</html>");
+    private NButtonImportFileApp choiceGraphImportation = new NButtonImportFileApp("<html>Importer<br>Graph-Test</html>");
 
     /**
      * Choice button
      * Vols/Aeroports
      * Location : first button in the center of the frame, left to graph one
      */
-    private NButtonImportFileApp choiceFlightImportation = new NButtonImportFileApp("<html>Importer des fichiers <br> vols/aeroports</html>");
+    private NButtonImportFileApp choiceFlightImportation = new NButtonImportFileApp("<html>Importer<br>Vols / Aeroports</html>");
     
-    /**
-     * Importation button
-     * vol-test.csv
-     * Location : after pushing the button buttonAirport
-     */
-    private NButtonImportFileApp buttonFlightFileSelection = new NButtonImportFileApp("vol-test.csv");
     /**
      * Importation Button for Flights
      * aeroport.txt
      * Location : after pushing the button choiceFlight
      */
-    private NButtonImportFileApp buttonAirportFileSelection = new NButtonImportFileApp("aeroport.csv");
+    private NButtonImportFileApp buttonAirportFileSelection = new NButtonImportFileApp("Fichier des aéroports");
+    /**
+     * Importation button
+     * vol-test.csv
+     * Location : after pushing the button buttonAirport
+     */
+    private NButtonImportFileApp buttonFlightFileSelection = new NButtonImportFileApp("Fichier des vols");
 
     /**
      * The panel which their there is buttons 
@@ -101,11 +113,11 @@ public class NButtonImportPanelApp extends JPanel {
      * Button for valided aerorort
      * Location : below buttonAirport
      */
-    private NFilledButton confirmAirports;
+    private NFilledButton confirmAirports = new NFilledButton(NButtonImportPanelApp.CONFIRM_MESSAGE);
     /**
      * Button for return back to the step the user were
      */
-    private NFilledButton returnBackAirports;
+    private NFilledButton returnBackAirports = new NFilledButton(NButtonImportPanelApp.REJECT_MESSAGE);
 
     /**
      * Panel for returnBack + valideFlight
@@ -116,22 +128,39 @@ public class NButtonImportPanelApp extends JPanel {
      * Button for valide vols
      * Location : below buttonFlight
      */
-    private NFilledButton confirmFlights;
+    private NFilledButton confirmFlights = new NFilledButton(NButtonImportPanelApp.CONFIRM_MESSAGE);
     /**
      * Button for annule return back to the step the user is
      */
-    private NFilledButton returnBackFlights;
+    private NFilledButton returnBackFlights = new NFilledButton(NButtonImportPanelApp.REJECT_MESSAGE);
 
     /**
      * Test pour rajouter un boutton valider au début
      * Location : below buttons choice
      */
-    private NFilledButton confirmStart;
+    private NFilledButton confirmStart = new NFilledButton(NButtonImportPanelApp.CONFIRM_MESSAGE);
 
     /**
      * Import the Frame of the App
      */
     private App app;
+
+    // VERIFICATIONS
+
+    /**
+     * This boolean checks if the testGraph was correctly imported
+     */
+    private boolean graphTestImported;
+
+    /**
+     * This boolean checks if the testGraph was correctly imported
+     */
+    private boolean airportsImported;
+
+    /**
+     * This boolean checks if the testGraph was correctly imported
+     */
+    private boolean flightsImported;
     
     /**
      * Create an Import panel
@@ -144,6 +173,10 @@ public class NButtonImportPanelApp extends JPanel {
     public NButtonImportPanelApp(App app){
 
         this.app = app;
+
+        this.graphTestImported = false;
+        this.airportsImported = false;
+        this.flightsImported = false;
 
         this.initComponents();
         this.placeComponents();
@@ -202,20 +235,13 @@ public class NButtonImportPanelApp extends JPanel {
      */
     private void addEvents(){
 
+        // First button : Step directly in the NMainScreen
         confirmStart.addActionListener((ActionEvent e) -> {
+            if(this.graphTestImported || (this.airportsImported && this.flightsImported))
             this.app.switchToMainScreen(); 
         });
-        
-        choiceFlightImportation.addActionListener((ActionEvent e) -> {
-            buttonsPanel.removeAll();
-            this.remove(confirmStart);
-            buttonsPanel.add(buttonAirportFileSelection);
-            this.add(panelReturnConfirmAir);
-            panelReturnConfirmAir.setAlignmentX(Component.CENTER_ALIGNMENT);
-            this.app.setVisible(true);
 
-        });
-    
+        // Button to choose the TestGraph's File : Open JFileChooser
         choiceGraphImportation.addActionListener((ActionEvent e) -> {
 
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
@@ -229,10 +255,64 @@ public class NButtonImportPanelApp extends JPanel {
                     this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
                     System.out.println(this.app.getTestGraph().getKMax());
                     this.app.getPrincFrame().getMenuGraphPanel().setAltitudeValues(this.app.getTestGraph().getKMax()) ;
+                    this.graphTestImported = true;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
+                    this.graphTestImported = false;
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                    fileChooser.setFile(null);
                 }
             }
+        });
+
+        // Choose Flights and Airports importation
+        choiceFlightImportation.addActionListener((ActionEvent e) -> {
+            buttonsPanel.removeAll();
+            this.remove(confirmStart);
+            buttonsPanel.add(buttonAirportFileSelection);
+            this.add(panelReturnConfirmAir);
+            panelReturnConfirmAir.setAlignmentX(Component.CENTER_ALIGNMENT);
+            this.app.setVisible(true);
+
+        });
+
+        // Button to import Airports' File : Open JFileChooser
+        buttonAirportFileSelection.addActionListener((ActionEvent e) -> {
+            
+            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.AIRPORT_FILE);
+
+            try {
+                fileChooser.userImportFile();
+                if(!fileChooser.getFile().equals(null)) {
+
+                    DataImportation.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
+                    this.airportsImported = true;
+                }
+            }catch(InvalidFileFormatException | FileNotFoundException error) {
+                this.airportsImported = false;
+                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                fileChooser.setFile(null);
+            }   
+
+        });
+
+        // Button to import Flights' File : Open JFileChooser
+        buttonFlightFileSelection.addActionListener((ActionEvent e) -> {
+    
+            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.FLIGHT_FILE);
+        
+            try {
+                fileChooser.userImportFile();
+                if(!fileChooser.getFile().equals(null)) {
+
+                    DataImportation.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());
+                    this.flightsImported = true;
+                }
+            }catch(InvalidFileFormatException | FileNotFoundException error) {
+                this.flightsImported = false;
+                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                fileChooser.setFile(null);
+            }
+    
         });
     
         confirmAirports.addActionListener((ActionEvent e) -> {
@@ -251,9 +331,14 @@ public class NButtonImportPanelApp extends JPanel {
         });
     
         confirmFlights.addActionListener((ActionEvent e) -> {
-            this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
-            this.app.switchToMainScreen();
-            this.app.getPrincFrame().initMap();
+            if(this.airportsImported && this.flightsImported) {
+
+                this.graphTestImported = false;
+
+                this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
+                this.app.switchToMainScreen();
+                this.app.getPrincFrame().initMap();
+            }
         });
     
         returnBackFlights.addActionListener((ActionEvent e) -> {
@@ -267,40 +352,9 @@ public class NButtonImportPanelApp extends JPanel {
             this.repaint();
         });
     
-        buttonAirportFileSelection.addActionListener((ActionEvent e) -> {
-            
-            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.AIRPORT_FILE);
-
-            try {
-                fileChooser.userImportFile();
-                if(!fileChooser.getFile().equals(null)) {
-
-                    DataImportation.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
-                    System.out.println("Airport imported");
-                }
-            }catch(InvalidFileFormatException | FileNotFoundException error) {
-                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
-            }   
-
-        } );
-    
-        buttonFlightFileSelection.addActionListener((ActionEvent e) -> {
-    
-            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.FLIGHT_FILE);
-        
-            try {
-                fileChooser.userImportFile();
-                if(!fileChooser.getFile().equals(null)) {
-
-                    DataImportation.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());
-                    System.out.println("Flight imported");
-                }
-            }catch(InvalidFileFormatException | FileNotFoundException error) {
-                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
-            }
-    
-        });
     } 
+
+    // METHODS
  
     /**
      * Restart the Panel for when we will open it again

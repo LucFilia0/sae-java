@@ -8,12 +8,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
 import javax.swing.Box;
+import javax.swing.JLayeredPane;
 
 // Import of AWT composants
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 // Import of LAYOUT
@@ -43,6 +42,11 @@ public class NMainScreen extends JPanel{
     //STRUCT
 
     /**
+     * THE layered pane. ha.
+     */
+    private JLayeredPane layeredPane = new JLayeredPane();
+
+    /**
      * Panel wish will situe in the North of the borderLayout of the frame
      * nb LINE : 3 (PanelNav + HourPanelCenter + HourSliderPanel)
      * nb COLUMN : 1
@@ -52,10 +56,17 @@ public class NMainScreen extends JPanel{
     private JPanel header = new JPanel(new GridLayout(1,1,0,0));
 
     /**
+     * The body of the NMainScreen, where the Map is located, and where the popup menus appears
+     * 
+     * @author Luc le Manifik
+     */
+    private JPanel body = new JPanel(new BorderLayout());
+
+    /**
      * Panel situe in the CENTER of the Frame's borderLayout 
      * For view the map even if we have the different Panel
      */
-    private Map body = new Map();
+    private Map map = new Map();
 
     /**
      * Layout for the BorderLayout CENTER of body
@@ -232,9 +243,21 @@ public class NMainScreen extends JPanel{
 
         this.app = app;
 
+        this.initComponents();
+        this.addComponents();
+        this.addEvents();
+
+    }
+
+    private void initComponents() {
+
         this.setLayout(new BorderLayout());
 
-        body.setLayout(new BorderLayout());
+        this.body.setLayout(new BorderLayout());
+
+        this.menuGraph = new NMenuGraphPanelApp(this.app, ABORT, choixAltitudesMax);
+
+        map.setLayout(new BorderLayout());
 
         bodyCenter.setLayout(new BoxLayout(bodyCenter, BoxLayout.Y_AXIS));
 
@@ -255,7 +278,7 @@ public class NMainScreen extends JPanel{
         leaveButtonToImport.setContentAreaFilled(false);
 
         labelLogoName.setIcon(new ImageIcon("./src/main/java/planeair/icons/GraphFrance.png"));
-        labelLogoName.setFont(new Font("Arial", Font.ITALIC, 25));
+        labelLogoName.setFont(App.KINDANOBLE);
         labelLogoName.setPreferredSize(new Dimension(WIDTH,70));
 
         // BODY COMPONENTS
@@ -289,9 +312,9 @@ public class NMainScreen extends JPanel{
     /**
      * Method adding components on the Panel
      */
-    public void addComponents(){
+    private void addComponents(){
 
-        //HEADER COMPOSANTS
+        //HEADER COMPONENTS
         panelButton.add(buttonMenuGraph);
         panelButton.add(buttonMenuMap);
         panelButton.add(leaveButtonToImport);
@@ -307,13 +330,13 @@ public class NMainScreen extends JPanel{
         header.add(panelNav);
 
         //BODY
-        body.add(timePanel, BorderLayout.CENTER);
+        map.add(timePanel, BorderLayout.CENTER);
 
         menuGraph = new NMenuGraphPanelApp(app, 10, choixAltitudesMax);
-        menuMap = new NMenuMapPanelApp(body);
+        menuMap = new NMenuMapPanelApp(map);
         
         // LEFT
-        body.add(article,BorderLayout.WEST);
+        map.add(article,BorderLayout.WEST);
 
         //RIGHT
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -322,17 +345,19 @@ public class NMainScreen extends JPanel{
         graphLRightBottom.add(infoGraph);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
         aside.add(graphLRightBottom);
-        body.add(aside,BorderLayout.EAST);
+        map.add(aside,BorderLayout.EAST);
 
         //ADD structure to BorderLayout
-        this.add(header, BorderLayout.NORTH);
+        body.add(header, BorderLayout.NORTH);
+        body.add(map, BorderLayout.CENTER);
+
         this.add(body, BorderLayout.CENTER);
     };
 
     /**
      * Method adding events of the Panel
      */
-    public void addEvents(){
+    private void addEvents(){
 
         buttonMenuGraph.addActionListener((ActionEvent e) -> {
 
@@ -349,7 +374,7 @@ public class NMainScreen extends JPanel{
                 this.app.revalidate();
                 }
                 else{
-                    body.remove(article);
+                    map.remove(article);
                     this.app.setVisible(true);
                     article.removeAll();
 
@@ -358,7 +383,7 @@ public class NMainScreen extends JPanel{
                     article.add(menuGraph, GridBagC);
                     article.paintComponents(article.getGraphics());
 
-                    body.add(article,BorderLayout.WEST);
+                    map.add(article,BorderLayout.WEST);
 
                     buttonMenuMap.setIcon(iconMenuMap);
                     buttonMenuGraph.setIcon(iconCloseGraph);
@@ -367,10 +392,10 @@ public class NMainScreen extends JPanel{
                 }               
             }
             else{
-                body.remove(article);
+                map.remove(article);
                 this.app.setVisible(true);
                 article.removeAll();
-                body.add(article,BorderLayout.WEST); 
+                map.add(article,BorderLayout.WEST); 
                 this.app.setVisible(true);
                 buttonMenuGraph.setIcon(iconMenuGraph);
             }
@@ -389,7 +414,7 @@ public class NMainScreen extends JPanel{
                     this.app.revalidate();
                 }
                 else{
-                    body.remove(article);
+                    map.remove(article);
                     this.app.setVisible(true);
                     article.removeAll();
 
@@ -398,7 +423,7 @@ public class NMainScreen extends JPanel{
                     article.add(menuMap, GridBagC);
                     article.paintComponents(article.getGraphics());
 
-                    body.add(article,BorderLayout.WEST);
+                    map.add(article,BorderLayout.WEST);
 
                     buttonMenuGraph.setIcon(iconMenuGraph);
                     buttonMenuMap.setIcon(iconCloseMap);
@@ -407,10 +432,10 @@ public class NMainScreen extends JPanel{
                 }               
             }
             else{
-                body.remove(article);
+                map.remove(article);
                 this.app.setVisible(true);
                 article.removeAll();
-                body.add(article,BorderLayout.WEST); 
+                map.add(article,BorderLayout.WEST); 
                 this.app.setVisible(true);
                 buttonMenuMap.setIcon(iconMenuMap);
             }
@@ -418,7 +443,7 @@ public class NMainScreen extends JPanel{
         });
 
         leaveButtonToImport.addActionListener((ActionEvent e) ->{
-                this.app.switchToMainScreen();
+                this.app.switchToImportScreen();
                 this.app.setVisible(true);
         });
 
@@ -438,6 +463,6 @@ public class NMainScreen extends JPanel{
 
     public void initMap() {
         this.app.getAirportSet().setActiveAirportsFrom(this.app.getFig());
-        this.body.paintMapItems(this.app.getAirportSet(), this.app.getFig());
+        this.map.paintMapItems(this.app.getAirportSet(), this.app.getFig());
     }
 }
