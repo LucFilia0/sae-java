@@ -71,7 +71,7 @@ public class PanelCreator {
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
 		viewer.getDefaultView().enableMouseOptions() ;
-		Coloration.setGraphStyle(graph, 0) ;
+		Coloring.setGraphStyle(graph, 0) ;
 
 		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
 		// and also checks for events
@@ -287,7 +287,7 @@ public class PanelCreator {
 		public void mouseLeft(String id) {
 			Node n = graph.getNode(id) ;
 			n.removeAttribute("ui.style") ;
-			n.setAttribute("ui.style", "size : " + Coloration.DEFAULT_NODE_SIZE + " ;") ;
+			n.setAttribute("ui.style", "size : " + Coloring.DEFAULT_NODE_SIZE + " ;") ;
 		}
 
 		/**

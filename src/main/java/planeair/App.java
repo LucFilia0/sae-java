@@ -22,7 +22,7 @@ import java.io.File;
 
 import planeair.util.AirportSet;
 import planeair.util.DataImportation;
-
+import planeair.graph.Automation;
 import planeair.graph.FlightsIntersectionGraph;
 import planeair.graph.PanelCreator;
 import planeair.graph.TestGraph;
@@ -135,7 +135,8 @@ public class App extends javax.swing.JFrame {
                 "If you're using anything else then just cry harder 🦈") ;
         }
 
-        App app = new App();
+        Automation.startAutomation("./data", new String[]{"graph-testX.txt"}, 'X', Runtime.getRuntime().availableProcessors());
+        //App app = new App();
         
     }
 

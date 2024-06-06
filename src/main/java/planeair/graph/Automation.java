@@ -46,12 +46,7 @@ public class Automation {
         List<TestGraph> graphList = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
         new File(path + "/4").mkdirs() ;
         for (TestGraph graph : graphList) {
-            threadPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Automation.writeToFile(graph, path, threadPool) ;
-                }
-            }) ;
+            Automation.writeToFile(graph, path, threadPool) ;
         }
         System.out.println("Done importing") ;
         threadPool.shutdown() ;
@@ -111,14 +106,6 @@ public class Automation {
             catch (InterruptedException e) {
                 System.out.println(e) ;
             }
-
-            // Sorts the list by graph name
-            res.sort(new Comparator<Graph>() {
-                @Override
-                public int compare(Graph arg0, Graph arg1) {
-                    return Integer.compare(Integer.valueOf(arg0.getId()), Integer.valueOf(arg1.getId())) ;
-                }
-            }) ;
         }
 
         return res ;
@@ -158,7 +145,7 @@ public class Automation {
             File conflictFile = new File(path + "/4/coloration-groupe1.4.csv") ;
             FileWriter conflictWriter = new FileWriter(conflictFile, true) ;
             
-            conflictWriter.write(resFile.getName() + ';' + Integer.toString(graph.getNbConflicts()) + '\n') ;
+            conflictWriter.write(resFile.getName() + ";" + Integer.toString(graph.getNbConflicts()) + '\n') ;
             conflictWriter.close() ;
         }
 
@@ -326,7 +313,7 @@ public class Automation {
      */
     public static void setValuesInLists(TestGraph graph, ArrayList<TestGraph> graphList, ArrayList<ArrayList<Integer>> resList, int algorithm, CountDownLatch latch) {
         graphList.set(algorithm, (TestGraph)Graphs.clone(graph)) ;
-        Coloration.colorationDsatur(graphList.get(DSATUR)) ;
+        Coloring.coloringDsatur(graphList.get(algorithm)) ;
         resList.get(algorithm).add(graph.getNbColors()) ;
         resList.get(algorithm).add(graph.getNbConflicts()) ;
         latch.countDown() ;

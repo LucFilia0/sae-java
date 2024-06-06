@@ -24,7 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.FlowLayout;
 
 import planeair.App;
-import planeair.graph.Coloration;
+import planeair.graph.Coloring;
 import planeair.graph.TestGraph;
 
 /**
@@ -211,9 +211,9 @@ public class NMenuGraphPanelApp extends JPanel{
         algoOption.add(algorithmes);
         algoOption.add(layoutAlgo);
 
-        algoChoice.addItem(Coloration.DSATUR);
-        algoChoice.addItem(Coloration.RLF);
-        algoChoice.addItem(Coloration.WELSH_POWELL);
+        algoChoice.addItem(Coloring.DSATUR);
+        algoChoice.addItem(Coloring.RLF);
+        algoChoice.addItem(Coloring.WELSH_POWELL);
 
         //ADD
         this.add(titleMenu);
@@ -357,7 +357,7 @@ public class NMenuGraphPanelApp extends JPanel{
                 // The algorithm used changed so we need to update the coloring
                 if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
                     if (lastAlgoSelected != null) {
-                        Coloration.removeCurrentColoring(graph) ;
+                        Coloring.removeCurrentColoring(graph) ;
                     }
                     lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
                     colorationChanged = true ;
@@ -375,10 +375,10 @@ public class NMenuGraphPanelApp extends JPanel{
                 // Treatment is done here because too much indentation is ugly
                 if (colorationChanged) {
                     if (lastAlgoSelected != null) {
-                        Coloration.removeCurrentColoring(graph) ;
+                        Coloring.removeCurrentColoring(graph) ;
                     }
-                    Coloration.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
-                    Coloration.setGraphStyle(graph, currentKMax) ;
+                    Coloring.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
+                    Coloring.setGraphStyle(graph, currentKMax) ;
                     NInfoGraphPanelApp panel = app.getPrincFrame().getInfoGraphPanel() ;
                     panel.setNbColorsUsed(graph.getNbColors()) ;
                     panel.setNbConflictsOccurred(graph.getNbConflicts()) ;
