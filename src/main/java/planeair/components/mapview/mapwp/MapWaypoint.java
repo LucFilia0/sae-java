@@ -91,7 +91,6 @@ public abstract class MapWaypoint extends planeair.components.mapview.MapItem {
                 MapWaypointButton mwp = (MapWaypointButton) e.getSource();
                 Map.infoPanel.showInfos(mwp.getMapWaypoint());
             }
-            
         });
 
     }

@@ -123,6 +123,17 @@ public class App extends javax.swing.JFrame {
         // DON'T TOUCH THAT IT'S VERY IMPORTANT
         System.setProperty("org.graphstream.ui", "swing") ;
         System.setProperty("sun.java2d.uiScale", "100%") ;
+        String osName = System.getProperty("os.name").toLowerCase() ;
+        if (osName.startsWith("windows")) {
+            System.setProperty("java -Dsun.java2d.directx", "True") ;
+        }
+        else if (osName.startsWith("unix")) {
+            System.setProperty("java -Dsun.java2d.opengl", "True") ;
+        }
+        else {
+            System.out.println("Sorry this is not supported for Mac, get a better OS 👍👍👍\n "+
+                "If you're using anything else then just cry harder 🦈") ;
+        }
 
         App app = new App();
         
@@ -161,7 +172,6 @@ public class App extends javax.swing.JFrame {
     private void initAttributes() {
         this.airportSet = new AirportSet();
         this.fig = new FlightsIntersectionGraph("FIG");
-        this.testGraph = new TestGraph("TestGraph");
 
         this.framePrinc = new NPrincipalePanelApp(this);
         this.importPanel = new NImportPanelApp(this);
@@ -251,7 +261,9 @@ public class App extends javax.swing.JFrame {
 
     public void setTestGraph(TestGraph testGraph) {
         this.testGraph = testGraph ;
-        this.initTestGraphRenderer() ;
+        if (testGraph != null) {
+            this.initTestGraphRenderer() ;
+        }
     }
 
     public TestGraph getTestGraph() {
@@ -263,7 +275,11 @@ public class App extends javax.swing.JFrame {
     }
 
     public void initTestGraphRenderer() {
-        this.testGraphRenderer = new PanelCreator(this.testGraph) ;
+        initTestGraphRenderer(false) ;
+    }
+
+    public void initTestGraphRenderer(boolean inOwnFrame) {
+        this.testGraphRenderer = new PanelCreator(this.testGraph, inOwnFrame) ;
     }
 
     public AirportSet getAirportSet() {

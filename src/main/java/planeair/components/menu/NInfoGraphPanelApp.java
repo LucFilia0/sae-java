@@ -3,7 +3,11 @@ package planeair.components.menu;
 // Import swing composants
 import javax.swing.JPanel;
 
+import org.graphstream.algorithm.ConnectedComponents;
+import org.graphstream.algorithm.Toolkit;
+
 import planeair.App;
+import planeair.graph.TestGraph;
 
 import javax.swing.JLabel;
 
@@ -114,11 +118,13 @@ public class NInfoGraphPanelApp extends JPanel {
      */
     private JLabel titleNbConflictsOccurred = new JLabel(NB_CONFLICTS_TEXT + "-") ;
 
+    private App app ;
+
     /**
      * Contructor of NInfoGraphPanelApp
      */
-    public NInfoGraphPanelApp(){
-
+    public NInfoGraphPanelApp(App app){
+        this.app = app ;
         this.setBackground(App.KINDAYELLOW);
 
         this.setLayout(new GridBagLayout());
@@ -155,57 +161,68 @@ public class NInfoGraphPanelApp extends JPanel {
      * Add Components in the panel
      */
     public void addComponents(){
-
+        this.removeAll() ;
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = -1; // colonne 1
-        gbc.gridy = 0; // ligne 0
-        gbc.anchor = GridBagConstraints.WEST;
-        //LINE 1
-        degreePanel.add(titleDegreeAvg);
-        this.add(degreePanel,gbc);
+        if (app.getTestGraph() != null) {
+            gbc.gridx = -1; // colonne 1
+            gbc.gridy = 0; // ligne 0
+            gbc.anchor = GridBagConstraints.WEST;
+            
+            //LINE 1
+            degreePanel.add(titleDegreeAvg);
+            this.add(degreePanel,gbc);
 
-        gbc.gridx = 0; // colonne 1
-        gbc.gridy = 1; // ligne 0
+            gbc.gridx = 0; // colonne 1
+            gbc.gridy = 1; // ligne 0
 
 
-        //Line 2
-        compPanel.add(titleComp);
-        this.add(compPanel,gbc);
+            //Line 2
+            compPanel.add(titleComp);
+            this.add(compPanel,gbc);
 
-        gbc.gridx = 0; // colonne 1
-        gbc.gridy = 2; // ligne 0
+            gbc.gridx = 0; // colonne 1
+            gbc.gridy = 2; // ligne 0
 
-        //Line 3
-        nodesPanel.add(titleNodes);
-        this.add(nodesPanel,gbc);
+            //Line 3
+            nodesPanel.add(titleNodes);
+            this.add(nodesPanel,gbc);
 
-        gbc.gridx = 0; // colonne 1
-        gbc.gridy = 3; // ligne 0
+            gbc.gridx = 0; // colonne 1
+            gbc.gridy = 3; // ligne 0
 
-        //Line 4
-        edgesPanel.add(titleEdges);
-        this.add(edgesPanel,gbc);
+            //Line 4
+            edgesPanel.add(titleEdges);
+            this.add(edgesPanel,gbc);
 
-        gbc.gridx = 0; // colonne 1
-        gbc.gridy = 4; // ligne 0
+            gbc.gridx = 0; // colonne 1
+            gbc.gridy = 4; // ligne 0
 
-        //Line 5
-        diameterPanel.add(titleDiameter);
-        this.add(diameterPanel,gbc);
+            //Line 5
+            diameterPanel.add(titleDiameter);
+            this.add(diameterPanel,gbc);
 
-        gbc.gridx = 0; // colonne 1
-        gbc.gridy = 5; // ligne 0
+            gbc.gridx = 0; // colonne 1
+            gbc.gridy = 5; // ligne 0
 
-        //Line 6
-        nbColorPanel.add(titleNbColorsUsed) ;
-        this.add(nbColorPanel, gbc) ;
+            //Line 6
+            nbColorPanel.add(titleNbColorsUsed) ;
+            this.add(nbColorPanel, gbc) ;
 
-        gbc.gridx = 0; // colonne 1
-        gbc.gridy = 6; // ligne 0
+            gbc.gridx = 0; // colonne 1
+            gbc.gridy = 6; // ligne 0
 
-        //Line 7
-        nbConflictPanel.add(titleNbConflictsOccurred) ;
-        this.add(nbConflictPanel, gbc) ;
+            //Line 7
+            nbConflictPanel.add(titleNbConflictsOccurred) ;
+            this.add(nbConflictPanel, gbc) ;
+        }
+
+        else {
+            gbc.gridx = 0 ;
+            gbc.gridy = 0 ;
+            JLabel problem = new JLabel("Veuillez importer un graph") ;
+            problem.setFont(new Font(getFont().getName(), Font.BOLD, 16)) ;
+            this.add(problem, gbc) ;
+        }
 
     }
 
@@ -314,4 +331,24 @@ public class NInfoGraphPanelApp extends JPanel {
     public void setNbConflictsOccurred(int nbConflicts) {
         this.titleNbConflictsOccurred.setText(NB_CONFLICTS_TEXT + nbConflicts) ;
     } 
+
+    /**
+     * Computes the relevant graph statistics and updates the infoGraphPanel
+     */
+    public void computeGraphStats() {
+        TestGraph graph = this.app.getTestGraph() ;
+        if (graph != null) {   
+            ConnectedComponents cc = new ConnectedComponents(graph) ;
+            cc.compute() ;
+            this.setNbConnectedComponent(cc.getConnectedComponentsCount()) ;
+            this.setAverageDegree((Toolkit.averageDegree(graph))) ;
+            this.setNbEdges(graph.getEdgeCount()) ;
+            this.setNbNodes(graph.getNodeCount()) ;
+            this.setDiameter((int)Toolkit.diameter(graph)) ;
+            if (graph.getNbColors() != 0) {
+                this.setNbColorsUsed(graph.getNbColors()) ;
+            this.setNbConflictsOccurred(graph.getNbConflicts());
+            }
+        }
+    }
 }

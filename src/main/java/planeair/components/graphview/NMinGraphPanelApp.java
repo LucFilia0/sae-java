@@ -2,19 +2,16 @@ package planeair.components.graphview;
 
 // Import swing composants
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.graphstream.ui.swing_viewer.ViewPanel;
 
 import planeair.App;
-import planeair.graph.Coloration;
 import planeair.graph.PanelCreator;
 
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 
 import java.awt.BorderLayout;
 // Import awt composants
@@ -25,7 +22,6 @@ import java.awt.Font;
 
 // Import Layout
 import java.awt.GridLayout;
-import java.awt.FlowLayout;
 
 /**
  * This class create a Panel for see the graph 
@@ -89,8 +85,11 @@ public class NMinGraphPanelApp extends JPanel {
 
         /*FIRST COMPOSANT */
         
-        //Insert Graph representation in FlowPanelGraph pour Nathan liegounettt
         this.setMaximumSize(new Dimension(350,400));
+        if (app.getTestGraph() == null) {
+            FlowPanelGraph = new NSkullPanel() ;
+            FlowPanelGraph.setLayout(new BorderLayout());
+        }
         FlowPanelGraph.setPreferredSize(new Dimension(325,325));
          
         /*SECOND COMPOSANT */
@@ -112,20 +111,26 @@ public class NMinGraphPanelApp extends JPanel {
         this.add(gridPanelMinGraph);
     }
 
+    /**
+     * Puts the graph in the panel
+     * @param graphRenderer Renderer which will take care of rendering the graph
+     * contains the panel containing the view of the graph
+     */
     public void addGraphToPanel(PanelCreator graphRenderer) {
         ViewPanel panel = graphRenderer.getViewPanel() ;
+        this.FlowPanelGraph.removeAll() ;
         this.FlowPanelGraph.add(panel, BorderLayout.CENTER) ;
         buttonCenter.setBackground(App.KINDAYELLOW);
     }
-    
+
     public void addComponents(){
 
-        /*FIRST COMPOSANT */
+        /*FIRST COMPONENT */
         gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,5)));
         gridPanelMinGraph.add(FlowPanelGraph);
         gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,10)));
 
-        /*SECOND COMPOSANT */
+        /*SECOND COMPONENT */
         buttonCenter.add(buttonAgr);
         gridPanelMinGraph.add(buttonCenter);
         gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,10)));

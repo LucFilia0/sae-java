@@ -4,11 +4,8 @@ package planeair.graph;
 import java.util.* ;
 import java.util.stream.Collectors;
 
-//-- Import GraphStream
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
-import org.miv.mbox.Test;
 
 //-- Import Exceptions
 
@@ -310,8 +307,8 @@ public class Coloration {
 
             // Used to store the colors of each neighbors of this node
             // The Keys are the color, the values are the number of times a neighbor of this node has it.
-            HashMap<Integer, Integer> neighborColorMap = new HashMap<>() ;
-            int minColor = 1 ;
+            TreeMap<Integer, Integer> neighborColorMap = new TreeMap<>() ;
+            int previousColor ;
 
             //Step2
             // We loop through all of the nodes of this neighbor and we store their color in the HashMap
@@ -333,23 +330,26 @@ public class Coloration {
                     neighborColorMap.get((int)nodeP.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE)));
             }
             else{
+                previousColor = 0 ;
+                // Idk why my shitty brain could NOT find a better way to do it 💀
                 for (Integer key : neighborColorMap.keySet()) {
-                    if (key == minColor) {
-                        minColor++ ;
+                    if (previousColor + 1 < key) {
+                        break ;
                     }
+                    previousColor = key ;
                 }
-                nodeP.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, minColor) ;
+                nodeP.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, previousColor + 1) ;
             }
 
             //Step3
             nodeP.neighborNodes().forEach(nodeAdj -> {
                 HashSet<Integer> buffer = new HashSet<>() ;
-
-                for(Node nodeAdj2 : nodeAdj.neighborNodes().collect(Collectors.toSet())){
+                nodeAdj.neighborNodes().forEach(nodeAdj2 -> {
                     if((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) != 0 && nodeAdj2 != nodeP){
                         buffer.add((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE)) ;
-                    }    
-                }
+                    }  
+                });
+
                 int nbColor = buffer.size() ;
                 if( nbColor!= 0){
                     nodeAdj.setAttribute("DSATUR", nbColor); 

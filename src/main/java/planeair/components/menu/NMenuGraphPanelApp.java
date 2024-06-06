@@ -140,10 +140,16 @@ public class NMenuGraphPanelApp extends JPanel{
 
         
         //  ComboBox
+        if (kmax > 0) {
+            this.setAltitudeValues(kmax) ;
+        }
+        else {
+            altitudesMax.addItem(0) ;
+            altitudesMax.setSelectedIndex(0) ;
+        }
         setAltitudeComboBox(kmax);
-        this.setAltitudeValues(kmax) ;
-        
         altitudesMax.setSelectedItem(kmax);
+        
         altitudesMax.setForeground(Color.WHITE);
         altitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
         altitudesMax.setBackground(Color.BLACK);
@@ -209,8 +215,6 @@ public class NMenuGraphPanelApp extends JPanel{
         algoChoice.addItem(Coloration.RLF);
         algoChoice.addItem(Coloration.WELSH_POWELL);
 
-        
-
         //ADD
         this.add(titleMenu);
         //KMAX
@@ -222,12 +226,27 @@ public class NMenuGraphPanelApp extends JPanel{
         //ALGO
         this.add(algoOption);
 
-        //LISTENERS
+        //LISTENERS AND RENDERERS
         initListeners() ;
+        initRenders() ;
     }
 
+    /**
+     * Fills the altitude comboBox with the correct values and defines its Render
+     * @param kmax
+     */
     public void setAltitudeComboBox(int kmax){
         altitudeComboBox.removeAllItems();
+
+        for(int i = 0; i <= kmax; i++ ){
+            altitudeComboBox.addItem(i);
+        }
+    }
+
+    /**
+     * Initializes the different Renderers needed
+     */
+    private void initRenders() {
         altitudeComboBox.setRenderer(new ListCellRenderer<Integer>() {
             @Override
             public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index,
@@ -250,15 +269,42 @@ public class NMenuGraphPanelApp extends JPanel{
             }
         });
 
-        for(int i = 0; i <= kmax; i++ ){
-            altitudeComboBox.addItem(i);
-        }
+        altitudesMax.setRenderer(new ListCellRenderer<Integer>() {
+            @Override
+            public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index,
+                boolean isSelected, boolean cellHasFocus) {
+                    
+                    JLabel cell = new JLabel() ;
+                    if (value == 0 ) {
+                        cell.setText("/!\\") ;
+                        cell.setHorizontalAlignment(JLabel.CENTER) ;
+                    }
+                    else {
+                        cell.setText(Integer.toString(value)) ;
+                    }
+                        
+                    cell.setFont(new Font("Arial", Font.BOLD, 18)) ;
+                    cell.setForeground(Color.WHITE);
+                    cell.setBackground(Color.BLACK);
+
+                    return cell ;
+
+            }
+        });
     }
 
+    /**
+     * Getter for the comboBox containing the kMax options
+     * @return
+     */
     public JComboBox<Integer> getAltitudeMax() {
         return this.altitudesMax ;
     }
 
+    /**
+     * Getter for the comboBox containing the algorithms
+     * @return
+     */
     public JComboBox<String> getAlgoChoice() {
         return this.algoChoice ;
     }
@@ -269,31 +315,46 @@ public class NMenuGraphPanelApp extends JPanel{
      */
     public void setAltitudeValues(int kMax) {
         this.altitudesMax.removeAllItems() ;
-        for (int i = 2; i < (int)kMax*2 ; i++) {
+        for (int i = 2; i < (int)kMax*1.5 + Math.sqrt(kMax) ; i++) {
             this.altitudesMax.addItem(i) ;
         }
 
         this.altitudesMax.setSelectedItem(kMax) ;
     }
 
+    /**
+     * Getter for the current kMax chosen
+     * @return
+     */
     public Integer getCurrentKMax() {
         return (Integer)this.altitudesMax.getSelectedItem() ;
     }
 
+    /**
+     * Getter for the current algorithm chosen
+     * @return
+     */
     public String getCurrentAlgorithm() {
         return (String)this.algoChoice.getSelectedItem() ;
     }
 
+    /**
+     * Adds listeners to components
+     */
     private void initListeners() {
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean colorationChanged = false ;
                 TestGraph graph = app.getTestGraph() ;
+                if (graph == null) {
+                    return ;
+                }
                 int oldKmax = graph.getKMax() ;
                 int currentKMax = (int)altitudesMax.getSelectedItem() ;
                 graph.setKMax(currentKMax) ;
                 
+                // The algorithm used changed so we need to update the coloring
                 if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
                     if (lastAlgoSelected != null) {
                         Coloration.removeCurrentColoring(graph) ;
@@ -302,12 +363,16 @@ public class NMenuGraphPanelApp extends JPanel{
                     colorationChanged = true ;
                 }
                 
+                // In case it didn't we check if it needs to be changed
                 else {
+                    // If the new KMax is smaller than the old one, if the coloration can be improved 
+                    //or if the coloring has more colors than the currentKmax, then we change the coloration
                     if (oldKmax > currentKMax || oldKmax < currentKMax && graph.getNbConflicts() > 0 || graph.getNbColors() > currentKMax) {
                         colorationChanged = true ;
                     }
                 }
 
+                // Treatment is done here because too much indentation is ugly
                 if (colorationChanged) {
                     if (lastAlgoSelected != null) {
                         Coloration.removeCurrentColoring(graph) ;

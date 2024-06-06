@@ -91,8 +91,7 @@ public class PanelCreator {
 					}
 
 					// Don't mind this idk why or when this gets thrown
-					catch (InterruptedException e) {
-						System.err.println("bro got interrupted 😡😡😡") ; // Bro, what did you do ?? XD
+					catch (Exception e) {
 					}
 				}
 			}

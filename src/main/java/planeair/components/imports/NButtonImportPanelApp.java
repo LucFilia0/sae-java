@@ -4,11 +4,6 @@ package planeair.components.imports;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import org.graphstream.algorithm.ConnectedComponents;
-import org.graphstream.algorithm.Toolkit;
-import org.graphstream.algorithm.ConnectedComponents.ConnectedComponent;
-import org.graphstream.graph.Node;
-
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -18,8 +13,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -207,9 +200,9 @@ public class NButtonImportPanelApp extends JPanel {
                 try {
                     this.app.setTestGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     DataImportation.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
-                    
-                    initDefaultGraphImportation() ;
+                    initDefaultGraphImportation(app.getPrincFrame().getInfoGraphPanel()) ;  
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
+                    this.app.setTestGraph(null) ;
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -298,25 +291,14 @@ public class NButtonImportPanelApp extends JPanel {
         this.add(Box.createRigidArea(new Dimension(0, 5)));
     }
 
-    public void initDefaultGraphImportation() {
+    /**
+     * Initializes the panel and statistics linked to this Graph
+     * @param infoGraph Panel which will contain the statistics
+     */
+    public void initDefaultGraphImportation(NInfoGraphPanelApp infoGraph) {
         this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
         this.app.getPrincFrame().getMenuGraphPanel().setAltitudeValues(this.app.getTestGraph().getKMax()) ;
-        computeGraphStats() ;
-    }
-
-    /**
-     * Computes the relevant graph statistics and updates the infoGraphPanel
-     */
-    public void computeGraphStats() {
-        NInfoGraphPanelApp panel = this.app.getPrincFrame().getInfoGraphPanel() ;
-        TestGraph graph = this.app.getTestGraph() ;
-
-        ConnectedComponents cc = new ConnectedComponents(graph) ;
-        cc.compute() ;
-        panel.setNbConnectedComponent(cc.getConnectedComponentsCount()) ;
-        panel.setAverageDegree((Toolkit.averageDegree(graph))) ;
-        panel.setNbEdges(graph.getEdgeCount()) ;
-        panel.setNbNodes(graph.getNodeCount()) ;
-        panel.setDiameter((int)Toolkit.diameter(graph)) ;
+        infoGraph.addComponents() ;
+        infoGraph.computeGraphStats() ;
     }
 }
