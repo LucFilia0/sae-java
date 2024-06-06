@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 //Import AWT composants
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
@@ -103,8 +102,5 @@ public class NImportPanelApp extends JPanel {
         //ADD to CONTENT PANE
         this.add(header, BorderLayout.NORTH);
         this.add(body, BorderLayout.CENTER);
-
-
-
     }
 }

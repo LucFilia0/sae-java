@@ -68,9 +68,7 @@ public class NMinGraphPanelApp extends JPanel {
 
 
         this.setBackground(App.KINDAYELLOW);
-
-
-
+        
         //STRUCT
         
         //GridPanel Background Color (YELLOW)

@@ -84,10 +84,6 @@ public class NPrincipalePanelApp extends JPanel{
      */
     private JPanel panelNav = new JPanel(new GridLayout(1,3,0,0));
 
-
-
-    
-
     /**
      * Panel for put all buttons in the nav
      * Grid
