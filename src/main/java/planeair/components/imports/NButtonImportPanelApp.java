@@ -298,6 +298,7 @@ public class NButtonImportPanelApp extends JPanel {
     public void initDefaultGraphImportation(NInfoGraphPanelApp infoGraph) {
         this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
         this.app.getPrincFrame().getMenuGraphPanel().setAltitudeValues(this.app.getTestGraph().getKMax()) ;
+        this.app.getPrincFrame().getMenuGraphPanel().setLastAlgoSelected(null) ;
         infoGraph.addComponents() ;
         infoGraph.computeGraphStats() ;
     }

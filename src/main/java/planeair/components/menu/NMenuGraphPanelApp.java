@@ -98,7 +98,7 @@ public class NMenuGraphPanelApp extends JPanel{
     /**
      * JcomboBox that help too choose an algo for the coloration
      */
-    JComboBox<String> algoChoice = new JComboBox<>();
+    private JComboBox<String> algoChoice = new JComboBox<>();
     /**
      * Use the algo of the ComboBox (validate)
      * For help the PC to not automatally have to change of coloration all the time the user change of SelectedItem
@@ -108,7 +108,7 @@ public class NMenuGraphPanelApp extends JPanel{
     /**
      * ComboBox containing kMax 
      */
-    JComboBox<Integer> altitudesMax ;
+    private JComboBox<Integer> altitudesMax ;
 
     private String lastAlgoSelected = null ;
 
@@ -387,5 +387,7 @@ public class NMenuGraphPanelApp extends JPanel{
         });
     }
     
- 
+    public void setLastAlgoSelected(String lastAlgoSelected) {
+        this.lastAlgoSelected = lastAlgoSelected ;
+    }
 }

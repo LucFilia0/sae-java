@@ -333,10 +333,24 @@ public class NInfoGraphPanelApp extends JPanel {
     } 
 
     /**
+     * Resets all of infoGraphs values to their default.
+     */
+    public void setDefaultValues() {
+        titleNodes.setText(NB_NODES_TEXT + "-") ;
+        titleEdges.setText(NB_EDGES_TEXT + "-") ;
+        titleDegreeAvg.setText(DEGREE_TEXT + "-") ;
+        titleDiameter.setText(DIAMETER_TEXT + "-") ;
+        titleComp.setText(CONNECTED_COMP_TEXT + "-") ;
+        titleNbColorsUsed.setText(NB_COLORS_TEXT + "-") ;
+        titleNbConflictsOccurred.setText(NB_CONFLICTS_TEXT + "-") ;
+    }
+
+    /**
      * Computes the relevant graph statistics and updates the infoGraphPanel
      */
     public void computeGraphStats() {
         TestGraph graph = this.app.getTestGraph() ;
+        this.setDefaultValues() ;
         if (graph != null) {   
             ConnectedComponents cc = new ConnectedComponents(graph) ;
             cc.compute() ;
@@ -347,7 +361,7 @@ public class NInfoGraphPanelApp extends JPanel {
             this.setDiameter((int)Toolkit.diameter(graph)) ;
             if (graph.getNbColors() != 0) {
                 this.setNbColorsUsed(graph.getNbColors()) ;
-            this.setNbConflictsOccurred(graph.getNbConflicts());
+                this.setNbConflictsOccurred(graph.getNbConflicts());
             }
         }
     }
