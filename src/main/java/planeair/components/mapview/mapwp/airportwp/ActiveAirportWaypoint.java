@@ -23,7 +23,7 @@ public class ActiveAirportWaypoint extends AirportWaypoint {
     /**
      * The file which contains the icon of the active Airports ({@link java.io.File})
      */
-    public static final File ACTIVE_AIRPORT_WAYPOINT_ICON_FILE = new File("sprint/active_airport.png");
+    public static final File ACTIVE_AIRPORT_WAYPOINT_ICON_FILE = new File("./icons/waypoints/active_airport.png");
 
     //-- ActiveAirportWaypoint Constructor
 

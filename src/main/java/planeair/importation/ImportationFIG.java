@@ -201,7 +201,7 @@ public abstract class ImportationFIG {
         Coordinate airportCoordinate = null;
 
         try {
-            new Coordinate(latitudeDegree, latitudeMinutes, latitudeSeconds, latitudeDirection, longitudeDegree, longitudeMinutes, longitudeSeconds, longitudeDirection);
+            airportCoordinate = new Coordinate(latitudeDegree, latitudeMinutes, latitudeSeconds, latitudeDirection, longitudeDegree, longitudeMinutes, longitudeSeconds, longitudeDirection);
         }catch(InvalidCoordinateException e) {
             throw new InvalidFileFormatException(currentLine, e.getMessage());
         }

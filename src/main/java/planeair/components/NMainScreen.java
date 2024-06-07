@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 
 // Import of LAYOUT
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.GridBagConstraints;
@@ -105,14 +104,14 @@ public class NMainScreen extends JPanel{
      * Description : A cross
      * Source : ./src/main/java/close.png
      */
-    private Icon iconCloseGraph = new ImageIcon("./src/main/java/planeair/icons/close.png");
+    private Icon iconCloseGraph = new ImageIcon("./icons/close.png");
 
      /**
      * Icon of the Button menu Graph
      * Description : three horizontal lines
      * Source : ./src/main/java/menu.png
      */
-    private Icon iconMenuGraph = new ImageIcon("./src/main/java/planeair/icons/graph.png");
+    private Icon iconMenuGraph = new ImageIcon("./icons/graph.png");
     /**
      * Button with their Icon
      * Location : first button in the nav
@@ -124,13 +123,13 @@ public class NMainScreen extends JPanel{
      * Description :  A cross
      * Source : ./src/main/java/close.png
      */
-    private Icon iconCloseMap = new ImageIcon("./src/main/java/planeair/icons/close.png");
+    private Icon iconCloseMap = new ImageIcon("./icons/close.png");
      /**
      * Icon of the Button menu Map
      * Description : A mini Map
      * Source : ./src/main/java/map.png
      */
-    private Icon iconMenuMap = new ImageIcon("./src/main/java/planeair/icons/map.png");
+    private Icon iconMenuMap = new ImageIcon("./icons/map.png");
     /**
      * Button with their Icon
      * Location : second button in the nav
@@ -140,7 +139,7 @@ public class NMainScreen extends JPanel{
     /**
      * Icon for import button
      */
-    private Icon iconFolder = new ImageIcon("./src/main/java/planeair/icons/folder-input.png");
+    private Icon iconFolder = new ImageIcon("./icons/folder-input.png");
     /**
      * Button for return with importButtons
      * Location : third button in the nav
@@ -264,7 +263,7 @@ public class NMainScreen extends JPanel{
         leaveButtonToImport.setBorderPainted(false);
         leaveButtonToImport.setContentAreaFilled(false);
 
-        labelLogoName.setIcon(new ImageIcon("./src/main/java/planeair/icons/GraphFrance.png"));
+        labelLogoName.setIcon(new ImageIcon("./icons/GraphFrance.png"));
         labelLogoName.setFont(App.KINDANOBLE);
         labelLogoName.setPreferredSize(new Dimension(WIDTH,70));
 

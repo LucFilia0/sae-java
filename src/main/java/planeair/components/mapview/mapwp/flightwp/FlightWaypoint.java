@@ -23,7 +23,7 @@ public class FlightWaypoint extends MapWaypoint {
     /**
      * The file which contains the icon of the flights ({@link java.io.File})
      */
-    public static final File FLIGHT_WAYPOINT_ICON_FILE = new File("sprint/plane.png");
+    public static final File FLIGHT_WAYPOINT_ICON_FILE = new File("./icons/waypoints/plane.png");
 
     //-- FlightWaypoint Attributes
 

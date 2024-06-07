@@ -10,7 +10,6 @@ import org.graphstream.graph.Node;
 
 //-- Import PlaneAIR
 
-import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphutil.Flight;
 
@@ -49,9 +48,11 @@ public class Airport {
      * @param longitude ({@link util.Longitude util.Longitude}) - The Longitude (extends {@link util.Coordinate util.Coordinate}) of the Airport.
      * @param latitude ({@link util.Latitude util.Latitude}) - The Latitude (extends {@link util.Coordinate util.Coordinate}) of the Airport.
      * 
+     * @throws NullPointerException Threw if the Object passed in parameter is Null / not declared
+     * 
      * @author Luc le Manifik
      */
-    public Airport(String name, String location, Coordinate coordinate) throws InvalidFileFormatException {
+    public Airport(String name, String location, Coordinate coordinate) throws NullPointerException {
         try {
             this.setName(name);
             this.setLocation(location);

@@ -64,7 +64,7 @@ public class NTimePanelApp extends JPanel {
     /**
      * Icon for the playing button
      */
-    private Icon iconPlay = new ImageIcon("./src/main/java/planeair/icons/play.png");
+    private Icon iconPlay = new ImageIcon("./icons/play.png");
     /**
      * Button for playing the simulation 
      * Location : right to the slider
