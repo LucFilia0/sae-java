@@ -162,12 +162,12 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
         // Adding the active Airports
         for(Airport airport : airportSet.getActiveAirports()) {
-            this.itemPainter.getAirportWaypoints().add(new ActiveAirportWaypoint(airport, airport.getPosition()));
+            this.itemPainter.getAirportWaypoints().add(new ActiveAirportWaypoint(airport, airport.getCoordinate()));
         }
 
         // Adding the inactive Airports
         for(Airport airport : airportSet.getInactiveAirports()) {
-            this.itemPainter.getAirportWaypoints().add(new InactiveAirportWaypoint(airport, airport.getPosition()));
+            this.itemPainter.getAirportWaypoints().add(new InactiveAirportWaypoint(airport, airport.getCoordinate()));
         }
 
     }

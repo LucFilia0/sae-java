@@ -274,17 +274,17 @@ public class Flight extends SingleNode {
             // Crossing cooordinate (Where the Flights are supposed to EXPLODE)
             double crossX;
     
-            depX_A = this.getDepartureAirport().getPosition().getLongitude();
-            depY_A = this.getDepartureAirport().getPosition().getLatitude();
+            depX_A = this.getDepartureAirport().getCoordinate().getLongitude();
+            depY_A = this.getDepartureAirport().getCoordinate().getLatitude();
 
-            arrX_A = this.getArrivalAirport().getPosition().getLongitude();
-            arrY_A = this.getArrivalAirport().getPosition().getLatitude();
+            arrX_A = this.getArrivalAirport().getCoordinate().getLongitude();
+            arrY_A = this.getArrivalAirport().getCoordinate().getLatitude();
 
-            depX_B = tangoCharlie.getDepartureAirport().getPosition().getLongitude();
-            depY_B = tangoCharlie.getDepartureAirport().getPosition().getLatitude();
+            depX_B = tangoCharlie.getDepartureAirport().getCoordinate().getLongitude();
+            depY_B = tangoCharlie.getDepartureAirport().getCoordinate().getLatitude();
 
-            arrX_B = tangoCharlie.getArrivalAirport().getPosition().getLongitude();
-            arrY_B = tangoCharlie.getArrivalAirport().getPosition().getLatitude();
+            arrX_B = tangoCharlie.getArrivalAirport().getCoordinate().getLongitude();
+            arrY_B = tangoCharlie.getArrivalAirport().getCoordinate().getLatitude();
     
             if(depX_A == arrX_A) {
 
@@ -464,12 +464,12 @@ public class Flight extends SingleNode {
         if(flightDepartureTime <= currentTimeInMinutes && currentTimeInMinutes <= flightArrivalTime) {
 
             // Departure Airport's coordinates
-            double depX = this.getDepartureAirport().getPosition().getLongitude();
-            double depY = this.getDepartureAirport().getPosition().getLatitude();
+            double depX = this.getDepartureAirport().getCoordinate().getLongitude();
+            double depY = this.getDepartureAirport().getCoordinate().getLatitude();
 
             // Arrival Airport's coordinates
-            double arrX = this.getArrivalAirport().getPosition().getLongitude();
-            double arrY = this.getArrivalAirport().getPosition().getLatitude();
+            double arrX = this.getArrivalAirport().getCoordinate().getLongitude();
+            double arrY = this.getArrivalAirport().getCoordinate().getLatitude();
 
             int flightDuration = this.getFlightDuration();
 

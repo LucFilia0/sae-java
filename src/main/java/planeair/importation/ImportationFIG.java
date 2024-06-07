@@ -7,16 +7,19 @@ import java.util.Scanner;
 
 // Import PlaneAIR
 import org.graphstream.graph.IdAlreadyInUseException;
-import org.jxmapviewer.viewer.GeoPosition;
 
+import planeair.exceptions.InvalidCoordinateException;
 import planeair.exceptions.InvalidEntryException;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.exceptions.ObjectNotFoundException;
+
 import planeair.graph.graphutil.Flight;
 import planeair.graph.graphutil.FlightFactory;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
+
 import planeair.util.Airport;
 import planeair.util.AirportSet;
+import planeair.util.Coordinate;
 import planeair.util.FlightTime;
 
 /**
@@ -128,7 +131,7 @@ public abstract class ImportationFIG {
 
         // All the Strings that will contain the informations of the Airport, by reading the source file.
         String s_name = "", s_location = "", s_latitudeDegree = "", s_latitudeMinutes = "", s_latitudeSeconds = "", s_longitudeDegree = "", s_longitudeMinutes = "", s_longitudeSeconds = "";
-        char s_latitudeDirection = ' ', s_longitudeDirection = ' ';
+        char latitudeDirection = ' ', longitudeDirection = ' ';
 
         int latitudeDegree = 0, latitudeMinutes = 0, latitudeSeconds = 0;
         int longitudeDegree = 0, longitudeMinutes = 0, longitudeSeconds = 0;
@@ -152,7 +155,7 @@ public abstract class ImportationFIG {
                     s_latitudeSeconds = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
                     break;
                 case 5 :
-                    s_latitudeDirection = string_attribute.toUpperCase().charAt(0);
+                    latitudeDirection = string_attribute.toUpperCase().charAt(0);
                     break;
                 case 6 :
                     s_longitudeDegree = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
@@ -164,7 +167,7 @@ public abstract class ImportationFIG {
                     s_longitudeSeconds = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
                     break;
                 case 9 :
-                    s_longitudeDirection = string_attribute.toUpperCase().charAt(0);
+                    longitudeDirection = string_attribute.toUpperCase().charAt(0);
                     break;
                 default :
                     System.err.println("Error at Line " + currentLine + " : More informations than required.");
@@ -195,10 +198,16 @@ public abstract class ImportationFIG {
         // Creates the two coordinates, need to be declared here before to be used in the Airport's Constructor below
 
         Airport airport = null;
-        GeoPosition airportPosition = new GeoPosition(latitudeDegree, latitudeMinutes, latitudeSeconds, longitudeDegree, longitudeMinutes, latitudeSeconds);
+        Coordinate airportCoordinate = null;
 
         try {
-            airport = new Airport(s_name, s_location, airportPosition);
+            new Coordinate(latitudeDegree, latitudeMinutes, latitudeSeconds, latitudeDirection, longitudeDegree, longitudeMinutes, longitudeSeconds, longitudeDirection);
+        }catch(InvalidCoordinateException e) {
+            throw new InvalidFileFormatException(currentLine, e.getMessage());
+        }
+        
+        try {
+            airport = new Airport(s_name, s_location, airportCoordinate);
         }catch(InvalidFileFormatException iffe) {
             throw iffe;
         }

@@ -8,9 +8,7 @@ import java.util.Iterator;
 
 import org.graphstream.graph.Node;
 
-//-- Import JxMapViewer
-
-import org.jxmapviewer.viewer.GeoPosition;
+//-- Import PlaneAIR
 
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
@@ -38,7 +36,7 @@ public class Airport {
     /**
      * The GeoPosition of the Airport 
      */
-    private GeoPosition position;
+    private Coordinate coordinate;
 
     //-- Airport Constructor
 
@@ -53,11 +51,11 @@ public class Airport {
      * 
      * @author Luc le Manifik
      */
-    public Airport(String name, String location, GeoPosition position) throws InvalidFileFormatException {
+    public Airport(String name, String location, Coordinate coordinate) throws InvalidFileFormatException {
         try {
             this.setName(name);
             this.setLocation(location);
-            this.setPosition(position);
+            this.setCoordinate(coordinate);
         }catch(NullPointerException e) {
             throw e;
         }
@@ -71,7 +69,7 @@ public class Airport {
      * @author Luc le Manifik
      */
     public String toString() {
-        return "<html><strong>-- Airport :</strong> " + this.name + "<br><strong>Location :</strong> " + this.location + "<br><strong>Latitude :</strong> " + this.position.getLatitude() + "<br><strong>Longitude :</strong> " + this.position.getLongitude() + "</html>";
+        return "<html><strong>-- Airport :</strong> " + this.name + "<br><strong>Location :</strong> " + this.location + "<br><strong>Latitude :</strong> " + this.coordinate.getLatitude() + "<br><strong>Longitude :</strong> " + this.coordinate.getLongitude() + "</html>";
     }
 
     //-- Airport Getters
@@ -99,8 +97,8 @@ public class Airport {
      * 
      * @author Luc le Maifik
      */
-    public GeoPosition getPosition() {
-        return this.position;
+    public Coordinate getCoordinate() {
+        return this.coordinate;
     }
 
     //-- Airport Setters
@@ -143,11 +141,11 @@ public class Airport {
      * 
      * @author Luc le Manifik
      */
-    public void setPosition(GeoPosition position) throws NullPointerException {
-        if(position == null) {
+    public void setCoordinate(Coordinate coordinate) throws NullPointerException {
+        if(coordinate == null) {
             throw new NullPointerException();
         }
-        this.position = position;
+        this.coordinate = coordinate;
     }
 
     //-- Airport Methods
