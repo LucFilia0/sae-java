@@ -26,13 +26,45 @@ import java.text.DecimalFormat;
  * @author GIRAUD Nila
  */
 public class NInfoGraphPanelApp extends JPanel {
-
+    /**
+     * String identifier for the text related to the degree of the graph
+     */
     public static final String DEGREE_TEXT = "Degré moyen: " ;
+
+    /**
+     * String identifier for the text related to the 
+     * number of connected components of the graph
+     */
     public static final String CONNECTED_COMP_TEXT = "Nb comp. connexes: " ;
+
+    /**
+     * String identifier for the text related to the 
+     * number of nodes of the graph
+     */
     public static final String NB_NODES_TEXT = "Nb noeuds: " ;
+
+    /**
+     * String identifier for the text related to the 
+     * number of edges of the graph
+     */
     public static final String NB_EDGES_TEXT = "Nb arretes: " ;
+
+    /**
+     * String identifier for the text related 
+     * to the diameter of the graph
+     */
     public static final String DIAMETER_TEXT = "Diametre: " ;
+
+    /**
+     * String identifier for the text related to the 
+     * number of colors of the graph
+     */
     public static final String NB_COLORS_TEXT = "Nb couleurs: " ;
+
+    /**
+     * String identifier for the text related to the 
+     * number of edges of the graph
+     */
     public static final String NB_CONFLICTS_TEXT = "Nb conflits: " ;
 
     // LINE 1
@@ -118,6 +150,9 @@ public class NInfoGraphPanelApp extends JPanel {
      */
     private JLabel titleNbConflictsOccurred = new JLabel(NB_CONFLICTS_TEXT + "-") ;
 
+    /**
+     * Homepage blablabla
+     */
     private App app ;
 
     /**
@@ -220,7 +255,7 @@ public class NInfoGraphPanelApp extends JPanel {
             gbc.gridx = 0 ;
             gbc.gridy = 0 ;
             JLabel problem = new JLabel("Veuillez importer un graph") ;
-            problem.setFont(new Font(getFont().getName(), Font.BOLD, 16)) ;
+            problem.setFont(new Font("Arial", Font.BOLD, 16)) ;
             this.add(problem, gbc) ;
         }
 
@@ -347,6 +382,7 @@ public class NInfoGraphPanelApp extends JPanel {
 
     /**
      * Computes the relevant graph statistics and updates the infoGraphPanel
+     * If the graph has a Coloring, then inputs the number of colors and conflicts
      */
     public void computeGraphStats() {
         TestGraph graph = this.app.getTestGraph() ;
@@ -354,15 +390,31 @@ public class NInfoGraphPanelApp extends JPanel {
         if (graph != null) {   
             ConnectedComponents cc = new ConnectedComponents(graph) ;
             cc.compute() ;
+
             this.setNbConnectedComponent(cc.getConnectedComponentsCount()) ;
             this.setAverageDegree((Toolkit.averageDegree(graph))) ;
             this.setNbEdges(graph.getEdgeCount()) ;
             this.setNbNodes(graph.getNodeCount()) ;
             this.setDiameter((int)Toolkit.diameter(graph)) ;
+
             if (graph.getNbColors() != 0) {
                 this.setNbColorsUsed(graph.getNbColors()) ;
                 this.setNbConflictsOccurred(graph.getNbConflicts());
             }
         }
+    }
+
+    /**
+     * Change font size of all labels inside this panel
+     * @param size
+     */
+    public void setFontSize(int size) {
+        titleComp.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
+        titleDegreeAvg.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
+        titleDiameter.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
+        titleEdges.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
+        titleNbColorsUsed.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
+        titleNbConflictsOccurred.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
+        titleNodes.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
     }
 }

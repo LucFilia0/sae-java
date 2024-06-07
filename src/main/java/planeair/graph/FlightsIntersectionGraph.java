@@ -46,7 +46,7 @@ public class FlightsIntersectionGraph extends TestGraph {
      * toString() FIG's method.
      */
     public String toString() {
-        return "-- Flights Intersection Graph\nIdentifier : " + super.id + "\nNumber of Flights : " + this.getNbNodes() + "\nNumber of collisions : " + this.getNbCollisions();
+        return "-- Flights Intersection Graph\nIdentifier : " + super.id + "\nNumber of Flights : " + this.getNodeCount() + "\nNumber of collisions : " + this.getNbCollisions();
     }
 
     //-- FIG Getters

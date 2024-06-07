@@ -461,7 +461,7 @@ public class NPrincipalePanelApp extends JPanel{
      * Fills the graphLRightBottom panel with all its components
      */
     public void initGraphBottomPanel() {
-        //graphLRightBottom.removeAll() ;
+        graphLRightBottom.removeAll() ;
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
         graphLRightBottom.add(minGraphPanel);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));

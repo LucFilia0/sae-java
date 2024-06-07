@@ -7,32 +7,33 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.List ;
+import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedList ;
 
 // Import graphstream
 
 import org.graphstream.graph.Node;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.Graphs;
 
+import planeair.graph.Coloring.ColoringDSATUR;
+import planeair.graph.Coloring.ColoringRLF;
+import planeair.graph.Coloring.ColoringWelshPowell;
 import planeair.util.DataImportation;
 
 /**
  * Does the importation of graphs from a folder automatically
  */
-public class Automation {
+public abstract class Automation {
     private static final int NUMBER_OF_ALGORITHMS = 3 ;
     private static final int WELSH_POWELL = 0 ;
     private static final int DSATUR = 1 ;
     private static final int RLF = 2 ;
-    private static final int NB_COLORS = 0 ;
-    private static final int NB_CONFLICTS = 1 ;
+    private static String FOLDER_PATH = "/Solution_Equipe_G1-4/" ;
         
     /**
      * Starts the importation of all the files
@@ -42,13 +43,25 @@ public class Automation {
      * @param placeholder Character that will be replaced by numbers
      */
     public static void startAutomation(String path, String[] identifiers, char placeholder, int numberOfCores) {
+        long start = System.nanoTime() ;
         ExecutorService threadPool = Executors.newFixedThreadPool(numberOfCores) ;
-        List<TestGraph> graphList = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
-        new File(path + "/4").mkdirs() ;
-        for (TestGraph graph : graphList) {
-            Automation.writeToFile(graph, path, threadPool) ;
+        TreeSet<TestGraph> graphSet = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
+        new File(path + FOLDER_PATH).mkdirs() ;
+        for (TestGraph graph : graphSet) {
+            TestGraph coloredGraph = Automation.useBestColoringAlgorithm(graph, threadPool) ;
+            threadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (graph != null) {
+                        Automation.writeToFile(coloredGraph, path, threadPool) ;
+                    }
+                }
+            });
+                
         }
+
         System.out.println("Done importing") ;
+        System.out.println("Time taken : " + (double)((System.nanoTime() - start)) /1000000000);
         threadPool.shutdown() ;
     }
 
@@ -60,8 +73,13 @@ public class Automation {
      * @param threadPool current threadPool used to divide the tasks
      * @return the list of Graphs that were imported ordered by ID
      */
-    public static List<TestGraph> importDataFromFolder(String path, String[] identifiers, char placeholder, ExecutorService threadPool) {
-        LinkedList<TestGraph> res = new LinkedList<>() ;
+    public static TreeSet<TestGraph> importDataFromFolder(String path, String[] identifiers, char placeholder, ExecutorService threadPool) {
+        TreeSet<TestGraph> res = new TreeSet<>(new Comparator<TestGraph>() {
+            @Override
+            public int compare(TestGraph o1, TestGraph o2) {
+                return Integer.compare(Integer.valueOf(o1.getId()), Integer.valueOf(o2.getId())) ;
+            }
+        }) ;
 
         // Filters the file that should be imported
         File folder = new File(path) ;
@@ -83,16 +101,12 @@ public class Automation {
                         TestGraph temp = new TestGraph(Automation.isolateNumberInString(file.getName())) ;
                         try {
                             DataImportation.importTestGraphFromFile(temp, file, false);
-                            for (Node node : temp) {
-                                node.setAttribute("color", 0) ;
-                            }
                         }
 
                         catch (FileNotFoundException e) {
                             System.err.println(e) ;
                         }
-        
-                        res.addFirst(temp) ;
+                        res.add(temp) ;
                         latch.countDown() ;
                     }
                 }) ;
@@ -117,10 +131,9 @@ public class Automation {
      * @param path Parent folder where the importation took place
      * @param threadPool current threadPool used to divide the tasks
      */
-    public static void writeToFile(TestGraph graphIn, String path, ExecutorService threadPool) {
-        TestGraph graph = Automation.useBestColoringAlgorithm(graphIn, threadPool) ;
+    public static void writeToFile(TestGraph graph, String path, ExecutorService threadPool) {
         try {
-            File resFile = new File(path + "/4/" + "color-eval" + graph.getId() + ".txt") ;
+            File resFile = new File(path + FOLDER_PATH + "color-eval" + graph.getId() + ".txt") ;
             if (!resFile.createNewFile()) {
                 System.out.println("File #" + graph.getId() + " already exists") ;
             }
@@ -142,7 +155,7 @@ public class Automation {
                 resWriter.close() ;
             }
 
-            File conflictFile = new File(path + "/4/coloration-groupe1.4.csv") ;
+            File conflictFile = new File(path + FOLDER_PATH + "coloration-groupe1.4.csv") ;
             FileWriter conflictWriter = new FileWriter(conflictFile, true) ;
             
             conflictWriter.write(resFile.getName() + ";" + Integer.toString(graph.getNbConflicts()) + '\n') ;
@@ -193,11 +206,9 @@ public class Automation {
      */
     public static TestGraph useBestColoringAlgorithm(TestGraph graph, ExecutorService threadPool) {
 
-        ArrayList<ArrayList<Integer>> resList = new ArrayList<>() ;
         ArrayList<TestGraph> graphList = new ArrayList<>() ;
         for (int i = 0 ; i < NUMBER_OF_ALGORITHMS ; i++) {
-            resList.add(new ArrayList<>()) ;
-            graphList.add(new TestGraph(graph.getId())) ;
+            graphList.add((TestGraph)Graphs.clone(graph)) ;
         }
 
         // Verifies all 3 threads are done before continuing
@@ -207,20 +218,23 @@ public class Automation {
         Runnable welshPowell = new Runnable() {
             @Override
             public void run() {
-                setValuesInLists(graph, graphList, resList, WELSH_POWELL, latch) ;
+                ColoringWelshPowell.coloringWelshPowell(graphList.get(WELSH_POWELL)) ;
+                latch.countDown() ;
             }
         } ;
 
         Runnable dsatur = new Runnable() {
             public void run() {
-                setValuesInLists(graph, graphList, resList, DSATUR, latch) ;
+                ColoringDSATUR.coloringDsatur(graphList.get(DSATUR));
+                latch.countDown() ;
             };
         } ;
 
         Runnable rlf = new Runnable() {
             @Override
             public void run() {
-                setValuesInLists(graph, graphList, resList, RLF, latch) ;
+                ColoringRLF.coloringRLF(graphList.get(RLF)) ;
+                latch.countDown() ;
             }
         } ;
 
@@ -237,14 +251,13 @@ public class Automation {
 
         // Finds the best solution
 
-        int bestAlgorithm = findBestAlgorithmInList(resList) ;
+        int bestAlgorithm = findBestAlgorithmInList(graphList) ;
 
         TestGraph temp  = null ;
         if (bestAlgorithm < graphList.size()) {
             temp = graphList.get(bestAlgorithm) ;
-            temp.setAttribute("nbColors", resList.get(bestAlgorithm).get(0)) ;
-            temp.setAttribute("nbConflicts", resList.get(bestAlgorithm).get(1)) ;
         }
+
         return temp ;
     }
 
@@ -302,24 +315,6 @@ public class Automation {
     }
 
     /**
-     * Colors the graph with the selected algorithm, puts it in the graphList and stores the number of colors and 
-     * the number of conflicts in resList
-     * @param graph
-     * @param graphList
-     * @param resList
-     * @param algorithm
-     * @param latch
-     * 
-     */
-    public static void setValuesInLists(TestGraph graph, ArrayList<TestGraph> graphList, ArrayList<ArrayList<Integer>> resList, int algorithm, CountDownLatch latch) {
-        graphList.set(algorithm, (TestGraph)Graphs.clone(graph)) ;
-        Coloring.coloringDsatur(graphList.get(algorithm)) ;
-        resList.get(algorithm).add(graph.getNbColors()) ;
-        resList.get(algorithm).add(graph.getNbConflicts()) ;
-        latch.countDown() ;
-    }
-
-    /**
      * Tells whether or not a file is of a similar form to one of the identifiers
      * ex : identifier is "testGraphX.txt" filename is "testGraph12.txt", placeholder is 'X'
      * The function will return true for the example
@@ -346,7 +341,7 @@ public class Automation {
      * @param arg2
      * @return index of the best algorithm
      */
-    public static Integer findBestAlgorithmInList(ArrayList<ArrayList<Integer>> list) {
+    public static Integer findBestAlgorithmInList(ArrayList<TestGraph> list) {
 
         if (list.isEmpty()) {
             return null ;
@@ -357,8 +352,8 @@ public class Automation {
             boolean hasLessConflicts ;
             boolean hasLessColors ;
             while (currentAlgorithm < list.size()) {
-                hasLessConflicts = list.get(bestAlgorithm).get(NB_CONFLICTS) > list.get(currentAlgorithm).get(NB_CONFLICTS) ;
-                hasLessColors = list.get(bestAlgorithm).get(NB_COLORS) > list.get(currentAlgorithm).get(NB_COLORS) ;
+                hasLessConflicts = list.get(bestAlgorithm).getNbConflicts() > list.get(currentAlgorithm).getNbConflicts() ;
+                hasLessColors = list.get(bestAlgorithm).getNbColors() > list.get(currentAlgorithm).getNbColors() ;
                 if (hasLessColors || hasLessConflicts) {
                     bestAlgorithm = currentAlgorithm ;
                 }

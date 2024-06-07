@@ -12,6 +12,9 @@ import org.graphstream.ui.view.* ;
 import org.graphstream.ui.view.Viewer.ThreadingModel;
 import org.graphstream.ui.view.camera.Camera;
 import org.graphstream.ui.view.util.GraphMetrics;
+
+import planeair.graph.Coloring.ColoringUtilities;
+
 import org.graphstream.ui.swing_viewer.* ;
 
 /**
@@ -71,7 +74,7 @@ public class PanelCreator {
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
 		viewer.getDefaultView().enableMouseOptions() ;
-		Coloring.setGraphStyle(graph, 0) ;
+		ColoringUtilities.setGraphStyle(graph, 0) ;
 
 		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
 		// and also checks for events
@@ -184,7 +187,7 @@ public class PanelCreator {
 	}
 
 	/**
-	 * Class handling only the mouseClicked method from MouseListener
+	 * Class handling only the mouseClicked and mousePressed methods from MouseListener
 	 * and the mouseWheelMoved method from MouseWheelListener
 	 */
 	private class MouseEventHandler extends MouseAdapter {
@@ -199,6 +202,14 @@ public class PanelCreator {
 		}
 
 		/**
+		 * This handles moving around the graph
+		 */
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Move around the graph 
+		}
+
+		/**
 		 * This event handles zooming on the graph from 0.1x to 2x while 
 		 * also moving the camera a bit so the zoom is less clunky to use
 		 */
@@ -208,7 +219,7 @@ public class PanelCreator {
 			double zoom = cam.getViewPercent() + (double)me.getUnitsToScroll() / 100 ;
 
 			// Limits the range of the zoom
-			if (zoom > 0.1 && zoom < 2) {
+			if (zoom > 0.2 && zoom < 2) {
 				cam.setViewPercent(zoom);
 				Point3 camPos = cam.getViewCenter() ;
 				Point3 finalCamPos ;
@@ -218,11 +229,7 @@ public class PanelCreator {
 					Point mousePosPx = me.getLocationOnScreen() ;
 					Point3 mousePos = getGraphPositionFromClick(cam, mousePosPx) ;
 
-					// Based on the function (x+1)^2/5 - 0.4x^1.3 where x is the viewPercent of the camera (yes I graphed it on Desmos)
-					// This function is increasing and has values in the interval [0.2 ; 0.815] for x in the interval [0 ; 2]
-					// Basically makes it so the more zoomed in the camera is, the less it will move around the plane while zooming
-					finalCamPos = camPos.interpolate(mousePos, 
-						Math.pow((cam.getViewPercent() + 1),2)/5 - 0.4*Math.pow(cam.getViewPercent(), 1.3)/1.5) ;
+					finalCamPos = camPos.interpolate(mousePos, 0.15 * cam.getViewPercent()) ;
 					cam.setViewCenter(finalCamPos.x, finalCamPos.y, finalCamPos.z) ;
 				}
 
@@ -287,7 +294,7 @@ public class PanelCreator {
 		public void mouseLeft(String id) {
 			Node n = graph.getNode(id) ;
 			n.removeAttribute("ui.style") ;
-			n.setAttribute("ui.style", "size : " + Coloring.DEFAULT_NODE_SIZE + " ;") ;
+			n.setAttribute("ui.style", "size : " + ColoringUtilities.DEFAULT_NODE_SIZE + " ;") ;
 		}
 
 		/**

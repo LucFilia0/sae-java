@@ -24,8 +24,8 @@ import java.awt.event.ActionListener;
 import java.awt.FlowLayout;
 
 import planeair.App;
-import planeair.graph.Coloring;
 import planeair.graph.TestGraph;
+import planeair.graph.Coloring.ColoringUtilities;
 
 /**
  * Class which create a JPanel of MENU for the graph 
@@ -110,14 +110,21 @@ public class NMenuGraphPanelApp extends JPanel{
      */
     private JComboBox<Integer> altitudesMax ;
 
+    /**
+     * String containing the last algo selected
+     */
     private String lastAlgoSelected = null ;
 
+    /**
+     * Homepage blablabla
+     */
     private App app ;
 
 
     /**
      * Constructor of NMenuPanelApp
      * @param kmax
+     * @param altitudesMax 
      */
     public NMenuGraphPanelApp(App app, int kmax, JComboBox<Integer> altitudesMax){
 
@@ -140,7 +147,7 @@ public class NMenuGraphPanelApp extends JPanel{
 
         
         //  ComboBox
-        if (kmax > 0) {
+        if (kmax > 1) {
             this.setAltitudeValues(kmax) ;
         }
         else {
@@ -211,9 +218,9 @@ public class NMenuGraphPanelApp extends JPanel{
         algoOption.add(algorithmes);
         algoOption.add(layoutAlgo);
 
-        algoChoice.addItem(Coloring.DSATUR);
-        algoChoice.addItem(Coloring.RLF);
-        algoChoice.addItem(Coloring.WELSH_POWELL);
+        algoChoice.addItem(ColoringUtilities.DSATUR);
+        algoChoice.addItem(ColoringUtilities.RLF);
+        algoChoice.addItem(ColoringUtilities.WELSH_POWELL);
 
         //ADD
         this.add(titleMenu);
@@ -357,7 +364,7 @@ public class NMenuGraphPanelApp extends JPanel{
                 // The algorithm used changed so we need to update the coloring
                 if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
                     if (lastAlgoSelected != null) {
-                        Coloring.removeCurrentColoring(graph) ;
+                        ColoringUtilities.removeCurrentColoring(graph) ;
                     }
                     lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
                     colorationChanged = true ;
@@ -375,10 +382,10 @@ public class NMenuGraphPanelApp extends JPanel{
                 // Treatment is done here because too much indentation is ugly
                 if (colorationChanged) {
                     if (lastAlgoSelected != null) {
-                        Coloring.removeCurrentColoring(graph) ;
+                        ColoringUtilities.removeCurrentColoring(graph) ;
                     }
-                    Coloring.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
-                    Coloring.setGraphStyle(graph, currentKMax) ;
+                    ColoringUtilities.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
+                    ColoringUtilities.setGraphStyle(graph, currentKMax) ;
                     NInfoGraphPanelApp panel = app.getPrincFrame().getInfoGraphPanel() ;
                     panel.setNbColorsUsed(graph.getNbColors()) ;
                     panel.setNbConflictsOccurred(graph.getNbConflicts()) ;
@@ -387,6 +394,10 @@ public class NMenuGraphPanelApp extends JPanel{
         });
     }
     
+    /**
+     * Setter for the lastAlgoSelected field
+     * @param lastAlgoSelected
+     */
     public void setLastAlgoSelected(String lastAlgoSelected) {
         this.lastAlgoSelected = lastAlgoSelected ;
     }

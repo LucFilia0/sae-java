@@ -4,6 +4,7 @@ package planeair.components.graphview;
  * Import swing composants
  */
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import planeair.App;
 import planeair.components.menu.NInfoGraphPanelApp;
@@ -18,6 +19,9 @@ import java.awt.event.WindowEvent;
  * Import awt composants
  */
 import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
 
 
 /**
@@ -47,14 +51,23 @@ public class NMaxGraphFrameApp extends JFrame{
     public NMaxGraphFrameApp(App app, PanelCreator graphRenderer, NInfoGraphPanelApp infoGraph){
         this.app = app ;
         this.infoGraph = infoGraph ;
+        JPanel infoGraphPanel = new JPanel() ;
         if (graphRenderer == null) {
             graph = new NSkullPanel() ;
             this.setTitle("Vue sur rien du tout :(") ;
         }
         else {
             graph = graphRenderer.getViewPanel() ;
+            graph.setLayout(new FlowLayout(FlowLayout.LEFT)) ;
             this.setTitle("Vue sur le Graph " + graphRenderer.getGraph().getId()) ;
-            graph.add(this.infoGraph);
+            
+            infoGraphPanel.add(this.infoGraph) ;
+            infoGraphPanel.setBackground(graph.getBackground()) ;
+            infoGraphPanel.setBorder(new EmptyBorder(new Insets(20, 20, 20, 20))) ;
+            infoGraphPanel.setBackground(Color.WHITE) ;
+
+            graph.add(infoGraphPanel) ;
+            infoGraph.setFontSize(18) ;
         }
 
         graph.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize()) ;
@@ -68,7 +81,9 @@ public class NMaxGraphFrameApp extends JFrame{
             @Override
             public void windowClosed(WindowEvent e) {
                 removeAll() ;
+                infoGraphPanel.removeAll() ;
                 if (graphRenderer != null) {
+                    infoGraph.setFontSize(12);
                     app.getPrincFrame().initGraphBottomPanel() ;
                     app.initTestGraphRenderer() ;
                     app.getPrincFrame().getMinGraphPanel().addGraphToPanel(app.getTestGraphRenderer()) ;

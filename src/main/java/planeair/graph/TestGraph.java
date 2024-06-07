@@ -5,6 +5,7 @@ package planeair.graph;
 //-- Import Exceptions
 
 import planeair.exceptions.InvalidEntryException;
+import planeair.graph.Coloring.ColoringUtilities;
 
 /**
  * TestGraph is the basic class to handle the "graph-testX.txt" files.
@@ -41,6 +42,8 @@ public class TestGraph extends GraphSAE {
         super(id);
         this.setAttribute(TestGraph.K_MAX, 0);
         this.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0);
+        this.setAttribute(GraphSAE.NB_MAX_NODES, 0);
+        ColoringUtilities.setGraphStyle(this, 0) ;
     }
 
     //-- TestGraph toString()
@@ -54,7 +57,7 @@ public class TestGraph extends GraphSAE {
      * @author Luc le Manifik
      */
     public String toString() {
-        return "-- TestGraph\nIdentifier : " + super.id + "\nkMax : " + this.getKMax() + "\nNumber of nodes : " + this.getNbNodes() + "/" + this.getNbMaxNodes() + "\nNumber of edges : " + this.getNbEdges();
+        return "-- TestGraph\nIdentifier : " + super.id + "\nkMax : " + this.getKMax() + "\nNumber of nodes : " + this.getNodeCount() + "/" + this.getNbMaxNodes() + "\nNumber of edges : " + this.getEdgeCount();
     }
 
     //-- TestGraph Getters
@@ -90,6 +93,17 @@ public class TestGraph extends GraphSAE {
         return (int)this.getAttribute(TestGraph.CONFLICT_ATTRIBUTE) ;
     }
 
+    /**
+     * Returns the value of the expected amount of nodes in the GraphTest.
+     * 
+     * @return (int) - The expected number of nodes in the TestGraph
+     * 
+     * @author Luc le Manifik
+     */
+    public int getNbMaxNodes() {
+        return (int)this.getAttribute(GraphSAE.NB_MAX_NODES);
+    }
+
     //-- TestGraph Setters
 
     /**
@@ -117,6 +131,21 @@ public class TestGraph extends GraphSAE {
             throw new InvalidEntryException() ;
         }
         this.setAttribute(CONFLICT_ATTRIBUTE, nbConflicts) ;
+    }
+
+    /**
+     * Sets the value of the expected amount of nodes in the TestGraph.
+     * 
+     * @param nbMaxNodes (int) - The new value of nbMaxNodes.
+     * @throws InvalidEntryException Throwed if the wanted value of nbMaxValues is inferior to 0.
+     * 
+     * @author Luc le Manifik
+     */
+    public void setNbMaxNodes(int nbMaxNodes) throws InvalidEntryException {
+        if(nbMaxNodes < 0) {
+            throw new InvalidEntryException();
+        }
+        this.setAttribute(TestGraph.NB_MAX_NODES, nbMaxNodes);
     }
 }
 
