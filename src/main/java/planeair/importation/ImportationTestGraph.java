@@ -11,12 +11,10 @@ import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
 
-// Import PlaneAIR
-import planeair.graph.TestGraph;
-
 // Import Exceptions
 import planeair.exceptions.InvalidEntryException;
 import planeair.exceptions.InvalidFileFormatException;
+import planeair.graph.graphtype.TestGraph;
 
 /**
  * <html>
@@ -52,7 +50,7 @@ public class ImportationTestGraph {
     /**
      * Imports the TestGraph data specified in parameter
      * 
-     * @param testGraph ({@link planeair.graph.TestGraph TestGraph}) - The TestGraph we want to import
+     * @param testGraph ({@link planeair.graph.graphtype.TestGraph TestGraph}) - The TestGraph we want to import
      * @param testGraphFile ({@link java.io.File File}) - The File which contains the TestGraph's data
      * @param showErrorMessages (boolean) - True if you want that the error messages are prompt
      * 
@@ -215,7 +213,6 @@ public class ImportationTestGraph {
 
         int nbMaxNodes = testGraph.getNbMaxNodes();
         int nbNodes = 0;
-        int nbEdges = 0;
 
         String idNodeA = null;
         String idNodeB = null;
@@ -264,7 +261,6 @@ public class ImportationTestGraph {
             if(nbNodes <= nbMaxNodes) {
                 try {
                     testGraph.addEdge(idNodeA + "-" + idNodeB, idNodeA, idNodeB);
-                    ++nbEdges;
                 }
                 // Errors are treated here, because they do not require to stop the program, and just need to prompt some informations
                 catch(IdAlreadyInUseException iaiue) {
@@ -298,8 +294,5 @@ public class ImportationTestGraph {
             }
             ++nodeId;
         }
-
-        testGraph.setNbNodes(nbNodes);
-        testGraph.setNbEdges(nbEdges);
     }
 }

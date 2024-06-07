@@ -17,12 +17,9 @@ import java.awt.geom.Point2D;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-//-- Import Plane AIR
-
-import planeair.graph.Flight;
-
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.graph.graphutil.Flight;
 
 /**
  * This class paints the different Waypoints on a Map object.

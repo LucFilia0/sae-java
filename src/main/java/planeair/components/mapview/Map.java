@@ -20,10 +20,8 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import planeair.util.Airport;
 import planeair.util.AirportSet;
-
-import planeair.graph.Flight;
-import planeair.graph.FlightsIntersectionGraph;
-
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphutil.Flight;
 import planeair.components.mapview.mapwp.MapWaypointPainter;
 import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;

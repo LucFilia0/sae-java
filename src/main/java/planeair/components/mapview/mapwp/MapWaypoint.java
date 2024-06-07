@@ -91,7 +91,6 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
                 MapWaypointButton mwp = (MapWaypointButton) e.getSource();
                 Map.infoPanel.showInfos(mwp.getMapWaypoint());
             }
-            
         });
 
     }

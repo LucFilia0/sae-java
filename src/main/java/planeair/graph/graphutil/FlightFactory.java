@@ -1,4 +1,4 @@
-package planeair.graph ;
+package planeair.graph.graphutil ;
 
 import org.graphstream.graph.implementations.*;
 import org.graphstream.graph.*;

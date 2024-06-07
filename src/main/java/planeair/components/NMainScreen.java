@@ -7,10 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.Box;
-import javax.swing.JLayeredPane;
-
 // Import of AWT composants
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -40,11 +37,6 @@ import planeair.components.time.NTimePanelApp;
 public class NMainScreen extends JPanel{
 
     //STRUCT
-
-    /**
-     * THE layered pane. ha.
-     */
-    private JLayeredPane layeredPane = new JLayeredPane();
 
     /**
      * Panel wish will situe in the North of the borderLayout of the frame
@@ -170,12 +162,6 @@ public class NMainScreen extends JPanel{
      * The user can move time (because it's a simulation)
      */
     private NTimePanelApp timePanel = new NTimePanelApp();
-
-    /**
-     * Slider that make access to change the number of altitudes max
-     * Location : in the panel menu --> need here for Events
-     */
-    private JSlider sliderKmax = new JSlider();
     /**
      * JLabel for see the number altitudes choose
      * Location : in the panel menu --> need here for Events
@@ -222,7 +208,7 @@ public class NMainScreen extends JPanel{
     /**
      * Info the graph show
      */
-    private NInfoGraphPanelApp infoGraph =  new NInfoGraphPanelApp();
+    private NInfoGraphPanelApp infoGraph ;
     /**
      * A frame for NMaxGraphPanelApp
      * Put directly in the frame with information
@@ -297,9 +283,6 @@ public class NMainScreen extends JPanel{
         minGraphPanel = new NMinGraphPanelApp(app, buttonAgr);
         minGraphPanel.addComponents();
 
-        infoGraph = new NInfoGraphPanelApp();
-        infoGraph.addComponents();
-
         graphLRightBottom.setLayout(new BoxLayout(graphLRightBottom, BoxLayout.Y_AXIS));
         graphLRightBottom.setOpaque(false);
 
@@ -332,18 +315,14 @@ public class NMainScreen extends JPanel{
         //BODY
         map.add(timePanel, BorderLayout.CENTER);
 
-        menuGraph = new NMenuGraphPanelApp(app, 10, choixAltitudesMax);
+        menuGraph = new NMenuGraphPanelApp(app, 0, choixAltitudesMax);
         menuMap = new NMenuMapPanelApp(map);
         
         // LEFT
         map.add(article,BorderLayout.WEST);
 
         //RIGHT
-        graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        graphLRightBottom.add(minGraphPanel);
-        graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        graphLRightBottom.add(infoGraph);
-        graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
+        initGraphBottomPanel();
         aside.add(graphLRightBottom);
         map.add(aside,BorderLayout.EAST);
 
@@ -448,21 +427,55 @@ public class NMainScreen extends JPanel{
         });
 
         buttonAgr.addActionListener((ActionEvent e) -> {
-            maxGraphPanel = new NMaxGraphFrameApp(app.getTestGraphRenderer());
+            maxGraphPanel = new NMaxGraphFrameApp(app, app.getTestGraphRenderer(), infoGraph);
         });
 
     }
 
+    /**
+     * Returns this panel's MinGraphPanel
+     * @return
+     */
     public NMinGraphPanelApp getMinGraphPanel() {
         return this.minGraphPanel ;
     }
 
+    /**
+     * Returns this panel's MenuGraphPanel
+     * @return
+     */
     public NMenuGraphPanelApp getMenuGraphPanel() {
         return this.menuGraph ;
     }
 
+    /**
+     * Returns this panel's InfoGraphPanel
+     * @return
+     */
+    public NInfoGraphPanelApp getInfoGraphPanel() {
+        return this.infoGraph ;
+    }
+    
     public void initMap() {
         this.app.getAirportSet().setActiveAirportsFrom(this.app.getFig());
         this.map.paintMapItems(this.app.getAirportSet(), this.app.getFig());
+    }
+
+    /**
+     * Fills the graphLRightBottom panel with all its components
+     */
+    public void initGraphBottomPanel() {
+        graphLRightBottom.removeAll() ;
+        graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
+        graphLRightBottom.add(minGraphPanel);
+        graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        infoGraph = new NInfoGraphPanelApp(app);
+        infoGraph.addComponents();
+        infoGraph.computeGraphStats() ;
+        graphLRightBottom.add(infoGraph);
+        graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
+        aside.add(graphLRightBottom);
+        body.add(aside,BorderLayout.EAST);
     }
 }

@@ -7,7 +7,7 @@ import java.util.HashSet;
 //-- Import Exceptions
 
 import planeair.exceptions.ObjectNotFoundException;
-import planeair.graph.FlightsIntersectionGraph;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 
 /**
  * The AirportSet class is a container for the Airport class.

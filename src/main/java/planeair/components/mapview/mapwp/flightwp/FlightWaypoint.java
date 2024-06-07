@@ -9,7 +9,7 @@ import java.io.File;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import planeair.components.mapview.mapwp.MapWaypoint;
-import planeair.graph.Flight;
+import planeair.graph.graphutil.Flight;
 
 /**
  * This class is the MapWaypoint which is used to represent Flights on the Map.

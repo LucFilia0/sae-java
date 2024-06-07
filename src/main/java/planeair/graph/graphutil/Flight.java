@@ -1,4 +1,4 @@
-package planeair.graph;
+package planeair.graph.graphutil;
 
 //-- Import Java
 

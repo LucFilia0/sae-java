@@ -12,11 +12,9 @@ import org.graphstream.graph.Node;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-//-- Import Plane AIR
-
-import planeair.graph.FlightsIntersectionGraph;
 import planeair.exceptions.InvalidFileFormatException;
-import planeair.graph.Flight;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphutil.Flight;
 
 /**
  * Airport represents the different France's airports.

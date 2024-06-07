@@ -12,11 +12,9 @@ import org.jxmapviewer.viewer.GeoPosition;
 import planeair.exceptions.InvalidEntryException;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.exceptions.ObjectNotFoundException;
-
-import planeair.graph.Flight;
-import planeair.graph.FlightFactory;
-import planeair.graph.FlightsIntersectionGraph;
-
+import planeair.graph.graphutil.Flight;
+import planeair.graph.graphutil.FlightFactory;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.util.Airport;
 import planeair.util.AirportSet;
 import planeair.util.FlightTime;
@@ -241,7 +239,6 @@ public abstract class ImportationFIG {
 
         String line;
         int currentLine = 0;
-        int nbFlight = 0;
 
         Flight flight = null;
 
@@ -251,7 +248,6 @@ public abstract class ImportationFIG {
             if(line.charAt(0) != '\n') { // Pass if the line is just a blank line
                 try {
                     flight = ImportationFIG.createFlightFrom(airportSet, fig, line, currentLine);
-                    ++nbFlight;
 
                     ImportationFIG.createCollisions(fig, flight, timeSecurity); // Creates all the collisions from this new Flight
                 }catch(InvalidFileFormatException iffe) {
@@ -263,7 +259,6 @@ public abstract class ImportationFIG {
                 }
             }
         }
-        fig.setNbFlights(nbFlight); // Sets the number of Flights
 
         scanLine.close();
     }

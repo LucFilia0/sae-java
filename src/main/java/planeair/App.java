@@ -3,8 +3,7 @@ package planeair;
 //-- Import Swing
 
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.border.Border;
+
 
 //-- Import AWT
 
@@ -16,10 +15,9 @@ import java.awt.Font;
 //-- Import Plane AIR
 
 import planeair.util.AirportSet;
-
-import planeair.graph.FlightsIntersectionGraph;
-import planeair.graph.PanelCreator;
-import planeair.graph.TestGraph;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphtype.TestGraph;
+import planeair.graph.graphutil.PanelCreator;
 import planeair.components.NMainScreen;
 import planeair.components.imports.NImportScreen;
 
@@ -39,9 +37,20 @@ public class App extends javax.swing.JFrame {
      */
     public static void main(String[] args) {
         
-        // Setup the System properties, 
+        // DON'T TOUCH THAT IT'S VERY IMPORTANT
         System.setProperty("org.graphstream.ui", "swing") ;
         System.setProperty("sun.java2d.uiScale", "100%") ;
+        String osName = System.getProperty("os.name").toLowerCase() ;
+        if (osName.startsWith("windows")) {
+            System.setProperty("java -Dsun.java2d.directx", "True") ;
+        }
+        else if (osName.startsWith("linux")) {
+            System.setProperty("java -Dsun.java2d.opengl", "True") ;
+        }
+        else {
+            System.out.println("Sorry this is not supported for Mac, get a better OS 👍👍👍\n "+
+                "If you're using anything else then just cry harder 🦈") ;
+        }
 
         App app = new App();
         app.setVisible(true);
@@ -134,7 +143,7 @@ public class App extends javax.swing.JFrame {
         // Basic configuration
         this.setTitle("Plane AIR");
         this.setSize(App.APPLICATION_SCREEN_WIDTH, App.APPLICATION_SCREEN_HEIGHT);
-        this.setMinimumSize(new Dimension(1200,700));
+        this.setMinimumSize(new Dimension(1200,800));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -160,7 +169,6 @@ public class App extends javax.swing.JFrame {
 
         this.mainScreen = new NMainScreen(this);
         this.importScreen = new NImportScreen(this);
-
     }
 
     /**
@@ -223,7 +231,7 @@ public class App extends javax.swing.JFrame {
 
     /**
      * Returns the PanelCreator which renders the TestGraph
-     * @return ({@link planeair.graph.PanelCreator PanelCreator}) - The PanelCreator which renders the TestGraph
+     * @return ({@link planeair.graph.graphutil.PanelCreator PanelCreator}) - The PanelCreator which renders the TestGraph
      */
     public PanelCreator getTestGraphRenderer() {
         return this.testGraphRenderer ;
@@ -233,8 +241,17 @@ public class App extends javax.swing.JFrame {
      * Returns the principal frame of the App
      * @return ({@link planeair.components.NMainScreen NPrincipalPanelApp}) - The principal frame of the App
      */
-    public NMainScreen getPrincFrame() {
+    public NMainScreen getMainScreen() {
         return this.mainScreen;
+    }
+
+
+    public void initTestGraphRenderer() {
+        initTestGraphRenderer(false) ;
+    }
+
+    public void initTestGraphRenderer(boolean inOwnFrame) {
+        this.testGraphRenderer = new PanelCreator(this.testGraph, inOwnFrame) ;
     }
 
     /**
@@ -255,7 +272,7 @@ public class App extends javax.swing.JFrame {
 
     /**
      * Returns the FIG of the App
-     * @return ({@link planeair.graph.FlightsIntersectionGraph FlightIntersectionGraph}) - The FIG of the App
+     * @return ({@link planeair.graph.graphtype.FlightsIntersectionGraph FlightIntersectionGraph}) - The FIG of the App
      */
     public FlightsIntersectionGraph getFig() {
         return this.fig;

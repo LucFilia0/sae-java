@@ -6,8 +6,7 @@ import javax.swing.JPanel;
 import org.graphstream.ui.swing_viewer.ViewPanel;
 
 import planeair.App;
-import planeair.graph.PanelCreator;
-
+import planeair.graph.graphutil.PanelCreator;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -85,8 +84,11 @@ public class NMinGraphPanelApp extends JPanel {
 
         /*FIRST COMPOSANT */
         
-        //Insert Graph representation in FlowPanelGraph pour Nathan liegounettt
         this.setMaximumSize(new Dimension(350,400));
+        if (app.getTestGraph() == null) {
+            FlowPanelGraph = new NSkullPanel() ;
+            FlowPanelGraph.setLayout(new BorderLayout());
+        }
         FlowPanelGraph.setPreferredSize(new Dimension(325,325));
          
         /*SECOND COMPOSANT */
@@ -108,20 +110,26 @@ public class NMinGraphPanelApp extends JPanel {
         this.add(gridPanelMinGraph);
     }
 
+    /**
+     * Puts the graph in the panel
+     * @param graphRenderer Renderer which will take care of rendering the graph
+     * contains the panel containing the view of the graph
+     */
     public void addGraphToPanel(PanelCreator graphRenderer) {
         ViewPanel panel = graphRenderer.getViewPanel() ;
+        this.FlowPanelGraph.removeAll() ;
         this.FlowPanelGraph.add(panel, BorderLayout.CENTER) ;
         buttonCenter.setBackground(App.KINDAYELLOW);
     }
-    
+
     public void addComponents(){
 
-        /*FIRST COMPOSANT */
+        /*FIRST COMPONENT */
         gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,5)));
         gridPanelMinGraph.add(FlowPanelGraph);
         gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,10)));
 
-        /*SECOND COMPOSANT */
+        /*SECOND COMPONENT */
         buttonCenter.add(buttonAgr);
         gridPanelMinGraph.add(buttonCenter);
         gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,10)));
