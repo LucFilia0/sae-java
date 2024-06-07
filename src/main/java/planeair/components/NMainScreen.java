@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 
 // Import of LAYOUT
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.GridBagConstraints;
@@ -324,6 +325,7 @@ public class NMainScreen extends JPanel{
         //RIGHT
         initGraphBottomPanel();
         aside.add(graphLRightBottom);
+        body.add(aside,BorderLayout.EAST);
         map.add(aside,BorderLayout.EAST);
 
         //ADD structure to BorderLayout
@@ -475,7 +477,5 @@ public class NMainScreen extends JPanel{
         infoGraph.computeGraphStats() ;
         graphLRightBottom.add(infoGraph);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
-        aside.add(graphLRightBottom);
-        body.add(aside,BorderLayout.EAST);
     }
 }

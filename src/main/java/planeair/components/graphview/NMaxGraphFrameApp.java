@@ -83,6 +83,7 @@ public class NMaxGraphFrameApp extends JFrame{
             public void windowClosed(WindowEvent e) {
                 removeAll() ;
                 infoGraphPanel.removeAll() ;
+                graph.removeAll() ;
                 if (graphRenderer != null) {
                     infoGraph.setFontSize(12);
                     app.getMainScreen().initGraphBottomPanel() ;
