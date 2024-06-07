@@ -6,6 +6,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 
 import planeair.App;
+import planeair.util.NTime;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 
 // import AWT components
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Dimension;
 
 // import LAYOUT
@@ -79,10 +81,12 @@ public class NTimePanelApp extends JPanel {
         hourSliderPanel.setOpaque(false);
         hourPanelComboBox.setOpaque(false);
         this.setOpaque(false);
+
+        this.betweenTime.setFont(App.KINDABOLD);
     
         //SLIDER
         sliderTime.setMinimum(0);
-        sliderTime.setMaximum(2359);
+        sliderTime.setMaximum(1439); // 24 * 60 - 1 : Nb of minutes in one day
         sliderTime.setPreferredSize(new Dimension(300,20));
         sliderTime.setValue(0000);
         //BUTTON PLAY
@@ -120,24 +124,37 @@ public class NTimePanelApp extends JPanel {
         hourChoice.addActionListener((ActionEvent e) -> {
             
                 int hour = (int)hourChoice.getSelectedItem();
-                int newValSlid = (sliderTime.getValue()%100) + hour*100;
+                int newValSlid = (sliderTime.getValue()%60) + (hour*60);
                 sliderTime.setValue(newValSlid);
             });
    
         minChoice.addActionListener((ActionEvent e) -> {
                 int min = (int)minChoice.getSelectedItem();
-                int newValSlid = (sliderTime.getValue()/100)*100 + min;
+                int newValSlid = (sliderTime.getValue()/60)*60 + min%60;
                 sliderTime.setValue(newValSlid);
         });
 
         sliderTime.addChangeListener((ChangeEvent e) -> {
             int time = sliderTime.getValue();
-            int hour = time/100;
-            int minutes = time%100;
+            int hour = (time/60);
+            int minutes = (time%60);
             hourChoice.setSelectedItem(hour);
             minChoice.setSelectedItem(minutes);
             ;
          });  
+
+        buttonPlay.addActionListener(e -> {
+            System.out.println(this.getSelectedTime());
+        });
+    }
+
+    /**
+     * //
+     * @return
+     */
+    public NTime getSelectedTime() {
+        int value = this.sliderTime.getValue();
+        return new NTime(value/60, value%60);
     }
     
 }

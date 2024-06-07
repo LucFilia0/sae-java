@@ -2,7 +2,7 @@ package planeair.graph.graphutil;
 
 //-- Import Java
 
-import planeair.util.FlightTime ;
+import planeair.util.NTime ;
 import planeair.util.Airport;
 
 //-- Import GraphStream
@@ -69,7 +69,7 @@ public class Flight extends SingleNode {
      * 
      * @author Luc le Manifik
      */
-    public void setFlightAttributes(Airport departureAirport, Airport arrivalAirport, FlightTime departureTime, int flightDuration) throws NullPointerException, InvalidEntryException {
+    public void setFlightAttributes(Airport departureAirport, Airport arrivalAirport, NTime departureTime, int flightDuration) throws NullPointerException, InvalidEntryException {
         try {
             this.setDepartureAirport(departureAirport); // -> The airport where it comes
             this.setArrivalAirport(arrivalAirport); // -> The airport where it goes
@@ -93,7 +93,7 @@ public class Flight extends SingleNode {
      * @return (String)
      */
     public String toString() {
-        return "<html>-- Flight<br><strong>Name :</strong> " + super.getId() + "<br><strong>Departure Airport :</strong> " + this.getAttribute(Flight.DEPARTURE_AIRPORT) + "<br><strong>Arrival Airport :</strong> " + this.getAttribute(Flight.ARRIVAL_AIRPORT) + "<br><strong>Departure Time :</strong> " + this.getAttribute(Flight.DEPARTURE_TIME) + "<br><strong>Duration Flight :</strong> " + this.getAttribute(Flight.FLIGHT_DURATION) + "<br><strong>Layer :</strong> " + this.getAttribute(Flight.LAYER);
+        return "<html>Flight<br><strong>Name :</strong> " + super.getId() + "<br><strong>Departure Airport :</strong> " + this.getAttribute(Flight.DEPARTURE_AIRPORT) + "<br><strong>Arrival Airport :</strong> " + this.getAttribute(Flight.ARRIVAL_AIRPORT) + "<br><strong>Departure Time :</strong> " + this.getAttribute(Flight.DEPARTURE_TIME) + "<br><strong>Duration Flight :</strong> " + this.getAttribute(Flight.FLIGHT_DURATION) + "<br><strong>Layer :</strong> " + this.getAttribute(Flight.LAYER);
     }
 
     //-- Flight Getters
@@ -123,12 +123,12 @@ public class Flight extends SingleNode {
     /**
      * Get the departure Time of the Flight.
      * 
-     * @return ({@link util.FlightTime})
+     * @return ({@link NTime.FlightTime})
      * 
      * @author Luc le Manifik
      */
-    public FlightTime getDepartureTime() {
-        return (FlightTime)this.getAttribute(Flight.DEPARTURE_TIME);
+    public NTime getDepartureTime() {
+        return (NTime)this.getAttribute(Flight.DEPARTURE_TIME);
     }
 
     /**
@@ -193,7 +193,7 @@ public class Flight extends SingleNode {
      * 
      * @author Luc le Manifik
      */
-    public void setDepartureTime(FlightTime departureTime) throws NullPointerException {
+    public void setDepartureTime(NTime departureTime) throws NullPointerException {
         if(departureTime == null) {
             throw new NullPointerException();
         }
@@ -407,8 +407,8 @@ public class Flight extends SingleNode {
                         deltaX_A = depX_A - crossX;
                         deltaX_B = depX_B - crossX;
         
-                        crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getHourValueInMinutes(); // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
-                        crossTime_B = (deltaX_B / speedX_B) + tangoCharlie.getDepartureTime().getHourValueInMinutes();
+                        crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getValueInMinutes(); // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
+                        crossTime_B = (deltaX_B / speedX_B) + tangoCharlie.getDepartureTime().getValueInMinutes();
 
                         // The time difference between the two crossTime
                         timeGap = (crossTime_A > crossTime_B) ? crossTime_A - crossTime_B : crossTime_B - crossTime_A; 
@@ -436,15 +436,16 @@ public class Flight extends SingleNode {
      * 
      * @author Luc le Manifik
      */
-    public GeoPosition getCurrentGeoPosition() {
+    public GeoPosition getGeoPositionAtTime(NTime time) {
 
         GeoPosition currentGeoPosition = null;
 
         // Get the current time (from milliseconds to minutes)
-        long currentTimeInMinutes = System.currentTimeMillis() / 60000;
-        //long currentTimeInMinutes = 8 * 60; // 8h
+        //long currentTimeInMinutes = System.currentTimeMillis() / 60000;
+        int currentTimeInMinutes = time.getValueInMinutes();
+        
 
-        int flightDepartureTime = this.getDepartureTime().getHourValueInMinutes();
+        int flightDepartureTime = this.getDepartureTime().getValueInMinutes();
         int flightArrivalTime = flightDepartureTime + this.getFlightDuration();
 
         /*

@@ -20,7 +20,7 @@ import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.util.Airport;
 import planeair.util.AirportSet;
 import planeair.util.Coordinate;
-import planeair.util.FlightTime;
+import planeair.util.NTime;
 
 /**
  * <html>
@@ -297,7 +297,7 @@ public abstract class ImportationFIG {
         // Variables that will store the Flight's informations
         String s_name = "", s_departure = "", s_arrival = "";
         int departureTime_h = 0, departureTime_m = 0, duration = 0;
-        FlightTime departureTime = null;
+        NTime departureTime = null;
 
         while(scanData.hasNext()) {
             
@@ -341,7 +341,7 @@ public abstract class ImportationFIG {
             throw new InvalidFileFormatException(currentLine, "Missing informations to correctly create the Flight");
         }
 
-        departureTime = new FlightTime(departureTime_h, departureTime_m);
+        departureTime = new NTime(departureTime_h, departureTime_m);
 
         // If everything is ok, the Flight is initialized
 

@@ -4,7 +4,7 @@ import planeair.graph.graphutil.Flight;
 
 //-- Import Plane AIR
 
-import planeair.util.FlightTime;
+import planeair.util.NTime;
 
 //-- Import GraphStream
 import org.graphstream.graph.Node ;
@@ -91,11 +91,11 @@ public class FlightsIntersectionGraph extends TestGraph {
      * Shows only the flights that are in the air at a given time
      * @param givenTime time used for the checks
      */
-    public void showFlightsAtATime(FlightTime givenTime) {
-        int givenTimeInMinutes = givenTime.getHourValueInMinutes() ;
+    public void showFlightsAtATime(NTime givenTime) {
+        int givenTimeInMinutes = givenTime.getValueInMinutes() ;
         for (Node node : this) {
             Flight flightNode = (Flight) node ;
-            int departure = flightNode.getDepartureTime().getHourValueInMinutes() ;
+            int departure = flightNode.getDepartureTime().getValueInMinutes() ;
             int arrival = departure + flightNode.getFlightDuration() ;
             if (givenTimeInMinutes < departure || givenTimeInMinutes > arrival) {
                 flightNode.setAttribute("ui.hide") ;

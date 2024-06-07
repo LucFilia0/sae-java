@@ -102,12 +102,24 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
             //waypointButton.setLocation((int) Math.round(x), (int) Math.round(y)); // The more accurate we can do T_
             waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
+
+            
+            Point2D departureAirport_location = map.getTileFactory().geoToPixel(flightWp.getFlight().getDepartureAirport().getCoordinate(), map.getZoom());
+            Point2D arrivalAirport_location = map.getTileFactory().geoToPixel(flightWp.getFlight().getArrivalAirport().getCoordinate(), map.getZoom());
+
+            int depX = (int) (departureAirport_location.getX() - screen.getX());
+            int depY = (int) (departureAirport_location.getY() - screen.getY());
+
+            int arrX = (int) (arrivalAirport_location.getX() - screen.getX());
+            int arrY = (int) (arrivalAirport_location.getY() - screen.getY());
+
+            g.drawLine(depX, depY, arrX, arrY);
         }
 
         /*
          * STEP 3 : We paint the Flights' routes
          */
-        for(Flight flight : this.currentFlightSet) {
+        /* for(Flight flight : this.currentFlightSet) {
 
             Point2D departureAirport_location = map.getTileFactory().geoToPixel(flight.getDepartureAirport().getCoordinate(), map.getZoom());
             Point2D arrivalAirport_location = map.getTileFactory().geoToPixel(flight.getArrivalAirport().getCoordinate(), map.getZoom());
@@ -119,7 +131,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             int arrY = (int) (arrivalAirport_location.getY() - screen.getY());
 
             g.drawLine(depX, depY, arrX, arrY);
-        }
+        } */
     }
 
     /**

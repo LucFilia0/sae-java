@@ -459,7 +459,7 @@ public class NMainScreen extends JPanel{
     
     public void initMap() {
         this.app.getAirportSet().setActiveAirportsFrom(this.app.getFig());
-        this.map.paintMapItems(this.app.getAirportSet(), this.app.getFig());
+        this.map.paintAllAirports(this.app.getAirportSet());
     }
 
     /**

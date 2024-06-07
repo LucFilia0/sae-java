@@ -20,6 +20,8 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import planeair.util.Airport;
 import planeair.util.AirportSet;
+import planeair.util.Coordinate;
+import planeair.util.NTime;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphutil.Flight;
 import planeair.components.mapview.mapwp.MapWaypointPainter;
@@ -173,24 +175,38 @@ public class Map extends org.jxmapviewer.JXMapViewer {
     }
 
     /**
-     * This method adds all the Flights which are in the FIG.
-     * 
-     * @author Luc le Manifik
+     * //
+     * @param time
+     * @param fig
      */
-    private void addFlights(FlightsIntersectionGraph fig) {
+    public void paintFlightsAtTime(NTime time, FlightsIntersectionGraph fig) {
 
+        clearAllFlights();
+        addAllFlightsAtTime(time, fig);
+    }
+
+    private void clearAllFlights() {
+        for(FlightWaypoint waypoint : this.itemPainter.getFlightWaypoints()) {
+            this.remove(waypoint.getWaypointButton());
+        }
+        this.itemPainter.getFlightWaypoints().clear();
+    }
+
+    private void addAllFlightsAtTime(NTime time, FlightsIntersectionGraph fig) {
         fig.forEach(node -> {
             Flight flight = (Flight)node;
 
-            // Adding the Flight in the "currentFlights" set, in order to prompt the Flight's route, even if he's not currently flying
-            this.itemPainter.getCurrentFlights().add(flight);
-
-            GeoPosition currentFlightPosition = flight.getCurrentGeoPosition();
+            GeoPosition flightPositionAtTime = flight.getGeoPositionAtTime(time);
             // The function returns null is the Flight is not currently flying
-            if(currentFlightPosition != null) {
-                this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight, currentFlightPosition));
+            if(flightPositionAtTime != null) {
+                this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight, flightPositionAtTime));
             }
         });
+
+        for(FlightWaypoint waypoint : this.itemPainter.getFlightWaypoints()) {
+
+            this.add(waypoint.getWaypointButton());
+        }
     }
 
     /**
@@ -199,10 +215,9 @@ public class Map extends org.jxmapviewer.JXMapViewer {
      * 
      * @author Luc le Manifik
      */
-    public void paintMapItems(AirportSet airportSet, FlightsIntersectionGraph fig) {
+    public void paintAllAirports(AirportSet airportSet) {
 
         this.addAirports(airportSet);
-        this.addFlights(fig);
 
         /* Adds the WaypointButtons, which are the visual for Waypoint,
         * they need to be added manually, because JxMap is not made to have buttons, but Waypoints
@@ -210,11 +225,6 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         */
         for(AirportWaypoint waypoint : this.itemPainter.getAirportWaypoints()) {
             
-            this.add(waypoint.getWaypointButton());
-        }
-
-        for(FlightWaypoint   waypoint : this.itemPainter.getFlightWaypoints()) {
-
             this.add(waypoint.getWaypointButton());
         }
     }

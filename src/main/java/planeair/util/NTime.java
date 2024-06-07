@@ -10,7 +10,7 @@ import planeair.exceptions.InvalidTimeException;
  * 
  * @author Nathan LIEGEON
  */
-public class FlightTime {
+public class NTime {
 
     /**
      * The number of hour - [0; 23]
@@ -30,7 +30,7 @@ public class FlightTime {
      * 
      * @author Nathan LIEGEON
      */
-    public FlightTime(int hour, int min) {
+    public NTime(int hour, int min) {
         try {
             this.setHour(hour) ;
             this.setMinute(min) ;
@@ -93,7 +93,12 @@ public class FlightTime {
      * toString() FlightTime's method.
      */
     public String toString() {
-        return this.getHour() + "h" + this.getMinute() ;
+        String between = null;
+        if(this.min < 10)
+            between = "h0";
+        else
+            between = "h";
+        return this.getHour() + between + this.getMinute() ;
     }
     
     /**
@@ -102,7 +107,7 @@ public class FlightTime {
      * 
      * @author Luc le Manifik
      */
-    public int getHourValueInMinutes() {
+    public int getValueInMinutes() {
         return this.hour * 60 + this.min;
     }
 
@@ -113,10 +118,10 @@ public class FlightTime {
      * 
      * @author Nathan LIEGEON
      */
-    public FlightTime convertTime(Time time) {
+    public NTime convertTime(Time time) {
         int hour = (int)time.getTime()%(1000000 * 60 * 60)/24 ;
         int minute = (int) time.getTime()%(1000000 * 60 * 60) / (24*60) ;
-        FlightTime returnTime = new FlightTime(hour, minute) ;
+        NTime returnTime = new NTime(hour, minute) ;
         return returnTime ;
     }
 
@@ -126,7 +131,7 @@ public class FlightTime {
      * 
      * @author Nathan LIEGEON
      */
-    public static FlightTime getCurrentTime() {
-        return new FlightTime(LocalTime.now().getHour(), LocalTime.now().getMinute()) ;
+    public static NTime getCurrentTime() {
+        return new NTime(LocalTime.now().getHour(), LocalTime.now().getMinute()) ;
     }
 }
