@@ -3,6 +3,8 @@ package planeair.components.buttons;
 // IMPORT SWING
 import javax.swing.JButton;
 
+import planeair.App;
+
 // IMPORT AWT
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,7 +27,7 @@ public class NFilledButton extends JButton {
     public static final int FILLED_BUTTON_HEIGHT = 40;
     
     /**
-     * Creates a new NFilledButton, with default size (width:80, height:40)
+     * Creates a new NFilledButton, with default size (width:90, height:40)
      * 
      * @param title (String) - The title of the button
      */
@@ -52,6 +54,7 @@ public class NFilledButton extends JButton {
      * Sets the same style for all the constructors 
      */
     private void setStyle() {
+        this.setFont(App.KINDANORMAL);
         this.setForeground(Color.WHITE);
         this.setBackground(Color.BLACK);
     }

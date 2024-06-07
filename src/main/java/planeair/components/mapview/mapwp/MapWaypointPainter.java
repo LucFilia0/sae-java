@@ -112,8 +112,8 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
          */
         for(Flight flight : this.currentFlightSet) {
 
-            Point2D departureAirport_location = map.getTileFactory().geoToPixel(flight.getDepartureAirport().getGeoPosition(), map.getZoom());
-            Point2D arrivalAirport_location = map.getTileFactory().geoToPixel(flight.getArrivalAirport().getGeoPosition(), map.getZoom());
+            Point2D departureAirport_location = map.getTileFactory().geoToPixel(flight.getDepartureAirport().getPosition(), map.getZoom());
+            Point2D arrivalAirport_location = map.getTileFactory().geoToPixel(flight.getArrivalAirport().getPosition(), map.getZoom());
 
             int depX = (int) (departureAirport_location.getX() - screen.getX());
             int depY = (int) (departureAirport_location.getY() - screen.getY());

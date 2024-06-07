@@ -6,14 +6,16 @@ import java.io.File ;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+
 import java.util.List ;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList ;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList ;
 
 // Import graphstream
 
@@ -21,7 +23,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.Graphs;
 
-import planeair.util.DataImportation;
+import planeair.importation.ImportationTestGraph;
 
 /**
  * Does the importation of graphs from a folder automatically
@@ -88,7 +90,7 @@ public class Automation {
                     public void run() {
                         TestGraph temp = new TestGraph(Automation.isolateNumberInString(file.getName())) ;
                         try {
-                            DataImportation.importTestGraphFromFile(temp, file, false);
+                            ImportationTestGraph.importTestGraphFromFile(temp, file, false);
                             for (Node node : temp) {
                                 node.setAttribute("color", 0) ;
                             }

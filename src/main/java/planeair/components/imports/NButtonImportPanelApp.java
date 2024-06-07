@@ -25,7 +25,8 @@ import planeair.components.buttons.NButtonImportFileApp;
 import planeair.components.buttons.NFilledButton;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.TestGraph;
-import planeair.util.DataImportation;
+import planeair.importation.ImportationFIG;
+import planeair.importation.ImportationTestGraph;
 
 /**
  * Creates a JPanel of importation for Flights and Airports4
@@ -250,7 +251,7 @@ public class NButtonImportPanelApp extends JPanel {
             if(!fileChooser.getFile().equals(null)) {
                 try {
                     this.app.setTestGraph(new TestGraph(fileChooser.getFile().getName())) ;
-                    DataImportation.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
+                    ImportationTestGraph.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
                     initDefaultGraphImportation() ;
                     this.app.getPrincFrame().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
                     System.out.println(this.app.getTestGraph().getKMax());
@@ -284,7 +285,7 @@ public class NButtonImportPanelApp extends JPanel {
                 fileChooser.userImportFile();
                 if(!fileChooser.getFile().equals(null)) {
 
-                    DataImportation.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
+                    ImportationFIG.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
                     this.airportsImported = true;
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
@@ -304,7 +305,7 @@ public class NButtonImportPanelApp extends JPanel {
                 fileChooser.userImportFile();
                 if(!fileChooser.getFile().equals(null)) {
 
-                    DataImportation.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());
+                    ImportationFIG.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());
                     this.flightsImported = true;
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {

@@ -15,6 +15,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 //-- Import Plane AIR
 
 import planeair.graph.FlightsIntersectionGraph;
+import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.Flight;
 
 /**
@@ -37,14 +38,9 @@ public class Airport {
     private String location;
 
     /**
-     * The latitude of the Airport ({@link util.Latitude util.Latitude})
+     * The GeoPosition of the Airport 
      */
-    private Latitude latitude;
-
-    /**
-     * The longitude of the Airport ({@link util.Longitude util.Longitude})
-     */
-    private Longitude longitude;
+    private GeoPosition position;
 
     //-- Airport Constructor
 
@@ -59,11 +55,14 @@ public class Airport {
      * 
      * @author Luc le Manifik
      */
-    Airport(String name, String location, Latitude latitude, Longitude longitude) {
-        this.setName(name);
-        this.setLocation(location);
-        this.setLatitude(latitude);
-        this.setLongitude(longitude);
+    public Airport(String name, String location, GeoPosition position) throws InvalidFileFormatException {
+        try {
+            this.setName(name);
+            this.setLocation(location);
+            this.setPosition(position);
+        }catch(NullPointerException e) {
+            throw e;
+        }
     }
 
     //-- Airport toString()
@@ -74,7 +73,7 @@ public class Airport {
      * @author Luc le Manifik
      */
     public String toString() {
-        return "<html><strong>-- Airport :</strong> " + this.name + "<br><strong>Location :</strong> " + this.location + "<br><strong>Latitude :</strong> " + this.latitude + "<br><strong>Longitude :</strong> " + this.longitude + "</html>";
+        return "<html><strong>-- Airport :</strong> " + this.name + "<br><strong>Location :</strong> " + this.location + "<br><strong>Latitude :</strong> " + this.position.getLatitude() + "<br><strong>Longitude :</strong> " + this.position.getLongitude() + "</html>";
     }
 
     //-- Airport Getters
@@ -96,30 +95,14 @@ public class Airport {
     }
 
     /**
-     * Get the longitude of the Airport.
-     * @return longitude ({@link util.Longitude util.Longitude})
-     */
-    public Longitude getLongitude() {
-        return this.longitude;
-    }
-
-    /**
-     * Get the latitude of the Airport.
-     * @return latitude ({@link util.Latitude util.Latitude})
-     */
-    public Latitude getLatitude() {
-        return this.latitude;
-    }
-
-    /**
      * Returns the GeoPosition of the Airport.
      * 
      * @return ({@link org.jxmapviewer.viewer.GeoPosition}) - The GeoPosition of the Airport
      * 
      * @author Luc le Maifik
      */
-    public GeoPosition getGeoPosition() {
-        return new GeoPosition(this.getLatitude().getDecimalCoordinate(), this.getLongitude().getDecimalCoordinate());
+    public GeoPosition getPosition() {
+        return this.position;
     }
 
     //-- Airport Setters
@@ -162,26 +145,11 @@ public class Airport {
      * 
      * @author Luc le Manifik
      */
-    public void setLongitude(Longitude longitude) throws NullPointerException {
-        if(longitude == null) {
+    public void setPosition(GeoPosition position) throws NullPointerException {
+        if(position == null) {
             throw new NullPointerException();
         }
-        this.longitude = longitude;
-    }
-
-    /**
-     * Set the latitude of the Airport.
-     * 
-     * @param latitude ({@link util.Latitude util.Latitude}) - The new Latitude of the Airport.
-     * @throws NullPointerException Throwed if the ({@link util.Latitude util.Latitude}) passed  in parameter is null.
-     * 
-     * @author Luc le Manifik
-     */
-    public void setLatitude(Latitude latitude) throws NullPointerException {
-        if(latitude == null) {
-            throw new NullPointerException();
-        }
-        this.latitude = latitude;
+        this.position = position;
     }
 
     //-- Airport Methods
