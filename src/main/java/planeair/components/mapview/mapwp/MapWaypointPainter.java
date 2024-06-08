@@ -9,6 +9,7 @@ import java.lang.Math;
 //-- Import AWT
 
 import java.awt.Rectangle;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
@@ -42,11 +43,6 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     private HashSet<FlightWaypoint> flightWaypointSet;
 
     /**
-     * The set which contains all the Flights currently flying, in order to trace the FlightRoutes
-     */
-    private HashSet<Flight> currentFlightSet;
-
-    /**
      * The MapItemPainter class's constructor. Creates a new MapItemPainter.
      * 
      * @author Luc le Manifik
@@ -54,7 +50,6 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     public MapWaypointPainter() {
         this.airportWaypointSet = new HashSet<AirportWaypoint>();
         this.flightWaypointSet = new HashSet<FlightWaypoint>();
-        this.currentFlightSet = new HashSet<Flight>();
     }
 
     /**
@@ -97,10 +92,9 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
             MapWaypointButton waypointButton = flightWp.getWaypointButton();
 
-            x = flightWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
-            y = flightWp_location.getY() - screen.getY() - waypointButton.getHeight()/2;
-
-            //waypointButton.setLocation((int) Math.round(x), (int) Math.round(y)); // The more accurate we can do T_
+            x = flightWp_location.getX() - screen.getX() - MapWaypointButton.BUTTON_SIZE/2;
+            y = flightWp_location.getY() - screen.getY() - MapWaypointButton.BUTTON_SIZE/2;
+            
             waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
 
             
@@ -115,23 +109,6 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
             g.drawLine(depX, depY, arrX, arrY);
         }
-
-        /*
-         * STEP 3 : We paint the Flights' routes
-         */
-        /* for(Flight flight : this.currentFlightSet) {
-
-            Point2D departureAirport_location = map.getTileFactory().geoToPixel(flight.getDepartureAirport().getCoordinate(), map.getZoom());
-            Point2D arrivalAirport_location = map.getTileFactory().geoToPixel(flight.getArrivalAirport().getCoordinate(), map.getZoom());
-
-            int depX = (int) (departureAirport_location.getX() - screen.getX());
-            int depY = (int) (departureAirport_location.getY() - screen.getY());
-
-            int arrX = (int) (arrivalAirport_location.getX() - screen.getX());
-            int arrY = (int) (arrivalAirport_location.getY() - screen.getY());
-
-            g.drawLine(depX, depY, arrX, arrY);
-        } */
     }
 
     /**
@@ -154,17 +131,6 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      */
     public HashSet<FlightWaypoint> getFlightWaypoints() {
         return this.flightWaypointSet;
-    }
-
-    /**
-     * Returns the Set which contains all the Flights currently flying
-     * 
-     * @return ({@link java.util.HashSet}) - The Set which contains all the Flights currently flying
-     * 
-     * @author Luc le Manifik
-     */
-    public HashSet<Flight> getCurrentFlights() {
-        return this.currentFlightSet;
     }
 
     /**

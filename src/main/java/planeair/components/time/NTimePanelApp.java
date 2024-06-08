@@ -15,7 +15,7 @@ import javax.swing.JButton;
 
 // import AWT components
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.lang.Thread;
 import java.awt.Dimension;
 
 // import LAYOUT
@@ -64,16 +64,38 @@ public class NTimePanelApp extends JPanel {
      */
     private JSlider sliderTime = new JSlider();
     /**
-     * Icon for the playing button
+     * Icon for the playing button (play)
      */
     private Icon iconPlay = new ImageIcon("./icons/play.png");
+    /**
+     * Icon for the playing button (pause)
+     */
+    private Icon iconPause = new ImageIcon("./icons/pause.png");
     /**
      * Button for playing the simulation 
      * Location : right to the slider
      */
-    private JButton buttonPlay = new JButton(iconPlay);
+    private JButton playButton = new JButton(iconPlay);
 
-    public NTimePanelApp(){
+    /**
+     * The App whichh contains the NTimePanelApp
+     */
+    private App app;
+
+    /**
+     * The boolean which says if the simulation is currently playing (if the Flights are currenly moving)
+     */
+    private boolean simulationPlaying;
+
+    /**
+     * The Thread which will run the simulation
+     */
+    private Thread simulation;
+
+    public NTimePanelApp(App app) {
+
+        this.app = app;
+        this.simulationPlaying = false;
 
         this.setLayout(new GridLayout(11,1));
 
@@ -90,15 +112,18 @@ public class NTimePanelApp extends JPanel {
         sliderTime.setPreferredSize(new Dimension(300,20));
         sliderTime.setValue(0000);
         //BUTTON PLAY
-        buttonPlay.setBackground(App.KINDAYELLOW);
-        buttonPlay.setBorderPainted(false);
-        buttonPlay.setPreferredSize(new Dimension(35,35));
+        playButton.setBackground(App.KINDAYELLOW);
+        playButton.setBorderPainted(false);
+        playButton.setPreferredSize(new Dimension(35,35));
+
+        this.addComponents();
+        this.addEvents();
     }
 
     /**
      * Method adding components on the Panel
      */
-    public void addComponents(){
+    private void addComponents(){
         //Hour COMBOBOX
         hourPanelComboBox.add(hourChoice);
         hourPanelComboBox.add(betweenTime);
@@ -107,7 +132,7 @@ public class NTimePanelApp extends JPanel {
 
         //TIME SLIDER
         hourSliderPanel.add(sliderTime);
-        hourSliderPanel.add(buttonPlay);
+        hourSliderPanel.add(playButton);
 
         //BODY CENTER
         this.add(hourPanelComboBox);
@@ -119,7 +144,7 @@ public class NTimePanelApp extends JPanel {
     /**
      * Method adding events of the JFrame
      */
-    public void addEvents(){
+    private void addEvents(){
         
         hourChoice.addActionListener((ActionEvent e) -> {
             
@@ -135,16 +160,47 @@ public class NTimePanelApp extends JPanel {
         });
 
         sliderTime.addChangeListener((ChangeEvent e) -> {
+
+            // Changes the value of the comboboxes
             int time = sliderTime.getValue();
             int hour = (time/60);
             int minutes = (time%60);
             hourChoice.setSelectedItem(hour);
             minChoice.setSelectedItem(minutes);
-            ;
-         });  
+            
+            // Paints the Flights on the Map, at the selected NTime
+            this.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), this.app.getFig());
+         });
 
-        buttonPlay.addActionListener(e -> {
-            System.out.println(this.getSelectedTime());
+        playButton.addActionListener(e -> {
+
+            if(this.simulationPlaying) {
+                // Stops the simulation
+                this.simulationPlaying = false;
+                this.playButton.setIcon(this.iconPlay);
+                this.simulation.interrupt();
+            }else {
+                // Starts the simulation
+                this.simulationPlaying = true;
+                this.playButton.setIcon(this.iconPause);
+
+                this.simulation = new Thread() {
+                    @Override
+                    public void run() {
+                        boolean stop = false;
+                        while(!stop) {
+                            try {
+                                Thread.sleep(1000);
+                            }catch(InterruptedException e) {
+                                stop = true;
+                            }
+                            sliderTime.setValue(sliderTime.getValue() + 2); // Plus 2mn in the simulation every second in the real life
+                        }
+                    }
+                };
+
+                this.simulation.start();
+            }
         });
     }
 
@@ -155,6 +211,10 @@ public class NTimePanelApp extends JPanel {
     public NTime getSelectedTime() {
         int value = this.sliderTime.getValue();
         return new NTime(value/60, value%60);
+    }
+
+    public boolean isSimulationPlaying() {
+        return this.simulationPlaying;
     }
     
 }

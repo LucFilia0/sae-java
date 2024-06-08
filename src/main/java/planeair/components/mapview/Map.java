@@ -183,6 +183,8 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
         clearAllFlights();
         addAllFlightsAtTime(time, fig);
+
+        this.repaint();
     }
 
     private void clearAllFlights() {

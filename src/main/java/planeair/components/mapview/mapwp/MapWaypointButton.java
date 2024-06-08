@@ -69,7 +69,7 @@ public class MapWaypointButton extends javax.swing.JButton {
 
         this.setIcon(new ImageIcon(scaledImage));
         this.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Makes a little funny hand when the button is hovered :)
-        this.setPreferredSize(new Dimension(MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE)); // Don't ask why, but "setSize" didn't work..
+        //this.setPreferredSize(new Dimension(MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE)); // Don't ask why, but "setSize" didn't work..
     }
 
     //-- MapWaypointButton Getters
@@ -81,6 +81,10 @@ public class MapWaypointButton extends javax.swing.JButton {
      */
     public MapWaypoint getMapWaypoint() {
         return this.mapWaypoint;
+    }
+
+    public void setOrientation() {
+        double requiredRotationInRad = Math.toRadian(45);
     }
 
 }
