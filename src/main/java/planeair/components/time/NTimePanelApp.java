@@ -178,7 +178,6 @@ public class NTimePanelApp extends JPanel {
                 // Stops the simulation
                 this.simulationPlaying = false;
                 this.playButton.setIcon(this.iconPlay);
-                this.simulation.interrupt();
             }else {
                 // Starts the simulation
                 this.simulationPlaying = true;
@@ -187,14 +186,13 @@ public class NTimePanelApp extends JPanel {
                 this.simulation = new Thread() {
                     @Override
                     public void run() {
-                        boolean stop = false;
-                        while(!stop) {
+                        while(simulationPlaying) {
+                            sliderTime.setValue(sliderTime.getValue() + 2); // Plus 2mn in the simulation every second in the real life
                             try {
                                 Thread.sleep(1000);
                             }catch(InterruptedException e) {
-                                stop = true;
+                                e.printStackTrace();
                             }
-                            sliderTime.setValue(sliderTime.getValue() + 2); // Plus 2mn in the simulation every second in the real life
                         }
                     }
                 };

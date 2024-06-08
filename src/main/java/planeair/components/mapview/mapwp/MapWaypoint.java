@@ -45,12 +45,12 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
      * 
      * @author Luc le Manifik
      */
-    public MapWaypoint(File iconFile, GeoPosition geoPosition) {
+    public MapWaypoint(File iconFile, GeoPosition geoPosition, double degree) {
         super(geoPosition);
         this.waypointButton = null;
 
         try {
-            this.waypointButton = new MapWaypointButton(iconFile, this);
+            this.waypointButton = new MapWaypointButton(iconFile, this, degree);
         }catch(IOException e) {
             e.printStackTrace();
         }
@@ -64,25 +64,6 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
      * @author Luc le Manifik
      */
     private void initEvents() {
-
-        /* this.waypointButton.addItemListener(new ItemListener() {
-
-            @Override
-            public void itemStateChanged(ItemEvent arg0) {
-                switch(arg0.getStateChange()) {
-                    case ItemEvent.SELECTED : 
-                        System.out.println("SELECTED");
-                        infoPanel.showInfos(((MapWaypointButton)arg0.getSource()).getMapWaypoint());
-                        break;
-                    case ItemEvent.DESELECTED : 
-                        System.out.println("DESELECTED");
-                        infoPanel.hideInfos();
-                        break;
-                    default : break;
-                }
-            }
-            
-        }); */
 
         this.waypointButton.addActionListener(new ActionListener() {
 
@@ -119,10 +100,10 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
      * 
      * @author Luc le Manifik
      */
-    public void setButtonIcon(File iconFile) throws IOException {
+    public void setButtonIcon(File iconFile, double degree) throws IOException {
         if(iconFile != null) {
             try {
-                this.waypointButton = new MapWaypointButton(iconFile, this);
+                this.waypointButton = new MapWaypointButton(iconFile, this, degree);
             }catch(IOException e) {
                 throw e;
             }
