@@ -8,7 +8,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
 import javax.swing.Box;
 
 // Import of AWT composants
@@ -96,7 +95,7 @@ public class NPrincipalePanelApp extends JPanel{
      * COLUMN : 2 (menu + import)
      * Location : left ine the header
      */
-    private JPanel panelButton = new JPanel(new GridLayout(1,3));
+    private JPanel panelButton = new JPanel();
 
     /**
      * Icon of the Button menu graph
@@ -238,8 +237,8 @@ public class NPrincipalePanelApp extends JPanel{
 
         this.app = app;
         this.setLayout(new BorderLayout());
-
         body.setLayout(new BorderLayout());
+        panelButton.setLayout(new BoxLayout(panelButton,BoxLayout.X_AXIS));
 
         bodyCenter.setLayout(new BoxLayout(bodyCenter, BoxLayout.Y_AXIS));
 
