@@ -17,6 +17,7 @@ import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.GraphSAE;
 
 import org.graphstream.ui.swing_viewer.* ;
+import org.graphstream.ui.swing_viewer.util.DefaultMouseManager;
 
 /**
  * Class handling the rendering of Graphs and the events on its panel
@@ -26,7 +27,7 @@ public class PanelCreator {
 	/**
 	 * boolean handling the pumping of events in a separate thread
 	 */
-	protected boolean loop = true ;
+	protected boolean isRendering = true ;
 
 	/**
 	 * Graph displayed in the panel
@@ -54,6 +55,11 @@ public class PanelCreator {
 	protected View view ;
 
 	/**
+	 * Field storing the mouse position for where it first started dragging
+	 */
+	protected Point3 dragPos = null ;
+
+	/**
 	 * Calls the default constructor with inOwnFrame set to false
 	 * @param graph
 	 */
@@ -74,7 +80,18 @@ public class PanelCreator {
 		panel = (ViewPanel)viewer.addDefaultView(inOwnFrame) ;
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
-		viewer.getDefaultView().enableMouseOptions() ;
+		//viewer.getDefaultView().enableMouseOptions() ;
+		viewer.getDefaultView().setMouseManager(new DefaultMouseManager() {
+			@Override
+			public void mouseDragged(MouseEvent event) {
+				if (curElement != null) {
+					elementMoving(curElement, event);
+				}
+				else {
+					dragMovement(event) ;
+				}
+			}
+		}) ;
 		ColoringUtilities.setGraphStyle(graph, 0) ;
 
 		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
@@ -89,13 +106,13 @@ public class PanelCreator {
 		// Thread running in the background constantly sending the changes to the Graph
 		Thread graphPump = new Thread(new Runnable() {
 			public void run() {
-				while(loop) {
+				while(isRendering) {
 					try {
 						fromViewer.blockingPump() ;
 					}
 
-					// Don't mind this idk why or when this gets thrown
 					catch (Exception e) {
+						// ^^'
 					}
 				}
 			}
@@ -150,7 +167,7 @@ public class PanelCreator {
 	 * @param cam The View Camera
 	 * @return The Point representing the mouse's effective Position
 	 */
-	public Point3 getGraphPositionFromClick(Camera cam, Point mousePosPx) {
+	private Point3 getGraphPositionFromClick(Camera cam, Point mousePosPx) {
 		//Initialisation
 		GraphMetrics gm = cam.getMetrics() ;
 		Point3 res ;
@@ -177,6 +194,18 @@ public class PanelCreator {
 	}
 
 	/**
+	 * Moves the camera when dragging the mouse
+	 */
+	private void dragMovement(MouseEvent e) {
+		Point originalMousePos = e.getPoint() ;
+		Point3 viewCenter = view.getCamera().getViewCenter() ;
+		Point3 mousePos = getGraphPositionFromClick(view.getCamera(), originalMousePos) ;
+		double posX = dragPos.x - mousePos.x ;
+		double posY = dragPos.y - mousePos.y ;
+		view.getCamera().setViewCenter(viewCenter.x - posX, viewCenter.y - posY, 0) ;
+	}
+
+	/**
 	 * Offsets the mouse position based on the panel's position relative to the screen
 	 * @param panel parent panel 
 	 * @param mousePosition position of the mouse relative to the screen
@@ -187,27 +216,16 @@ public class PanelCreator {
 		return mousePosition ;
 	}
 
-	/**
-	 * Class handling only the mouseClicked and mousePressed methods from MouseListener
-	 * and the mouseWheelMoved method from MouseWheelListener
-	 */
+	
 	private class MouseEventHandler extends MouseAdapter {
-		/**
-		 * This event handles moving around the graph by centering the camera on the point you clicked
-		 */
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			Camera cam = view.getCamera() ;
-			Point3 viewCenter = getGraphPositionFromClick(cam, e.getLocationOnScreen()) ;
-			cam.setViewCenter(viewCenter.x, viewCenter.y, viewCenter.z) ;
-		}
 
-		/**
-		 * This handles moving around the graph
-		 */
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Move around the graph 
+			dragPos = getGraphPositionFromClick(view.getCamera(), e.getPoint()) ;
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			dragPos = null ;
 		}
 
 		/**
@@ -275,7 +293,7 @@ public class PanelCreator {
 		 */
 		@Override
 		public void viewClosed(String id) {
-			loop = false;
+			isRendering = false;
 		}
 		
 		/**

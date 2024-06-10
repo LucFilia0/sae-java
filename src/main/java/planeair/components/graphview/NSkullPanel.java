@@ -33,7 +33,9 @@ public class NSkullPanel extends JPanel {
         int x ;
         int y ;
         try {
-            Image skullEmoji = ImageIO.read(new File("./src/main/java/planeair/icons/SkullEmoji.png")) ;
+            this.setBackground(Color.BLACK) ;
+            Image skullEmoji = ImageIO.read(new File("./icons/SkullEmoji.png"))
+                .getScaledInstance(-1, (int)(this.getHeight()*0.8), Image.SCALE_DEFAULT) ;
             x = (this.getWidth() - skullEmoji.getWidth(null)) / 2;
             y = (this.getHeight() - skullEmoji.getHeight(null)) / 2;
             g.drawImage(skullEmoji, x, y, null) ;

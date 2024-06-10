@@ -1,6 +1,6 @@
 package planeair.components.menu;
 
-// Import swing composants
+// Import swing components
 import javax.swing.JPanel;
 
 import org.graphstream.algorithm.ConnectedComponents;
@@ -87,7 +87,7 @@ public class NInfoGraphPanelApp extends JPanel {
     private JPanel compPanel = new JPanel();
     /**
      * Title of the second LINE
-     * Nb related composants
+     * Nb related components
      */
     private JLabel titleComp = new JLabel(CONNECTED_COMP_TEXT + "-");
 

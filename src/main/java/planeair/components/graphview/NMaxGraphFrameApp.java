@@ -19,7 +19,7 @@ import planeair.graph.graphutil.PanelCreator;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 /**
- * Import awt composants
+ * Import awt components
  */
 import java.awt.FlowLayout;
 import java.awt.Insets;

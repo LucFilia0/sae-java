@@ -1,6 +1,6 @@
 package planeair.components;
 
-// Import of SWING composants
+// Import of SWING components
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Box;
-// Import of AWT composants
+// Import of AWT components
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
@@ -78,7 +78,7 @@ public class NMainScreen extends JPanel{
      */
     private JPanel aside = new JPanel(new GridLayout());
 
-    // HEADER COMPOSANTS 
+    // HEADER COMPONENTS 
     
     /**
      * Layout's panel for Navigation bar (Button MENU  + LOGO and NAME of the APP)
@@ -152,7 +152,7 @@ public class NMainScreen extends JPanel{
     private JLabel labelLogoName = new JLabel("Plane AIR",JLabel.CENTER);
 
 
-    /*BODY COMPOSANTS*/
+    /*BODY COMPONENTS*/
 
     // CENTER
 

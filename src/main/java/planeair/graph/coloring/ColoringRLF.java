@@ -134,11 +134,11 @@ public abstract class ColoringRLF {
         }
 
         // Recovers the one with the highest number of common neighbors
-        if (!countCommonNeighbors.keySet().isEmpty()) {
+        if (!countCommonNeighbors.isEmpty()) {
             // Prevents randomness in the answer provided
             res = Collections.max(countCommonNeighbors.keySet(), (node1, node2) -> {
                 int comp1 = countCommonNeighbors.get(node1) ;
-                int comp2 = countCommonNeighbors.get(node1) ;
+                int comp2 = countCommonNeighbors.get(node2) ;
                 if (comp1 == comp2) {
                     return node1.getId().compareTo(node2.getId()) ;
                 }

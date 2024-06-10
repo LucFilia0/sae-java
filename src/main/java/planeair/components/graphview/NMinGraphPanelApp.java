@@ -1,6 +1,6 @@
 package planeair.components.graphview;
 
-// Import swing composants
+// Import swing COMPONENTs
 import javax.swing.JPanel;
 
 import org.graphstream.ui.swing_viewer.ViewPanel;
@@ -13,7 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
 import java.awt.BorderLayout;
-// Import awt composants
+// Import awt COMPONENTs
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -42,7 +42,7 @@ public class NMinGraphPanelApp extends JPanel {
     private JPanel gridPanelMinGraph = new JPanel();
 
 
-    /*FIRST COMPOSANT */
+    /*FIRST COMPONENT */
 
     /**
      * Panel of the graph representation
@@ -56,7 +56,7 @@ public class NMinGraphPanelApp extends JPanel {
      */
     private App app;
 
-    /*SECOND COMPOSANT */ 
+    /*SECOND COMPONENT */ 
     /**
      * Expand Button for graph
      * Open a new Frame with the graph and this information
@@ -82,7 +82,7 @@ public class NMinGraphPanelApp extends JPanel {
         gridPanelMinGraph.setBackground(App.KINDAYELLOW);
         gridPanelMinGraph.setLayout(new BoxLayout(gridPanelMinGraph, BoxLayout.Y_AXIS));
 
-        /*FIRST COMPOSANT */
+        /*FIRST COMPONENT */
         
         this.setMaximumSize(new Dimension(350,400));
         if (app.getTestGraph() == null) {
@@ -91,7 +91,7 @@ public class NMinGraphPanelApp extends JPanel {
         }
         FlowPanelGraph.setPreferredSize(new Dimension(325,325));
          
-        /*SECOND COMPOSANT */
+        /*SECOND COMPONENT */
 
         buttonAgr.setBackground(Color.BLACK);
         buttonAgr.setForeground(Color.WHITE);
@@ -101,10 +101,10 @@ public class NMinGraphPanelApp extends JPanel {
         buttonCenter.setBackground(App.KINDAYELLOW);
 
 
-        /*FIRST COMPOSANT */
+        /*FIRST COMPONENT */
         gridPanelMinGraph.add(FlowPanelGraph);
 
-        /*SECOND COMPOSANT */
+        /*SECOND COMPONENT */
         gridPanelMinGraph.add(buttonAgr);
 
         this.add(gridPanelMinGraph);

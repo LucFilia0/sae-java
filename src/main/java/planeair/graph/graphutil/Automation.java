@@ -255,6 +255,17 @@ public abstract class Automation {
         // Finds the best solution
 
         int bestAlgorithm = findBestAlgorithmInList(graphList) ;
+        switch (bestAlgorithm) {
+            case WELSH_POWELL:
+                System.out.println("WP") ;
+                break ;
+            case DSATUR:
+                System.out.println("DSATUR") ;
+                break ;
+            case RLF:
+                System.out.println("RLF") ;
+                break ;
+        }
 
         TestGraph temp  = null ;
         if (bestAlgorithm < graphList.size()) {

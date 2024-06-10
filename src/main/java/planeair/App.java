@@ -17,6 +17,7 @@ import java.awt.Font;
 import planeair.util.AirportSet;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.TestGraph;
+import planeair.graph.graphutil.Automation;
 import planeair.graph.graphutil.PanelCreator;
 import planeair.components.NMainScreen;
 import planeair.components.imports.NImportScreen;
@@ -165,7 +166,7 @@ public class App extends javax.swing.JFrame {
         this.airportSet = new AirportSet();
         this.fig = new FlightsIntersectionGraph("FIG");
 
-        this.setTestGraph(new TestGraph("TestGraph"));
+        this.testGraph = null ;
 
         this.mainScreen = new NMainScreen(this);
         this.importScreen = new NImportScreen(this);

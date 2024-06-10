@@ -1,7 +1,7 @@
 package planeair.components.menu;
 
 
-// Import swing composants
+// Import swing components
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.JLabel;
@@ -11,7 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 
 
-// Import awt composants
+// Import awt components
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
