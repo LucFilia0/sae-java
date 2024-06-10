@@ -18,6 +18,7 @@ import planeair.graph.graphtype.GraphSAE;
 
 import org.graphstream.ui.swing_viewer.* ;
 import org.graphstream.ui.swing_viewer.util.DefaultMouseManager;
+import org.graphstream.ui.swing_viewer.util.DefaultShortcutManager;
 
 /**
  * Class handling the rendering of Graphs and the events on its panel
@@ -80,8 +81,7 @@ public class PanelCreator {
 		panel = (ViewPanel)viewer.addDefaultView(inOwnFrame) ;
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
-		//viewer.getDefaultView().enableMouseOptions() ;
-		viewer.getDefaultView().setMouseManager(new DefaultMouseManager() {
+		view.setMouseManager(new DefaultMouseManager() {
 			@Override
 			public void mouseDragged(MouseEvent event) {
 				if (curElement != null) {
@@ -92,6 +92,9 @@ public class PanelCreator {
 				}
 			}
 		}) ;
+		
+		view.setShortcutManager(new DefaultShortcutManager());
+
 		ColoringUtilities.setGraphStyle(graph, 0) ;
 
 		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
@@ -100,7 +103,7 @@ public class PanelCreator {
 		fromViewer.addViewerListener(new ViewerEventHandler()) ;
 		panel.addMouseWheelListener(new MouseEventHandler()) ;
 		panel.addMouseListener(new MouseEventHandler()) ;
-		panel.addKeyListener(new KeyboardEventHandler()) ;
+		//panel.addKeyListener(new KeyboardEventHandler()) ;
 		fromViewer.addSink(graph) ;
 		
 		// Thread running in the background constantly sending the changes to the Graph
@@ -112,7 +115,7 @@ public class PanelCreator {
 					}
 
 					catch (Exception e) {
-						// ^^'
+						// ^^'  
 					}
 				}
 			}
@@ -169,25 +172,36 @@ public class PanelCreator {
 	 */
 	private Point3 getGraphPositionFromClick(Camera cam, Point mousePosPx) {
 		//Initialisation
-		GraphMetrics gm = cam.getMetrics() ;
-		Point3 res ;
-		double scaleFactor = cam.getViewPercent() ;
 		offsetMousePosition(panel, mousePosPx) ;
 
 		// Retrieving important coordinates and distances
 		Point3 mousePosGU = cam.transformPxToGu(mousePosPx.getX(), mousePosPx.getY()) ;
+
+		return getAdjustedPosition(cam, mousePosGU) ;
+	}
+
+	/**
+	 * Adjusts the point's position so that it stays inside the graph's bounds
+	 * @param cam
+	 * @param point The point we are adjusting
+	 * @return 
+	 */
+	public Point3 getAdjustedPosition(Camera cam, Point3 point) {
+		Point3 res ;
+		GraphMetrics gm = cam.getMetrics() ;
+		double scaleFactor = cam.getViewPercent() ;
 		Point3 center = new Point3((gm.hi.x + gm.lo.x)/2, (gm.hi.y + gm.lo.y)/2) ;
 		double maxDistance = (gm.diagonal/2)*scaleFactor ;
-		double clickDistance = mousePosGU.distance(center) ;
+		double clickDistance = point.distance(center) ;
 		
 		// Restricts the movements of the user around the graph
 		if (clickDistance < maxDistance) {
-			res = mousePosGU ;
+			res = point ;
 		}
 		// If the user clicked outside the authorized region, he will be snapped to the border
 		else {
 			// I don't think clickDistance can be equal to zero here so it should be fine
-			res = center.interpolate(mousePosGU, maxDistance/clickDistance) ;
+			res = center.interpolate(point, maxDistance/clickDistance) ;
 		}
 
 		return res ;
@@ -197,12 +211,16 @@ public class PanelCreator {
 	 * Moves the camera when dragging the mouse
 	 */
 	private void dragMovement(MouseEvent e) {
+		double scaleFactor = 0.05 ;
+		Camera cam = view.getCamera() ;
 		Point originalMousePos = e.getPoint() ;
-		Point3 viewCenter = view.getCamera().getViewCenter() ;
-		Point3 mousePos = getGraphPositionFromClick(view.getCamera(), originalMousePos) ;
-		double posX = dragPos.x - mousePos.x ;
-		double posY = dragPos.y - mousePos.y ;
-		view.getCamera().setViewCenter(viewCenter.x - posX, viewCenter.y - posY, 0) ;
+		Point3 viewCenter = cam.getViewCenter() ;
+		Point3 mousePos = getGraphPositionFromClick(cam, originalMousePos) ;
+
+		double posX = viewCenter.x + (dragPos.x - mousePos.x)*scaleFactor ;
+		double posY = viewCenter.y + (dragPos.y - mousePos.y)*scaleFactor ;
+		Point3 newViewCenter = getAdjustedPosition(cam, new Point3(posX, posY, 0)) ;
+		cam.setViewCenter(newViewCenter.x, newViewCenter.y, 0) ;
 	}
 
 	/**
