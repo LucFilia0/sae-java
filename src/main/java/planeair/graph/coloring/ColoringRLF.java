@@ -122,29 +122,36 @@ public abstract class ColoringRLF {
      */
     private static Node getNextNodeRLF(Set<Node> addableNodesSet, Set<Node> colorSet) {
         // Counts the number of common Neighbors between a node and all nodes in colorSet 
-        HashMap<Node, Integer> countCommonNeighbors = new HashMap<>() ;
+        HashMap<Node, Integer> countNeighborsInSet = new HashMap<>() ;
+        HashMap<Node, Integer> countNeighborsNotInSet = new HashMap<>() ;
         Node res = null ;
         for (Node node : addableNodesSet) {
-            countCommonNeighbors.put(node, 0) ;
+            countNeighborsInSet.put(node, 0) ;
+            countNeighborsNotInSet.put(node, 0) ;
             node.neighborNodes().forEach(neighbor -> {  
                 if (colorSet.contains(neighbor)) {
-                    countCommonNeighbors.merge(node, 1, Integer::sum) ;
+                    countNeighborsInSet.merge(node, 1, Integer::sum) ;
+                }
+                else {
+                    countNeighborsNotInSet.merge(node, 1, Integer::sum) ;
                 }
             });
         }
 
         // Recovers the one with the highest number of common neighbors
-        if (!countCommonNeighbors.isEmpty()) {
+        if (!countNeighborsInSet.isEmpty()) {
             // Prevents randomness in the answer provided
-            res = Collections.max(countCommonNeighbors.keySet(), (node1, node2) -> {
-                int comp1 = countCommonNeighbors.get(node1) ;
-                int comp2 = countCommonNeighbors.get(node2) ;
+            res = Collections.max(countNeighborsInSet.keySet(), (node1, node2) -> {
+                int comp1 = countNeighborsInSet.get(node1) ;
+                int comp2 = countNeighborsInSet.get(node2) ;
                 if (comp1 == comp2) {
-                    return node1.getId().compareTo(node2.getId()) ;
+                    comp1 = countNeighborsNotInSet.get(node1) ;
+                    comp2 = countNeighborsNotInSet.get(node2) ;
+                    if (comp1 == comp2) {
+                        return node1.getId().compareTo(node2.getId()) ;
+                    }
                 }
-                else {
-                    return Integer.max(comp1, comp2) ;
-                }
+                return Integer.compare(comp1, comp2) ;
             }) ;
         }
         return res ;

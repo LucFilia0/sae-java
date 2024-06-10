@@ -71,7 +71,7 @@ public class PanelCreator {
 	 * Opens the graph in a JFrame and handles mouse events
 	 * @param graph graph you are trying to render
 	 * @param inOwnFrame 
-	 * @see ViewPanel 
+	 * @see ViewPanel
 	 */
 	public PanelCreator(GraphSAE graph, boolean inOwnFrame) {
 		this.graph = graph ;
@@ -103,7 +103,6 @@ public class PanelCreator {
 		fromViewer.addViewerListener(new ViewerEventHandler()) ;
 		panel.addMouseWheelListener(new MouseEventHandler()) ;
 		panel.addMouseListener(new MouseEventHandler()) ;
-		//panel.addKeyListener(new KeyboardEventHandler()) ;
 		fromViewer.addSink(graph) ;
 		
 		// Thread running in the background constantly sending the changes to the Graph
@@ -276,28 +275,6 @@ public class PanelCreator {
 					Point3 center = new Point3((gm.hi.x + gm.lo.x)/2, (gm.hi.y + gm.lo.y)/2) ;
 					finalCamPos = camPos.interpolate(center, cam.getViewPercent()/2) ;
 				}
-			}
-		}
-	}
-	
-	/**
-	 * Class handling only the keyPressed event from KeyEvent
-	 */
-	private class KeyboardEventHandler extends KeyAdapter {
-		/**
-		 * Spacebar resets the view
-		 */
-		@Override
-		public void keyPressed(KeyEvent arg0) {
-			Camera cam = view.getCamera() ;
-			GraphMetrics gm = cam.getMetrics() ;
-			switch (arg0.getKeyCode()) {
-				case KeyEvent.VK_SPACE:
-					Point3 center = new Point3((gm.hi.x + gm.lo.x)/2, (gm.hi.y + gm.lo.y)/2) ;
-					cam.setViewCenter(center.x, center.y, center.z) ;
-					break ;
-				default:
-					break ;
 			}
 		}
 	}

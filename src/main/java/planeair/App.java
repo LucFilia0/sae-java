@@ -17,7 +17,6 @@ import java.awt.Font;
 import planeair.util.AirportSet;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.TestGraph;
-import planeair.graph.graphutil.Automation;
 import planeair.graph.graphutil.PanelCreator;
 import planeair.components.NMainScreen;
 import planeair.components.imports.NImportScreen;
