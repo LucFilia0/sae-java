@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.graphstream.graph.Node;
 
 import planeair.graph.graphtype.GraphSAE;
-import planeair.graph.graphtype.TestGraph;
 
 //-- Import Exceptions
 
@@ -122,19 +121,10 @@ public class ColoringUtilities {
      * @param conflictAttribute
      */
     public static void removeCurrentColoring(GraphSAE graph) {
-        graph.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
-
-        if (graph instanceof TestGraph) {
-            graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
-            for (Node node : graph) {
-                node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
-                node.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
-            }
-        }
-        else {
-            for (Node node : graph) {
-                node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
-            }
+        graph.setAttribute(GraphSAE.COLOR_ATTRIBUTE, 0) ;
+        for (Node node : graph) {
+            node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
+            node.setAttribute(GraphSAE.CONFLICT_ATTRIBUTE, 0) ;
         }
     }
 

@@ -4,6 +4,7 @@ package planeair.components.mapview;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Iterator;
 
 //-- Import JxMapViewer
 
@@ -188,13 +189,25 @@ public class Map extends org.jxmapviewer.JXMapViewer {
     }
 
     private void clearAllFlights() {
-        for(FlightWaypoint waypoint : this.itemPainter.getFlightWaypoints()) {
-            this.remove(waypoint.getWaypointButton());
+
+        MapWaypointButton mwb = null;
+
+        Iterator<FlightWaypoint> itWp = this.itemPainter.getFlightWaypoints().iterator();
+        FlightWaypoint wp = null;
+
+        while(itWp.hasNext()) { 
+            wp = itWp.next();
+            mwb = wp.getWaypointButton();
+            this.remove(mwb);
+            itWp.remove();
         }
-        this.itemPainter.getFlightWaypoints().clear();
+        //this.itemPainter.getFlightWaypoints().clear();
     }
 
     private void addAllFlightsAtTime(NTime time, FlightsIntersectionGraph fig) {
+
+        MapWaypointButton mwb = null;
+
         fig.forEach(node -> {
             Flight flight = (Flight)node;
 
@@ -206,8 +219,9 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         });
 
         for(FlightWaypoint waypoint : this.itemPainter.getFlightWaypoints()) {
-
-            this.add(waypoint.getWaypointButton());
+            mwb = waypoint.getWaypointButton();
+            this.add(mwb);
+            this.itemPainter.getWpButtons().add(mwb);
         }
     }
 

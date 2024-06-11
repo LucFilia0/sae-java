@@ -6,6 +6,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 
 import planeair.App;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.util.NTime;
 
 import javax.swing.Icon;
@@ -179,8 +180,8 @@ public class NTimePanelApp extends JPanel {
             minChoice.setSelectedItem(minutes);
             
             // Paints the Flights on the Map, at the selected NTime
-            if(this.app.getFig() != null)
-                this.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), this.app.getFig());
+            if(this.app.getGraph() != null && this.app.getGraph() instanceof FlightsIntersectionGraph)
+                this.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), (FlightsIntersectionGraph)this.app.getGraph());
          });
 
         playButton.addActionListener(e -> {

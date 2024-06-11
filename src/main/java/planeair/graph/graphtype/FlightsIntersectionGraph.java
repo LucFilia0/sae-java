@@ -1,13 +1,10 @@
 package planeair.graph.graphtype;
 
-import planeair.graph.graphutil.Flight;
-
 //-- Import Plane AIR
 
-import planeair.util.NTime;
+import planeair.exceptions.InvalidEntryException;
 
 //-- Import GraphStream
-import org.graphstream.graph.Node ;
 
 
 /**
@@ -18,14 +15,9 @@ import org.graphstream.graph.Node ;
  * 
  * @author Luc le Manifik
  */
-public class FlightsIntersectionGraph extends TestGraph {
+public class FlightsIntersectionGraph extends GraphSAE {
 
     //-- FIG Attributes
-
-    /**
-     * The String identifier that represents the number of collisions in the FIG (int)
-     */
-    public static final String NB_COLLISIONS = "nbCollisions";
 
     //-- FIG Constructor
 
@@ -39,7 +31,6 @@ public class FlightsIntersectionGraph extends TestGraph {
      */
     public FlightsIntersectionGraph(String id) {
         super(id); // -> The identifier of the FIG, in the parent class (SingleGraph)
-        this.setAttribute(FlightsIntersectionGraph.NB_COLLISIONS, 0); // -> The number of collisions in the FIG
     }
 
     //-- FIG toString()
@@ -48,33 +39,19 @@ public class FlightsIntersectionGraph extends TestGraph {
      * toString() FIG's method.
      */
     public String toString() {
-        return "-- Flights Intersection Graph\nIdentifier : " + super.id + "\nNumber of Flights : " + this.getNodeCount() + "\nNumber of collisions : " + this.getNbCollisions();
+        return "-- Flights Intersection Graph\nIdentifier : " + super.id + "\nNumber of Flights : " + this.getNodeCount() + "\nNumber of collisions : " + this.getNbConflicts();
     }
 
-    //-- FIG Getters
-
     /**
-     * Get the number of collisions in the FIG.
-     * 
-     * @return (int) - The number of collisions in the FIG.
-     * 
-     * @author Luc le Manifik
+     * Sets the total number of colors used to color the graph
+     * @param nbConflicts new number of colors
      */
-    public int getNbCollisions()  {
-        return (int)this.getAttribute(FlightsIntersectionGraph.NB_COLLISIONS);
-    }
-
-    //-- FIG Setters
-
-    /**
-     * Set the number of collisions in the FIG.
-     * 
-     * @param nbCollisions (int) - The new number of collisions in the FIG.
-     * 
-     * @author Luc le Manifik
-     */
-    public void setNbCollisions(int nbCollisions) {
-        this.setAttribute(FlightsIntersectionGraph.NB_COLLISIONS, nbCollisions);
+    public void setNbColors(int nbColors) {
+        if (nbColors < 0) {
+            throw new InvalidEntryException() ;
+        }
+        this.setAttribute(COLOR_ATTRIBUTE, nbColors) ;
+        this.setKMax(nbColors) ;
     }
 
 }

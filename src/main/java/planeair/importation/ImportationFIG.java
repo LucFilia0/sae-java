@@ -77,7 +77,7 @@ public abstract class ImportationFIG {
      * 
      * @author Luc le Manifik
      */
-    public static void importAirportsFromFile(AirportSet airportSet, FlightsIntersectionGraph fig, File airportsFile) throws FileNotFoundException, InvalidFileFormatException {
+    public static void importAirportsFromFile(AirportSet airportSet, File airportsFile) throws FileNotFoundException, InvalidFileFormatException {
         
         Scanner scanLine = null;
 
@@ -95,7 +95,7 @@ public abstract class ImportationFIG {
             line = scanLine.nextLine();
             if(line.charAt(0) != '\n') { // Check if the line is not just a blank line
                 try {
-                    ImportationFIG.createAirportFrom(airportSet, fig, line, currentLine); // Creates an Airport with the informations of the line.
+                    ImportationFIG.createAirportFrom(airportSet, line, currentLine); // Creates an Airport with the informations of the line.
                 }catch(InvalidFileFormatException errorInFile) {
                     scanLine.close();
                     // All errors are threw as InvalidFileFormatException, because the File is not in the correct format, non-dependant of which error precisely
@@ -119,7 +119,7 @@ public abstract class ImportationFIG {
      * 
      * @author Luc le Manifik
      */
-    private static void createAirportFrom(AirportSet airportSet, FlightsIntersectionGraph fig, String line, int currentLine) throws InvalidFileFormatException {
+    private static void createAirportFrom(AirportSet airportSet, String line, int currentLine) throws InvalidFileFormatException {
 
         String okLine = line.replaceAll(ImportationFIG.REGEX_FIG, ""); // Suppress all the useless spaces
 
@@ -386,7 +386,6 @@ public abstract class ImportationFIG {
         fig.nodes().forEach(e -> {
             if(flight.isBooming((Flight)e, timeSecurity)) {
                 fig.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
-                fig.setNbCollisions(fig.getNbCollisions() + 1); // Increment nbCollisions
             }
         });   
     }

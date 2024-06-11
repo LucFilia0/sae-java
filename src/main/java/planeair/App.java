@@ -18,6 +18,7 @@ import planeair.util.Airport;
 
 import planeair.util.AirportSet;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
 import planeair.graph.graphutil.Flight;
 import planeair.graph.graphutil.PanelCreator;
@@ -127,7 +128,7 @@ public class App extends javax.swing.JFrame {
     /**
      * PanelCreator object used to render the graph
      */
-    private PanelCreator testGraphRenderer ;
+    private PanelCreator graphRenderer ;
 
     /**
      * The time security
@@ -165,9 +166,8 @@ public class App extends javax.swing.JFrame {
      */
     private void initAttributes() {
 
-        // Only declared during importation
-        this.airportSet = null;
-        this.fig = null;
+        this.airportSet = null ;
+        this.fig = null ;
         this.testGraph = null ;
 
         this.mainScreen = new NMainScreen(this);
@@ -218,36 +218,30 @@ public class App extends javax.swing.JFrame {
     //-- GETTERS AND SETTERS
 
     /**
-     * Gets the TestGraph renders by the App
-     * @return ({@link planeair.graph.TestGraph TestGraph}) - The TestGraph currently rendered by the App
+     * Sets the value of the Graph, and makes the correct renderer
+     * @param graph ({@link planeair.graph.GraphSAE TestGraph}) - The new Graph rendered on the App
      */
-    public TestGraph getTestGraph() {
-        return this.testGraph;
-    }
-
-    /**
-     * Sets the value of the testGraph, and makes the correct renderer
-     * @param testGraph ({@link planeair.graph.TestGraph TestGraph}) - The new TestGraph renders on the App
-     */
-    public void setTestGraph(TestGraph testGraph) {
-        this.testGraph = testGraph ;
-        if (testGraph != null) {
-            this.testGraphRenderer = new PanelCreator(this.testGraph) ;
+    public void setGraph(GraphSAE graph) {
+        if (graph == null) {
+            this.testGraph = null ;
+            this.fig = null ;
+            this.graphRenderer = null ;
+            return ;
+        }
+        if (graph instanceof TestGraph) {
+            this.testGraph = (TestGraph)graph ;
+            this.fig = null ;
+        }
+        else if (graph instanceof FlightsIntersectionGraph) {
+            this.fig = (FlightsIntersectionGraph)graph ;
+            this.testGraph = null ;
         }
         else {
-            this.testGraphRenderer = null ;
+            System.err.println("tf did you do ?????") ;
+            return ;
         }
-    }
 
-    /**
-     * Sets the value of the FIG
-     * 
-     * @param fig ({@link planeair.graph.graphtype.FlightsIntersectionGraph FLightsIntersectionGraph}) - The new FIG of the App
-     * 
-     * @author Luc le Manifik
-     */
-    public void setFig(FlightsIntersectionGraph fig) {
-        this.fig = fig;
+        this.graphRenderer = new PanelCreator(graph) ;
     }
 
     /**
@@ -265,8 +259,16 @@ public class App extends javax.swing.JFrame {
      * Returns the PanelCreator which renders the TestGraph
      * @return ({@link planeair.graph.graphutil.PanelCreator PanelCreator}) - The PanelCreator which renders the TestGraph
      */
-    public PanelCreator getTestGraphRenderer() {
-        return this.testGraphRenderer ;
+    public PanelCreator getGraphRenderer() {
+        return this.graphRenderer ;
+    }
+
+    /**
+     * Returns the graph currently being rendered 
+     * @return
+     */
+    public GraphSAE getGraph() {
+        return graphRenderer.getGraph() ;
     }
 
     /**
@@ -283,7 +285,7 @@ public class App extends javax.swing.JFrame {
     }
 
     public void initTestGraphRenderer(boolean inOwnFrame) {
-        this.testGraphRenderer = new PanelCreator(this.testGraph, inOwnFrame) ;
+        this.graphRenderer = new PanelCreator(this.testGraph, inOwnFrame) ;
     }
 
     /**
@@ -300,14 +302,6 @@ public class App extends javax.swing.JFrame {
      */
     public AirportSet getAirportSet() {
         return this.airportSet;
-    }
-
-    /**
-     * Returns the FIG of the App
-     * @return ({@link planeair.graph.graphtype.FlightsIntersectionGraph FlightIntersectionGraph}) - The FIG of the App
-     */
-    public FlightsIntersectionGraph getFig() {
-        return this.fig;
     }
 
     /**
