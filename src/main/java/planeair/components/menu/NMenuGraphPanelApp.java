@@ -16,7 +16,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-
+import java.awt.GridBagLayout;
 //Import Layout
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -35,6 +35,11 @@ import planeair.graph.graphtype.TestGraph;
  * @author GIRAUD Nila
  */
 public class NMenuGraphPanelApp extends JPanel{
+
+    /**
+     * 
+     */
+    public static final Dimension KINDACOMBOBOXDIMENSION = new Dimension(200,33);
 
     /**
      * JLabel for the title of the Panel NMenuPanelApp
@@ -100,10 +105,15 @@ public class NMenuGraphPanelApp extends JPanel{
      */
     private JComboBox<String> algoChoice = new JComboBox<>();
     /**
+     * Panel For confirm button , CENTER alignement(BoxLayout)
+     */
+    private JPanel layoutConfirm = new JPanel(new GridBagLayout());
+
+    /**
      * Use the algo of the ComboBox (validate)
      * For help the PC to not automatally have to change of coloration all the time the user change of SelectedItem
      */
-    private JButton okButton = new JButton("OK");
+    private JButton confirmButton = new JButton("Valider");
 
     /**
      * ComboBox containing kMax 
@@ -138,10 +148,10 @@ public class NMenuGraphPanelApp extends JPanel{
 
         this.setBackground(App.KINDAYELLOW);
 
-        this.setLayout(new GridLayout(4,1));
+        this.setLayout(new GridLayout(5,1));
 
         //TITLE
-        titleMenu.setFont(new Font("Arial", Font.BOLD, 26));
+        titleMenu.setFont(App.KINDATITLE);
 
         //KMAX
         kmaxOption.setLayout( new GridLayout(2,1));
@@ -165,13 +175,13 @@ public class NMenuGraphPanelApp extends JPanel{
         altitudesMax.setForeground(Color.WHITE);
         altitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
         altitudesMax.setBackground(Color.BLACK);
-        altitudesMax.setPreferredSize(new Dimension(100,30));
+        altitudesMax.setPreferredSize(NMenuGraphPanelApp.KINDACOMBOBOXDIMENSION);
 
         kmaxOption.add(changeKmax);
         kmaxOption.add(altitudesMax);
 
         borderPanelKmax.setBackground(App.KINDAYELLOW);
-        borderPanelKmax.setPreferredSize(new Dimension(225,30));
+        borderPanelKmax.setPreferredSize(new Dimension(250,30));
 
         borderPanelKmax.add(kmaxOption);
 
@@ -187,13 +197,12 @@ public class NMenuGraphPanelApp extends JPanel{
         altitudeComboBox.setForeground(Color.WHITE);
         altitudeComboBox.setFont(new Font("Arial", Font.BOLD, 18));
         altitudeComboBox.setBackground(Color.BLACK);
-        altitudeComboBox.setPreferredSize(new Dimension(100,30));
+        altitudeComboBox.setPreferredSize(NMenuGraphPanelApp.KINDACOMBOBOXDIMENSION);
 
         altitudeMaxOption.add(colorChoice);
         altitudeMaxOption.add(altitudeComboBox);
 
         borderPanelAlt.setBackground(App.KINDAYELLOW);
-        borderPanelAlt.setPreferredSize(new Dimension(225,30));
 
         //CONFLITS
 
@@ -209,19 +218,21 @@ public class NMenuGraphPanelApp extends JPanel{
         algoChoice.setForeground(Color.WHITE);
         algoChoice.setFont(new Font("Arial", Font.BOLD, 18));
         algoChoice.setBackground(Color.BLACK);
-
-        okButton.setForeground(Color.WHITE);
-        okButton.setFont(new Font("Arial", Font.BOLD, 14));
-        okButton.setBackground(Color.BLACK);
-        okButton.setPreferredSize(new Dimension(55,45));
+        algoChoice.setPreferredSize(NMenuGraphPanelApp.KINDACOMBOBOXDIMENSION);
 
         layoutAlgo.setLayout(new FlowLayout());
         layoutAlgo.setBackground(App.KINDAYELLOW);
         layoutAlgo.add(algoChoice);
-        layoutAlgo.add(okButton);
 
         algoOption.add(algorithmes);
         algoOption.add(layoutAlgo);
+
+        //Confirm
+        confirmButton.setForeground(Color.WHITE);
+        confirmButton.setFont(App.KINDABOLD);
+        confirmButton.setBackground(Color.BLACK);
+        confirmButton.setPreferredSize(NMenuGraphPanelApp.KINDACOMBOBOXDIMENSION);
+        layoutConfirm.setBackground(App.KINDAYELLOW);
 
         initAlgoComboBox((app.getTestGraph() != null)) ;
 
@@ -235,6 +246,10 @@ public class NMenuGraphPanelApp extends JPanel{
 
         //ALGO
         this.add(algoOption);
+
+        //Ok button
+        layoutConfirm.add(confirmButton);
+        this.add(layoutConfirm);
 
         //LISTENERS AND RENDERERS
         initListeners() ;
@@ -388,7 +403,7 @@ public class NMenuGraphPanelApp extends JPanel{
      * Adds listeners to components
      */
     private void initListeners() {
-        okButton.addActionListener(new ActionListener() {
+        confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean colorationChanged = false ;

@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 //-- Import AWT
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 
 //-- Import PlaneAIR
@@ -74,7 +75,8 @@ public class NMaxGraphFrameApp extends JFrame{
         graph.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize()) ;
         graph.setBackground(Color.BLACK);
         this.add(graph);
-        this.pack();
+        this.setSize(new Dimension(1100,700));
+        this.setAlwaysOnTop(true); 
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);  
