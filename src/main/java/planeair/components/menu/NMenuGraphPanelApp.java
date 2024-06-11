@@ -469,8 +469,8 @@ public class NMenuGraphPanelApp extends JPanel{
     private void changeColorShown(PanelCreator graphRenderer) {
         int colorShown = (int)altitudeComboBox.getSelectedItem() ;
         GraphSAE graph = graphRenderer.getGraph() ;
-        if (colorShown != lastColorSelected) {
-            graph.showAllNodes() ;
+        graph.showAllNodes() ;
+        if (colorShown != 0) {
             graph.showNodesWithColor(colorShown) ;
         }
     }

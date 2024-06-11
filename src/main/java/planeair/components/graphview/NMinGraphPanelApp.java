@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 import org.graphstream.ui.swing_viewer.ViewPanel;
 
 import planeair.App;
-import planeair.graph.graphtype.TestGraph;
 import planeair.graph.graphutil.PanelCreator;
 
 import javax.swing.Box;
