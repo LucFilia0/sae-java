@@ -274,12 +274,6 @@ public class NPrincipalePanelApp extends JPanel{
         timePanel.addEvents();
 
         //ARTICLE
-
-        // zoomButtonLeftBottom.setLayout(new BoxLayout(zoomButtonLeftBottom, BoxLayout.Y_AXIS));
-        // spaceBorderZoomPanel.setOpaque(false);
-        // zoomButtonLeftBottom.setOpaque(false);
-        // empty2.setOpaque(false);
-        
         bodyCenter.setOpaque(false);
         article.setOpaque(false);
         article.setPreferredSize(new Dimension(385,100));
@@ -306,6 +300,7 @@ public class NPrincipalePanelApp extends JPanel{
     public void addComposants(){
 
         //HEADER COMPOSANTS
+        panelButton.add(Box.createRigidArea(new Dimension(102, 0)));
         panelButton.add(buttonMenuGraph);
         panelButton.add(buttonMenuMap);
         panelButton.add(leaveButtonToImport);
