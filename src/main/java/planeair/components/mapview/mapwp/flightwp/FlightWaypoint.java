@@ -32,11 +32,6 @@ public class FlightWaypoint extends MapWaypoint {
      */
     private Flight flight;
 
-    /**
-     * The angle which draw the Flight in the right direction
-     */
-    private double flightOrientation;
-
     //-- FlightWaypoint Constructor
 
     /**
