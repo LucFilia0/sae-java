@@ -386,7 +386,6 @@ public abstract class ImportationFIG {
         fig.nodes().forEach(e -> {
             if(flight.isBooming((Flight)e, timeSecurity)) {
                 fig.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
-                fig.setNbCollisions(fig.getNbCollisions() + 1); // Increment nbCollisions
             }
         });   
     }

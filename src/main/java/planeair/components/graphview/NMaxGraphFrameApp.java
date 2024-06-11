@@ -87,8 +87,7 @@ public class NMaxGraphFrameApp extends JFrame{
                 if (graphRenderer != null) {
                     infoGraph.setFontSize(12);
                     app.getMainScreen().initGraphBottomPanel() ;
-                    app.initTestGraphRenderer() ;
-                    app.getMainScreen().getMinGraphPanel().addGraphToPanel(app.getTestGraphRenderer()) ;
+                    app.getMainScreen().getMinGraphPanel().addGraphToPanel(app.getGraphRenderer()) ;
                     app.repaint();
                     app.revalidate() ;
                 }

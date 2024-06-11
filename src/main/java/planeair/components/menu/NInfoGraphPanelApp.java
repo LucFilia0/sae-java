@@ -7,6 +7,7 @@ import org.graphstream.algorithm.ConnectedComponents;
 import org.graphstream.algorithm.Toolkit;
 
 import planeair.App;
+import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
 
 import javax.swing.JLabel;
@@ -198,7 +199,7 @@ public class NInfoGraphPanelApp extends JPanel {
     public void addComponents(){
         this.removeAll() ;
         GridBagConstraints gbc = new GridBagConstraints();
-        if (app.getTestGraph() != null) {
+        if (app.getGraphRenderer() != null) {
             gbc.gridx = -1; // colonne 1
             gbc.gridy = 0; // ligne 0
             gbc.anchor = GridBagConstraints.WEST;
@@ -385,9 +386,9 @@ public class NInfoGraphPanelApp extends JPanel {
      * If the graph has a Coloring, then inputs the number of colors and conflicts
      */
     public void computeGraphStats() {
-        TestGraph graph = this.app.getTestGraph() ;
         this.setDefaultValues() ;
-        if (graph != null) {   
+        if (app.getGraphRenderer() != null) { 
+            GraphSAE graph = app.getGraph() ;  
             ConnectedComponents cc = new ConnectedComponents(graph) ;
             cc.compute() ;
 

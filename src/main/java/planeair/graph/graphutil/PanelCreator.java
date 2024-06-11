@@ -32,7 +32,7 @@ public class PanelCreator {
 	/**
 	 * Graph displayed in the panel
 	 */
-	protected Graph graph ;
+	protected GraphSAE graph ;
 
 	/**
 	 * The Viewer of the graph, lets you display the graph
@@ -127,7 +127,7 @@ public class PanelCreator {
 	 * Getter for the graph contained in the panel
 	 * @return the Graph object
 	 */
-	public Graph getGraph() {
+	public GraphSAE getGraph() {
 		return this.graph;
 	}
 

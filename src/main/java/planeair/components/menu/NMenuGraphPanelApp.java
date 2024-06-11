@@ -25,7 +25,9 @@ import java.awt.FlowLayout;
 
 import planeair.App;
 import planeair.graph.coloring.ColoringUtilities;
-import planeair.graph.graphtype.TestGraph;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphtype.GraphSAE;
+import planeair.graph.graphutil.PanelCreator;
 
 /**
  * Class which create a JPanel of MENU for the graph 
@@ -129,12 +131,12 @@ public class NMenuGraphPanelApp extends JPanel{
     /**
      * Constructor of NMenuPanelApp
      * @param kmax
-     * @param altitudesMax 
+     * @param kmaxComboBox 
      */
-    public NMenuGraphPanelApp(App app, int kmax, JComboBox<Integer> altitudesMax){
+    public NMenuGraphPanelApp(App app, int kmax, JComboBox<Integer> kmaxComboBox){
 
         this.app = app ;
-        this.kmaxComboBox = altitudesMax ;
+        this.kmaxComboBox = kmaxComboBox ;
 
         this.setBackground(App.KINDAYELLOW);
 
@@ -156,19 +158,19 @@ public class NMenuGraphPanelApp extends JPanel{
             this.initKmaxValues(kmax) ;
         }
         else {
-            altitudesMax.addItem(0) ;
-            altitudesMax.setSelectedIndex(0) ;
+            kmaxComboBox.addItem(0) ;
+            kmaxComboBox.setSelectedIndex(0) ;
         }
         initAltitudeComboBox(kmax);
-        altitudesMax.setSelectedItem(kmax);
+        kmaxComboBox.setSelectedItem(kmax);
         
-        altitudesMax.setForeground(Color.WHITE);
-        altitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
-        altitudesMax.setBackground(Color.BLACK);
-        altitudesMax.setPreferredSize(new Dimension(100,30));
+        kmaxComboBox.setForeground(Color.WHITE);
+        kmaxComboBox.setFont(new Font("Arial", Font.BOLD, 18));
+        kmaxComboBox.setBackground(Color.BLACK);
+        kmaxComboBox.setPreferredSize(new Dimension(100,30));
 
         kmaxOption.add(changeKmax);
-        kmaxOption.add(altitudesMax);
+        kmaxOption.add(kmaxComboBox);
 
         borderPanelKmax.setBackground(App.KINDAYELLOW);
         borderPanelKmax.setPreferredSize(new Dimension(225,30));
@@ -223,7 +225,7 @@ public class NMenuGraphPanelApp extends JPanel{
         algoOption.add(algorithmes);
         algoOption.add(layoutAlgo);
 
-        initAlgoComboBox((app.getTestGraph() != null)) ;
+        initAlgoComboBox((app.getGraph() != null)) ;
 
         //ADD
         this.add(titleMenu);
@@ -282,6 +284,7 @@ public class NMenuGraphPanelApp extends JPanel{
     public void initAllComboBoxes(int kMax, boolean graphIsImported) {
         initAlgoComboBox(graphIsImported) ;
         initAltitudeComboBox(kMax) ;
+        initKmaxValues(kMax) ;
     }
 
     /**
@@ -361,11 +364,17 @@ public class NMenuGraphPanelApp extends JPanel{
      */
     public void initKmaxValues(int kMax) {
         this.kmaxComboBox.removeAllItems() ;
-        for (int i = 2; i < (int)kMax*1.5 + Math.sqrt(kMax) ; i++) {
-            this.kmaxComboBox.addItem(i) ;
+        if (kMax > 1) {
+            for (int i = 2; i < (int)kMax*1.5 + Math.sqrt(kMax) ; i++) {
+                this.kmaxComboBox.addItem(i) ;
+            }
+
+            this.kmaxComboBox.setSelectedItem(kMax) ;
         }
 
-        this.kmaxComboBox.setSelectedItem(kMax) ;
+        else {
+            kmaxComboBox.addItem(0) ;
+        }
     }
 
     /**
@@ -391,44 +400,8 @@ public class NMenuGraphPanelApp extends JPanel{
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean colorationChanged = false ;
-                TestGraph graph = app.getTestGraph() ;
-                if (graph == null) {
-                    return ;
-                }
-                int oldKmax = graph.getKMax() ;
-                int currentKMax = (int)kmaxComboBox.getSelectedItem() ;
-                graph.setKMax(currentKMax) ;
-                
-                // The algorithm used changed so we need to update the coloring
-                if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
-                    if (lastAlgoSelected != null) {
-                        ColoringUtilities.removeCurrentColoring(graph) ;
-                    }
-                    lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
-                    colorationChanged = true ;
-                }
-                
-                // In case it didn't we check if it needs to be changed
-                else {
-                    // If the new KMax is smaller than the old one, if the coloration can be improved 
-                    //or if the coloring has more colors than the currentKmax, then we change the coloration
-                    if (oldKmax > currentKMax || oldKmax < currentKMax && graph.getNbConflicts() > 0 || graph.getNbColors() > currentKMax) {
-                        colorationChanged = true ;
-                    }
-                }
-
-                // Treatment is done here because too much indentation is ugly
-                if (colorationChanged) {
-                    if (lastAlgoSelected != null) {
-                        ColoringUtilities.removeCurrentColoring(graph) ;
-                    }
-                    ColoringUtilities.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
-                    ColoringUtilities.setGraphStyle(graph, currentKMax) ;
-                    NInfoGraphPanelApp panel = app.getMainScreen().getInfoGraphPanel() ;
-                    panel.setNbColorsUsed(graph.getNbColors()) ;
-                    panel.setNbConflictsOccurred(graph.getNbConflicts()) ;
-                }
+                changeColoring(app.getGraph()) ;
+                changeColorShown(app.getGraphRenderer()) ;
             }
         });
     }
@@ -439,5 +412,66 @@ public class NMenuGraphPanelApp extends JPanel{
      */
     public void setLastAlgoSelected(String lastAlgoSelected) {
         this.lastAlgoSelected = lastAlgoSelected ;
+    }
+
+    /**
+     * Changes the coloring of this graph best on the kmax and algorithm selected
+     * @param graph
+     */
+    private void changeColoring(GraphSAE graph) {
+        boolean coloringChanged = false ;
+        if (graph == null) {
+            return ;
+        }
+        int oldKMax = graph.getKMax() ;
+        int currentKMax = (int)kmaxComboBox.getSelectedItem() ;
+        graph.setKMax(currentKMax) ;
+        
+        // The algorithm used changed so we need to update the coloring
+        if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
+            if (lastAlgoSelected != null) {
+                ColoringUtilities.removeCurrentColoring(graph) ;
+            }
+            lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
+            coloringChanged = true ;
+        }
+        
+        // In case it didn't we check if it needs to be changed
+        else {
+            // If the new KMax is smaller than the old one, if the coloration can be improved 
+            //or if the coloring has more colors than the currentKmax, then we change the coloration
+            if (oldKMax > currentKMax || oldKMax < currentKMax && graph.getNbConflicts() > 0 || graph.getNbColors() > currentKMax) {
+                coloringChanged = true ;
+            }
+        }
+
+        // Treatment is done here because too much indentation is ugly
+        if (coloringChanged) {
+            if (lastAlgoSelected != null) {
+                ColoringUtilities.removeCurrentColoring(graph) ;
+            }
+            ColoringUtilities.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
+            if (graph instanceof FlightsIntersectionGraph) {
+                graph.setKMax(graph.getNbColors()) ;
+                currentKMax = graph.getKMax() ;
+            }
+            ColoringUtilities.setGraphStyle(graph, currentKMax) ;
+            NInfoGraphPanelApp panel = app.getMainScreen().getInfoGraphPanel() ;
+            panel.setNbColorsUsed(graph.getNbColors()) ;
+            panel.setNbConflictsOccurred(graph.getNbConflicts()) ;
+        }
+    }
+
+    /**
+     * Changes the color shown based on the value in the altitudeComboBox
+     * @param graphRenderer
+     */
+    private void changeColorShown(PanelCreator graphRenderer) {
+        int colorShown = (int)altitudeComboBox.getSelectedItem() ;
+        GraphSAE graph = graphRenderer.getGraph() ;
+        if (colorShown != lastColorSelected) {
+            graph.showAllNodes() ;
+            graph.showNodesWithColor(colorShown) ;
+        }
     }
 }

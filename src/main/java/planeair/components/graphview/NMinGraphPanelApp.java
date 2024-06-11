@@ -85,7 +85,7 @@ public class NMinGraphPanelApp extends JPanel {
         /*FIRST COMPONENT */
         
         this.setMaximumSize(new Dimension(350,400));
-        if (app.getTestGraph() == null) {
+        if (app.getGraph() == null) {
             FlowPanelGraph = new NSkullPanel() ;
             FlowPanelGraph.setLayout(new BorderLayout());
         }

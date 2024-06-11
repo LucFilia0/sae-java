@@ -13,7 +13,6 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 
 import planeair.graph.graphtype.GraphSAE;
-import planeair.graph.graphtype.TestGraph;
 
 public abstract class ColoringRLF {
     
@@ -27,33 +26,28 @@ public abstract class ColoringRLF {
      */
     public static void coloringRLF(GraphSAE graph) {
         // INITIALISATION
-
-        // Set containing all the nodes with the current color
         int nbConflicts = 0 ;
-        int kMax = Integer.MAX_VALUE ;
-        TestGraph testGraph ;
-        if (graph instanceof TestGraph) {
-            testGraph = (TestGraph)graph ;
-            kMax = testGraph.getKMax() ;
+        int kMax = graph.getKMax() ;
+        if (kMax < 2) {
+            kMax = Integer.MAX_VALUE ;
         }
 
+        // Copy of the graph which will be progressively emptied
         GraphSAE newGraph = (GraphSAE)Graphs.clone(graph) ;
 
         // First recursive call
         int color = recursiveColoringRLF(graph, newGraph, 0, kMax) ;
-        graph.setNbColors(color) ;
-
+        
         // Conflict management 
-        if (graph instanceof TestGraph) {
-            int res[] = {0,0} ;
-            for (Node nodeLeft : newGraph) {
-                res = ColoringUtilities.getLeastConflictingColor(graph, nodeLeft) ;
-                nodeLeft.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, res[0]) ;
-                nbConflicts += res[1] ;
-            }
-            testGraph = (TestGraph)graph ;
-            testGraph.setNbConflicts(nbConflicts) ;
+        int res[] = {0,0} ;
+        for (Node nodeLeft : newGraph) {
+            res = ColoringUtilities.getLeastConflictingColor(graph, nodeLeft) ;
+            nodeLeft.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, res[0]) ;
+            nbConflicts += res[1] ;
         }
+
+        graph.setNbColors(color) ;
+        graph.setNbConflicts(nbConflicts) ;
 
     }
 
@@ -63,7 +57,6 @@ public abstract class ColoringRLF {
      * @param originalGraph
      * @param graph
      * @param color
-     * @param kMax
      * @return
      */
     public static int recursiveColoringRLF(GraphSAE originalGraph, GraphSAE graph, int color, int kMax) {

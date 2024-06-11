@@ -27,6 +27,7 @@ import planeair.components.menu.NInfoGraphPanelApp;
 import planeair.components.menu.NMenuGraphPanelApp;
 import planeair.components.menu.NMenuMapPanelApp;
 import planeair.components.time.NTimePanelApp;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 
 
 /**
@@ -426,7 +427,7 @@ public class NMainScreen extends JPanel{
         });
 
         buttonAgr.addActionListener((ActionEvent e) -> {
-            maxGraphPanel = new NMaxGraphFrameApp(app, app.getTestGraphRenderer(), infoGraph);
+            maxGraphPanel = new NMaxGraphFrameApp(app, app.getGraphRenderer(), infoGraph);
         });
 
     }
@@ -465,7 +466,7 @@ public class NMainScreen extends JPanel{
     }
     
     public void initMap() {
-        this.app.getAirportSet().setActiveAirportsFrom(this.app.getFig());
+        this.app.getAirportSet().setActiveAirportsFrom((FlightsIntersectionGraph)this.app.getGraph()) ;
         this.map.paintAllAirports(this.app.getAirportSet());
     }
 

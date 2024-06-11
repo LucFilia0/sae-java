@@ -20,6 +20,10 @@ public abstract class ColoringDSATUR {
      * @autor GIRAUD Nila
      */
     public static void coloringDsatur(GraphSAE graph) {
+        int kMax = graph.getKMax() ;
+        if (kMax < 2) {
+            kMax = Integer.MAX_VALUE ;
+        }
         LinkedList<Node> ListNodes = new LinkedList<Node>();
         graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE,0);
 
@@ -32,7 +36,7 @@ public abstract class ColoringDSATUR {
         }
 
         // Recursive call
-        recursifDSATUR(ListNodes, graph);
+        recursifDSATUR(ListNodes, graph, kMax);
 
         int[] res = {0,0};
         for(Node node : graph){
@@ -53,14 +57,9 @@ public abstract class ColoringDSATUR {
      * @author GIRAUD Nila
      */
 
-    private static void recursifDSATUR(LinkedList<Node> ListNodes, GraphSAE graph){
+    private static void recursifDSATUR(LinkedList<Node> ListNodes, GraphSAE graph, int kMax){
 
         if(!ListNodes.isEmpty()){
-            int kMax = -1 ;
-            if (graph instanceof TestGraph) {
-                TestGraph testGraph = (TestGraph)graph ;
-                kMax = testGraph.getKMax() ;
-            }
             //Step1
             Node nodeP = MaxNodeDSATUR(ListNodes);
 
@@ -79,18 +78,17 @@ public abstract class ColoringDSATUR {
                 }
             }) ;
 
-            if (neighborColorMap.keySet().size() >= kMax) {
+            if (neighborColorMap.size() >= kMax) {
                 nodeP.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 
                     Collections.min(neighborColorMap.keySet(), (int1, int2) -> 
-                    Integer.compare(neighborColorMap.get(int1), neighborColorMap.get(int2)))) ;
+                        Integer.compare(neighborColorMap.get(int1), neighborColorMap.get(int2)))) ;
 
-                int nbConflict = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE);
-                graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, nbConflict + 
+                int nbConflict = (int)graph.getAttribute(GraphSAE.CONFLICT_ATTRIBUTE);
+                graph.setAttribute(GraphSAE.CONFLICT_ATTRIBUTE, nbConflict + 
                     neighborColorMap.get((int)nodeP.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)));
             }
             else{
                 previousColor = 0 ;
-                // Idk why my shitty brain could NOT find a better way to do it 💀
                 for (Integer key : neighborColorMap.keySet()) {
                     if (previousColor + 1 < key) {
                         break ;
@@ -118,7 +116,7 @@ public abstract class ColoringDSATUR {
             
 
             //Step4
-            recursifDSATUR(ListNodes, graph);
+            recursifDSATUR(ListNodes, graph, kMax);
         }
 
     }

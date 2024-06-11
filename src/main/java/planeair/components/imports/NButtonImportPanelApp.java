@@ -26,7 +26,11 @@ import planeair.components.buttons.NButtonImportFileApp;
 import planeair.components.buttons.NFilledButton;
 import planeair.components.menu.NInfoGraphPanelApp;
 import planeair.exceptions.InvalidFileFormatException;
+import planeair.graph.coloring.ColoringDSATUR;
+import planeair.graph.coloring.ColoringUtilities;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.TestGraph;
+import planeair.graph.graphutil.Automation;
 import planeair.importation.ImportationFIG;
 import planeair.importation.ImportationTestGraph;
 
@@ -244,12 +248,11 @@ public class NButtonImportPanelApp extends JPanel {
 
             if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
                 try {
-                    this.app.setTestGraph(new TestGraph(fileChooser.getFile().getName())) ;
-                    ImportationTestGraph.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
+                    this.app.setGraph(new TestGraph(fileChooser.getFile().getName())) ;
+                    ImportationTestGraph.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
+                        fileChooser.getFile(), false);
+                    
                     initDefaultGraphImportation(this.app.getMainScreen().getInfoGraphPanel()) ;
-
-                    this.app.getMainScreen().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
-                    this.app.getMainScreen().getMenuGraphPanel().initAllComboBoxes(this.app.getTestGraph().getKMax(), true) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                     fileChooser.setFile(null);
@@ -276,11 +279,12 @@ public class NButtonImportPanelApp extends JPanel {
             try {
                 fileChooser.userImportFile();
                 if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
-
-                    ImportationFIG.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
+                    ImportationFIG.importAirportsFromFile(this.app.getAirportSet(), 
+                        (FlightsIntersectionGraph)this.app.getGraph(), fileChooser.getFile());
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
-                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, error.getMessage(),
+                    "Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                 fileChooser.setFile(null);
             }   
 
@@ -294,8 +298,15 @@ public class NButtonImportPanelApp extends JPanel {
             try {
                 fileChooser.userImportFile();
                 if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
-
-                    ImportationFIG.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());                }
+                    app.setGraph(new FlightsIntersectionGraph(fileChooser.getFile().getName())) ;
+                    System.out.println("bye") ;
+                    ImportationFIG.importFlightsFromFile(this.app.getAirportSet(), 
+                        (FlightsIntersectionGraph)this.app.getGraph(), fileChooser.getFile(), this.app.getTimeSecurity());
+                    
+                        ColoringDSATUR.coloringDsatur(app.getGraph()) ;
+                    app.getGraph().setKMax(app.getGraph().getNbColors() + 2) ;
+                    initDefaultGraphImportation(this.app.getMainScreen().getInfoGraphPanel());
+                }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
                 JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                 fileChooser.setFile(null);
@@ -360,8 +371,9 @@ public class NButtonImportPanelApp extends JPanel {
      * @param infoGraph Panel which will contain the statistics
      */
     public void initDefaultGraphImportation(NInfoGraphPanelApp infoGraph) {
-        this.app.getMainScreen().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
-        this.app.getMainScreen().getMenuGraphPanel().initKmaxValues(this.app.getTestGraph().getKMax()) ;
+        this.app.getMainScreen().getMinGraphPanel().addGraphToPanel(this.app.getGraphRenderer()) ;
+        this.app.getMainScreen().getMenuGraphPanel()
+            .initAllComboBoxes(app.getGraph().getKMax(), true) ;
         this.app.getMainScreen().getMenuGraphPanel().setLastAlgoSelected(null) ;
         infoGraph.addComponents() ;
         infoGraph.computeGraphStats() ;
