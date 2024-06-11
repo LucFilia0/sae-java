@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.Box;
 // Import of AWT components
 import java.awt.Dimension;
@@ -46,13 +47,6 @@ public class NMainScreen extends JPanel{
      * vgap : 0
      */
     private JPanel header = new JPanel(new GridLayout(1,1,0,0));
-
-    /**
-     * The body of the NMainScreen, where the Map is located, and where the popup menus appears
-     * 
-     * @author Luc le Manifik
-     */
-    private JPanel body = new JPanel(new BorderLayout());
 
     /**
      * Panel situe in the CENTER of the Frame's borderLayout 
@@ -97,7 +91,7 @@ public class NMainScreen extends JPanel{
      * COLUMN : 2 (menu + import)
      * Location : left ine the header
      */
-    private JPanel panelButton = new JPanel(new GridLayout(1,3));
+    private JPanel panelButton = new JPanel();
 
     /**
      * Icon of the Button menu graph
@@ -241,11 +235,8 @@ public class NMainScreen extends JPanel{
 
         this.setLayout(new BorderLayout());
 
-        this.body.setLayout(new BorderLayout());
-
-        this.menuGraph = new NMenuGraphPanelApp(this.app, ABORT, choixAltitudesMax);
-
         map.setLayout(new BorderLayout());
+        panelButton.setLayout(new BoxLayout(panelButton,BoxLayout.X_AXIS));
 
         bodyCenter.setLayout(new BoxLayout(bodyCenter, BoxLayout.Y_AXIS));
 
@@ -272,7 +263,6 @@ public class NMainScreen extends JPanel{
         // BODY COMPONENTS
 
         //ARTICLE
-        
         bodyCenter.setOpaque(false);
         article.setOpaque(false);
         article.setPreferredSize(new Dimension(385,100));
@@ -295,7 +285,8 @@ public class NMainScreen extends JPanel{
      */
     private void addComponents(){
 
-        //HEADER COMPONENTS
+        //HEADER COMPOSANTS
+        panelButton.add(Box.createRigidArea(new Dimension(102, 0)));
         panelButton.add(buttonMenuGraph);
         panelButton.add(buttonMenuMap);
         panelButton.add(leaveButtonToImport);
@@ -322,14 +313,11 @@ public class NMainScreen extends JPanel{
         //RIGHT
         initGraphBottomPanel();
         aside.add(graphLRightBottom);
-        body.add(aside,BorderLayout.EAST);
         map.add(aside,BorderLayout.EAST);
 
         //ADD structure to BorderLayout
-        body.add(header, BorderLayout.NORTH);
-        body.add(map, BorderLayout.CENTER);
-
-        this.add(body, BorderLayout.CENTER);
+        this.add(header, BorderLayout.NORTH);
+        this.add(map, BorderLayout.CENTER);
     };
 
     /**
