@@ -4,7 +4,7 @@ import planeair.graph.graphutil.Flight;
 
 //-- Import Plane AIR
 
-import planeair.util.FlightTime;
+import planeair.util.NTime;
 
 //-- Import GraphStream
 import org.graphstream.graph.Node ;

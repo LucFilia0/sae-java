@@ -9,12 +9,7 @@ import javax.imageio.ImageIO;
 //-- Import AWT
 
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Image;
-
-//-- Import Swing
-
-import javax.swing.ImageIcon;
 
 //-- Import Exceptions
 
@@ -50,7 +45,7 @@ public class MapWaypointButton extends javax.swing.JButton {
      * 
      * @throws IOException Throwed if the File does not exist or does not match the "image" requirements.
      */
-    public MapWaypointButton(File iconFile, MapWaypoint mapWaypoint) throws IOException {
+    public MapWaypointButton(File iconFile, MapWaypoint mapWaypoint, double radian) throws IOException {
 
         this.mapWaypoint = mapWaypoint;
 
@@ -66,10 +61,10 @@ public class MapWaypointButton extends javax.swing.JButton {
         // Sets the background of the button unfilled, and makes the border disapear
         this.setContentAreaFilled(true);
         this.setBorder(null);
+        this.setContentAreaFilled(false);
 
-        this.setIcon(new ImageIcon(scaledImage));
+        this.setIcon(new RotatedImage(scaledImage, radian));
         this.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Makes a little funny hand when the button is hovered :)
-        this.setPreferredSize(new Dimension(MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE)); // Don't ask why, but "setSize" didn't work..
     }
 
     //-- MapWaypointButton Getters
@@ -81,6 +76,10 @@ public class MapWaypointButton extends javax.swing.JButton {
      */
     public MapWaypoint getMapWaypoint() {
         return this.mapWaypoint;
+    }
+
+    public void rotate(double angle) {
+
     }
 
 }

@@ -161,7 +161,7 @@ public class NMainScreen extends JPanel{
      * Localisation : Top of the center of the frame
      * The user can move time (because it's a simulation)
      */
-    private NTimePanelApp timePanel = new NTimePanelApp();
+    private NTimePanelApp timePanel;
     /**
      * JLabel for see the number altitudes choose
      * Location : in the panel menu --> need here for Events
@@ -237,6 +237,8 @@ public class NMainScreen extends JPanel{
 
     private void initComponents() {
 
+        this.timePanel = new NTimePanelApp(this.app);
+
         this.setLayout(new BorderLayout());
 
         this.body.setLayout(new BorderLayout());
@@ -268,10 +270,6 @@ public class NMainScreen extends JPanel{
         labelLogoName.setPreferredSize(new Dimension(WIDTH,70));
 
         // BODY COMPONENTS
-
-        // CENTER
-        timePanel.addComponents();
-        timePanel.addEvents();
 
         //ARTICLE
         
@@ -456,10 +454,19 @@ public class NMainScreen extends JPanel{
     public NInfoGraphPanelApp getInfoGraphPanel() {
         return this.infoGraph ;
     }
+
+    /**
+     * Returns the Map of the NMainScreen
+     * 
+     * @return The {@link planeair.components.mapview.Map Map} of the NMainScreen
+     */
+    public Map getMap() {
+        return this.map;
+    }
     
     public void initMap() {
         this.app.getAirportSet().setActiveAirportsFrom(this.app.getFig());
-        this.map.paintMapItems(this.app.getAirportSet(), this.app.getFig());
+        this.map.paintAllAirports(this.app.getAirportSet());
     }
 
     /**

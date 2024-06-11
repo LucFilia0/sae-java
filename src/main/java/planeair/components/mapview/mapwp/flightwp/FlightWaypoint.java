@@ -27,6 +27,9 @@ public class FlightWaypoint extends MapWaypoint {
 
     //-- FlightWaypoint Attributes
 
+    /**
+     * The Flight which is represented by the FlightWaypoint
+     */
     private Flight flight;
 
     //-- FlightWaypoint Constructor
@@ -40,7 +43,7 @@ public class FlightWaypoint extends MapWaypoint {
      * @author Luc le Manifik
      */
     public FlightWaypoint(Flight flight, GeoPosition geoPosition) {
-        super(FlightWaypoint.FLIGHT_WAYPOINT_ICON_FILE, geoPosition);
+        super(FlightWaypoint.FLIGHT_WAYPOINT_ICON_FILE, geoPosition, getFlightOrientation(flight));
         this.flight = flight;
     }
 
@@ -65,7 +68,43 @@ public class FlightWaypoint extends MapWaypoint {
 		}
 	}
 
+    /**
+     * Returns the toString value of the represented Flight : Its informations and all...
+     * 
+     * @author Luc le Manifik
+     */
     public String toString() {
         return this.flight.toString();
     }
+
+    private static double getFlightOrientation(Flight flight) {
+
+        double radian = 0.;
+        int offset = 45;
+
+        double latitudeDep = flight.getDepartureAirport().getCoordinate().getLatitude();
+        double longitudeDep = flight.getDepartureAirport().getCoordinate().getLongitude();
+
+        double latitudeArr = flight.getArrivalAirport().getCoordinate().getLatitude();
+        double longitudeArr = flight.getArrivalAirport().getCoordinate().getLongitude();
+
+        // TRIGO
+
+        double adj = longitudeArr - longitudeDep;
+        double op = latitudeArr - latitudeDep;
+        double hyp = Math.sqrt(Math.pow(adj, 2) + Math.pow(op, 2));
+
+        double sin = op / hyp;
+        double cos = adj / hyp;
+
+        if(sin > 0) {
+            radian = -(Math.acos(cos)); // DONT touch or you dead :angry_skull:
+        }else {
+            radian = -(Math.toRadians(360) - Math.acos(cos));
+        }
+
+        return radian + Math.toRadians(offset);
+    }
+
+
 }
