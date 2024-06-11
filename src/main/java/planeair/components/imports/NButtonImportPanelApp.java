@@ -242,14 +242,14 @@ public class NButtonImportPanelApp extends JPanel {
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
             fileChooser.userImportFile();
 
-            if(!fileChooser.getFile().equals(null)) {
+            if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
                 try {
                     this.app.setTestGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     ImportationTestGraph.importTestGraphFromFile(this.app.getTestGraph(), fileChooser.getFile(), false);
                     initDefaultGraphImportation(this.app.getMainScreen().getInfoGraphPanel()) ;
 
                     this.app.getMainScreen().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
-                    this.app.getMainScreen().getMenuGraphPanel().setAltitudeValues(this.app.getTestGraph().getKMax()) ;
+                    this.app.getMainScreen().getMenuGraphPanel().initAllComboBoxes(this.app.getTestGraph().getKMax(), true) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                     fileChooser.setFile(null);
@@ -275,7 +275,7 @@ public class NButtonImportPanelApp extends JPanel {
 
             try {
                 fileChooser.userImportFile();
-                if(!fileChooser.getFile().equals(null)) {
+                if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
 
                     ImportationFIG.importAirportsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile());
                 }
@@ -293,7 +293,7 @@ public class NButtonImportPanelApp extends JPanel {
         
             try {
                 fileChooser.userImportFile();
-                if(!fileChooser.getFile().equals(null)) {
+                if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
 
                     ImportationFIG.importFlightsFromFile(this.app.getAirportSet(), this.app.getFig(), fileChooser.getFile(), this.app.getTimeSecurity());                }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
@@ -361,7 +361,7 @@ public class NButtonImportPanelApp extends JPanel {
      */
     public void initDefaultGraphImportation(NInfoGraphPanelApp infoGraph) {
         this.app.getMainScreen().getMinGraphPanel().addGraphToPanel(this.app.getTestGraphRenderer()) ;
-        this.app.getMainScreen().getMenuGraphPanel().setAltitudeValues(this.app.getTestGraph().getKMax()) ;
+        this.app.getMainScreen().getMenuGraphPanel().initKmaxValues(this.app.getTestGraph().getKMax()) ;
         this.app.getMainScreen().getMenuGraphPanel().setLastAlgoSelected(null) ;
         infoGraph.addComponents() ;
         infoGraph.computeGraphStats() ;

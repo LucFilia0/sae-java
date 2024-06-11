@@ -45,10 +45,11 @@ public abstract class ColoringWelshPowell {
             ListIterator<Node> itr = nodeList.listIterator() ;
             while (itr.hasNext()) {
                 Node currentNode = itr.next() ;
-                if ((int)currentNode.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) == 0 && !nodeSet.contains(currentNode)) {
+                if ((int)currentNode.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) == 0 
+                    && !nodeSet.contains(currentNode)) {
                     itr.previous() ;
                     itr.remove() ;
-                    currentNode.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, infoTab[0]) ;
+                    currentNode.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, infoTab[0]) ;
                     nodeSet.addAll(currentNode.neighborNodes().collect(Collectors.toSet())) ;
                 }
             }
@@ -59,7 +60,7 @@ public abstract class ColoringWelshPowell {
             int[] res ;
             for (Node node : nodeList) {
                 res = ColoringUtilities.getLeastConflictingColor(graph, node) ;
-                node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, res[0]) ;
+                node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, res[0]) ;
                 infoTab[1] += res[1] ;
             }
             graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, infoTab[1]) ;

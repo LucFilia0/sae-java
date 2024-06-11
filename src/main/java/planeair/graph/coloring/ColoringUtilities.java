@@ -22,6 +22,11 @@ public class ColoringUtilities {
     public static final String DEFAULT_NODE_SIZE = "20px" ;
 
     /**
+     * The String identifier that that represents the color assigned to a Node in a GraphSAE (int)
+     */
+    public static final String NODE_COLOR_ATTRIBUTE = "color" ;
+
+    /**
      * String Identifier for the DSATUR algorithm
      */
     public static final String DSATUR = "DSATUR" ;
@@ -54,7 +59,7 @@ public class ColoringUtilities {
         int nbProblems = 0 ;
         for (Node node : graph) {
             for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
-                if (node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) == neighbor.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE)) {
+                if (node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) == neighbor.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) {
                     nbProblems++ ;
                     if (showErrorMessages) {
                         System.out.println("Probleme entre " + node + " et " + neighbor) ;
@@ -77,7 +82,7 @@ public class ColoringUtilities {
         Integer color ;
         if (nbColor > 0) {
             for (Node coloringNode : graph) {
-                color = (Integer)coloringNode.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) ;
+                color = (Integer)coloringNode.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
                 coloringNode.setAttribute("ui.class", "color" + color) ;
             }
             
@@ -117,18 +122,18 @@ public class ColoringUtilities {
      * @param conflictAttribute
      */
     public static void removeCurrentColoring(GraphSAE graph) {
-        graph.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
+        graph.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
 
         if (graph instanceof TestGraph) {
             graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
             for (Node node : graph) {
-                node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
+                node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
                 node.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
             }
         }
         else {
             for (Node node : graph) {
-                node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
+                node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
             }
         }
     }
@@ -169,8 +174,8 @@ public class ColoringUtilities {
         HashMap<Integer, Integer> conflictCount = new HashMap<>() ;
 
         node.neighborNodes().forEach(neighbor -> {
-            if ((Integer) neighbor.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) != 0) {
-                conflictCount.merge((Integer)neighbor.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE), 1, Integer::sum) ;
+            if ((Integer) neighbor.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) != 0) {
+                conflictCount.merge((Integer)neighbor.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE), 1, Integer::sum) ;
             }
         }) ;
 

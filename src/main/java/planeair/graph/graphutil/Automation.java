@@ -23,6 +23,7 @@ import org.graphstream.graph.implementations.Graphs;
 
 import planeair.graph.coloring.ColoringDSATUR;
 import planeair.graph.coloring.ColoringRLF;
+import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.coloring.ColoringWelshPowell;
 import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
@@ -152,7 +153,7 @@ public abstract class Automation {
                 }) ;
 
                 for (Node node : list) {
-                    resWriter.write(node.getId() + " ; " + node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) + '\n') ;
+                    resWriter.write(node.getId() + " ; " + node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) + '\n') ;
                 }
 
                 resWriter.close() ;
@@ -216,6 +217,7 @@ public abstract class Automation {
 
         // Verifies all 3 threads are done before continuing
         CountDownLatch latch = new CountDownLatch(NUMBER_OF_ALGORITHMS) ;
+
 
         // Creates the threads handling the colorations
         Runnable welshPowell = new Runnable() {

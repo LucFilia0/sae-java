@@ -67,7 +67,7 @@ public class NMenuGraphPanelApp extends JPanel{
     /**
      * Title of the choose ComboBox 
      */
-    private JLabel nbAltitudes = new JLabel("Choix des altitudes", SwingConstants.CENTER);
+    private JLabel colorChoice = new JLabel("Choix de la couleur", SwingConstants.CENTER);
     /**
      * JComboBox for choose the altitude (or everyone)
      * "Toutes" -> for everyone
@@ -108,12 +108,17 @@ public class NMenuGraphPanelApp extends JPanel{
     /**
      * ComboBox containing kMax 
      */
-    private JComboBox<Integer> altitudesMax ;
+    private JComboBox<Integer> kmaxComboBox ;
 
     /**
      * String containing the last algo selected
      */
     private String lastAlgoSelected = null ;
+
+    /**
+     * Last color selected for the displayed color
+     */
+    private int lastColorSelected = 0 ;
 
     /**
      * Homepage blablabla
@@ -129,7 +134,7 @@ public class NMenuGraphPanelApp extends JPanel{
     public NMenuGraphPanelApp(App app, int kmax, JComboBox<Integer> altitudesMax){
 
         this.app = app ;
-        this.altitudesMax = altitudesMax ;
+        this.kmaxComboBox = altitudesMax ;
 
         this.setBackground(App.KINDAYELLOW);
 
@@ -148,13 +153,13 @@ public class NMenuGraphPanelApp extends JPanel{
         
         //  ComboBox
         if (kmax > 1) {
-            this.setAltitudeValues(kmax) ;
+            this.initKmaxValues(kmax) ;
         }
         else {
             altitudesMax.addItem(0) ;
             altitudesMax.setSelectedIndex(0) ;
         }
-        setAltitudeComboBox(kmax);
+        initAltitudeComboBox(kmax);
         altitudesMax.setSelectedItem(kmax);
         
         altitudesMax.setForeground(Color.WHITE);
@@ -175,7 +180,7 @@ public class NMenuGraphPanelApp extends JPanel{
         altitudeMaxOption.setBackground(App.KINDAYELLOW);
 
         // Titre
-        nbAltitudes.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+        colorChoice.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
 
         // ComboBox
         // Democraty doesn't work in times of war. DO NOT TOUCH (or i will put a pipe bomb in your mail).
@@ -184,7 +189,7 @@ public class NMenuGraphPanelApp extends JPanel{
         altitudeComboBox.setBackground(Color.BLACK);
         altitudeComboBox.setPreferredSize(new Dimension(100,30));
 
-        altitudeMaxOption.add(nbAltitudes);
+        altitudeMaxOption.add(colorChoice);
         altitudeMaxOption.add(altitudeComboBox);
 
         borderPanelAlt.setBackground(App.KINDAYELLOW);
@@ -218,9 +223,7 @@ public class NMenuGraphPanelApp extends JPanel{
         algoOption.add(algorithmes);
         algoOption.add(layoutAlgo);
 
-        algoChoice.addItem(ColoringUtilities.DSATUR);
-        algoChoice.addItem(ColoringUtilities.RLF);
-        algoChoice.addItem(ColoringUtilities.WELSH_POWELL);
+        initAlgoComboBox((app.getTestGraph() != null)) ;
 
         //ADD
         this.add(titleMenu);
@@ -242,12 +245,43 @@ public class NMenuGraphPanelApp extends JPanel{
      * Fills the altitude comboBox with the correct values and defines its Render
      * @param kmax
      */
-    public void setAltitudeComboBox(int kmax){
+    public void initAltitudeComboBox(int kmax){
         altitudeComboBox.removeAllItems();
-
-        for(int i = 0; i <= kmax; i++ ){
-            altitudeComboBox.addItem(i);
+        if (kmax < 2) {
+            altitudeComboBox.addItem(-1) ;
         }
+        else {
+            for(int i = 0; i <= kmax; i++ ){
+                altitudeComboBox.addItem(i);
+            }
+        }
+    }
+
+    /**
+     * Initializes algoComboBox with either the algorithms or
+     * an error message depending of if the graph has been imported
+     * @param graphIsImported
+     */
+    public void initAlgoComboBox(boolean graphIsImported) {
+        algoChoice.removeAllItems() ;
+        if (graphIsImported) {
+            algoChoice.addItem(ColoringUtilities.DSATUR);
+            algoChoice.addItem(ColoringUtilities.RLF);
+            algoChoice.addItem(ColoringUtilities.WELSH_POWELL);
+        }
+        else {
+            algoChoice.addItem("INDISPONIBLE") ;
+        }
+    }
+
+    /**
+     * Initializes all comboBoxes in the menu
+     * @param kMax
+     * @param graphIsImported
+     */
+    public void initAllComboBoxes(int kMax, boolean graphIsImported) {
+        initAlgoComboBox(graphIsImported) ;
+        initAltitudeComboBox(kMax) ;
     }
 
     /**
@@ -268,6 +302,11 @@ public class NMenuGraphPanelApp extends JPanel{
                     cell.setText("Toutes") ;
                 }
 
+                else if (value == -1) {
+                    cell.setText("/!\\") ;
+                    cell.setHorizontalAlignment(JLabel.CENTER) ;
+                }
+
                 else {
                     cell.setText(Integer.toString(value)) ;
                 }
@@ -276,7 +315,7 @@ public class NMenuGraphPanelApp extends JPanel{
             }
         });
 
-        altitudesMax.setRenderer(new ListCellRenderer<Integer>() {
+        kmaxComboBox.setRenderer(new ListCellRenderer<Integer>() {
             @Override
             public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index,
                 boolean isSelected, boolean cellHasFocus) {
@@ -304,8 +343,8 @@ public class NMenuGraphPanelApp extends JPanel{
      * Getter for the comboBox containing the kMax options
      * @return
      */
-    public JComboBox<Integer> getAltitudeMax() {
-        return this.altitudesMax ;
+    public JComboBox<Integer> getKmaxComboBox() {
+        return this.kmaxComboBox ;
     }
 
     /**
@@ -320,13 +359,13 @@ public class NMenuGraphPanelApp extends JPanel{
      * Sets the range of values and the default value of the kMax comboBox in the menu
      * @param kMax new KMax value
      */
-    public void setAltitudeValues(int kMax) {
-        this.altitudesMax.removeAllItems() ;
+    public void initKmaxValues(int kMax) {
+        this.kmaxComboBox.removeAllItems() ;
         for (int i = 2; i < (int)kMax*1.5 + Math.sqrt(kMax) ; i++) {
-            this.altitudesMax.addItem(i) ;
+            this.kmaxComboBox.addItem(i) ;
         }
 
-        this.altitudesMax.setSelectedItem(kMax) ;
+        this.kmaxComboBox.setSelectedItem(kMax) ;
     }
 
     /**
@@ -334,7 +373,7 @@ public class NMenuGraphPanelApp extends JPanel{
      * @return
      */
     public Integer getCurrentKMax() {
-        return (Integer)this.altitudesMax.getSelectedItem() ;
+        return (Integer)this.kmaxComboBox.getSelectedItem() ;
     }
 
     /**
@@ -358,7 +397,7 @@ public class NMenuGraphPanelApp extends JPanel{
                     return ;
                 }
                 int oldKmax = graph.getKMax() ;
-                int currentKMax = (int)altitudesMax.getSelectedItem() ;
+                int currentKMax = (int)kmaxComboBox.getSelectedItem() ;
                 graph.setKMax(currentKMax) ;
                 
                 // The algorithm used changed so we need to update the coloring

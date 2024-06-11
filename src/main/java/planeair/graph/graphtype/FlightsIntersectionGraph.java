@@ -77,46 +77,4 @@ public class FlightsIntersectionGraph extends TestGraph {
         this.setAttribute(FlightsIntersectionGraph.NB_COLLISIONS, nbCollisions);
     }
 
-    /**
-     * Makes all flights visible
-     */
-    public void showAllFlights() {
-        for (Node node : this) {
-            node.removeAttribute("ui.hide") ;
-            node.edges().forEach(edge -> edge.removeAttribute("ui.hide")) ;
-        }
-    }
-
-    /**
-     * Shows only the flights that are in the air at a given time
-     * @param givenTime time used for the checks
-     */
-    public void showFlightsAtATime(FlightTime givenTime) {
-        int givenTimeInMinutes = givenTime.getHourValueInMinutes() ;
-        for (Node node : this) {
-            Flight flightNode = (Flight) node ;
-            int departure = flightNode.getDepartureTime().getHourValueInMinutes() ;
-            int arrival = departure + flightNode.getFlightDuration() ;
-            if (givenTimeInMinutes < departure || givenTimeInMinutes > arrival) {
-                flightNode.setAttribute("ui.hide") ;
-                flightNode.edges().forEach(edge -> edge.setAttribute("ui.hide")) ;
-            }
-        }
-    }
-    /**
-     * Shows only the flights that are on the same layer
-     * @param layer layer used for the checks
-     */
-    public void showSameLayerFlights(int layer) {
-        this.showAllFlights() ;
-        this.setAttribute("hidden") ;
-        for (Node node : this) {
-            Flight flightNode = (Flight)node ;
-            if (flightNode.getLayer() != layer) {
-                flightNode.setAttribute("ui.hide") ;
-                flightNode.edges().forEach(edge -> edge.setAttribute("ui.hide")) ;
-            }
-        }
-    }
-
 }

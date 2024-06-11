@@ -3,7 +3,6 @@ package planeair.graph.graphutil ;
 import java.awt.* ;
 import java.awt.event.* ;
 
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.graphstream.graph.* ;
@@ -171,7 +170,7 @@ public class PanelCreator {
 	 */
 	private Point3 getGraphPositionFromClick(Camera cam, Point mousePosPx) {
 		//Initialisation
-		offsetMousePosition(panel, mousePosPx) ;
+		SwingUtilities.convertPointFromScreen(mousePosPx, panel) ;
 
 		// Retrieving important coordinates and distances
 		Point3 mousePosGU = cam.transformPxToGu(mousePosPx.getX(), mousePosPx.getY()) ;
@@ -212,25 +211,13 @@ public class PanelCreator {
 	private void dragMovement(MouseEvent e) {
 		double scaleFactor = 0.05 ;
 		Camera cam = view.getCamera() ;
-		Point originalMousePos = e.getPoint() ;
 		Point3 viewCenter = cam.getViewCenter() ;
-		Point3 mousePos = getGraphPositionFromClick(cam, originalMousePos) ;
+		Point3 mousePos = getGraphPositionFromClick(cam, e.getPoint()) ;
 
 		double posX = viewCenter.x + (dragPos.x - mousePos.x)*scaleFactor ;
 		double posY = viewCenter.y + (dragPos.y - mousePos.y)*scaleFactor ;
 		Point3 newViewCenter = getAdjustedPosition(cam, new Point3(posX, posY, 0)) ;
 		cam.setViewCenter(newViewCenter.x, newViewCenter.y, 0) ;
-	}
-
-	/**
-	 * Offsets the mouse position based on the panel's position relative to the screen
-	 * @param panel parent panel 
-	 * @param mousePosition position of the mouse relative to the screen
-	 * @return position of the mouse relative to panel
-	 */
-	public Point offsetMousePosition(JPanel panel, Point mousePosition) {
-		SwingUtilities.convertPointFromScreen(mousePosition, panel) ;
-		return mousePosition ;
 	}
 
 	

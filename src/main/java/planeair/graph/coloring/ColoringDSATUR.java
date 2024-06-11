@@ -25,7 +25,7 @@ public abstract class ColoringDSATUR {
 
         //Put all Nodes in a LinkedList
         for (Node node : graph) {
-            node.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0);
+            node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0);
             node.setAttribute("DSATUR", node.getDegree());
             
             insertSorted(ListNodes, node); // Descendent Sort
@@ -36,8 +36,8 @@ public abstract class ColoringDSATUR {
 
         int[] res = {0,0};
         for(Node node : graph){
-            if((int)node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) > res[0]){
-                res[0] = (int)node.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE);
+            if((int)node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) > res[0]){
+                res[0] = (int)node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE);
             }
         }
         graph.setAttribute(TestGraph.COLOR_ATTRIBUTE, res[0]) ;
@@ -72,7 +72,7 @@ public abstract class ColoringDSATUR {
             //Step2
             // We loop through all of the nodes of this neighbor and we store their color in the HashMap
             nodeP.neighborNodes().forEach(nodeAdj -> {
-                int colorFound = (int)nodeAdj.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) ;
+                int colorFound = (int)nodeAdj.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
                 if (colorFound != 0) {
                     // If color not in map, set value to 1, else add 1 to current value
                     neighborColorMap.merge(colorFound, 1, Integer::sum) ;
@@ -80,13 +80,13 @@ public abstract class ColoringDSATUR {
             }) ;
 
             if (neighborColorMap.keySet().size() >= kMax) {
-                nodeP.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 
+                nodeP.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 
                     Collections.min(neighborColorMap.keySet(), (int1, int2) -> 
                     Integer.compare(neighborColorMap.get(int1), neighborColorMap.get(int2)))) ;
 
                 int nbConflict = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE);
                 graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, nbConflict + 
-                    neighborColorMap.get((int)nodeP.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE)));
+                    neighborColorMap.get((int)nodeP.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)));
             }
             else{
                 previousColor = 0 ;
@@ -97,15 +97,15 @@ public abstract class ColoringDSATUR {
                     }
                     previousColor = key ;
                 }
-                nodeP.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, previousColor + 1) ;
+                nodeP.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, previousColor + 1) ;
             }
 
             //Step3
             nodeP.neighborNodes().forEach(nodeAdj -> {
                 HashSet<Integer> buffer = new HashSet<>() ;
                 nodeAdj.neighborNodes().forEach(nodeAdj2 -> {
-                    if((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE) != 0 && nodeAdj2 != nodeP){
-                        buffer.add((int)nodeAdj2.getAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE)) ;
+                    if((int)nodeAdj2.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) != 0 && nodeAdj2 != nodeP){
+                        buffer.add((int)nodeAdj2.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
                     }  
                 });
 

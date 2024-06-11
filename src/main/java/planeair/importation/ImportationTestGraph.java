@@ -14,6 +14,7 @@ import org.graphstream.graph.Node;
 // Import Exceptions
 import planeair.exceptions.InvalidEntryException;
 import planeair.exceptions.InvalidFileFormatException;
+import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
 
@@ -247,13 +248,13 @@ public class ImportationTestGraph {
             // Adds the nodes and increment node number if they do not already exist
             if(testGraph.getNode(idNodeA) == null) {
                 nodeAdded = testGraph.addNode(idNodeA);
-                nodeAdded.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
+                nodeAdded.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
                 nodeAdded.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
                 ++nbNodes;
             }
             if(testGraph.getNode(idNodeB) == null) {
                 nodeAdded = testGraph.addNode(idNodeB);
-                nodeAdded.setAttribute(GraphSAE.NODE_COLOR_ATTRIBUTE, 0) ;
+                nodeAdded.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
                 nodeAdded.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0) ;
                 ++nbNodes;
             }

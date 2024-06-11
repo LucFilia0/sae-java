@@ -3,6 +3,7 @@ package planeair.graph.graphtype;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import planeair.exceptions.InvalidEntryException;
+import planeair.graph.coloring.ColoringUtilities;
 /**
  * Abstract class containing our default graph attributes
  * @see TestGraph
@@ -18,24 +19,9 @@ public abstract class GraphSAE extends SingleGraph {
     public static final String NB_MAX_NODES = "nbMaxNodes";
 
     /**
-     * The String identifier that represents the current number of Nodes (int)
-     */
-    public static final String NB_NODES = "nbNodes";
-
-    /**
-     * The String identifier that represents the current number of edges (int)
-     */
-    public static final String NB_EDGES = "nbEdges";
-
-    /**
      * The String identifier that represents the current number of colors (int)
      */
     public static final String COLOR_ATTRIBUTE = "nbColors" ;
-
-    /**
-     * The String identifier that that represents the color assigned to a Node in a GraphSAE (int)
-     */
-    public static final String NODE_COLOR_ATTRIBUTE = "color" ;
 
     /**
      * Constructor setting our attributes to a default value of 0.
@@ -64,5 +50,29 @@ public abstract class GraphSAE extends SingleGraph {
             throw new InvalidEntryException() ;
         }
         this.setAttribute(COLOR_ATTRIBUTE, nbColors) ;
+    }
+
+    /**
+     * Removes the "ui.hide" attribute from every node of this graph
+     */
+    public void showAllNodes() {
+        this.nodes().forEach(n -> {
+            n.removeAttribute("ui.hide") ;
+            n.edges().forEach(e -> e.removeAttribute("ui.hide"));
+        });
+    }
+
+    /**
+     * Shows only nodes with their colorAttribute set to color
+     * Gives the attribute "ui.hide" to all the ones which don't
+     * @param color
+     */
+    public void showNodesWithColor(int color) {
+        this.nodes().forEach(n -> {
+            if ((Integer)n.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) == color) {
+                n.setAttribute("ui.hide") ;
+                n.edges().forEach(e -> e.setAttribute("ui.hide")) ;
+            }
+        }) ;
     }
 }
