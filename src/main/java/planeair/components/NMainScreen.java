@@ -231,8 +231,6 @@ public class NMainScreen extends JPanel{
 
     private void initComponents() {
 
-        this.timePanel = new NTimePanelApp(this.app);
-
         this.setLayout(new BorderLayout());
 
         map.setLayout(new BorderLayout());
@@ -302,7 +300,6 @@ public class NMainScreen extends JPanel{
         header.add(panelNav);
 
         //BODY
-        map.add(timePanel, BorderLayout.CENTER);
 
         menuGraph = new NMenuGraphPanelApp(app, 0, choixAltitudesMax);
         menuMap = new NMenuMapPanelApp(map);
@@ -319,6 +316,18 @@ public class NMainScreen extends JPanel{
         this.add(header, BorderLayout.NORTH);
         this.add(map, BorderLayout.CENTER);
     };
+
+    /**
+     * Adds the NTimePanel only if the FIG is not null
+     * 
+     * @author Luc le Manifik
+     */
+    public void addTimePanel() {
+        if(this.app.getFig() != null) {
+            this.timePanel = new NTimePanelApp(this.app);
+            map.add(timePanel, BorderLayout.CENTER);
+        }
+    }
 
     /**
      * Method adding events of the Panel
@@ -409,8 +418,9 @@ public class NMainScreen extends JPanel{
         });
 
         leaveButtonToImport.addActionListener((ActionEvent e) ->{
-                this.app.switchToImportScreen();
-                this.app.setVisible(true);
+            this.app.switchToImportScreen();
+            this.app.setVisible(true);
+            this.map.clearAll();
         });
 
         buttonAgr.addActionListener((ActionEvent e) -> {

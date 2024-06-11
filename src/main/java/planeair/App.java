@@ -12,11 +12,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
+import planeair.util.Airport;
+
 //-- Import Plane AIR
 
 import planeair.util.AirportSet;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.TestGraph;
+import planeair.graph.graphutil.Flight;
 import planeair.graph.graphutil.PanelCreator;
 import planeair.components.NMainScreen;
 import planeair.components.imports.NImportScreen;
@@ -162,9 +165,9 @@ public class App extends javax.swing.JFrame {
      */
     private void initAttributes() {
 
-        this.airportSet = new AirportSet();
-        this.fig = new FlightsIntersectionGraph("FIG");
-
+        // Only declared during importation
+        this.airportSet = null;
+        this.fig = null;
         this.testGraph = null ;
 
         this.mainScreen = new NMainScreen(this);
@@ -189,6 +192,8 @@ public class App extends javax.swing.JFrame {
      * @author GIRAUD Nila - modified by Luc le Manifik
      */
     public void switchToMainScreen() {
+
+        this.mainScreen.addTimePanel();
 
         this.remove(this.importScreen);
         this.add(this.mainScreen);
@@ -226,7 +231,34 @@ public class App extends javax.swing.JFrame {
      */
     public void setTestGraph(TestGraph testGraph) {
         this.testGraph = testGraph ;
-        this.testGraphRenderer = new PanelCreator(this.testGraph) ;
+        if (testGraph != null) {
+            this.testGraphRenderer = new PanelCreator(this.testGraph) ;
+        }
+        else {
+            this.testGraphRenderer = null ;
+        }
+    }
+
+    /**
+     * Sets the value of the FIG
+     * 
+     * @param fig ({@link planeair.graph.graphtype.FlightsIntersectionGraph FLightsIntersectionGraph}) - The new FIG of the App
+     * 
+     * @author Luc le Manifik
+     */
+    public void setFig(FlightsIntersectionGraph fig) {
+        this.fig = fig;
+    }
+
+    /**
+     * Sets the value of the AirportSet
+     * 
+     * @param fig ({@link planeair.util.AirportSet AirportSet}) - The new AirportSet of the App
+     * 
+     * @author Luc le Manifik
+     */
+    public void setAirportSet(AirportSet as) {
+        this.airportSet = as;
     }
 
     /**

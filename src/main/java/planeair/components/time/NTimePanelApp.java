@@ -92,17 +92,25 @@ public class NTimePanelApp extends JPanel {
      */
     private Thread simulation;
 
+    private JPanel container;
+
     public NTimePanelApp(App app) {
 
         this.app = app;
         this.simulationPlaying = false;
 
-        this.setLayout(new GridLayout(11,1));
+        //this.setLayout(new GridLayout(11,1));
+        this.setLayout(new FlowLayout());
+
+        this.container = new JPanel();
+        this.container.setLayout(new GridLayout(2, 1));
 
         sliderTime.setOpaque(false);
         hourSliderPanel.setOpaque(false);
         hourPanelComboBox.setOpaque(false);
+
         this.setOpaque(false);
+        this.container.setOpaque(false);
 
         this.betweenTime.setFont(App.KINDABOLD);
     
@@ -135,8 +143,10 @@ public class NTimePanelApp extends JPanel {
         hourSliderPanel.add(playButton);
 
         //BODY CENTER
-        this.add(hourPanelComboBox);
-        this.add(hourSliderPanel);
+        container.add(hourPanelComboBox);
+        container.add(hourSliderPanel);
+
+        this.add(this.container);
 
         this.setVisible(true);
     }
@@ -169,7 +179,8 @@ public class NTimePanelApp extends JPanel {
             minChoice.setSelectedItem(minutes);
             
             // Paints the Flights on the Map, at the selected NTime
-            this.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), this.app.getFig());
+            if(this.app.getFig() != null)
+                this.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), this.app.getFig());
          });
 
         playButton.addActionListener(e -> {

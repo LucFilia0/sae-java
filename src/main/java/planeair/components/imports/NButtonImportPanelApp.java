@@ -26,9 +26,11 @@ import planeair.components.buttons.NButtonImportFileApp;
 import planeair.components.buttons.NFilledButton;
 import planeair.components.menu.NInfoGraphPanelApp;
 import planeair.exceptions.InvalidFileFormatException;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.TestGraph;
 import planeair.importation.ImportationFIG;
 import planeair.importation.ImportationTestGraph;
+import planeair.util.AirportSet;
 
 /**
  * Creates a JPanel of importation for Flights and Airports4
@@ -239,6 +241,10 @@ public class NButtonImportPanelApp extends JPanel {
         // Button to choose the TestGraph's File : Open JFileChooser
         choiceGraphImportation.addActionListener((ActionEvent e) -> {
 
+            this.app.setFig(null);
+            this.app.setAirportSet(null);
+            this.app.setTestGraph(new TestGraph("TestGraph"));
+
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
             fileChooser.userImportFile();
 
@@ -259,6 +265,12 @@ public class NButtonImportPanelApp extends JPanel {
 
         // Choose Flights and Airports importation
         choiceFlightImportation.addActionListener((ActionEvent e) -> {
+
+            // In Garbage Collector we trust 🙌
+            this.app.setAirportSet(new AirportSet());
+            this.app.setFig(new FlightsIntersectionGraph("FIG"));
+            this.app.setTestGraph(null);
+
             buttonsPanel.removeAll();
             this.remove(confirmStart);
             buttonsPanel.add(buttonAirportFileSelection);

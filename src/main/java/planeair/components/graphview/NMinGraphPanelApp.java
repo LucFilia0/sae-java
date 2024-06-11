@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import org.graphstream.ui.swing_viewer.ViewPanel;
 
 import planeair.App;
+import planeair.graph.graphtype.TestGraph;
 import planeair.graph.graphutil.PanelCreator;
 
 import javax.swing.Box;
@@ -119,6 +120,16 @@ public class NMinGraphPanelApp extends JPanel {
         this.FlowPanelGraph.removeAll() ;
         this.FlowPanelGraph.add(panel, BorderLayout.CENTER) ;
         buttonCenter.setBackground(App.KINDAYELLOW);
+    }
+
+    /**
+     * Clears the MinGraph from the panel
+     * 
+     * @author Luc le Manifik
+     */
+    public void removeGraphToPanel() {
+        this.FlowPanelGraph.removeAll();
+        this.app.setTestGraph(null);
     }
 
     public void addComponents(){

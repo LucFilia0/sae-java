@@ -9,7 +9,6 @@ import java.lang.Math;
 //-- Import AWT
 
 import java.awt.Rectangle;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
@@ -20,7 +19,6 @@ import org.jxmapviewer.viewer.WaypointPainter;
 
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-import planeair.graph.graphutil.Flight;
 
 /**
  * This class paints the different Waypoints on a Map object.
@@ -43,6 +41,11 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     private HashSet<FlightWaypoint> flightWaypointSet;
 
     /**
+     * The Set which stores all the MapWaypointButtons
+     */
+    private HashSet<MapWaypointButton> waypointButtonSet;
+
+    /**
      * The MapItemPainter class's constructor. Creates a new MapItemPainter.
      * 
      * @author Luc le Manifik
@@ -50,6 +53,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     public MapWaypointPainter() {
         this.airportWaypointSet = new HashSet<AirportWaypoint>();
         this.flightWaypointSet = new HashSet<FlightWaypoint>();
+        this.waypointButtonSet = new HashSet<>();
     }
 
     /**
@@ -131,6 +135,17 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      */
     public HashSet<FlightWaypoint> getFlightWaypoints() {
         return this.flightWaypointSet;
+    }
+
+    /**
+     * Returns the Set which contains all the MapWaypointButtons
+     * 
+     * @return ({@link java.util.HashSet HashSet}) - The Sets which contains all the MapWaypointButtons
+     * 
+     * @author Luc le Manifik
+     */
+    public HashSet<MapWaypointButton> getWpButtons() {
+        return this.waypointButtonSet;
     }
 
     /**

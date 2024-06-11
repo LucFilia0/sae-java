@@ -20,10 +20,10 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import planeair.util.Airport;
 import planeair.util.AirportSet;
-import planeair.util.Coordinate;
 import planeair.util.NTime;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphutil.Flight;
+import planeair.components.mapview.mapwp.MapWaypointButton;
 import planeair.components.mapview.mapwp.MapWaypointPainter;
 import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
@@ -219,6 +219,8 @@ public class Map extends org.jxmapviewer.JXMapViewer {
      */
     public void paintAllAirports(AirportSet airportSet) {
 
+        MapWaypointButton mwb = null;
+
         this.addAirports(airportSet);
 
         /* Adds the WaypointButtons, which are the visual for Waypoint,
@@ -226,9 +228,29 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         * So it will not show them automatically
         */
         for(AirportWaypoint waypoint : this.itemPainter.getAirportWaypoints()) {
-            
-            this.add(waypoint.getWaypointButton());
+            mwb = waypoint.getWaypointButton();
+            this.add(mwb);
+            this.itemPainter.getWpButtons().add(mwb);
         }
+    }
+
+    /**
+     * Clears all the MapWaypoints on the Map, by reseting the MapItemPainter
+     * 
+     * @author Luc le Manifik
+     */
+    public void clearAll() {
+    
+        for(MapWaypointButton mwb : this.itemPainter.getWpButtons()) {
+            this.remove(mwb);
+        }
+
+        this.itemPainter.getAirportWaypoints().clear();
+        this.itemPainter.getFlightWaypoints().clear();
+        this.itemPainter.getWpButtons().clear();
+
+        this.repaint();
+        this.revalidate();
     }
 
     //-- Map Methods --> Center default

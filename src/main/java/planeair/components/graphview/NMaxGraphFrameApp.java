@@ -60,12 +60,15 @@ public class NMaxGraphFrameApp extends JFrame{
         else {
             graph = graphRenderer.getViewPanel() ;
             graph.setLayout(new FlowLayout(FlowLayout.LEFT)) ;
-            this.setTitle("Vue sur le Graph " + graphRenderer.getGraph().getId()) ;
+            this.setTitle("Vue sur le Graph " + graphRenderer.getGraph().getId()) ; 
+
+            int inset = 12 + 5; // 12 forever
+            this.infoGraph.setBorder(new EmptyBorder(new Insets(inset, inset, inset, inset)));
             
             infoGraphPanel.add(this.infoGraph) ;
             infoGraphPanel.setBackground(graph.getBackground()) ;
             infoGraphPanel.setBorder(new EmptyBorder(new Insets(20, 20, 20, 20))) ;
-            infoGraphPanel.setBackground(Color.WHITE) ;
+            infoGraphPanel.setOpaque(false);
 
             graph.add(infoGraphPanel) ;
             infoGraph.setFontSize(18) ;
