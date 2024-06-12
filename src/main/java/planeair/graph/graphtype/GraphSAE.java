@@ -1,5 +1,7 @@
 package planeair.graph.graphtype;
 
+import java.awt.Color;
+
 import org.graphstream.graph.implementations.SingleGraph;
 
 import planeair.exceptions.InvalidEntryException;
@@ -31,6 +33,8 @@ public abstract class GraphSAE extends SingleGraph {
      * The String identifier that represents the current number of conflicts (int)
      */
     public static final String CONFLICT_ATTRIBUTE = "nbConflicts" ; 
+
+    private Color[] colorTab ;
 
     /**
      * Constructor setting our attributes to a default value of 0.
@@ -74,6 +78,10 @@ public abstract class GraphSAE extends SingleGraph {
         return (int)this.getAttribute(TestGraph.CONFLICT_ATTRIBUTE) ;
     }
 
+    public Color[] getColorTab() {
+        return this.colorTab ;
+    }
+
     /**
      * Sets the value of kMax, which is the maximum amount of colors of the TestGraph.
      * 
@@ -110,6 +118,10 @@ public abstract class GraphSAE extends SingleGraph {
             throw new InvalidEntryException() ;
         }
         this.setAttribute(CONFLICT_ATTRIBUTE, nbConflicts) ;
+    }
+
+    public void setColorTab(Color[] colorTab) {
+        this.colorTab = colorTab ;
     }
 
     /**

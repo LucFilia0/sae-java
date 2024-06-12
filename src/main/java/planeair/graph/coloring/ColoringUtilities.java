@@ -18,7 +18,7 @@ public class ColoringUtilities {
     /**
      * default size for nodes in the stylesheet 
      */
-    public static final String DEFAULT_NODE_SIZE = "20px" ;
+    public static final Integer DEFAULT_NODE_SIZE = 20 ;
 
     /**
      * The String identifier that that represents the color assigned to a Node in a GraphSAE (int)
@@ -77,8 +77,9 @@ public class ColoringUtilities {
      * @param nbColor number of colors the graph has
      */
     public static void setGraphStyle(GraphSAE graph, int nbColor) {
-        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ; size : " + DEFAULT_NODE_SIZE + " ; }\n") ;
+        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ;\n size : " + DEFAULT_NODE_SIZE + " ; }\n") ;
         Integer color ;
+        graph.setColorTab(new Color[nbColor]) ;
         if (nbColor > 0) {
             for (Node coloringNode : graph) {
                 color = (Integer)coloringNode.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
@@ -91,12 +92,17 @@ public class ColoringUtilities {
             // Hexadecimal value used for the color stored as an int
             int currentHexValue ;
 
+            Color[] colorTab = new Color[nbColor] ;
             for (int i = 0 ; i < nbColor ; i++) {
-                currentHexValue = (int)Math.round(maxHexValue*Math.random()) ;
-                stylesheet.append("node.color" + (i+1) + "{fill-color : #" + toValidHex(Integer.toHexString(currentHexValue)) + " ; }\n") ;
+                currentHexValue = (int)Math.round(maxHexValue*Math.random()) ; 
+                stylesheet.append("node.color" + (i+1) + "{fill-color : #" + 
+                    toValidHex(Integer.toHexString(currentHexValue)) + " ; }\n") ;
+                colorTab[i] = new Color(currentHexValue) ;
             }
-        }
 
+            graph.setColorTab(colorTab) ;
+        }
+        
         graph.setAttribute("ui.stylesheet", stylesheet.toString()) ;
     }
 

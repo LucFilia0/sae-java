@@ -9,6 +9,9 @@ import java.lang.Math;
 //-- Import AWT
 
 import java.awt.Rectangle;
+import java.awt.Stroke;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
@@ -19,6 +22,8 @@ import org.jxmapviewer.viewer.WaypointPainter;
 
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.graph.coloring.ColoringUtilities;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 
 /**
  * This class paints the different Waypoints on a Map object.
@@ -111,6 +116,12 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             int arrX = (int) (arrivalAirport_location.getX() - screen.getX());
             int arrY = (int) (arrivalAirport_location.getY() - screen.getY());
 
+            int color = (int)flightWp.getFlight().getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
+            if (color != 0) {
+                FlightsIntersectionGraph graph = (FlightsIntersectionGraph)flightWp.getFlight().getGraph() ;
+                g.setColor(graph.getColorTab()[color - 1]) ;
+            }
+            g.setStroke(new BasicStroke(3)) ;
             g.drawLine(depX, depY, arrX, arrY);
         }
     }

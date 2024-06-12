@@ -2,6 +2,7 @@ package planeair.graph.graphutil ;
 
 import java.awt.* ;
 import java.awt.event.* ;
+import java.util.EnumSet;
 
 import javax.swing.SwingUtilities;
 
@@ -11,6 +12,7 @@ import org.graphstream.ui.view.* ;
 import org.graphstream.ui.view.Viewer.ThreadingModel;
 import org.graphstream.ui.view.camera.Camera;
 import org.graphstream.ui.view.util.GraphMetrics;
+import org.graphstream.ui.view.util.InteractiveElement;
 
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.GraphSAE;
@@ -18,6 +20,7 @@ import planeair.graph.graphtype.GraphSAE;
 import org.graphstream.ui.swing_viewer.* ;
 import org.graphstream.ui.swing_viewer.util.DefaultMouseManager;
 import org.graphstream.ui.swing_viewer.util.DefaultShortcutManager;
+import org.graphstream.ui.swing_viewer.util.MouseOverMouseManager;
 
 /**
  * Class handling the rendering of Graphs and the events on its panel
@@ -80,7 +83,7 @@ public class PanelCreator {
 		panel = (ViewPanel)viewer.addDefaultView(inOwnFrame) ;
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
-		view.setMouseManager(new DefaultMouseManager() {
+		view.setMouseManager(new MouseOverMouseManager(EnumSet.of(InteractiveElement.NODE), 20) {
 			@Override
 			public void mouseDragged(MouseEvent event) {
 				if (curElement != null) {
@@ -284,8 +287,12 @@ public class PanelCreator {
 		@Override
 		public void mouseOver(String id) {
 			Node n = graph.getNode(id) ;
-			n.removeAttribute("ui.style") ;
-			n.setAttribute("ui.style", "size : 40px ;") ;
+			n.removeAttribute("ui.size") ;
+			n.setAttribute("ui.size", ColoringUtilities.DEFAULT_NODE_SIZE*2) ;
+			n.setAttribute("ui.label", id) ;
+			n.setAttribute("ui.style", "text-alignment : center ; text-color : white ;" + 
+			"text-background-mode : rounded-box ; text-background-color : black ; text-padding : 2 ;" + 
+			"text-style : bold ;") ;	
 		}
 
 		/**
@@ -294,8 +301,9 @@ public class PanelCreator {
 		@Override
 		public void mouseLeft(String id) {
 			Node n = graph.getNode(id) ;
+			n.removeAttribute("ui.size") ;
+			n.removeAttribute("ui.label") ;
 			n.removeAttribute("ui.style") ;
-			n.setAttribute("ui.style", "size : " + ColoringUtilities.DEFAULT_NODE_SIZE + " ;") ;
 		}
 
 		/**

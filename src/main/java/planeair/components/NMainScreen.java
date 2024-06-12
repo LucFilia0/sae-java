@@ -345,13 +345,14 @@ public class NMainScreen extends JPanel{
 
                 if(buttonMenuMap.getIcon().equals(iconMenuMap)){
 
-                GridBagConstraints GridBagC = new GridBagConstraints(); 
-                GridBagC.insets = new Insets(0, 10, 10, 0);
-                article.add(menuGraph, GridBagC);
-                article.paintComponents(article.getGraphics());
+                    GridBagConstraints GridBagC = new GridBagConstraints(); 
+                    GridBagC.insets = new Insets(0, 10, 10, 0);
+                    article.add(menuGraph, GridBagC);
+                    article.paintComponents(article.getGraphics());
 
-                buttonMenuGraph.setIcon(iconCloseGraph);
-                this.app.revalidate();
+                    buttonMenuGraph.setIcon(iconCloseGraph);
+                    this.app.revalidate();
+                    this.repaint() ;
                 }
                 else{
                     map.remove(article);
@@ -369,6 +370,7 @@ public class NMainScreen extends JPanel{
                     buttonMenuGraph.setIcon(iconCloseGraph);
 
                     this.app.revalidate();
+                    this.repaint() ;
                 }               
             }
             else{
@@ -378,6 +380,7 @@ public class NMainScreen extends JPanel{
                 map.add(article,BorderLayout.WEST); 
                 this.app.setVisible(true);
                 buttonMenuGraph.setIcon(iconMenuGraph);
+                this.repaint() ;
             }
 
         });
@@ -392,6 +395,7 @@ public class NMainScreen extends JPanel{
 ;
                     buttonMenuMap.setIcon(iconCloseMap);
                     this.app.revalidate();
+                    this.repaint() ;
                 }
                 else{
                     map.remove(article);
@@ -408,6 +412,7 @@ public class NMainScreen extends JPanel{
                     buttonMenuGraph.setIcon(iconMenuGraph);
                     buttonMenuMap.setIcon(iconCloseMap);
                     this.app.revalidate();
+                    this.repaint() ;
 
                 }               
             }
@@ -418,6 +423,7 @@ public class NMainScreen extends JPanel{
                 map.add(article,BorderLayout.WEST); 
                 this.app.setVisible(true);
                 buttonMenuMap.setIcon(iconMenuMap);
+                this.repaint() ;
             }
 
         });

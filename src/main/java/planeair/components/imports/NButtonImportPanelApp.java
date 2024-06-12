@@ -27,6 +27,7 @@ import planeair.components.buttons.NFilledButton;
 import planeair.components.menu.NInfoGraphPanelApp;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.coloring.ColoringDSATUR;
+import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.TestGraph;
 import planeair.importation.ImportationFIG;
@@ -305,8 +306,9 @@ public class NButtonImportPanelApp extends JPanel {
                     ImportationFIG.importFlightsFromFile(this.app.getAirportSet(), 
                         (FlightsIntersectionGraph)this.app.getGraph(), fileChooser.getFile(), this.app.getTimeSecurity());
                     
-                        ColoringDSATUR.coloringDsatur(app.getGraph()) ;
-                    app.getGraph().setKMax(app.getGraph().getNbColors() + 2) ;
+                    ColoringDSATUR.coloringDsatur(app.getGraph()) ;
+                    ColoringUtilities.setGraphStyle(app.getGraph(), app.getGraph().getNbColors()) ;
+                    app.getGraph().setKMax(app.getGraph().getNbColors()) ;
                     initDefaultGraphImportation(this.app.getMainScreen().getInfoGraphPanel());
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
