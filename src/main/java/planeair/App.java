@@ -88,7 +88,7 @@ public class App extends javax.swing.JFrame {
     /**
      * The default Font for the entire App
      */
-    public static final Font KINDANORMAL = new Font("Arial", Font.CENTER_BASELINE, 14);
+    public static final Font KINDANORMAL = new Font("Arial", Font.CENTER_BASELINE, 16);
 
     /**
      * The default italic font

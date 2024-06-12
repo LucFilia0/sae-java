@@ -41,7 +41,7 @@ public class NSliderTime extends JSlider{
         private static final int TRACK_HEIGHT = 8;
         private static final int TRACK_WIDTH = 8;
         private static final int TRACK_ARC = 5;
-        private static final Dimension THUMB_SIZE = new Dimension(25, 25);
+        private static final Dimension THUMB_SIZE = new Dimension(20, 20);
         private final RoundRectangle2D.Float trackShape = new RoundRectangle2D.Float();
 
         public CustomSliderUI(final JSlider b) {

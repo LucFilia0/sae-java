@@ -23,10 +23,12 @@ import planeair.App;
 import planeair.components.graphview.NMaxGraphFrameApp;
 import planeair.components.graphview.NMinGraphPanelApp;
 import planeair.components.mapview.Map;
+import planeair.components.menu.NComboBoxGraphe;
 import planeair.components.menu.NInfoGraphPanelApp;
 import planeair.components.menu.NMenuGraphPanelApp;
 import planeair.components.menu.NMenuMapPanelApp;
 import planeair.components.time.NTimePanelApp;
+import planeair.components.menu.NComboBoxGraphe;
 
 
 /**
@@ -159,7 +161,7 @@ public class NMainScreen extends JPanel{
      * JLabel for see the number altitudes choose
      * Location : in the panel menu --> need here for Events
      */
-    private JComboBox<Integer> choixAltitudesMax = new JComboBox<>(); 
+    private NComboBoxGraphe choixAltitudesMax = new NComboBoxGraphe(); 
 
      // LEFT 
     /**

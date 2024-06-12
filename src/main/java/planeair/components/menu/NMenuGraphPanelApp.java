@@ -78,7 +78,7 @@ public class NMenuGraphPanelApp extends JPanel{
      * "Toutes" -> for everyone
      * A number between [first altitude; last altitude]
      */
-    private JComboBox<Integer> altitudeComboBox = new JComboBox<>();
+    private NComboBoxGraphe altitudeComboBox = new NComboBoxGraphe();
 
     /**
      * Panel for create an empty border to the JComboBox altitude
@@ -95,15 +95,43 @@ public class NMenuGraphPanelApp extends JPanel{
      * JLabel title for algorithmes (DSATUR + RLF)
      */
     private JLabel algorithmes = new JLabel("Algorithmes", SwingConstants.CENTER );
-    /**
-     * JPanel for put the JComboBox (choose algo) next to JButton (validate) 
-     */
-    private JPanel layoutAlgo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-    /**
+     /**
      * JcomboBox that help too choose an algo for the coloration
      */
     private JComboBox<String> algoChoice = new JComboBox<>();
+    /**
+     * JPanel for put the JComboBox (choose algo) next to JButton (validate) 
+     */
+    private JPanel borderPanelAlgo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+   
+    
+
+    //CHANGE SAFETY MARGIN 
+
+    /**
+     * Panel for Margin option
+     */
+    private JPanel marginOptionPanel = new JPanel();
+    /**
+     * Title of the choose ComboBox 
+     */
+    private JLabel safetyMargin = new JLabel("Changer marge sécurité", SwingConstants.CENTER);
+    /**
+     * JComboBox for choose the margin (default : 15min)
+     * A number between [  ;  ]
+     */
+    private NComboBoxGraphe marginComboBox = new NComboBoxGraphe();
+
+    /**
+     * Panel for create an empty border to the JComboBox safety margin
+     */
+    private JPanel borderPanelMargin = new JPanel();
+
+    
+
+    //CONFIRM
+
     /**
      * Panel For confirm button , CENTER alignement(BoxLayout)
      */
@@ -118,7 +146,7 @@ public class NMenuGraphPanelApp extends JPanel{
     /**
      * ComboBox containing kMax 
      */
-    private JComboBox<Integer> kmaxComboBox ;
+    private NComboBoxGraphe kmaxComboBox ;
 
     /**
      * String containing the last algo selected
@@ -141,14 +169,14 @@ public class NMenuGraphPanelApp extends JPanel{
      * @param kmax
      * @param altitudesMax 
      */
-    public NMenuGraphPanelApp(App app, int kmax, JComboBox<Integer> altitudesMax){
+    public NMenuGraphPanelApp(App app, int kmax, NComboBoxGraphe altitudesMax){
 
         this.app = app ;
         this.kmaxComboBox = altitudesMax ;
 
         this.setBackground(App.KINDAYELLOW);
 
-        this.setLayout(new GridLayout(5,1));
+        this.setLayout(new GridLayout(6,1));
 
         //TITLE
         titleMenu.setFont(App.KINDATITLE);
@@ -157,7 +185,7 @@ public class NMenuGraphPanelApp extends JPanel{
         kmaxOption.setLayout( new GridLayout(2,1));
 
         // Title
-        changeKmax.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+        changeKmax.setFont(App.KINDANORMAL);
         kmaxOption.setBackground(App.KINDAYELLOW);
 
         
@@ -172,10 +200,6 @@ public class NMenuGraphPanelApp extends JPanel{
         initAltitudeComboBox(kmax);
         altitudesMax.setSelectedItem(kmax);
         
-        altitudesMax.setForeground(Color.WHITE);
-        altitudesMax.setFont(new Font("Arial", Font.BOLD, 18));
-        altitudesMax.setBackground(Color.BLACK);
-        altitudesMax.setPreferredSize(NMenuGraphPanelApp.KINDACOMBOBOXDIMENSION);
 
         kmaxOption.add(changeKmax);
         kmaxOption.add(altitudesMax);
@@ -190,14 +214,10 @@ public class NMenuGraphPanelApp extends JPanel{
         altitudeMaxOption.setBackground(App.KINDAYELLOW);
 
         // Titre
-        colorChoice.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+        colorChoice.setFont(App.KINDANORMAL);
 
         // ComboBox
         // Democraty doesn't work in times of war. DO NOT TOUCH (or i will put a pipe bomb in your mail).
-        altitudeComboBox.setForeground(Color.WHITE);
-        altitudeComboBox.setFont(new Font("Arial", Font.BOLD, 18));
-        altitudeComboBox.setBackground(Color.BLACK);
-        altitudeComboBox.setPreferredSize(NMenuGraphPanelApp.KINDACOMBOBOXDIMENSION);
 
         altitudeMaxOption.add(colorChoice);
         altitudeMaxOption.add(altitudeComboBox);
@@ -211,21 +231,34 @@ public class NMenuGraphPanelApp extends JPanel{
         algoOption.setBackground(App.KINDAYELLOW);
 
         // Titre
-        algorithmes.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+        algorithmes.setFont(App.KINDANORMAL);
 
-        // JComboBox + JButton
+        // JComboBox
 
         algoChoice.setForeground(Color.WHITE);
         algoChoice.setFont(new Font("Arial", Font.BOLD, 18));
         algoChoice.setBackground(Color.BLACK);
         algoChoice.setPreferredSize(NMenuGraphPanelApp.KINDACOMBOBOXDIMENSION);
 
-        layoutAlgo.setLayout(new FlowLayout());
-        layoutAlgo.setBackground(App.KINDAYELLOW);
-        layoutAlgo.add(algoChoice);
-
         algoOption.add(algorithmes);
-        algoOption.add(layoutAlgo);
+        algoOption.add(algoChoice);
+
+        borderPanelAlgo.setBackground(App.KINDAYELLOW);
+
+       
+
+        // SAFETY MARGIN
+        marginOptionPanel.setLayout(new GridLayout(2,1));
+        marginOptionPanel.setBackground(App.KINDAYELLOW);
+
+        // Titre
+        safetyMargin.setFont(App.KINDANORMAL);
+
+        // JComboBox
+        marginOptionPanel.add(safetyMargin);
+        marginOptionPanel.add(marginComboBox);
+
+        borderPanelMargin.setBackground(App.KINDAYELLOW);
 
         //Confirm
         confirmButton.setForeground(Color.WHITE);
@@ -245,7 +278,13 @@ public class NMenuGraphPanelApp extends JPanel{
         this.add(borderPanelAlt);
 
         //ALGO
-        this.add(algoOption);
+        borderPanelAlgo.add(algoOption);
+        this.add(borderPanelAlgo);
+
+        // SAFETY MARGIN
+        borderPanelMargin.add(marginOptionPanel);
+        this.add(borderPanelMargin);
+
 
         //Ok button
         layoutConfirm.add(confirmButton);
