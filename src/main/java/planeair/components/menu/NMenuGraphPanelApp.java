@@ -404,6 +404,12 @@ public class NMenuGraphPanelApp extends JPanel{
                 changeColorShown(app.getGraphRenderer()) ;
             }
         });
+
+        kmaxComboBox.addActionListener(e -> {
+            if (kmaxComboBox.getSelectedItem() != null) {
+                initAltitudeComboBox((int)kmaxComboBox.getSelectedItem()) ;
+            }
+        });
     }
     
     /**
@@ -456,7 +462,7 @@ public class NMenuGraphPanelApp extends JPanel{
                 currentKMax = graph.getKMax() ;
             }
             ColoringUtilities.setGraphStyle(graph, currentKMax) ;
-            NInfoGraphPanelApp panel = app.getMainScreen().getInfoGraphPanel() ;
+            NInfoGraphPanelApp panel = app.getMainScreen().getGraphInfoPanel() ;
             panel.setNbColorsUsed(graph.getNbColors()) ;
             panel.setNbConflictsOccurred(graph.getNbConflicts()) ;
         }

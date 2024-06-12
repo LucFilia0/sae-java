@@ -252,7 +252,7 @@ public class NButtonImportPanelApp extends JPanel {
                     ImportationTestGraph.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
                         fileChooser.getFile(), false);
                     
-                    initDefaultGraphImportation(this.app.getMainScreen().getInfoGraphPanel()) ;
+                    initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                     fileChooser.setFile(null);
@@ -309,7 +309,7 @@ public class NButtonImportPanelApp extends JPanel {
                     ColoringDSATUR.coloringDsatur(app.getGraph()) ;
                     ColoringUtilities.setGraphStyle(app.getGraph(), app.getGraph().getNbColors()) ;
                     app.getGraph().setKMax(app.getGraph().getNbColors()) ;
-                    initDefaultGraphImportation(this.app.getMainScreen().getInfoGraphPanel());
+                    initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel());
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
                 JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
@@ -376,9 +376,9 @@ public class NButtonImportPanelApp extends JPanel {
      */
     public void initDefaultGraphImportation(NInfoGraphPanelApp infoGraph) {
         this.app.getMainScreen().getMinGraphPanel().addGraphToPanel(this.app.getGraphRenderer()) ;
-        this.app.getMainScreen().getMenuGraphPanel()
+        this.app.getMainScreen().getGraphMenuPanel()
             .initAllComboBoxes(app.getGraph().getKMax(), true) ;
-        this.app.getMainScreen().getMenuGraphPanel().setLastAlgoSelected(null) ;
+        this.app.getMainScreen().getGraphMenuPanel().setLastAlgoSelected(null) ;
         infoGraph.addComponents() ;
         infoGraph.computeGraphStats() ;
     }

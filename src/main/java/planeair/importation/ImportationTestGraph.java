@@ -15,7 +15,6 @@ import org.graphstream.graph.Node;
 import planeair.exceptions.InvalidEntryException;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.coloring.ColoringUtilities;
-import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
 
 /**

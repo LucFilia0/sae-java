@@ -8,7 +8,6 @@ import org.graphstream.algorithm.Toolkit;
 
 import planeair.App;
 import planeair.graph.graphtype.GraphSAE;
-import planeair.graph.graphtype.TestGraph;
 
 import javax.swing.JLabel;
 

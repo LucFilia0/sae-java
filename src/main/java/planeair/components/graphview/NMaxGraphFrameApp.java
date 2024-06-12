@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 //-- Import AWT
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 
 //-- Import PlaneAIR
@@ -74,10 +75,11 @@ public class NMaxGraphFrameApp extends JFrame{
             infoGraph.setFontSize(18) ;
         }
 
-        graph.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize()) ;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setBounds(0,0,screenSize.width, screenSize.height);
+        
         graph.setBackground(Color.BLACK);
         this.add(graph);
-        this.pack();
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);  

@@ -18,7 +18,6 @@ import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.GraphSAE;
 
 import org.graphstream.ui.swing_viewer.* ;
-import org.graphstream.ui.swing_viewer.util.DefaultMouseManager;
 import org.graphstream.ui.swing_viewer.util.DefaultShortcutManager;
 import org.graphstream.ui.swing_viewer.util.MouseOverMouseManager;
 

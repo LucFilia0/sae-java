@@ -54,7 +54,7 @@ public class NMainScreen extends JPanel{
      * Panel situe in the CENTER of the Frame's borderLayout 
      * For view the map even if we have the different Panel
      */
-    private Map map = new Map();
+    private Map map ;
 
     /**
      * Layout for the BorderLayout CENTER of body
@@ -147,6 +147,10 @@ public class NMainScreen extends JPanel{
      */
     private JLabel labelLogoName = new JLabel("Plane AIR",JLabel.CENTER);
 
+    private boolean graphMenuIsVisible ;
+
+    private boolean mapMenuIsVisible ;
+
 
     /*BODY COMPONENTS*/
 
@@ -170,14 +174,14 @@ public class NMainScreen extends JPanel{
      * Appear after push the button with the icon menu.png
      * Location : left in the frame
      */
-    private NMenuGraphPanelApp menuGraph; 
+    private NMenuGraphPanelApp graphMenu; 
 
     /**
      * Menu for changing graph composition
      * Appear after push the button with the icon menu.png
      * Location : left in the frame
      */
-    private NMenuMapPanelApp menuMap;
+    private NMenuMapPanelApp mapMenu;
 
     //RIGHT
 
@@ -204,7 +208,7 @@ public class NMainScreen extends JPanel{
     /**
      * Info the graph show
      */
-    private NInfoGraphPanelApp infoGraph ;
+    private NInfoGraphPanelApp graphInfo ;
     /**
      * A frame for NMaxGraphPanelApp
      * Put directly in the frame with information
@@ -224,6 +228,7 @@ public class NMainScreen extends JPanel{
     public NMainScreen (App app){
 
         this.app = app;
+        this.map = new Map(app) ;
 
         this.initComponents();
         this.addComponents();
@@ -249,9 +254,11 @@ public class NMainScreen extends JPanel{
         // Set ButtonsMenu
         buttonMenuGraph.setBorderPainted(false);
         buttonMenuGraph.setContentAreaFilled(false);
+        graphMenuIsVisible = false ;
 
         buttonMenuMap.setBorderPainted(false);
         buttonMenuMap.setContentAreaFilled(false);
+        mapMenuIsVisible = false ;
 
         leaveButtonToImport.setBorderPainted(false);
         leaveButtonToImport.setContentAreaFilled(false);
@@ -303,8 +310,8 @@ public class NMainScreen extends JPanel{
 
         //BODY
 
-        menuGraph = new NMenuGraphPanelApp(app, 0, choixAltitudesMax);
-        menuMap = new NMenuMapPanelApp(map);
+        graphMenu = new NMenuGraphPanelApp(app, 0, choixAltitudesMax);
+        mapMenu = new NMenuMapPanelApp(map);
         
         // LEFT
         map.add(article,BorderLayout.WEST);
@@ -341,13 +348,13 @@ public class NMainScreen extends JPanel{
 
         buttonMenuGraph.addActionListener((ActionEvent e) -> {
 
-            if(buttonMenuGraph.getIcon().equals(iconMenuGraph)){
-
-                if(buttonMenuMap.getIcon().equals(iconMenuMap)){
+            if(!graphMenuIsVisible){
+                graphMenuIsVisible = true ;
+                if(!mapMenuIsVisible){
 
                     GridBagConstraints GridBagC = new GridBagConstraints(); 
                     GridBagC.insets = new Insets(0, 10, 10, 0);
-                    article.add(menuGraph, GridBagC);
+                    article.add(graphMenu, GridBagC);
                     article.paintComponents(article.getGraphics());
 
                     buttonMenuGraph.setIcon(iconCloseGraph);
@@ -355,13 +362,14 @@ public class NMainScreen extends JPanel{
                     this.repaint() ;
                 }
                 else{
+                    mapMenuIsVisible = false ;
                     map.remove(article);
                     this.app.setVisible(true);
                     article.removeAll();
 
                     GridBagConstraints GridBagC = new GridBagConstraints(); 
                     GridBagC.insets = new Insets(0, 10, 10, 0);
-                    article.add(menuGraph, GridBagC);
+                    article.add(graphMenu, GridBagC);
                     article.paintComponents(article.getGraphics());
 
                     map.add(article,BorderLayout.WEST);
@@ -374,6 +382,7 @@ public class NMainScreen extends JPanel{
                 }               
             }
             else{
+                graphMenuIsVisible = false ;
                 map.remove(article);
                 this.app.setVisible(true);
                 article.removeAll();
@@ -387,10 +396,10 @@ public class NMainScreen extends JPanel{
 
         buttonMenuMap.addActionListener((ActionEvent e) -> {
 
-            if(buttonMenuMap.getIcon().equals(iconMenuMap)){
-
-                if(buttonMenuGraph.getIcon().equals(iconMenuGraph)){
-                    article.add(menuMap);
+            if(!mapMenuIsVisible){
+                mapMenuIsVisible = true ;
+                if(!graphMenuIsVisible){
+                    article.add(mapMenu);
                     article.paintComponents(article.getGraphics());
 ;
                     buttonMenuMap.setIcon(iconCloseMap);
@@ -398,13 +407,14 @@ public class NMainScreen extends JPanel{
                     this.repaint() ;
                 }
                 else{
+                    graphMenuIsVisible = false ;
                     map.remove(article);
                     this.app.setVisible(true);
                     article.removeAll();
 
                     GridBagConstraints GridBagC = new GridBagConstraints(); 
                     GridBagC.insets = new Insets(0, 10, 10, 0);
-                    article.add(menuMap, GridBagC);
+                    article.add(mapMenu, GridBagC);
                     article.paintComponents(article.getGraphics());
 
                     map.add(article,BorderLayout.WEST);
@@ -417,6 +427,7 @@ public class NMainScreen extends JPanel{
                 }               
             }
             else{
+                mapMenuIsVisible = false ;
                 map.remove(article);
                 this.app.setVisible(true);
                 article.removeAll();
@@ -435,7 +446,7 @@ public class NMainScreen extends JPanel{
         });
 
         buttonAgr.addActionListener((ActionEvent e) -> {
-            maxGraphPanel = new NMaxGraphFrameApp(app, app.getGraphRenderer(), infoGraph);
+            maxGraphPanel = new NMaxGraphFrameApp(app, app.getGraphRenderer(), graphInfo);
         });
 
     }
@@ -452,16 +463,20 @@ public class NMainScreen extends JPanel{
      * Returns this panel's MenuGraphPanel
      * @return
      */
-    public NMenuGraphPanelApp getMenuGraphPanel() {
-        return this.menuGraph ;
+    public NMenuGraphPanelApp getGraphMenuPanel() {
+        return this.graphMenu ;
+    }
+
+    public NMenuMapPanelApp getMapMenuPanel() {
+        return this.mapMenu ;
     }
 
     /**
      * Returns this panel's InfoGraphPanel
      * @return
      */
-    public NInfoGraphPanelApp getInfoGraphPanel() {
-        return this.infoGraph ;
+    public NInfoGraphPanelApp getGraphInfoPanel() {
+        return this.graphInfo ;
     }
 
     /**
@@ -471,6 +486,14 @@ public class NMainScreen extends JPanel{
      */
     public Map getMap() {
         return this.map;
+    }
+
+    public boolean isGraphMenuVisible() {
+        return this.graphMenuIsVisible ;
+    }
+
+    public boolean isMapMenuVisible() {
+        return this.mapMenuIsVisible ;
     }
     
     public void initMap() {
@@ -487,10 +510,10 @@ public class NMainScreen extends JPanel{
         graphLRightBottom.add(minGraphPanel);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        infoGraph = new NInfoGraphPanelApp(app);
-        infoGraph.addComponents();
-        infoGraph.computeGraphStats() ;
-        graphLRightBottom.add(infoGraph);
+        graphInfo = new NInfoGraphPanelApp(app);
+        graphInfo.addComponents();
+        graphInfo.computeGraphStats() ;
+        graphLRightBottom.add(graphInfo);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
     }
 }

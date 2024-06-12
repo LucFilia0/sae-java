@@ -25,7 +25,6 @@ import planeair.graph.coloring.ColoringDSATUR;
 import planeair.graph.coloring.ColoringRLF;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.coloring.ColoringWelshPowell;
-import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
 import planeair.importation.ImportationTestGraph;
 
@@ -51,6 +50,7 @@ public abstract class Automation {
         ExecutorService threadPool = Executors.newFixedThreadPool(numberOfCores) ;
         TreeSet<TestGraph> graphSet = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
         new File(path + FOLDER_PATH).mkdirs() ;
+        CountDownLatch latch = new CountDownLatch(graphSet.size()) ;
         for (TestGraph graph : graphSet) {
             TestGraph coloredGraph = Automation.useBestColoringAlgorithm(graph, threadPool) ;
             threadPool.execute(new Runnable() {
@@ -58,10 +58,18 @@ public abstract class Automation {
                 public void run() {
                     if (graph != null) {
                         Automation.writeToFile(coloredGraph, path, threadPool) ;
+                        latch.countDown() ;
                     }
                 }
             });
                 
+        }
+        try {
+            latch.await() ;
+        }
+
+        catch (InterruptedException e) {
+            System.out.println(e) ;
         }
 
         System.out.println("Done importing") ;
@@ -81,7 +89,8 @@ public abstract class Automation {
         TreeSet<TestGraph> res = new TreeSet<>(new Comparator<TestGraph>() {
             @Override
             public int compare(TestGraph o1, TestGraph o2) {
-                return Integer.compare(Integer.valueOf(o1.getId()), Integer.valueOf(o2.getId())) ;
+                return Integer.compare(Integer.valueOf(Automation.isolateNumberInString(o1.getId())), 
+                    Integer.valueOf(Automation.isolateNumberInString(o2.getId()))) ;
             }
         }) ;
 
@@ -102,7 +111,7 @@ public abstract class Automation {
             for (File file : files) {
                 threadPool.execute(new Runnable() {
                     public void run() {
-                        TestGraph temp = new TestGraph(Automation.isolateNumberInString(file.getName())) ;
+                        TestGraph temp = new TestGraph(file.getName()) ;
                         try {
                             ImportationTestGraph.importTestGraphFromFile(temp, file, false);
                         }
@@ -137,12 +146,12 @@ public abstract class Automation {
      */
     public static void writeToFile(TestGraph graph, String path, ExecutorService threadPool) {
         try {
-            File resFile = new File(path + FOLDER_PATH + "color-eval" + graph.getId() + ".txt") ;
+            File resFile = new File(path + FOLDER_PATH + "colo-eval" + Automation.isolateNumberInString(graph.getId()) + ".txt") ;
             if (!resFile.createNewFile()) {
-                System.out.println("File #" + graph.getId() + " already exists") ;
+                System.out.println("File " + graph.getId() + " already exists") ;
             }
             else {
-                System.out.println("Writing file #" + graph.getId()) ;
+                System.out.println("Writing file " + graph.getId()) ;
                 FileWriter resWriter = new FileWriter(resFile) ;
                 List<Node> list = graph.nodes().collect(Collectors.toList()) ;
                 list.sort(new Comparator<Node>() {
@@ -162,7 +171,7 @@ public abstract class Automation {
             File conflictFile = new File(path + FOLDER_PATH + "coloration-groupe1.4.csv") ;
             FileWriter conflictWriter = new FileWriter(conflictFile, true) ;
             
-            conflictWriter.write(resFile.getName() + ";" + Integer.toString(graph.getNbConflicts()) + '\n') ;
+            conflictWriter.write(graph.getId() + ";" + Integer.toString(graph.getNbConflicts()) + '\n') ;
             conflictWriter.close() ;
         }
 

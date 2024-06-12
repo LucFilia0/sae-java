@@ -24,6 +24,7 @@ import planeair.util.AirportSet;
 import planeair.util.NTime;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphutil.Flight;
+import planeair.App;
 import planeair.components.mapview.mapwp.MapWaypointButton;
 import planeair.components.mapview.mapwp.MapWaypointPainter;
 import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
@@ -67,6 +68,11 @@ public class Map extends org.jxmapviewer.JXMapViewer {
      */
     private MapWaypointPainter itemPainter;
 
+    /**
+     * Homepage blablabla
+     */
+    private App app ;
+
     //-- Map Constructor
 
     /**
@@ -75,7 +81,8 @@ public class Map extends org.jxmapviewer.JXMapViewer {
      * 
      * @author Luc le Manifik
      */
-    public Map() {
+    public Map(App app) {
+        this.app = app ;
 
         this.initAttributes();
         this.initEvents();
@@ -99,7 +106,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         /*
         this.itemSet = new HashSet<MapItem>();
         */
-        this.itemPainter = new MapWaypointPainter();
+        this.itemPainter = new MapWaypointPainter(this.app);
 
         this.setOverlayPainter(this.itemPainter);
 

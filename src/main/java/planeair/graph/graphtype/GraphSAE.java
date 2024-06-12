@@ -129,8 +129,8 @@ public abstract class GraphSAE extends SingleGraph {
      */
     public void showAllNodes() {
         this.nodes().forEach(n -> {
-            n.removeAttribute("ui.hide") ;
             n.edges().forEach(e -> e.removeAttribute("ui.hide"));
+            n.removeAttribute("ui.hide") ;
         });
     }
 
@@ -142,11 +142,12 @@ public abstract class GraphSAE extends SingleGraph {
     public void showNodesWithColor(int color) {
         this.nodes().forEach(n -> {
             if ((Integer)n.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) != color) {
-                n.setAttribute("ui.hide") ;
                 n.edges().forEach(e -> {
                     e.setAttribute("ui.hide") ;
                 }) ;
+                n.setAttribute("ui.hide") ;
             }
         }) ;
     }
+
 }
