@@ -245,6 +245,7 @@ public class NMainScreen extends JPanel{
 
         this.setLayout(new BorderLayout());
 
+        // Make Info Panel principal
         this.infoPanel = new NInfoPanel();
         this.infoPanel.setPrincipal();
 

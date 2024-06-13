@@ -190,10 +190,12 @@ public class NTimePanelApp extends JPanel {
                 // Stops the simulation
                 this.simulationPlaying = false;
                 this.playButton.setIcon(this.iconPlay);
+                this.sliderTime.setEnabled(true);
             }else {
                 // Starts the simulation
                 this.simulationPlaying = true;
                 this.playButton.setIcon(this.iconPause);
+                this.sliderTime.setEnabled(false);
 
                 this.simulation = new Thread() {
                     @Override

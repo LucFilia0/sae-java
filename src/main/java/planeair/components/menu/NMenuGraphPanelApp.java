@@ -249,8 +249,11 @@ public class NMenuGraphPanelApp extends JPanel{
      */
     public void initAltitudeComboBox(int kmax){
         altitudeComboBox.removeAllItems();
-        if (kmax < 2) {
+        if (kmax <= 0) {
             altitudeComboBox.addItem(-1) ;
+        }
+        else if (kmax == 1) {
+            altitudeComboBox.addItem(1) ;
         }
         else {
             for(int i = 0; i <= kmax; i++ ){
@@ -364,8 +367,8 @@ public class NMenuGraphPanelApp extends JPanel{
      */
     public void initKmaxValues(int kMax) {
         this.kmaxComboBox.removeAllItems() ;
-        if (kMax > 1) {
-            for (int i = 2; i < (int)kMax*1.5 + Math.sqrt(kMax) ; i++) {
+        if (kMax > 0) {
+            for (int i = 1; i < (int)kMax*1.5 + Math.sqrt(kMax) ; i++) {
                 this.kmaxComboBox.addItem(i) ;
             }
 

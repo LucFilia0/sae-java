@@ -86,8 +86,9 @@ public class ColoringUtilities {
                 coloringNode.setAttribute("ui.class", "color" + color) ;
             }
             
-            // FFFFFF in decimal (i asked Google 👍)
-            int maxHexValue = 16777215 ;
+            // FFFFFF in decimal (i asked Google 👍) - 15 
+            //to get to FFFFF0 to avoid white nodes
+            int maxHexValue = 16777200 ;
             
             // Hexadecimal value used for the color stored as an int
             int currentHexValue ;
