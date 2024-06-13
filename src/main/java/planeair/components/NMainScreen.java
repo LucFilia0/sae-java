@@ -25,6 +25,7 @@ import planeair.components.graphview.NMaxGraphFrameApp;
 import planeair.components.graphview.NMinGraphPanelApp;
 import planeair.components.mapview.Map;
 import planeair.components.menu.NInfoGraphPanelApp;
+import planeair.components.menu.NInfoPanel;
 import planeair.components.menu.NMenuGraphPanelApp;
 import planeair.components.menu.NMenuMapPanelApp;
 import planeair.components.time.NTimePanelApp;
@@ -210,6 +211,10 @@ public class NMainScreen extends JPanel{
      */
     private NInfoGraphPanelApp graphInfo ;
     /**
+     * The panel which shows the informations of the clicked MapWaypoints
+     */
+    private NInfoPanel infoPanel;
+    /**
      * A frame for NMaxGraphPanelApp
      * Put directly in the frame with information
      */
@@ -239,6 +244,9 @@ public class NMainScreen extends JPanel{
     private void initComponents() {
 
         this.setLayout(new BorderLayout());
+
+        this.infoPanel = new NInfoPanel();
+        this.infoPanel.setPrincipal();
 
         map.setLayout(new BorderLayout());
         panelButton.setLayout(new BoxLayout(panelButton,BoxLayout.X_AXIS));
@@ -324,6 +332,9 @@ public class NMainScreen extends JPanel{
         //ADD structure to BorderLayout
         this.add(header, BorderLayout.NORTH);
         this.add(map, BorderLayout.CENTER);
+
+        // Info Panel
+        this.map.add(this.infoPanel, BorderLayout.SOUTH);
     };
 
     /**

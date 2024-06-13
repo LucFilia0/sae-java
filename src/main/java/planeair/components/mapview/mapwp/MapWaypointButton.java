@@ -78,8 +78,4 @@ public class MapWaypointButton extends javax.swing.JButton {
         return this.mapWaypoint;
     }
 
-    public void rotate(double angle) {
-
-    }
-
 }
