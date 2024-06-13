@@ -1,5 +1,7 @@
 package planeair.util;
 
+import java.util.ArrayList;
+
 //-- Import java
 
 import java.util.Iterator;
@@ -37,6 +39,11 @@ public class Airport {
      */
     private Coordinate coordinate;
 
+    /**
+     * Contains all the flights arriving to or leaving from this airport
+     */
+    private ArrayList<Flight> flightList ;
+
     //-- Airport Constructor
 
     /**
@@ -57,6 +64,7 @@ public class Airport {
             this.setName(name);
             this.setLocation(location);
             this.setCoordinate(coordinate);
+            this.flightList = new ArrayList<>() ;
         }catch(NullPointerException e) {
             throw e;
         }
@@ -100,6 +108,10 @@ public class Airport {
      */
     public Coordinate getCoordinate() {
         return this.coordinate;
+    }
+
+    public ArrayList<Flight> getFlightList() {
+        return this.flightList ;
     }
 
     //-- Airport Setters

@@ -11,6 +11,7 @@ import planeair.graph.graphutil.PanelCreator;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 import java.awt.BorderLayout;
 // Import awt COMPONENTs
@@ -21,6 +22,7 @@ import java.awt.Font;
 
 // Import Layout
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 
 /**
  * This class create a Panel for see the graph 
@@ -66,13 +68,14 @@ public class NMinGraphPanel extends JPanel {
 
     private JPanel buttonCenter = new JPanel(new GridLayout(1,1));
 
+    private JFrame maxGraphFrame ;
+
     
     /**
      * Constructor of NMinGraphPanelApp
      */
-    public NMinGraphPanel(App app, JButton buttonAgr) {
+    public NMinGraphPanel(App app) {
         this.app = app ;
-        this.buttonAgr = buttonAgr;
 
         this.setBackground(App.KINDAYELLOW);  
         //STRUCT
@@ -107,6 +110,7 @@ public class NMinGraphPanel extends JPanel {
         gridPanelMinGraph.add(buttonAgr);
 
         this.add(gridPanelMinGraph);
+        this.initListeners() ;
     }
 
     /**
@@ -115,7 +119,7 @@ public class NMinGraphPanel extends JPanel {
      * contains the panel containing the view of the graph
      */
     public void addGraphToPanel(PanelCreator graphRenderer) {
-        ViewPanel panel = graphRenderer.getViewPanel() ;
+        ViewPanel panel = graphRenderer.getDefaultViewPanel() ;
         this.FlowPanelGraph.removeAll() ;
         this.FlowPanelGraph.add(panel, BorderLayout.CENTER) ;
         buttonCenter.setBackground(App.KINDAYELLOW);
@@ -145,5 +149,17 @@ public class NMinGraphPanel extends JPanel {
 
         this.add(gridPanelMinGraph);
    }
+
+    private void initListeners() {
+        buttonAgr.addActionListener((ActionEvent e) -> {
+            buttonAgr.setEnabled(false) ;
+            maxGraphFrame = new NMaxGraphFrame(app, app.getGraphRenderer());
+            maxGraphFrame.setVisible(true) ;
+        });
+    }
+
+    public JButton getButtonAgr() {
+        return this.buttonAgr ;
+    }
 
 }

@@ -187,7 +187,8 @@ public class NGraphInfoPanel extends JPanel {
 
 
         this.setMaximumSize(new Dimension(225,200));
-       
+        this.addComponents() ;
+        this.computeGraphStats() ;
         this.setVisible(true);
 
     }

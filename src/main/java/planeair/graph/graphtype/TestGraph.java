@@ -15,8 +15,6 @@ import planeair.exceptions.InvalidEntryException;
  */
 public class TestGraph extends GraphSAE {
 
-    //-- TestGraph Attributes
-
     //-- TestGraph Constructor
 
     /**

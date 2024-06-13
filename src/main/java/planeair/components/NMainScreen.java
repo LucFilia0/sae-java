@@ -147,8 +147,14 @@ public class NMainScreen extends JPanel{
      */
     private JLabel labelLogoName = new JLabel("Plane AIR",JLabel.CENTER);
 
+    /**
+     * States whether or not the graph menu is opened
+     */
     private boolean graphMenuIsVisible ;
 
+    /**
+     * States whether or not the map menu is opened
+     */
     private boolean mapMenuIsVisible ;
 
 
@@ -190,35 +196,27 @@ public class NMainScreen extends JPanel{
      * Add Border
      */
     private JPanel spaceBorderGraph = new JPanel();
+
     /**
      * Contain an Empty Panel and spaceBorderButtonImport
      * Forcing bottom
      */
     private JPanel graphLRightBottom = new JPanel();
+
     /**
      * Panel for min graphPanel
      */
     private NMinGraphPanel minGraphPanel; 
-    /**
-     * Expand Button for graph
-     * Open a new Frame with the graph and this information
-     * Location : in the panel Mingraph --> need here for Events
-     */
-    private JButton buttonAgr = new JButton("AGRANDIR");
+
     /**
      * Info the graph show
      */
     private NGraphInfoPanel graphInfo ;
+
     /**
      * The panel which shows the informations of the clicked MapWaypoints
      */
     private NInfoPanel infoPanel;
-    /**
-     * A frame for NMaxGraphPanelApp
-     * Put directly in the frame with information
-     */
-    @SuppressWarnings("unused")
-	private NMaxGraphFrame maxGraphPanel; // DO NOT DELETE : Used in ActionListener
 
     /**
      * Having acces to homePage (setVisible elements change)
@@ -284,7 +282,7 @@ public class NMainScreen extends JPanel{
         article.setPreferredSize(new Dimension(385,100));
 
         //ASIDE
-        minGraphPanel = new NMinGraphPanel(app, buttonAgr);
+        minGraphPanel = new NMinGraphPanel(app);
         minGraphPanel.addComponents();
 
         graphLRightBottom.setLayout(new BoxLayout(graphLRightBottom, BoxLayout.Y_AXIS));
@@ -301,7 +299,7 @@ public class NMainScreen extends JPanel{
      */
     private void addComponents(){
 
-        //HEADER COMPOSANTS
+        //HEADER COMPONENTS
         panelButton.add(Box.createRigidArea(new Dimension(102, 0)));
         panelButton.add(buttonMenuGraph);
         panelButton.add(buttonMenuMap);
@@ -457,10 +455,6 @@ public class NMainScreen extends JPanel{
             this.map.clearAll();
         });
 
-        buttonAgr.addActionListener((ActionEvent e) -> {
-            maxGraphPanel = new NMaxGraphFrame(app, app.getGraphRenderer(), graphInfo);
-        });
-
     }
 
     /**
@@ -523,6 +517,6 @@ public class NMainScreen extends JPanel{
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
 
         graphInfo = new NGraphInfoPanel(this.app);
-        graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
+        graphLRightBottom.add(graphInfo) ;
     }
 }

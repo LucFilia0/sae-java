@@ -356,7 +356,12 @@ public abstract class ImportationFIG {
         }
 
         try {
-            flight.setFlightAttributes(airportSet.getAirport(s_departure), airportSet.getAirport(s_arrival), departureTime, duration);
+            Airport start = airportSet.getAirport(s_departure) ;
+            Airport end = airportSet.getAirport(s_arrival) ;
+            start.getFlightList().add(flight) ;
+            end.getFlightList().add(flight) ;
+            
+            flight.setFlightAttributes(start, end, departureTime, duration);
         }catch(ObjectNotFoundException onfe) {
             throw new InvalidFileFormatException(currentLine, "Airport does not exist");
         }catch(InvalidEntryException iee) {

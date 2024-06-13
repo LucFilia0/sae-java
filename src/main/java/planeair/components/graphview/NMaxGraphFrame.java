@@ -54,16 +54,16 @@ public class NMaxGraphFrame extends JFrame{
     /**
      * Constructor of NMaxGraphPanelApp
      */
-    public NMaxGraphFrame(App app, PanelCreator graphRenderer, NGraphInfoPanel infoGraph){
+    public NMaxGraphFrame(App app, PanelCreator graphRenderer){
         this.app = app ;
-        this.infoGraph = infoGraph ;
+        this.infoGraph = new NGraphInfoPanel(app) ;
         JPanel infoGraphPanel = new JPanel() ;
         if (graphRenderer == null) {
             graph = new NSkullPanel() ;
             this.setTitle("Vue sur rien du tout :(") ;
         }
         else {
-            graph = graphRenderer.getViewPanel() ;
+            graph = graphRenderer.getAnotherViewPanel() ;
             graph.setLayout(new FlowLayout(FlowLayout.LEFT)) ;
             this.setTitle("Vue sur le Graph " + graphRenderer.getGraph().getId()) ; 
 
@@ -85,8 +85,6 @@ public class NMaxGraphFrame extends JFrame{
         graph.setBackground(Color.BLACK);
         this.add(graph);
         this.setSize(new Dimension(1100,700));
-        this.setAlwaysOnTop(true); 
-        this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);  
         this.addWindowListener(new WindowAdapter() {
@@ -95,6 +93,7 @@ public class NMaxGraphFrame extends JFrame{
                 removeAll() ;
                 infoGraphPanel.removeAll() ;
                 graph.removeAll() ;
+                app.getMainScreen().getMinGraphPanel().getButtonAgr().setEnabled(true) ;
                 if (graphRenderer != null) {
                     infoGraph.setFontSize(12);
                     app.getMainScreen().initGraphBottomPanel() ;

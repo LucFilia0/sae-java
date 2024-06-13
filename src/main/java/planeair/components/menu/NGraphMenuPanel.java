@@ -111,7 +111,7 @@ public class NGraphMenuPanel extends JPanel{
      */
     private JPanel borderPanelMargin = new JPanel();
 
-    //ALGORITHMES
+    //ALGORITHMS
 
     /**
      * Panel for algo option
@@ -333,8 +333,11 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Initializes all comboBoxes in the menu
+     * 
      * @param kMax
      * @param graphIsImported
+     * 
+     * @author Nathan LIEGEON
      */
     public void initAllComboBoxes(int kMax, boolean graphIsImported) {
         initAlgoComboBox(graphIsImported) ;
@@ -344,6 +347,8 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Initializes the different Renderers needed
+     * 
+     * @author Nathan LIEGEON
      */
     private void initRenderers() {
         altitudeComboBox.setRenderer(new NDefaultRenderer<Integer>() {
@@ -486,6 +491,8 @@ public class NGraphMenuPanel extends JPanel{
     /**
      * Changes the coloring of this graph best on the kmax and algorithm selected
      * @param graph
+     * 
+     * @author Nathan LIEGEON
      */
     private void changeColoring(GraphSAE graph) {
         boolean coloringChanged = false ;
@@ -498,17 +505,14 @@ public class NGraphMenuPanel extends JPanel{
         
         // The algorithm used changed so we need to update the coloring
         if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
-            if (lastAlgoSelected != null) {
-                ColoringUtilities.removeCurrentColoring(graph) ;
-            }
             lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
             coloringChanged = true ;
         }
         
-        // In case it didn't we check if it needs to be changed
+        // In case we didn't check if it needs to be changed
         else {
             // If the new KMax is smaller than the old one, if the coloration can be improved 
-            //or if the coloring has more colors than the currentKmax, then we change the coloration
+            // or if the coloring has more colors than the currentKmax, then we change the coloration
             if (oldKMax > currentKMax || oldKMax < currentKMax && graph.getNbConflicts() > 0 || graph.getNbColors() > currentKMax) {
                 coloringChanged = true ;
             }
@@ -534,6 +538,8 @@ public class NGraphMenuPanel extends JPanel{
     /**
      * Changes the color shown based on the value in the altitudeComboBox
      * @param graphRenderer
+     * 
+     * @author Nathan LIEGEON
      */
     private void changeColorShown(PanelCreator graphRenderer) {
         int colorShown = (int)altitudeComboBox.getSelectedItem() ;

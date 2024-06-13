@@ -29,14 +29,39 @@ import planeair.graph.graphtype.TestGraph;
 import planeair.importation.ImportationTestGraph;
 
 /**
- * Does the importation of graphs from a folder automatically
+ * Automates every step of the test where we have to import 20 graphs, 
+ * color them and store the results.
+ * 
+ * @author Nathan LIEGEON
  */
 public abstract class Automation {
+    /**
+     * Number of algorithms that are supported by this process
+     */
     private static final int NUMBER_OF_ALGORITHMS = 3 ;
+
+    /**
+     * Int identifier for the Welsh_Powell algorithm, represents its index in lists where its results are stored
+     * and its identifying value for switch statements
+     */
     private static final int WELSH_POWELL = 0 ;
+
+    /**
+     * Int identifier for the DSATUR algorithm, represents its index in lists where its results are stored
+     * and its identifying value for switch statements
+     */
     private static final int DSATUR = 1 ;
+
+    /**
+     * Int identifier for the RLF algorithm, represents its index in lists where its results are stored
+     * and its identifying value for switch statements
+     */
     private static final int RLF = 2 ;
-    private static String FOLDER_PATH = "/Solution_Equipe_G1-4/" ;
+
+    /**
+     * Default folder where the solution will be stored
+     */
+    private static final String FOLDER_PATH = "/Solution_Equipe_G1-4/" ;
         
     /**
      * Starts the importation of all the files
@@ -44,6 +69,8 @@ public abstract class Automation {
      * @param path Folder from which the files will be imported
      * @param identifiers The file name structures
      * @param placeholder Character that will be replaced by numbers
+     * 
+     * @author Nathan LIEGEON
      */
     public static void startAutomation(String path, String[] identifiers, char placeholder, int numberOfCores) {
         long start = System.nanoTime() ;
@@ -79,11 +106,14 @@ public abstract class Automation {
 
     /**
      * Loads all graphs from the folder and stores them in a LinkedList which is returned
+     * 
      * @param path the folder's path
      * @param identifiers the strings the name will be compared to
      * @param placeholder character that should be replaced by numbers for the check
      * @param threadPool current threadPool used to divide the tasks
      * @return the list of Graphs that were imported ordered by ID
+     * 
+     * @author Nathan LIEGEON
      */
     public static TreeSet<TestGraph> importDataFromFolder(String path, String[] identifiers, char placeholder, ExecutorService threadPool) {
         TreeSet<TestGraph> res = new TreeSet<>(new Comparator<TestGraph>() {
@@ -140,9 +170,12 @@ public abstract class Automation {
 
     /**
      * Writes the relevant data to the graph files
+     * 
      * @param graph Graph whose data is written down
      * @param path Parent folder where the importation took place
      * @param threadPool current threadPool used to divide the tasks
+     * 
+     * @author Nathan LIEGEON
      */
     public static void writeToFile(TestGraph graph, String path, ExecutorService threadPool) {
         try {
@@ -182,8 +215,11 @@ public abstract class Automation {
 
     /**
      * Recovers the first number in the String and returns it
+     * 
      * @param input String containing the Integer
      * @return The String contraining the isolated Integer, null if there wasn't any
+     * 
+     * @author Nathan LIEGEON
      */
     public static String isolateNumberInString(String input) {
         int length = input.length() ;
@@ -216,6 +252,8 @@ public abstract class Automation {
      * @param graph Graph that was colored
      * @param threadPool List of threads currently used
      * @return
+     * 
+     * @author Nathan LIEGEON
      */
     public static TestGraph useBestColoringAlgorithm(TestGraph graph, ExecutorService threadPool) {
 
@@ -290,10 +328,13 @@ public abstract class Automation {
      * Tells whether or not a file is of a similar form to the identifier
      * ex : identifier is "testGraphX.txt" filename is "testGraph12.txt", placeholder is 'X'
      * The function will return true for the example
+     * 
      * @param filename name your are testing
      * @param identifier identifier the filename will be compared to
      * @param placeholder character which should be replaced by numbers
      * @return boolean telling whether the file was similar to the identifier or not
+     * 
+     * @author Nathan LIEGEON
      */
     public static boolean isFileLike(String filename, String identifier, char placeholder) {
         // Initialisation
@@ -343,10 +384,13 @@ public abstract class Automation {
      * Tells whether or not a file is of a similar form to one of the identifiers
      * ex : identifier is "testGraphX.txt" filename is "testGraph12.txt", placeholder is 'X'
      * The function will return true for the example
+     * 
      * @param filename name your are testing
      * @param identifier array containing different identifiers the filename will be compared to
      * @param placeholder character which should be replaced by numbers
      * @return boolean telling whether the file was similar to one of the identifiers or not
+     * 
+     * @author Nathan LIEGEON
      */
     public static boolean isFileLike(String filename, String[] identifiers, char placeholder) {
         int i = 0 ;
@@ -361,10 +405,13 @@ public abstract class Automation {
 
     /**
      * Returns which algorithm in the list has the best solution
+     * 
      * @param arg0
      * @param arg1
      * @param arg2
      * @return index of the best algorithm
+     * 
+     * @author Nathan LIEGEON
      */
     public static Integer findBestAlgorithmInList(ArrayList<TestGraph> list) {
 

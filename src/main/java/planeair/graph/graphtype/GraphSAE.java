@@ -35,8 +35,8 @@ public abstract class GraphSAE extends SingleGraph {
     public static final String CONFLICT_ATTRIBUTE = "nbConflicts" ; 
 
     /**
-     * Array the size of the number of color containing
-     * at the index i the Color assigned to the color i+1
+     * array the size of the number of color used to color 
+     * the graph containing at the index i the Color assigned to the color i+1
      */
     private Color[] colorTab ;
 
@@ -82,6 +82,11 @@ public abstract class GraphSAE extends SingleGraph {
         return (int)this.getAttribute(TestGraph.CONFLICT_ATTRIBUTE) ;
     }
 
+    /**
+     * Returns an array the size of the number of color used to color 
+     * the graph containing at the index i the Color assigned to the color i+1
+     * @return
+     */
     public Color[] getColorTab() {
         return this.colorTab ;
     }
@@ -124,6 +129,10 @@ public abstract class GraphSAE extends SingleGraph {
         this.setAttribute(CONFLICT_ATTRIBUTE, nbConflicts) ;
     }
 
+    /**
+     * Overrides the old array containing the colors with this one
+     * @param colorTab
+     */
     public void setColorTab(Color[] colorTab) {
         this.colorTab = colorTab ;
     }
@@ -132,6 +141,7 @@ public abstract class GraphSAE extends SingleGraph {
      * Removes the "ui.hide" attribute from every node of this graph
      */
     public void showAllNodes() {
+        // Tell graphstream to fix their bug (or fix our own skill issue)
         this.nodes().forEach(n -> {
             n.edges().forEach(e -> e.removeAttribute("ui.hide"));
             n.removeAttribute("ui.hide") ;
@@ -141,9 +151,14 @@ public abstract class GraphSAE extends SingleGraph {
     /**
      * Shows only nodes with their colorAttribute set to color
      * Gives the attribute "ui.hide" to all the ones that don't
+     * 
+     * 
      * @param color
+     * 
+     * @author Nathan LIEGEON
      */
     public void showNodesWithColor(int color) {
+        // Tell graphstream to fix their bug (or fix our own skill issue)
         this.nodes().forEach(n -> {
             if ((Integer)n.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) != color) {
                 n.edges().forEach(e -> {

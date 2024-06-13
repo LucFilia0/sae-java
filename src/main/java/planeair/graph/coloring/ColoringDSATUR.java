@@ -17,7 +17,7 @@ public abstract class ColoringDSATUR {
      * @param graph Graph that will be tested.
      * @return max array consisting of 2 values, 1 : number of colors used, 2 : number of conflicts
      * 
-     * @autor GIRAUD Nila
+     * @autor GIRAUD Nila mod. Nathan LIEGEON
      */
     public static void coloringDsatur(GraphSAE graph) {
         int kMax = graph.getKMax() ;
@@ -54,7 +54,7 @@ public abstract class ColoringDSATUR {
      * @param ListNodes LinkedList of Graph's Nodes, with descendent sort (with one less node at each recursive call)
      * @param color Color tab wich give a resum of Adjacents Node's colors
      * 
-     * @author GIRAUD Nila
+     * @author GIRAUD Nila mod. Nathan LIEGEON
      */
 
     private static void recursifDSATUR(LinkedList<Node> ListNodes, GraphSAE graph, int kMax){
@@ -142,7 +142,7 @@ public abstract class ColoringDSATUR {
     }
 
     /**
-     * Insert a Node in a linkedList with in a descendent order
+     * Inserts a Node in the linkedList sorted in descending order
      * @param ListNodes LinkedList of Graph's Nodes
      * @param nodeP The Node that we want to insert
      * 

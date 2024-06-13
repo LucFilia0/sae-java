@@ -23,6 +23,8 @@ import org.graphstream.ui.swing_viewer.util.MouseOverMouseManager;
 
 /**
  * Class handling the rendering of Graphs and the events on its panel
+ * 
+ * @author Nathan LIEGEON
  */
 public class PanelCreator {
 
@@ -61,18 +63,30 @@ public class PanelCreator {
 	 */
 	protected Point3 dragPos = null ;
 
+	protected static int numberOfInstances = 0 ;
+
 	/**
-	 * Calls the default constructor with inOwnFrame set to false
+	 * Handles the creation of a view on the graph, giving access
+	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
+	 * moving around the view...
 	 * @param graph
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	public PanelCreator(GraphSAE graph) {
 		this(graph, false) ;
 	}
 	/**
-	 * Opens the graph in a JFrame and handles mouse events
+	 * Handles the creation of a view on the graph, giving access
+	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
+	 * moving around the view...
+	 * 
 	 * @param graph graph you are trying to render
-	 * @param inOwnFrame 
+	 * @param inOwnFrame if true the graph will open its own frame, else 
+	 * its viewPanel will have to be added to a JFrame
 	 * @see ViewPanel
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	public PanelCreator(GraphSAE graph, boolean inOwnFrame) {
 		this.graph = graph ;
@@ -106,11 +120,12 @@ public class PanelCreator {
 		panel.addMouseListener(new MouseEventHandler()) ;
 		fromViewer.addSink(graph) ;
 		
-		// Thread running in the background constantly sending the changes to the Graph
+		// Thread running in the background constantly sending events that happened on the graph
 		Thread graphPump = new Thread(new Runnable() {
 			public void run() {
 				while(isRendering) {
 					try {
+						// Blocking pump waits for events so it's better for performances
 						fromViewer.blockingPump() ;
 					}
 
@@ -136,6 +151,7 @@ public class PanelCreator {
 	/**
 	 * Getter for the viewer related to the Graph in the panel
 	 * @return the Viewer object
+	 * @see Viewer
 	 */
 	public Viewer getViewer() {
 		return this.viewer;
@@ -143,6 +159,7 @@ public class PanelCreator {
 
 	/**
 	 * Getter for the pipe handling events
+	 * @see ViewerPipe
 	 * @return the ViewerPipe object
 	 */
 	public ViewerPipe getViewerPipe() {
@@ -152,14 +169,25 @@ public class PanelCreator {
 	/**
 	 * Getter for the panel containing the graph
 	 * @return the ViewPanel object
+	 * @see ViewPanel
 	 */
-	public ViewPanel getViewPanel() {
+	public ViewPanel getDefaultViewPanel() {
 		return this.panel;
 	}
 
 	/**
-	 * Getter for the view of the Graph
+	 * Returns another view panel so you can have
+	 * multiplie views on the graph at the same time.
 	 * @return
+	 */
+	public ViewPanel getAnotherViewPanel() {
+		return (ViewPanel)viewer.addView("new Instance" + (++numberOfInstances), viewer.newDefaultGraphRenderer(), false) ;
+	}
+
+	/**
+	 * Getter for the view of the Graph
+	 * @return 
+	 * @see View
 	 */
 	public View getView() {
 		return this.view ;
@@ -169,6 +197,8 @@ public class PanelCreator {
 	 * Returns the mouse position in Graph Units while making sure it stays inside the authorized area
 	 * @param cam The View Camera
 	 * @return The Point representing the mouse's effective Position
+	 *
+	 * @author Nathan LIEGEON
 	 */
 	private Point3 getGraphPositionFromClick(Camera cam, Point mousePosPx) {
 		//Initialisation
@@ -185,6 +215,8 @@ public class PanelCreator {
 	 * @param cam
 	 * @param point The point we are adjusting
 	 * @return 
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	public Point3 getAdjustedPosition(Camera cam, Point3 point) {
 		Point3 res ;
@@ -209,6 +241,8 @@ public class PanelCreator {
 
 	/**
 	 * Moves the camera when dragging the mouse
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	private void dragMovement(MouseEvent e) {
 		double scaleFactor = 0.05 ;
@@ -222,14 +256,24 @@ public class PanelCreator {
 		cam.setViewCenter(newViewCenter.x, newViewCenter.y, 0) ;
 	}
 
-	
+	/**
+	 * Class handling all mouse events on this panel
+	 * 
+	 * @author Nathan LIEGEON
+	 */
 	private class MouseEventHandler extends MouseAdapter {
 
+		/**
+		 * Initializes the position where the mouse started dragging from
+		 */
 		@Override
 		public void mousePressed(MouseEvent e) {
 			dragPos = getGraphPositionFromClick(view.getCamera(), e.getPoint()) ;
 		}
 
+		/**
+		 * Deletes the position the mouse started dragging from
+		 */
 		public void mouseReleased(MouseEvent e) {
 			dragPos = null ;
 		}
@@ -237,6 +281,8 @@ public class PanelCreator {
 		/**
 		 * This event handles zooming on the graph from 0.1x to 2x while 
 		 * also moving the camera a bit so the zoom is less clunky to use
+		 * 
+		 * @author Nathan LIEGEON
 		 */
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent me) {
@@ -269,7 +315,8 @@ public class PanelCreator {
 	}
 		
 	/**
-	 * Class handling methods from ViewerListener
+	 * Class handling viewer events which are events related to graphical elements in the viewer
+	 * (nodes, edges and other stuff)
 	 */
 	private class ViewerEventHandler implements ViewerListener {
 		/**
@@ -281,7 +328,10 @@ public class PanelCreator {
 		}
 		
 		/**
-		 * Makes nodes bigger when hovering over them
+		 * Makes nodes bigger when hovering over them 
+		 * and shows their id
+		 *
+		 * @author Nathan LIEGEON
 		 */
 		@Override
 		public void mouseOver(String id) {
@@ -295,7 +345,9 @@ public class PanelCreator {
 		}
 
 		/**
-		 * Returns the nodes to their original size
+		 * Returns the nodes to their original state
+		 * 
+		 * @author Nathan LIEGEON
 		 */
 		@Override
 		public void mouseLeft(String id) {

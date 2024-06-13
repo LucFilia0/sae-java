@@ -10,9 +10,8 @@ import org.graphstream.graph.*;
  */
 public class FlightFactory implements NodeFactory<SingleNode> {
     /**
-     * Overrides the way {@link org.graphstream.graph.Node Nodes} are created in a graph so that we can instantiate them as {@link Flight Flights}
-     * 
-     * {@inheritDoc}
+     * Overrides the way {@link org.graphstream.graph.Node Nodes} are 
+     * created in a graph so that we can instantiate them as {@link Flight Flights}
      */
     @Override
     public Flight newInstance(String id, Graph graph) {
