@@ -63,7 +63,7 @@ public class NMaxGraphFrame extends JFrame{
             this.setTitle("Vue sur rien du tout :(") ;
         }
         else {
-            graph = graphRenderer.getAnotherViewPanel() ;
+            graph = graphRenderer.getViewPanel() ;
             graph.setLayout(new FlowLayout(FlowLayout.LEFT)) ;
             this.setTitle("Vue sur le Graph " + graphRenderer.getGraph().getId()) ; 
 

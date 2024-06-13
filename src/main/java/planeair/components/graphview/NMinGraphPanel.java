@@ -18,11 +18,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-
-
+import java.awt.Graphics;
 // Import Layout
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 
 /**
  * This class create a Panel for see the graph 
@@ -119,7 +121,14 @@ public class NMinGraphPanel extends JPanel {
      * contains the panel containing the view of the graph
      */
     public void addGraphToPanel(PanelCreator graphRenderer) {
-        ViewPanel panel = graphRenderer.getDefaultViewPanel() ;
+        FlowPanelGraph.removeAll() ;
+        JPanel panel ;
+        if (graphRenderer != null) {
+            panel = graphRenderer.getViewPanel() ;
+        }
+        else {
+            panel = new NGraphNotHerePanel() ;
+        }
         this.FlowPanelGraph.removeAll() ;
         this.FlowPanelGraph.add(panel, BorderLayout.CENTER) ;
         buttonCenter.setBackground(App.KINDAYELLOW);
@@ -155,11 +164,40 @@ public class NMinGraphPanel extends JPanel {
             buttonAgr.setEnabled(false) ;
             maxGraphFrame = new NMaxGraphFrame(app, app.getGraphRenderer());
             maxGraphFrame.setVisible(true) ;
+            addGraphToPanel(null) ;
         });
     }
 
     public JButton getButtonAgr() {
         return this.buttonAgr ;
+    }
+
+    /**
+     * Draws a centered String in a Rectangle
+     * I didn't make this, I yonked it from StackOverflow
+     * Here's the original question 
+     * https://stackoverflow.com/questions/27706197/how-can-i-center-graphics-drawstring-in-java
+     * @author Gilbert Le Blanc
+     * @param g
+     * @param r
+     * @param s
+     * @param font
+     */
+    public static void centerString(Graphics g, Rectangle r, String s, 
+            Font font) {
+        FontRenderContext frc = new FontRenderContext(null, true, true);
+
+        Rectangle2D r2D = font.getStringBounds(s, frc);
+        int rWidth = (int) Math.round(r2D.getWidth());
+        int rHeight = (int) Math.round(r2D.getHeight());
+        int rX = (int) Math.round(r2D.getX());
+        int rY = (int) Math.round(r2D.getY());
+
+        int a = (r.width / 2) - (rWidth / 2) - rX;
+        int b = (r.height / 2) - (rHeight / 2) - rY;
+
+        g.setFont(font);
+        g.drawString(s, r.x + a, r.y + b);
     }
 
 }

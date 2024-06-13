@@ -38,7 +38,6 @@ public class NTimePanel extends JPanel {
      */
     public static final int MIN = 59;
 
-
     /**
      * Layout Panel For hour's panel, link to the GridLayout of header
      */

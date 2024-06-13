@@ -20,7 +20,6 @@ import javax.swing.BoxLayout;
 
 import planeair.App;
 import planeair.components.comboboxes.NComboBoxGraph;
-import planeair.components.graphview.NMaxGraphFrame;
 import planeair.components.graphview.NMinGraphPanel;
 import planeair.components.mapview.Map;
 import planeair.components.menu.NGraphInfoPanel;

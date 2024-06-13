@@ -110,7 +110,7 @@ public class PanelCreator {
 		
 		view.setShortcutManager(new DefaultShortcutManager());
 
-		ColoringUtilities.setGraphStyle(graph, 0) ;
+		ColoringUtilities.setGraphStyle(graph, graph.getKMax()) ;
 
 		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
 		// and also checks for events
@@ -171,17 +171,8 @@ public class PanelCreator {
 	 * @return the ViewPanel object
 	 * @see ViewPanel
 	 */
-	public ViewPanel getDefaultViewPanel() {
+	public ViewPanel getViewPanel() {
 		return this.panel;
-	}
-
-	/**
-	 * Returns another view panel so you can have
-	 * multiplie views on the graph at the same time.
-	 * @return
-	 */
-	public ViewPanel getAnotherViewPanel() {
-		return (ViewPanel)viewer.addView("new Instance" + (++numberOfInstances), viewer.newDefaultGraphRenderer(), false) ;
 	}
 
 	/**

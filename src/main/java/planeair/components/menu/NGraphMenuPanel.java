@@ -78,6 +78,7 @@ public class NGraphMenuPanel extends JPanel{
      * Title of the choose ComboBox 
      */
     private JLabel colorChoice = new JLabel("Choix de la couleur", SwingConstants.CENTER);
+
     /**
      * JComboBox for choose the altitude (or everyone)
      * "Toutes" -> for everyone
@@ -414,7 +415,7 @@ public class NGraphMenuPanel extends JPanel{
      * Getter for the comboBox containing the kMax options
      * @return
      */
-    public JComboBox<Integer> getKmaxComboBox() {
+    public NComboBoxGraph getKmaxComboBox() {
         return this.kmaxComboBox ;
     }
 
@@ -425,6 +426,12 @@ public class NGraphMenuPanel extends JPanel{
     public JComboBox<String> getAlgoChoice() {
         return this.algoChoice ;
     }
+
+    public NComboBoxGraph getAltitudesComboBox() {
+        return this.altitudeComboBox ;
+    }
+
+    private int lastColorSelected ;
 
     /**
      * Sets the range of values and the default value of the kMax comboBox in the menu
@@ -461,6 +468,10 @@ public class NGraphMenuPanel extends JPanel{
         return (String)this.algoChoice.getSelectedItem() ;
     }
 
+    public Integer getLastColorSelected() {
+        return this.lastColorSelected ;
+    }
+
     /**
      * Adds listeners to components
      */
@@ -468,6 +479,7 @@ public class NGraphMenuPanel extends JPanel{
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                lastColorSelected = (int)altitudeComboBox.getSelectedItem() ;
                 changeColoring(app.getGraph()) ;
                 changeColorShown(app.getGraphRenderer()) ;
             }
@@ -542,11 +554,10 @@ public class NGraphMenuPanel extends JPanel{
      * @author Nathan LIEGEON
      */
     private void changeColorShown(PanelCreator graphRenderer) {
-        int colorShown = (int)altitudeComboBox.getSelectedItem() ;
         GraphSAE graph = graphRenderer.getGraph() ;
         graph.showAllNodes() ;
-        if (colorShown != 0) {
-            graph.showNodesWithColor(colorShown) ;
+        if (lastColorSelected != 0) {
+            graph.showNodesWithColor(lastColorSelected) ;
         }
     }
 }
