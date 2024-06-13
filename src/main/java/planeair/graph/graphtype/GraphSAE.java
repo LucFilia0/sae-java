@@ -34,6 +34,10 @@ public abstract class GraphSAE extends SingleGraph {
      */
     public static final String CONFLICT_ATTRIBUTE = "nbConflicts" ; 
 
+    /**
+     * Array the size of the number of color containing
+     * at the index i the Color assigned to the color i+1
+     */
     private Color[] colorTab ;
 
     /**
