@@ -4,10 +4,8 @@ package planeair.components;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.Box;
 // Import of AWT components
 import java.awt.Dimension;
@@ -21,14 +19,15 @@ import java.awt.GridBagConstraints;
 import javax.swing.BoxLayout;
 
 import planeair.App;
-import planeair.components.graphview.NMaxGraphFrameApp;
-import planeair.components.graphview.NMinGraphPanelApp;
+import planeair.components.comboboxes.NComboBoxGraph;
+import planeair.components.graphview.NMaxGraphFrame;
+import planeair.components.graphview.NMinGraphPanel;
 import planeair.components.mapview.Map;
-import planeair.components.menu.NInfoGraphPanelApp;
+import planeair.components.menu.NGraphInfoPanel;
 import planeair.components.menu.NInfoPanel;
-import planeair.components.menu.NMenuGraphPanelApp;
-import planeair.components.menu.NMenuMapPanelApp;
-import planeair.components.time.NTimePanelApp;
+import planeair.components.menu.NMapMenuPanel;
+import planeair.components.menu.NGraphMenuPanel;
+import planeair.components.time.NTimePanel;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.TestGraph;
 
@@ -162,12 +161,12 @@ public class NMainScreen extends JPanel{
      * Localisation : Top of the center of the frame
      * The user can move time (because it's a simulation)
      */
-    private NTimePanelApp timePanel;
+    private NTimePanel timePanel;
     /**
      * JLabel for see the number altitudes choose
      * Location : in the panel menu --> need here for Events
      */
-    private JComboBox<Integer> choixAltitudesMax = new JComboBox<>(); 
+    private NComboBoxGraph kmaxComboBox = new NComboBoxGraph(); 
 
      // LEFT 
     /**
@@ -175,14 +174,14 @@ public class NMainScreen extends JPanel{
      * Appear after push the button with the icon menu.png
      * Location : left in the frame
      */
-    private NMenuGraphPanelApp graphMenu; 
+    private NGraphMenuPanel graphMenu; 
 
     /**
      * Menu for changing graph composition
      * Appear after push the button with the icon menu.png
      * Location : left in the frame
      */
-    private NMenuMapPanelApp mapMenu;
+    private NMapMenuPanel mapMenu;
 
     //RIGHT
 
@@ -199,7 +198,7 @@ public class NMainScreen extends JPanel{
     /**
      * Panel for min graphPanel
      */
-    private NMinGraphPanelApp minGraphPanel; 
+    private NMinGraphPanel minGraphPanel; 
     /**
      * Expand Button for graph
      * Open a new Frame with the graph and this information
@@ -209,7 +208,7 @@ public class NMainScreen extends JPanel{
     /**
      * Info the graph show
      */
-    private NInfoGraphPanelApp graphInfo ;
+    private NGraphInfoPanel graphInfo ;
     /**
      * The panel which shows the informations of the clicked MapWaypoints
      */
@@ -218,7 +217,8 @@ public class NMainScreen extends JPanel{
      * A frame for NMaxGraphPanelApp
      * Put directly in the frame with information
      */
-    private NMaxGraphFrameApp maxGraphPanel; //maybe transform the class to JFrame directly
+    @SuppressWarnings("unused")
+	private NMaxGraphFrame maxGraphPanel; // DO NOT DELETE : Used in ActionListener
 
     /**
      * Having acces to homePage (setVisible elements change)
@@ -284,7 +284,7 @@ public class NMainScreen extends JPanel{
         article.setPreferredSize(new Dimension(385,100));
 
         //ASIDE
-        minGraphPanel = new NMinGraphPanelApp(app, buttonAgr);
+        minGraphPanel = new NMinGraphPanel(app, buttonAgr);
         minGraphPanel.addComponents();
 
         graphLRightBottom.setLayout(new BoxLayout(graphLRightBottom, BoxLayout.Y_AXIS));
@@ -319,8 +319,8 @@ public class NMainScreen extends JPanel{
 
         //BODY
 
-        graphMenu = new NMenuGraphPanelApp(app, 0, choixAltitudesMax);
-        mapMenu = new NMenuMapPanelApp(map);
+        graphMenu = new NGraphMenuPanel(app, 0, kmaxComboBox);
+        mapMenu = new NMapMenuPanel(map);
         
         // LEFT
         map.add(article,BorderLayout.WEST);
@@ -345,7 +345,7 @@ public class NMainScreen extends JPanel{
      */
     public void addTimePanel() {
         if(this.app.getGraphRenderer() != null && this.timePanel == null && app.getGraph() instanceof FlightsIntersectionGraph) {
-            this.timePanel = new NTimePanelApp(this.app);
+            this.timePanel = new NTimePanel(this.app);
             map.add(timePanel, BorderLayout.CENTER);
         }else if(this.app.getGraphRenderer() != null && this.timePanel != null && app.getGraph() instanceof TestGraph) {
             map.remove(this.timePanel);
@@ -458,7 +458,7 @@ public class NMainScreen extends JPanel{
         });
 
         buttonAgr.addActionListener((ActionEvent e) -> {
-            maxGraphPanel = new NMaxGraphFrameApp(app, app.getGraphRenderer(), graphInfo);
+            maxGraphPanel = new NMaxGraphFrame(app, app.getGraphRenderer(), graphInfo);
         });
 
     }
@@ -467,7 +467,7 @@ public class NMainScreen extends JPanel{
      * Returns this panel's MinGraphPanel
      * @return
      */
-    public NMinGraphPanelApp getMinGraphPanel() {
+    public NMinGraphPanel getMinGraphPanel() {
         return this.minGraphPanel ;
     }
 
@@ -475,11 +475,11 @@ public class NMainScreen extends JPanel{
      * Returns this panel's MenuGraphPanel
      * @return
      */
-    public NMenuGraphPanelApp getGraphMenuPanel() {
+    public NGraphMenuPanel getGraphMenuPanel() {
         return this.graphMenu ;
     }
 
-    public NMenuMapPanelApp getMapMenuPanel() {
+    public NMapMenuPanel getMapMenuPanel() {
         return this.mapMenu ;
     }
 
@@ -487,7 +487,7 @@ public class NMainScreen extends JPanel{
      * Returns this panel's InfoGraphPanel
      * @return
      */
-    public NInfoGraphPanelApp getGraphInfoPanel() {
+    public NGraphInfoPanel getGraphInfoPanel() {
         return this.graphInfo ;
     }
 
@@ -522,10 +522,7 @@ public class NMainScreen extends JPanel{
         graphLRightBottom.add(minGraphPanel);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        graphInfo = new NInfoGraphPanelApp(app);
-        graphInfo.addComponents();
-        graphInfo.computeGraphStats() ;
-        graphLRightBottom.add(graphInfo);
+        graphInfo = new NGraphInfoPanel(this.app);
         graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
     }
 }

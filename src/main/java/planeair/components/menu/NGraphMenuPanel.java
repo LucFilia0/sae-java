@@ -3,7 +3,6 @@ package planeair.components.menu;
 
 // Import swing components
 import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JButton;
@@ -16,7 +15,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-
+import java.awt.GridBagLayout;
 //Import Layout
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -24,6 +23,10 @@ import java.awt.event.ActionListener;
 import java.awt.FlowLayout;
 
 import planeair.App;
+import planeair.components.comboboxes.NComboBoxGraph;
+import planeair.components.comboboxes.NComboBoxTime;
+import planeair.components.comboboxes.renders.NDefaultRenderer;
+import planeair.components.comboboxes.renders.NTimeComboBoxRenderer;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.GraphSAE;
@@ -36,7 +39,12 @@ import planeair.graph.graphutil.PanelCreator;
  * 
  * @author GIRAUD Nila
  */
-public class NMenuGraphPanelApp extends JPanel{
+public class NGraphMenuPanel extends JPanel{
+
+    /**
+     * 
+     */
+    public static final Dimension KINDACOMBOBOXDIMENSION = new Dimension(200,33);
 
     /**
      * JLabel for the title of the Panel NMenuPanelApp
@@ -75,12 +83,33 @@ public class NMenuGraphPanelApp extends JPanel{
      * "Toutes" -> for everyone
      * A number between [first altitude; last altitude]
      */
-    private JComboBox<Integer> altitudeComboBox = new JComboBox<>();
+    private NComboBoxGraph altitudeComboBox = new NComboBoxGraph();
 
     /**
      * Panel for create an empty border to the JComboBox altitude
      */
     private JPanel borderPanelAlt = new JPanel();
+
+    //CHANGE SAFETY MARGIN 
+
+    /**
+     * Panel for Margin option
+     */
+    private JPanel marginOptionPanel = new JPanel();
+    /**
+     * Title of the choose ComboBox 
+     */
+    private JLabel safetyMargin = new JLabel("Changer marge sécurité", SwingConstants.CENTER);
+    /**
+     * JComboBox for choose the margin (default : 15min)
+     * A number between [  ;  ]
+     */
+    private NComboBoxTime marginComboBox = new NComboBoxTime(59, NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
+
+    /**
+     * Panel for create an empty border to the JComboBox safety margin
+     */
+    private JPanel borderPanelMargin = new JPanel();
 
     //ALGORITHMES
 
@@ -92,35 +121,37 @@ public class NMenuGraphPanelApp extends JPanel{
      * JLabel title for algorithmes (DSATUR + RLF)
      */
     private JLabel algorithmes = new JLabel("Algorithmes", SwingConstants.CENTER );
-    /**
-     * JPanel for put the JComboBox (choose algo) next to JButton (validate) 
-     */
-    private JPanel layoutAlgo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-    /**
+     /**
      * JcomboBox that help too choose an algo for the coloration
      */
     private JComboBox<String> algoChoice = new JComboBox<>();
     /**
+     * JPanel for put the JComboBox (choose algo) next to JButton (validate) 
+     */
+    private JPanel borderPanelAlgo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+    //CONFIRM
+
+    /**
+     * Panel For confirm button , CENTER alignement(BoxLayout)
+     */
+    private JPanel layoutConfirm = new JPanel(new GridBagLayout());
+
+    /**
      * Use the algo of the ComboBox (validate)
      * For help the PC to not automatally have to change of coloration all the time the user change of SelectedItem
      */
-    private JButton okButton = new JButton("OK");
+    private JButton confirmButton = new JButton("Valider");
 
     /**
      * ComboBox containing kMax 
      */
-    private JComboBox<Integer> kmaxComboBox ;
+    private NComboBoxGraph kmaxComboBox ;
 
     /**
      * String containing the last algo selected
      */
     private String lastAlgoSelected = null ;
-
-    /**
-     * Last color selected for the displayed color
-     */
-    private int lastColorSelected = 0 ;
 
     /**
      * Homepage blablabla
@@ -133,23 +164,23 @@ public class NMenuGraphPanelApp extends JPanel{
      * @param kmax
      * @param kmaxComboBox 
      */
-    public NMenuGraphPanelApp(App app, int kmax, JComboBox<Integer> kmaxComboBox){
+    public NGraphMenuPanel(App app, int kmax, NComboBoxGraph kmaxComboBox){
 
         this.app = app ;
         this.kmaxComboBox = kmaxComboBox ;
 
         this.setBackground(App.KINDAYELLOW);
 
-        this.setLayout(new GridLayout(4,1));
+        this.setLayout(new GridLayout(6,1));
 
         //TITLE
-        titleMenu.setFont(new Font("Arial", Font.BOLD, 26));
+        titleMenu.setFont(App.KINDATITLE);
 
-        //KMAX
+        //#region KMAX
         kmaxOption.setLayout( new GridLayout(2,1));
 
         // Title
-        changeKmax.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+        changeKmax.setFont(App.KINDANORMAL);
         kmaxOption.setBackground(App.KINDAYELLOW);
 
         
@@ -164,69 +195,79 @@ public class NMenuGraphPanelApp extends JPanel{
         initAltitudeComboBox(kmax);
         kmaxComboBox.setSelectedItem(kmax);
         
-        kmaxComboBox.setForeground(Color.WHITE);
-        kmaxComboBox.setFont(new Font("Arial", Font.BOLD, 18));
-        kmaxComboBox.setBackground(Color.BLACK);
-        kmaxComboBox.setPreferredSize(new Dimension(100,30));
 
         kmaxOption.add(changeKmax);
         kmaxOption.add(kmaxComboBox);
 
         borderPanelKmax.setBackground(App.KINDAYELLOW);
-        borderPanelKmax.setPreferredSize(new Dimension(225,30));
+        borderPanelKmax.setPreferredSize(new Dimension(250,30));
 
         borderPanelKmax.add(kmaxOption);
+        //#endregion
 
-        //ALTITUDES
+        //#region ALTITUDES
         altitudeMaxOption.setLayout(new GridLayout(2,1));
         altitudeMaxOption.setBackground(App.KINDAYELLOW);
 
         // Titre
-        colorChoice.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+        colorChoice.setFont(App.KINDANORMAL);
 
         // ComboBox
         // Democraty doesn't work in times of war. DO NOT TOUCH (or i will put a pipe bomb in your mail).
-        altitudeComboBox.setForeground(Color.WHITE);
-        altitudeComboBox.setFont(new Font("Arial", Font.BOLD, 18));
-        altitudeComboBox.setBackground(Color.BLACK);
-        altitudeComboBox.setPreferredSize(new Dimension(100,30));
 
         altitudeMaxOption.add(colorChoice);
         altitudeMaxOption.add(altitudeComboBox);
 
         borderPanelAlt.setBackground(App.KINDAYELLOW);
-        borderPanelAlt.setPreferredSize(new Dimension(225,30));
+        //#endregion
 
-        //CONFLITS
+        //#region SAFETY MARGIN
+        // SAFETY MARGIN
+        marginComboBox.setSelectedItem(15);
+        marginOptionPanel.setLayout(new GridLayout(2,1));
+        marginOptionPanel.setBackground(App.KINDAYELLOW);
 
-        //ALGO
+        // Titre
+        safetyMargin.setFont(App.KINDANORMAL);
+
+        // JComboBox
+        marginOptionPanel.add(safetyMargin);
+        marginOptionPanel.add(marginComboBox);
+
+        borderPanelMargin.setBackground(App.KINDAYELLOW);
+        //#endregion SAFETY MARGIN
+
+        //#region ALGO
         algoOption.setLayout(new GridLayout(2,1));
         algoOption.setBackground(App.KINDAYELLOW);
 
         // Titre
-        algorithmes.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+        algorithmes.setFont(App.KINDANORMAL);
 
-        // JComboBox + JButton
+        // JComboBox
 
         algoChoice.setForeground(Color.WHITE);
         algoChoice.setFont(new Font("Arial", Font.BOLD, 18));
         algoChoice.setBackground(Color.BLACK);
-
-        okButton.setForeground(Color.WHITE);
-        okButton.setFont(new Font("Arial", Font.BOLD, 14));
-        okButton.setBackground(Color.BLACK);
-        okButton.setPreferredSize(new Dimension(55,45));
-
-        layoutAlgo.setLayout(new FlowLayout());
-        layoutAlgo.setBackground(App.KINDAYELLOW);
-        layoutAlgo.add(algoChoice);
-        layoutAlgo.add(okButton);
+        algoChoice.setPreferredSize(NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
 
         algoOption.add(algorithmes);
-        algoOption.add(layoutAlgo);
+        algoOption.add(algoChoice);
+
+        borderPanelAlgo.setBackground(App.KINDAYELLOW);
+        //#endregion
+
+        //#region CONFIRM
+        confirmButton.setForeground(Color.WHITE);
+        confirmButton.setFont(App.KINDABOLD);
+        confirmButton.setBackground(Color.BLACK);
+        confirmButton.setPreferredSize(NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
+        layoutConfirm.setBackground(App.KINDAYELLOW);
+        //#endregion
 
         initAlgoComboBox((app.getGraphRenderer() != null)) ;
 
+        //#region ADD
         //ADD
         this.add(titleMenu);
         //KMAX
@@ -235,12 +276,23 @@ public class NMenuGraphPanelApp extends JPanel{
         borderPanelAlt.add(altitudeMaxOption);
         this.add(borderPanelAlt);
 
+        // SAFETY MARGIN
+        borderPanelMargin.add(marginOptionPanel);
+        this.add(borderPanelMargin);
+
         //ALGO
-        this.add(algoOption);
+        borderPanelAlgo.add(algoOption);
+        this.add(borderPanelAlgo);
+
+
+        //Ok button
+        layoutConfirm.add(confirmButton);
+        this.add(layoutConfirm);
+        //#endregion
 
         //LISTENERS AND RENDERERS
         initListeners() ;
-        initRenders() ;
+        initRenderers() ;
     }
 
     /**
@@ -293,17 +345,13 @@ public class NMenuGraphPanelApp extends JPanel{
     /**
      * Initializes the different Renderers needed
      */
-    private void initRenders() {
-        altitudeComboBox.setRenderer(new ListCellRenderer<Integer>() {
+    private void initRenderers() {
+        altitudeComboBox.setRenderer(new NDefaultRenderer<Integer>() {
             @Override
             public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index,
                     boolean isSelected, boolean cellHasFocus) {
-                JLabel cell = new JLabel() ;
-                cell.setForeground(Color.WHITE);
-                cell.setFont(new Font("Arial", Font.BOLD, 18));
-                cell.setBackground(Color.BLACK);
-                cell.setPreferredSize(new Dimension(100,30));
-
+                JLabel cell = (JLabel)super.getListCellRendererComponent(
+                    list, value, index, isSelected, cellHasFocus) ;
                 if (value == 0) {
                     cell.setText("Toutes") ;
                 }
@@ -321,12 +369,13 @@ public class NMenuGraphPanelApp extends JPanel{
             }
         });
 
-        kmaxComboBox.setRenderer(new ListCellRenderer<Integer>() {
+        kmaxComboBox.setRenderer(new NDefaultRenderer<Integer>() {
             @Override
             public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index,
                 boolean isSelected, boolean cellHasFocus) {
                     
-                    JLabel cell = new JLabel() ;
+                    JLabel cell = (JLabel)super.getListCellRendererComponent(
+                        list, value, index, isSelected, cellHasFocus) ;
                     if (value == 0 ) {
                         cell.setText("/!\\") ;
                         cell.setHorizontalAlignment(JLabel.CENTER) ;
@@ -334,13 +383,24 @@ public class NMenuGraphPanelApp extends JPanel{
                     else {
                         cell.setText(Integer.toString(value)) ;
                     }
-                        
-                    cell.setFont(new Font("Arial", Font.BOLD, 18)) ;
-                    cell.setForeground(Color.WHITE);
-                    cell.setBackground(Color.BLACK);
 
                     return cell ;
 
+            }
+        });
+
+        // Default for time comboBoxes
+        marginComboBox.setRenderer(new NTimeComboBoxRenderer(Color.WHITE, Color.BLACK)) ;
+
+        algoChoice.setRenderer(new NDefaultRenderer<String>() {
+            @Override
+            public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                JLabel cell = (JLabel)super.getListCellRendererComponent(
+                    list, value, index, isSelected, cellHasFocus) ;
+
+                cell.setText(value) ;
+                return cell ;
             }
         });
     }
@@ -400,7 +460,7 @@ public class NMenuGraphPanelApp extends JPanel{
      * Adds listeners to components
      */
     private void initListeners() {
-        okButton.addActionListener(new ActionListener() {
+        confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 changeColoring(app.getGraph()) ;
@@ -465,7 +525,7 @@ public class NMenuGraphPanelApp extends JPanel{
                 currentKMax = graph.getKMax() ;
             }
             ColoringUtilities.setGraphStyle(graph, currentKMax) ;
-            NInfoGraphPanelApp panel = app.getMainScreen().getGraphInfoPanel() ;
+            NGraphInfoPanel panel = app.getMainScreen().getGraphInfoPanel() ;
             panel.setNbColorsUsed(graph.getNbColors()) ;
             panel.setNbConflictsOccurred(graph.getNbConflicts()) ;
         }

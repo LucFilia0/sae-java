@@ -28,7 +28,7 @@ import java.awt.GridLayout;
  * 
  * @author GIRAUD Nila
  */
-public class NMinGraphPanelApp extends JPanel {
+public class NMinGraphPanel extends JPanel {
 
     //STRUCT
     /**
@@ -70,7 +70,7 @@ public class NMinGraphPanelApp extends JPanel {
     /**
      * Constructor of NMinGraphPanelApp
      */
-    public NMinGraphPanelApp(App app, JButton buttonAgr) {
+    public NMinGraphPanel(App app, JButton buttonAgr) {
         this.app = app ;
         this.buttonAgr = buttonAgr;
 

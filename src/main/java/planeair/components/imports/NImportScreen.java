@@ -56,7 +56,7 @@ public class NImportScreen extends JPanel {
      * Import Button Panel
      * Location : In the center of the panel (with gridBagLayouts)
      */
-    private NButtonImportPanelApp buttonImport;
+    private NImportButtonPanel buttonImport;
 
     /**
      * The current App
@@ -95,7 +95,7 @@ public class NImportScreen extends JPanel {
         descriptionApp1.setFont(App.KINDABOLD);
         descriptionApp2.setFont(App.KINDABOLD);
 
-        buttonImport = new NButtonImportPanelApp(this.app);
+        buttonImport = new NImportButtonPanel(this.app);
     }
 
     /**

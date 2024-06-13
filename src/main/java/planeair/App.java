@@ -12,8 +12,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
-import planeair.util.Airport;
-
 //-- Import Plane AIR
 
 import planeair.util.AirportSet;
@@ -85,14 +83,24 @@ public class App extends javax.swing.JFrame {
     public static final Font KINDABOLD = new Font("Arial", Font.BOLD, 20);
 
     /**
+     * The default Bold font for JCheckBox
+     */
+    public static final Font KINDACHEKBOX = new Font("Arial", Font.BOLD, 18);
+
+    /**
      * The default Font for the entire App
      */
-    public static final Font KINDANORMAL = new Font("Arial", Font.CENTER_BASELINE, 14);
+    public static final Font KINDANORMAL = new Font("Arial", Font.CENTER_BASELINE, 16);
 
     /**
      * The default italic font
      */
     public static final Font KINDANOBLE = new Font("Arial", Font.ITALIC, 25);
+
+    /**
+     * The default Title font for Menu
+     */
+    public static final Font KINDATITLE = new Font("Arial", Font.BOLD, 26);
 
     // FRAMES
 
@@ -118,6 +126,7 @@ public class App extends javax.swing.JFrame {
     /**
      * The FIG which contains all the Flights
      */
+    @SuppressWarnings("unused")
     private FlightsIntersectionGraph fig;
 
     /**

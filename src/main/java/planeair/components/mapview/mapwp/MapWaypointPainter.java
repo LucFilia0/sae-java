@@ -9,11 +9,8 @@ import java.lang.Math;
 //-- Import AWT
 
 import java.awt.Rectangle;
-import java.awt.Stroke;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 
 //-- Import JxMapViewer
@@ -25,7 +22,6 @@ import planeair.App;
 import planeair.components.NMainScreen;
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-import planeair.components.menu.NMenuGraphPanelApp;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 

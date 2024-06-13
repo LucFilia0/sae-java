@@ -5,9 +5,9 @@ package planeair.components.buttons;
  * 
  * @author GIRAUD Nila - mod. Luc le Manifik
  */
-public class NButtonImportFileApp extends NFilledButton {
+public class NImportFileButton extends NFilledButton {
 
-    public NButtonImportFileApp(String title) {
+    public NImportFileButton(String title) {
         super(title, 200, 125);
     } 
 }

@@ -22,9 +22,9 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 
 import planeair.App;
-import planeair.components.buttons.NButtonImportFileApp;
+import planeair.components.buttons.NImportFileButton;
 import planeair.components.buttons.NFilledButton;
-import planeair.components.menu.NInfoGraphPanelApp;
+import planeair.components.menu.NGraphInfoPanel;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.coloring.ColoringDSATUR;
 import planeair.graph.coloring.ColoringUtilities;
@@ -38,7 +38,7 @@ import planeair.util.AirportSet;
  * Creates a JPanel of importation for Flights and Airports4
  * @author GIRAUD Nila
  */
-public class NButtonImportPanelApp extends JPanel {
+public class NImportButtonPanel extends JPanel {
 
     // CONSTANTS
 
@@ -82,31 +82,31 @@ public class NButtonImportPanelApp extends JPanel {
      * Graph
      * Location : second button in the center of the frame, right to Flight/Airport one
      */
-    private NButtonImportFileApp choiceGraphImportation = 
-        new NButtonImportFileApp("<html>Importer<br>Graph-Test</html>");
+    private NImportFileButton choiceGraphImportation = 
+        new NImportFileButton("<html>Importer<br>Graph-Test</html>");
 
     /**
      * Choice button
      * Vols/Aeroports
      * Location : first button in the center of the frame, left to graph one
      */
-    private NButtonImportFileApp choiceFlightImportation = 
-        new NButtonImportFileApp("<html>Importer<br>Vols / Aeroports</html>");
+    private NImportFileButton choiceFlightImportation = 
+        new NImportFileButton("<html>Importer<br>Vols / Aeroports</html>");
     
     /**
      * Importation Button for Flights
      * aeroport.txt
      * Location : after pushing the button choiceFlight
      */
-    private NButtonImportFileApp buttonAirportFileSelection = 
-        new NButtonImportFileApp("Fichier des aéroports");
+    private NImportFileButton buttonAirportFileSelection = 
+        new NImportFileButton("Fichier des aéroports");
     /**
      * Importation button
      * vol-test.csv
      * Location : after pushing the button buttonAirport
      */
-    private NButtonImportFileApp buttonFlightFileSelection = 
-        new NButtonImportFileApp("Fichier des vols");
+    private NImportFileButton buttonFlightFileSelection = 
+        new NImportFileButton("Fichier des vols");
 
     /**
      * The panel which their there is buttons 
@@ -127,12 +127,12 @@ public class NButtonImportPanelApp extends JPanel {
      * Location : below buttonAirport
      */
     private NFilledButton confirmAirports = 
-        new NFilledButton(NButtonImportPanelApp.CONFIRM_MESSAGE);
+        new NFilledButton(NImportButtonPanel.CONFIRM_MESSAGE);
     /**
      * Button for return back to the step the user were
      */
     private NFilledButton returnBackAirports = 
-        new NFilledButton(NButtonImportPanelApp.REJECT_MESSAGE);
+        new NFilledButton(NImportButtonPanel.REJECT_MESSAGE);
 
     /**
      * Panel for returnBack + valideFlight
@@ -145,19 +145,19 @@ public class NButtonImportPanelApp extends JPanel {
      * Location : below buttonFlight
      */
     private NFilledButton confirmFlights = 
-        new NFilledButton(NButtonImportPanelApp.CONFIRM_MESSAGE);
+        new NFilledButton(NImportButtonPanel.CONFIRM_MESSAGE);
     /**
      * Button for annule return back to the step the user is
      */
     private NFilledButton returnBackFlights = 
-        new NFilledButton(NButtonImportPanelApp.REJECT_MESSAGE);
+        new NFilledButton(NImportButtonPanel.REJECT_MESSAGE);
 
     /**
      * Test pour rajouter un boutton valider au début
      * Location : below buttons choice
      */
     private NFilledButton confirmStart = 
-        new NFilledButton(NButtonImportPanelApp.CONFIRM_MESSAGE);
+        new NFilledButton(NImportButtonPanel.CONFIRM_MESSAGE);
 
     /**
      * Import the Frame of the App
@@ -174,7 +174,7 @@ public class NButtonImportPanelApp extends JPanel {
      * @param framePrinc The object HomePage where the panel is put
      * @author GIRAUD Nila
      */
-    public NButtonImportPanelApp(App app){
+    public NImportButtonPanel(App app){
 
         this.app = app;
 
@@ -374,7 +374,7 @@ public class NButtonImportPanelApp extends JPanel {
      * Initializes the panel and statistics linked to this Graph
      * @param infoGraph Panel which will contain the statistics
      */
-    public void initDefaultGraphImportation(NInfoGraphPanelApp infoGraph) {
+    public void initDefaultGraphImportation(NGraphInfoPanel infoGraph) {
         this.app.getMainScreen().getMinGraphPanel().addGraphToPanel(this.app.getGraphRenderer()) ;
         this.app.getMainScreen().getGraphMenuPanel()
             .initAllComboBoxes(app.getGraph().getKMax(), true) ;

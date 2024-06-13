@@ -5,8 +5,6 @@ package planeair.graph.graphtype;
 //-- Import Exceptions
 
 import planeair.exceptions.InvalidEntryException;
-import planeair.graph.coloring.ColoringUtilities;
-
 /**
  * TestGraph is the basic class to handle the "graph-testX.txt" files.
  * This class extends the class SingleGraph, from GraphStream.

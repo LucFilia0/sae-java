@@ -25,7 +25,7 @@ import java.text.DecimalFormat;
  * 
  * @author GIRAUD Nila
  */
-public class NInfoGraphPanelApp extends JPanel {
+public class NGraphInfoPanel extends JPanel {
     /**
      * String identifier for the text related to the degree of the graph
      */
@@ -158,7 +158,7 @@ public class NInfoGraphPanelApp extends JPanel {
     /**
      * Contructor of NInfoGraphPanelApp
      */
-    public NInfoGraphPanelApp(App app){
+    public NGraphInfoPanel(App app){
         this.app = app ;
         this.setBackground(App.KINDAYELLOW);
 

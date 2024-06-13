@@ -2,10 +2,10 @@ package planeair.components.time;
 
 // import SWING components
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 
 import planeair.App;
+import planeair.components.comboboxes.NComboBoxTime;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.util.NTime;
 
@@ -24,7 +24,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 
-public class NTimePanelApp extends JPanel {
+
+
+public class NTimePanel extends JPanel {
 
     /**
      * Variable for HOUR representation ComboBox
@@ -63,7 +65,7 @@ public class NTimePanelApp extends JPanel {
      * Slider for Hour 
      * Location : Top of the center of the frame, below the comboBox
      */
-    private JSlider sliderTime = new JSlider();
+    private NSliderTime sliderTime = new NSliderTime();
     /**
      * Icon for the playing button (play)
      */
@@ -95,7 +97,7 @@ public class NTimePanelApp extends JPanel {
 
     private JPanel container;
 
-    public NTimePanelApp(App app) {
+    public NTimePanel(App app) {
 
         this.app = app;
         this.simulationPlaying = false;
@@ -106,7 +108,6 @@ public class NTimePanelApp extends JPanel {
         this.container = new JPanel();
         this.container.setLayout(new GridLayout(2, 1));
 
-        sliderTime.setOpaque(false);
         hourSliderPanel.setOpaque(false);
         hourPanelComboBox.setOpaque(false);
 
@@ -114,12 +115,7 @@ public class NTimePanelApp extends JPanel {
         this.container.setOpaque(false);
 
         this.betweenTime.setFont(App.KINDABOLD);
-    
-        //SLIDER
-        sliderTime.setMinimum(0);
-        sliderTime.setMaximum(1439); // 24 * 60 - 1 : Nb of minutes in one day
-        sliderTime.setPreferredSize(new Dimension(300,20));
-        sliderTime.setValue(0000);
+
         //BUTTON PLAY
         playButton.setBackground(App.KINDAYELLOW);
         playButton.setBorderPainted(false);

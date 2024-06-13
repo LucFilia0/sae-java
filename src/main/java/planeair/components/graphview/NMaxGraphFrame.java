@@ -14,7 +14,7 @@ import java.awt.Toolkit;
 //-- Import PlaneAIR
 import javax.swing.border.EmptyBorder;
 import planeair.App;
-import planeair.components.menu.NInfoGraphPanelApp;
+import planeair.components.menu.NGraphInfoPanel;
 import planeair.graph.graphutil.PanelCreator;
 
 import java.awt.event.WindowAdapter;
@@ -31,7 +31,7 @@ import java.awt.Insets;
  * 
  * @author GIRAUD Nila
  */
-public class NMaxGraphFrameApp extends JFrame{
+public class NMaxGraphFrame extends JFrame{
 
     /**
      * Panel of the graph (Bigger than NInfoGraphPanelApp)
@@ -43,14 +43,18 @@ public class NMaxGraphFrameApp extends JFrame{
      * NInfoGraphPanelApp created, have parameter of the graph
      * Location : In the left at the bottom of the graph
      */
-    private NInfoGraphPanelApp infoGraph ;
+    private NGraphInfoPanel infoGraph ;
 
+    /**
+     * Homepage babababa no one cares
+     */
+    @SuppressWarnings("unused")
     private App app ;
 
     /**
      * Constructor of NMaxGraphPanelApp
      */
-    public NMaxGraphFrameApp(App app, PanelCreator graphRenderer, NInfoGraphPanelApp infoGraph){
+    public NMaxGraphFrame(App app, PanelCreator graphRenderer, NGraphInfoPanel infoGraph){
         this.app = app ;
         this.infoGraph = infoGraph ;
         JPanel infoGraphPanel = new JPanel() ;
@@ -80,6 +84,8 @@ public class NMaxGraphFrameApp extends JFrame{
         
         graph.setBackground(Color.BLACK);
         this.add(graph);
+        this.setSize(new Dimension(1100,700));
+        this.setAlwaysOnTop(true); 
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);  
