@@ -6,8 +6,11 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+/**
+ * Placeholder panel for when the graph has been moved to another frame
+ */
 public class NGraphNotHerePanel extends JPanel {
-
+    
     public NGraphNotHerePanel() {
         super() ;
     }

@@ -5,6 +5,16 @@ package planeair.components.mapview.mapwp;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.border.Border;
+
+import planeair.App;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.graph.graphutil.Flight;
+import planeair.graph.graphutil.PanelCreator;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
 
 //-- Import AWT
 
@@ -34,6 +44,11 @@ public class MapWaypointButton extends javax.swing.JButton {
      * The MapWaypoint which is linked to the button
      */
     private MapWaypoint mapWaypoint;
+
+    /**
+     * The Waypoint currently being clicked
+     */
+    public static MapWaypointButton waypointSelected ;
 
     //-- WaypointButton Constructor
 
@@ -76,6 +91,47 @@ public class MapWaypointButton extends javax.swing.JButton {
      */
     public MapWaypoint getMapWaypoint() {
         return this.mapWaypoint;
+    }
+
+    /**
+     * Highlights a waypoint when clicked on by putting a
+     * colored border around it, only one button
+     * can have be selected at a time
+     * 
+     * If the waypoint corresponds to a flight, then also updates
+     * its related graph node's style to also appear selected
+     * 
+     * @author Nathan LIEGEON
+     */
+    public void changeSelection(boolean isSelected) {
+        if (isSelected) {
+            this.setBorder(null) ;
+            if (waypointSelected != null && waypointSelected.getMapWaypoint() instanceof FlightWaypoint) {
+                FlightWaypoint selectedFWP = (FlightWaypoint)waypointSelected.getMapWaypoint() ;
+                PanelCreator.removeSelectedStyle(selectedFWP.getFlight()) ;
+            }
+            waypointSelected = null ;
+
+        }
+        else {
+            if (waypointSelected != null) {
+                waypointSelected.setBorder(null) ;
+                if (waypointSelected.getMapWaypoint() instanceof FlightWaypoint) {
+                    FlightWaypoint selectedFWP = (FlightWaypoint)waypointSelected.getMapWaypoint() ;
+                    PanelCreator.removeSelectedStyle(selectedFWP.getFlight()) ;
+                }
+            }
+            this.setForeground(App.KINDAYELLOW) ;
+            this.setBorder(BorderFactory.createStrokeBorder(new BasicStroke(3))) ;
+            if (this.getMapWaypoint() instanceof FlightWaypoint) {
+                FlightWaypoint fwp = (FlightWaypoint)this.getMapWaypoint() ;
+                PanelCreator.setSelectedStyle(fwp.getFlight()) ;
+            }
+
+            waypointSelected = this ;
+            
+        }
+        this.repaint() ;
     }
 
 }

@@ -14,6 +14,8 @@ import org.graphstream.ui.view.camera.Camera;
 import org.graphstream.ui.view.util.GraphMetrics;
 import org.graphstream.ui.view.util.InteractiveElement;
 
+import planeair.components.mapview.mapwp.MapWaypointButton;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.GraphSAE;
 
@@ -327,12 +329,15 @@ public class PanelCreator {
 		@Override
 		public void mouseOver(String id) {
 			Node n = graph.getNode(id) ;
-			n.removeAttribute("ui.size") ;
-			n.setAttribute("ui.size", ColoringUtilities.DEFAULT_NODE_SIZE*2) ;
-			n.setAttribute("ui.label", id) ;
-			n.setAttribute("ui.style", "text-alignment : center ; text-color : white ;" + 
-			"text-background-mode : rounded-box ; text-background-color : black ; text-padding : 2 ;" + 
-			"text-style : bold ;") ;	
+			boolean updated = false ;
+			if (n instanceof Flight) {
+				Flight f = (Flight)n ;
+				updated = f.fireSelectionUpdated() ;
+			}
+
+			if (!updated) {
+				setSelectedStyle(n) ;
+			}
 		}
 
 		/**
@@ -343,9 +348,15 @@ public class PanelCreator {
 		@Override
 		public void mouseLeft(String id) {
 			Node n = graph.getNode(id) ;
-			n.removeAttribute("ui.size") ;
-			n.removeAttribute("ui.label") ;
-			n.removeAttribute("ui.style") ;
+			boolean updated = false ;
+			if (n instanceof Flight) {
+				Flight f = (Flight)n ;
+				updated = f.fireSelectionUpdated() ;
+			}
+
+			if (!updated) {
+				removeSelectedStyle(n) ;
+			}
 		}
 
 		/**
@@ -361,6 +372,29 @@ public class PanelCreator {
 		@Override
 		public void buttonReleased(String id) {
 		}
+	}
+
+	/**
+	 * Sets the default style for selected nodes
+	 * @param n
+	 */
+	public static void setSelectedStyle(Node n) {
+		n.removeAttribute("ui.size") ;
+		n.setAttribute("ui.size", ColoringUtilities.DEFAULT_NODE_SIZE*2) ;
+		n.setAttribute("ui.label", n.getId()) ;
+		n.setAttribute("ui.style", "text-alignment : center ; text-color : white ;" + 
+		"text-background-mode : rounded-box ; text-background-color : black ; text-padding : 2 ;" + 
+		"text-style : bold ;") ;	
+	}
+
+	/**
+	 * Removes all attributes related to the selected node style
+	 * @param n
+	 */
+	public static void removeSelectedStyle(Node n) {
+		n.removeAttribute("ui.size") ;
+		n.removeAttribute("ui.label") ;
+		n.removeAttribute("ui.style") ;
 	}
 
 }

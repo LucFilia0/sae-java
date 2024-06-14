@@ -15,6 +15,9 @@ import java.awt.event.ActionListener;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import planeair.components.mapview.Map;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.graph.graphutil.Flight;
+import planeair.graph.graphutil.PanelCreator;
 
 
 /**
@@ -70,6 +73,18 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
             @Override
             public void actionPerformed(ActionEvent e) {
                 MapWaypointButton mwp = (MapWaypointButton) e.getSource();
+                boolean isSelected = mwp.equals(MapWaypointButton.waypointSelected) ;
+                mwp.changeSelection(isSelected) ;
+                if (mwp.getMapWaypoint() instanceof FlightWaypoint) {
+                    FlightWaypoint fwp = (FlightWaypoint)mwp.getMapWaypoint() ;
+                    if (!isSelected) {
+                        PanelCreator.setSelectedStyle(fwp.getFlight()) ;
+                    }
+                    else {
+                        PanelCreator.removeSelectedStyle(fwp.getFlight());
+                    }
+                }
+
                 Map.infoPanel.showInfos(mwp.getMapWaypoint());
             }
         });

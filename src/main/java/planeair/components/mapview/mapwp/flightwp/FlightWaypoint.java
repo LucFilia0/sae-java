@@ -3,6 +3,7 @@ package planeair.components.mapview.mapwp.flightwp;
 //-- Import Java
 
 import java.io.File;
+import java.io.IOException;
 
 //-- Import JxMapViewer
 
@@ -25,6 +26,11 @@ public class FlightWaypoint extends MapWaypoint {
      */
     public static final File FLIGHT_WAYPOINT_ICON_FILE = new File("./icons/waypoints/plane.png");
 
+    /**
+     * The file which contains the icon of the flights ({@link java.io.File})
+     */
+    public static final File FLIGHT_CLICKED_WAYPOINT_ICON_FILE = new File("./icons/waypoints/planeClicked.png") ;
+
     //-- FlightWaypoint Attributes
 
     /**
@@ -45,6 +51,7 @@ public class FlightWaypoint extends MapWaypoint {
     public FlightWaypoint(Flight flight, GeoPosition geoPosition) {
         super(FlightWaypoint.FLIGHT_WAYPOINT_ICON_FILE, geoPosition, getFlightOrientation(flight));
         this.flight = flight;
+        this.flight.setFlightWaypoint(this) ;
     }
 
 	//-- FlightWaypoint Getters
@@ -105,6 +112,8 @@ public class FlightWaypoint extends MapWaypoint {
 
         return radian + Math.toRadians(offset);
     }
+
+    
 
 
 }

@@ -68,8 +68,8 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     }
 
     /**
-     * This method paints the Map's overlay, and diaplays all the different types of Waypoints on the Map.
-     * There is 3 foreach loops, wandering the three Sets, and displaying each type of Waypoint accrding to it's own specs.
+     * This method paints the Map's overlay, and displays all the different types of Waypoints on the Map.
+     * There are 3 foreach loops, wandering the three Sets, and displaying each type of Waypoint according to its own specs.
      * 
      * @author Luc le Manifik
      */
@@ -91,7 +91,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
             MapWaypointButton waypointButton = airportWp.getWaypointButton();
 
-            // In order to center the button on the whished position
+            // In order to center the button on the wished position
             x = airportWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = airportWp_location.getY() - screen.getY() - waypointButton.getHeight();
             NMainScreen main = app.getMainScreen() ;
@@ -101,10 +101,9 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             boolean mapMenuIntersects = main.isMapMenuVisible() && main.getMapMenuPanel().getBounds()
                 .intersects(waypointButton.getBounds()) ;
             
-            // If the waypoint is over once of the menus, don't paint it
+            // If the waypoint is over one of the menus, don't paint it
             if (graphMenuIntersects || mapMenuIntersects) {
-                    waypointButton.setVisible(false) ;
-                    
+                waypointButton.setVisible(false) ;   
             }
             else {
                 waypointButton.setVisible(true) ;
@@ -119,9 +118,10 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
         for(FlightWaypoint flightWp : this.flightWaypointSet) {
             Integer drawnColor = app.getMainScreen().getGraphMenuPanel().getLastColorSelected() ;
                 
-            if (drawnColor != 0 && flightWp.getFlight().getAttribute(
+            if (drawnColor == 0 || flightWp.getFlight().getAttribute(
                     ColoringUtilities.NODE_COLOR_ATTRIBUTE) == drawnColor) {
                 Point2D flightWp_location = map.getTileFactory().geoToPixel(flightWp.getPosition(), mapZoom);
+                flightWp.getFlight().setFlightWaypoint(flightWp) ;
     
                 MapWaypointButton waypointButton = flightWp.getWaypointButton();
     
@@ -147,6 +147,9 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                 }
                 g.setStroke(new BasicStroke(3)) ;
                 g.drawLine(depX, depY, arrX, arrY);
+            }
+            else {
+                flightWp.getFlight().setFlightWaypoint(null) ;
             }
         }
     }

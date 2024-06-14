@@ -3,8 +3,6 @@ package planeair.components.graphview;
 // Import swing COMPONENTs
 import javax.swing.JPanel;
 
-import org.graphstream.ui.swing_viewer.ViewPanel;
-
 import planeair.App;
 import planeair.graph.graphutil.PanelCreator;
 
