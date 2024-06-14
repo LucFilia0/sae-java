@@ -1,4 +1,4 @@
-package planeair.components.menu;
+package planeair.components.menu.infos;
 
 import javax.swing.BoxLayout;
 

@@ -23,8 +23,8 @@ import javax.swing.BoxLayout;
 
 import planeair.App;
 import planeair.components.buttons.NImportFileButton;
+import planeair.components.menu.infos.NGraphInfoPanel;
 import planeair.components.buttons.NFilledButton;
-import planeair.components.menu.NGraphInfoPanel;
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.coloring.ColoringDSATUR;
 import planeair.graph.coloring.ColoringUtilities;

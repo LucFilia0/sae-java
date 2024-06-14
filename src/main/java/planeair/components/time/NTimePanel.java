@@ -1,44 +1,59 @@
 package planeair.components.time;
 
-// import SWING components
-import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
+//#region
+    //#region SWING
+    import javax.swing.JPanel;
+    import javax.swing.event.ChangeEvent;
+    //#endregion
 
-import planeair.App;
-import planeair.components.comboboxes.NComboBoxTime;
-import planeair.graph.graphtype.FlightsIntersectionGraph;
-import planeair.util.NTime;
+    //#region PLANEAIR
+    import planeair.App;
+    import planeair.components.comboboxes.NComboBoxTime;
+    import planeair.graph.graphtype.FlightsIntersectionGraph;
+    import planeair.util.NTime;
+    //#endregion
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JButton;
+    import javax.swing.Icon;
+    import javax.swing.ImageIcon;
+    import javax.swing.JLabel;
+    import javax.swing.JButton;
 
-// import AWT components
-import java.awt.event.ActionEvent;
-import java.lang.Thread;
-import java.awt.Dimension;
+    //#region AWR
+    import java.awt.event.ActionEvent;
+    import java.awt.Dimension;
+    //#endregion
 
-// import LAYOUT
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+    //#region LAYOUT
+    import java.awt.FlowLayout;
+    import java.awt.GridLayout;
+    //#endregion
 
+    import java.lang.Thread;
+//#endregion
 
-
-
+/**
+ * A time Panel for JcomboxBoxs (hour/min) + the Slider (time) + PLAY button (simulation)
+ * ActionListener for the simulation here
+ * 
+ * @author GIRAUD Nila
+ */
 public class NTimePanel extends JPanel {
 
-    /**
-     * Variable for HOUR representation ComboBox
-     */
-    public static final int HOUR = 23;
+    //#region  INSTANTIALISATION AND INITIALISATION
 
-    /**
-     * Variable for MINUTES representation ComboBox
-     */
-    public static final int MIN = 59;
+        //#region STATIC
+        /**
+         * Variable for HOUR representation ComboBox
+         */
+        public static final int HOUR = 23;
 
+        /**
+         * Variable for MINUTES representation ComboBox
+         */
+        public static final int MIN = 59;
+        //#endregion
 
+    //#region COMBOBOXS
     /**
      * Layout Panel For hour's panel, link to the GridLayout of header
      */
@@ -55,7 +70,9 @@ public class NTimePanel extends JPanel {
      * JComboBox for choose minutes
      */
     private NComboBoxTime minChoice = new NComboBoxTime(MIN);
+    //#endregion
     
+    //#region SLIDER
     /**
      * Panel for the time's Slider
      * FlowLayout at CENTER
@@ -66,6 +83,9 @@ public class NTimePanel extends JPanel {
      * Location : Top of the center of the frame, below the comboBox
      */
     private NSliderTime sliderTime = new NSliderTime();
+    //#endregion
+
+    //#region BUTTON SIMULATION
     /**
      * Icon for the playing button (play)
      */
@@ -79,6 +99,7 @@ public class NTimePanel extends JPanel {
      * Location : right to the slider
      */
     private JButton playButton = new JButton(iconPlay);
+    //#endregion
 
     /**
      * The App whichh contains the NTimePanelApp
@@ -96,7 +117,14 @@ public class NTimePanel extends JPanel {
     private Thread simulation;
 
     private JPanel container;
+    //#endregion
 
+    //#region CONSTRUCTOR
+    /**
+     * Constructor of NTimePANEL
+     * 
+     * @param app The Frame of the App
+     */
     public NTimePanel(App app) {
 
         this.app = app;
@@ -124,94 +152,104 @@ public class NTimePanel extends JPanel {
         this.addComponents();
         this.addEvents();
     }
+    //#endregion
 
-    /**
-     * Method adding components on the Panel
-     */
-    private void addComponents(){
-        //Hour COMBOBOX
-        hourPanelComboBox.add(hourChoice);
-        hourPanelComboBox.add(betweenTime);
-        hourPanelComboBox.add(minChoice);
+    //#region ADD
+
+        //#region COMPONENTS
+        /**
+         * Method adding components on the Panel
+         */
+        private void addComponents(){
+            //Hour COMBOBOX
+            hourPanelComboBox.add(hourChoice);
+            hourPanelComboBox.add(betweenTime);
+            hourPanelComboBox.add(minChoice);
 
 
-        //TIME SLIDER
-        hourSliderPanel.add(sliderTime);
-        hourSliderPanel.add(playButton);
+            //TIME SLIDER
+            hourSliderPanel.add(sliderTime);
+            hourSliderPanel.add(playButton);
 
-        //BODY CENTER
-        container.add(hourPanelComboBox);
-        container.add(hourSliderPanel);
+            //BODY CENTER
+            container.add(hourPanelComboBox);
+            container.add(hourSliderPanel);
 
-        this.add(this.container);
+            this.add(this.container);
 
-        this.setVisible(true);
-    }
+            this.setVisible(true);
+        }
+        //#endregion
 
-    /**
-     * Method adding events of the JFrame
-     */
-    private void addEvents(){
-        
-        hourChoice.addActionListener((ActionEvent e) -> {
+        //#region EVENTS
+        /**
+         * Method adding events of the JFrame
+         */
+        private void addEvents(){
             
-                int hour = (int)hourChoice.getSelectedItem();
-                int newValSlid = (sliderTime.getValue()%60) + (hour*60);
-                sliderTime.setValue(newValSlid);
+            hourChoice.addActionListener((ActionEvent e) -> {
+                
+                    int hour = (int)hourChoice.getSelectedItem();
+                    int newValSlid = (sliderTime.getValue()%60) + (hour*60);
+                    sliderTime.setValue(newValSlid);
+                });
+    
+            minChoice.addActionListener((ActionEvent e) -> {
+                    int min = (int)minChoice.getSelectedItem();
+                    int newValSlid = (sliderTime.getValue()/60)*60 + min%60;
+                    sliderTime.setValue(newValSlid);
             });
-   
-        minChoice.addActionListener((ActionEvent e) -> {
-                int min = (int)minChoice.getSelectedItem();
-                int newValSlid = (sliderTime.getValue()/60)*60 + min%60;
-                sliderTime.setValue(newValSlid);
-        });
 
-        sliderTime.addChangeListener((ChangeEvent e) -> {
+            sliderTime.addChangeListener((ChangeEvent e) -> {
 
-            // Changes the value of the comboboxes
-            int time = sliderTime.getValue();
-            int hour = (time/60);
-            int minutes = (time%60);
-            hourChoice.setSelectedItem(hour);
-            minChoice.setSelectedItem(minutes);
-            
-            // Paints the Flights on the Map, at the selected NTime
-            if(this.app.getGraph() != null && this.app.getGraph() instanceof FlightsIntersectionGraph)
-                this.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), (FlightsIntersectionGraph)this.app.getGraph());
-         });
+                // Changes the value of the comboboxes
+                int time = sliderTime.getValue();
+                int hour = (time/60);
+                int minutes = (time%60);
+                hourChoice.setSelectedItem(hour);
+                minChoice.setSelectedItem(minutes);
+                
+                // Paints the Flights on the Map, at the selected NTime
+                if(this.app.getGraph() != null && this.app.getGraph() instanceof FlightsIntersectionGraph)
+                    this.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), (FlightsIntersectionGraph)this.app.getGraph());
+            });
 
-        playButton.addActionListener(e -> {
+            playButton.addActionListener(e -> {
 
-            if(this.simulationPlaying) {
-                // Stops the simulation
-                this.simulationPlaying = false;
-                this.playButton.setIcon(this.iconPlay);
-                this.sliderTime.setEnabled(true);
-            }else {
-                // Starts the simulation
-                this.simulationPlaying = true;
-                this.playButton.setIcon(this.iconPause);
-                this.sliderTime.setEnabled(false);
+                if(this.simulationPlaying) {
+                    // Stops the simulation
+                    this.simulationPlaying = false;
+                    this.playButton.setIcon(this.iconPlay);
+                    this.sliderTime.setEnabled(true);
+                }else {
+                    // Starts the simulation
+                    this.simulationPlaying = true;
+                    this.playButton.setIcon(this.iconPause);
+                    this.sliderTime.setEnabled(false);
 
-                this.simulation = new Thread() {
-                    @Override
-                    public void run() {
-                        while(simulationPlaying) {
-                            sliderTime.setValue(sliderTime.getValue() + 2); // Plus 2mn in the simulation every second in the real life
-                            try {
-                                Thread.sleep(1000);
-                            }catch(InterruptedException e) {
-                                e.printStackTrace();
+                    this.simulation = new Thread() {
+                        @Override
+                        public void run() {
+                            while(simulationPlaying) {
+                                sliderTime.setValue(sliderTime.getValue() + 2); // Plus 2mn in the simulation every second in the real life
+                                try {
+                                    Thread.sleep(1000);
+                                }catch(InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
-                    }
-                };
+                    };
 
-                this.simulation.start();
-            }
-        });
-    }
+                    this.simulation.start();
+                }
+            });
+        }
+        //#endregion
+   
+        //#endregion
 
+    //#region GETTER / SETTER
     /**
      * //
      * @return
@@ -224,5 +262,6 @@ public class NTimePanel extends JPanel {
     public boolean isSimulationPlaying() {
         return this.simulationPlaying;
     }
+    //#endregion
     
 }

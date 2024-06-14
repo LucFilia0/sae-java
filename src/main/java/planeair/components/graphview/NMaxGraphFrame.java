@@ -1,30 +1,32 @@
 package planeair.components.graphview;
 
-//-- Import Swing
+//#region IMPORT
+    //#region .SWING
+    import javax.swing.JPanel;
+    import javax.swing.JFrame;
+    //#endregion
 
-import javax.swing.JPanel;
-import javax.swing.JFrame;
+    //#region .AWT
+    import java.awt.Color;
+    import java.awt.Dimension;
+    import java.awt.Toolkit;
+    //#endregion
 
-//-- Import AWT
+    //#region PLANEAIR
+    import javax.swing.border.EmptyBorder;
+    import planeair.App;
+    import planeair.components.menu.infos.NGraphInfoPanel;
+    import planeair.graph.graphutil.PanelCreator;
+    //#endregion
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
-//-- Import PlaneAIR
-import javax.swing.border.EmptyBorder;
-import planeair.App;
-import planeair.components.menu.NGraphInfoPanel;
-import planeair.graph.graphutil.PanelCreator;
+    //#region .AWT
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-/**
- * Import awt components
- */
 import java.awt.FlowLayout;
 import java.awt.Insets;
-
+//#endregion
+//#endregion
 
 /**
  * Create a Panel for MaxGraph, it's a frame for seeing the graph bigger (with informations)
@@ -33,6 +35,7 @@ import java.awt.Insets;
  */
 public class NMaxGraphFrame extends JFrame{
 
+    //#region INSTANTIALISATION AND INITIALISATION
     /**
      * Panel of the graph (Bigger than NInfoGraphPanelApp)
      * Location : all in the frame
@@ -50,7 +53,9 @@ public class NMaxGraphFrame extends JFrame{
      */
     @SuppressWarnings("unused")
     private App app ;
+    //#endregion
 
+    //#region CONSTRUCTOR
     /**
      * Constructor of NMaxGraphPanelApp
      */
@@ -105,5 +110,6 @@ public class NMaxGraphFrame extends JFrame{
             }
         });
     }
+    //#endregion
     
 }

@@ -1,26 +1,34 @@
 package planeair.components.graphview;
 
-// Import swing COMPONENTs
-import javax.swing.JPanel;
+//#region IMPORT
+    //#region .SWING
+    import javax.swing.JPanel;
+    import javax.swing.Box;
+    import javax.swing.JButton;
+    //#endregion
 
-import org.graphstream.ui.swing_viewer.ViewPanel;
+    //#region .GRAPHSTREAM
+    import org.graphstream.ui.swing_viewer.ViewPanel;
+    //#endregion
 
-import planeair.App;
-import planeair.graph.graphutil.PanelCreator;
+    //#region PLANEAIR
+    import planeair.App;
+    import planeair.graph.graphutil.PanelCreator;
+    //#endregion
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
+    //#region .AWT
+    import java.awt.Color;
+    import java.awt.Dimension;
+    import java.awt.Font;
+    //#endregion
 
-import java.awt.BorderLayout;
-// Import awt COMPONENTs
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+    //#region LAYOUT
 
-
-// Import Layout
 import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
+//#endregion
+//#endregion
 
 /**
  * This class create a Panel for see the graph 
@@ -30,43 +38,45 @@ import java.awt.GridLayout;
  */
 public class NMinGraphPanel extends JPanel {
 
-    //STRUCT
-    /**
-     * GridLayout
-     * nb LINE : 2  (Graph + ButtonAgr)
-     * nb COLUMN : 1
-     * hgap : 0
-     * vgap : 30
-     */
-    // private JPanel gridPanelMinGraph = new JPanel(new GridLayout(2,1,0,30));
-    private JPanel gridPanelMinGraph = new JPanel();
+    //#region  INSTANTIALISATION AND INITIALISATION
+        //#region STRUCTURE
+        /**
+         * GridLayout
+         * nb LINE : 2  (Graph + ButtonAgr)
+         * nb COLUMN : 1
+         * hgap : 0
+         * vgap : 30
+         */
+        private JPanel gridPanelMinGraph = new JPanel();
+        //#endregion
 
+        //#region FIRST COMPONENT 
+        /**
+         * Panel of the graph representation
+         * FlowLayout CENTER
+         */
+        private JPanel FlowPanelGraph = new JPanel(new BorderLayout());
 
-    /*FIRST COMPONENT */
+        /**
+         * Having acces to homePage (setVisible elements change)
+         * the panel NPrincipalePanelApp is put in this frame
+         */
+        private App app;
+        //#endregion
 
-    /**
-     * Panel of the graph representation
-     * FlowLayout CENTER
-     */
-    private JPanel FlowPanelGraph = new JPanel(new BorderLayout());
+        //#region SECOND COMPONENT 
+        /**
+         * Expand Button for graph
+         * Open a new Frame with the graph and this information
+         * Location : in the panel Mingraph --> need here for Events
+         */
+        private JButton buttonAgr = new JButton("AGRANDIR");
 
-    /**
-     * Having acces to homePage (setVisible elements change)
-     * the panel NPrincipalePanelApp is put in this frame
-     */
-    private App app;
-
-    /*SECOND COMPONENT */ 
-    /**
-     * Expand Button for graph
-     * Open a new Frame with the graph and this information
-     * Location : in the panel Mingraph --> need here for Events
-     */
-    private JButton buttonAgr = new JButton("AGRANDIR");
-
-    private JPanel buttonCenter = new JPanel(new GridLayout(1,1));
-
+        private JPanel buttonCenter = new JPanel(new GridLayout(1,1));
+        //#endregion
+    //#endregion
     
+    //#region CONSTRUCTOR
     /**
      * Constructor of NMinGraphPanelApp
      */
@@ -108,7 +118,9 @@ public class NMinGraphPanel extends JPanel {
 
         this.add(gridPanelMinGraph);
     }
+    //#endregion
 
+    //#region ADD GRAPH
     /**
      * Puts the graph in the panel
      * @param graphRenderer Renderer which will take care of rendering the graph
@@ -120,7 +132,9 @@ public class NMinGraphPanel extends JPanel {
         this.FlowPanelGraph.add(panel, BorderLayout.CENTER) ;
         buttonCenter.setBackground(App.KINDAYELLOW);
     }
+    //#endregion
 
+    //#region REMOVE GRAPH
     /**
      * Clears the MinGraph from the panel
      * 
@@ -130,7 +144,9 @@ public class NMinGraphPanel extends JPanel {
         this.FlowPanelGraph.removeAll();
         this.app.setGraph(null);
     }
+    //#endregion
 
+    //#region ADD
     public void addComponents(){
 
         /*FIRST COMPONENT */
@@ -145,5 +161,6 @@ public class NMinGraphPanel extends JPanel {
 
         this.add(gridPanelMinGraph);
    }
+   //#endregion
 
 }
