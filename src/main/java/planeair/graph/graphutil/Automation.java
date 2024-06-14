@@ -35,6 +35,9 @@ import planeair.importation.ImportationTestGraph;
  * @author Nathan LIEGEON
  */
 public abstract class Automation {
+
+    //#region ATTRIBUTES
+
     /**
      * Number of algorithms that are supported by this process
      */
@@ -62,6 +65,10 @@ public abstract class Automation {
      * Default folder where the solution will be stored
      */
     private static final String FOLDER_PATH = "/Solution_Equipe_G1-4/" ;
+
+    //#endregion
+
+    //#region MAIN
         
     /**
      * Starts the importation of all the files
@@ -212,6 +219,10 @@ public abstract class Automation {
             System.err.println(e) ;
         }
     }
+
+    //#endregion
+
+    //#region UTILITY
 
     /**
      * Recovers the first number in the String and returns it
@@ -435,6 +446,6 @@ public abstract class Automation {
             return bestAlgorithm ;
         }
 
-
+        //#endregion
     }
 } 

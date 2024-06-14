@@ -11,6 +11,9 @@ import javax.swing.JPanel;
  */
 public class NGraphNotHerePanel extends JPanel {
     
+    /**
+     * Panel telling the user that the graph has been moved to another frame
+     */
     public NGraphNotHerePanel() {
         super() ;
     }

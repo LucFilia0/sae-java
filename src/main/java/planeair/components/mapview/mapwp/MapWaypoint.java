@@ -16,7 +16,6 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import planeair.components.mapview.Map;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-import planeair.graph.graphutil.Flight;
 import planeair.graph.graphutil.PanelCreator;
 
 

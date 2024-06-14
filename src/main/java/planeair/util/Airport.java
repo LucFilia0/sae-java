@@ -110,6 +110,12 @@ public class Airport {
         return this.coordinate;
     }
 
+    /**
+     * Returns all the fligts coming to and going from this airport
+     * 
+     * @return
+     * 
+     */
     public ArrayList<Flight> getFlightList() {
         return this.flightList ;
     }

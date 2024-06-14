@@ -3,7 +3,6 @@ package planeair.components.mapview.mapwp.flightwp;
 //-- Import Java
 
 import java.io.File;
-import java.io.IOException;
 
 //-- Import JxMapViewer
 

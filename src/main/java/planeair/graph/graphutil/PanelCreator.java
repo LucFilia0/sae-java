@@ -14,8 +14,6 @@ import org.graphstream.ui.view.camera.Camera;
 import org.graphstream.ui.view.util.GraphMetrics;
 import org.graphstream.ui.view.util.InteractiveElement;
 
-import planeair.components.mapview.mapwp.MapWaypointButton;
-import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.GraphSAE;
 
@@ -30,6 +28,7 @@ import org.graphstream.ui.swing_viewer.util.MouseOverMouseManager;
  */
 public class PanelCreator {
 
+	//#region ATTRIBUTES
 	/**
 	 * boolean handling the pumping of events in a separate thread
 	 */
@@ -66,7 +65,8 @@ public class PanelCreator {
 	protected Point3 dragPos = null ;
 
 	protected static int numberOfInstances = 0 ;
-
+	//#endregion
+	//#region CONSTRUCTORS
 	/**
 	 * Handles the creation of a view on the graph, giving access
 	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
@@ -98,6 +98,7 @@ public class PanelCreator {
 		panel = (ViewPanel)viewer.addDefaultView(inOwnFrame) ;
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
+		// Sets the way the graph handles mouse events over nodes
 		view.setMouseManager(new MouseOverMouseManager(EnumSet.of(InteractiveElement.NODE), 20) {
 			@Override
 			public void mouseDragged(MouseEvent event) {
@@ -139,8 +140,8 @@ public class PanelCreator {
 		}) ;
 		graphPump.start() ;
 	}
-	
-	// Getters
+	//#endregion
+	//#region GETTERS
 		
 	/**
 	 * Getter for the graph contained in the panel
@@ -185,6 +186,10 @@ public class PanelCreator {
 	public View getView() {
 		return this.view ;
 	}
+
+	//#endregion
+	
+	//#region FUNCTIONS
 
 	/**
 	 * Returns the mouse position in Graph Units while making sure it stays inside the authorized area
@@ -250,6 +255,32 @@ public class PanelCreator {
 	}
 
 	/**
+	 * Sets the default style for selected nodes
+	 * @param n
+	 */
+	public static void setSelectedStyle(Node n) {
+		n.removeAttribute("ui.size") ;
+		n.setAttribute("ui.size", ColoringUtilities.DEFAULT_NODE_SIZE*2) ;
+		n.setAttribute("ui.label", n.getId()) ;
+		n.setAttribute("ui.style", "text-alignment : center ; text-color : white ;" + 
+		"text-background-mode : rounded-box ; text-background-color : black ; text-padding : 2 ;" + 
+		"text-style : bold ;") ;	
+	}
+
+	/**
+	 * Removes all attributes related to the selected node style
+	 * @param n
+	 */
+	public static void removeSelectedStyle(Node n) {
+		n.removeAttribute("ui.size") ;
+		n.removeAttribute("ui.label") ;
+		n.removeAttribute("ui.style") ;
+	}
+	//#endregion
+
+	//region EVENTS
+
+	/**
 	 * Class handling all mouse events on this panel
 	 * 
 	 * @author Nathan LIEGEON
@@ -310,6 +341,8 @@ public class PanelCreator {
 	/**
 	 * Class handling viewer events which are events related to graphical elements in the viewer
 	 * (nodes, edges and other stuff)
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	private class ViewerEventHandler implements ViewerListener {
 		/**
@@ -374,27 +407,6 @@ public class PanelCreator {
 		}
 	}
 
-	/**
-	 * Sets the default style for selected nodes
-	 * @param n
-	 */
-	public static void setSelectedStyle(Node n) {
-		n.removeAttribute("ui.size") ;
-		n.setAttribute("ui.size", ColoringUtilities.DEFAULT_NODE_SIZE*2) ;
-		n.setAttribute("ui.label", n.getId()) ;
-		n.setAttribute("ui.style", "text-alignment : center ; text-color : white ;" + 
-		"text-background-mode : rounded-box ; text-background-color : black ; text-padding : 2 ;" + 
-		"text-style : bold ;") ;	
-	}
-
-	/**
-	 * Removes all attributes related to the selected node style
-	 * @param n
-	 */
-	public static void removeSelectedStyle(Node n) {
-		n.removeAttribute("ui.size") ;
-		n.removeAttribute("ui.label") ;
-		n.removeAttribute("ui.style") ;
-	}
+	//#endregion
 
 }

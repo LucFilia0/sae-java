@@ -15,6 +15,8 @@ import planeair.graph.coloring.ColoringUtilities;
  */
 public abstract class GraphSAE extends SingleGraph {
 
+    //#region ATTRIBUTES
+
     /**
      * The String identifier that represents the max allowed number of Nodes (int)
      */
@@ -40,6 +42,10 @@ public abstract class GraphSAE extends SingleGraph {
      */
     private Color[] colorTab ;
 
+    //#endregion
+
+    //#region CONSTRUCTORS
+
     /**
      * Constructor setting our attributes to a default value of 0.
      * @param id
@@ -52,6 +58,10 @@ public abstract class GraphSAE extends SingleGraph {
         this.setAttribute(GraphSAE.NB_MAX_NODES, 0);
         ColoringUtilities.setGraphStyle(this, 0) ;
     }
+
+    //#endregion
+
+    //#region GETTERS
 
     /**
      * Returns the value of kMax, the maximum number of allowed colors.
@@ -90,6 +100,10 @@ public abstract class GraphSAE extends SingleGraph {
     public Color[] getColorTab() {
         return this.colorTab ;
     }
+
+    //#endregion
+
+    //#region SETTERS
 
     /**
      * Sets the value of kMax, which is the maximum amount of colors of the TestGraph.
@@ -137,13 +151,21 @@ public abstract class GraphSAE extends SingleGraph {
         this.colorTab = colorTab ;
     }
 
+    //#endregion
+
+    //#region UTILITY
+
     /**
      * Removes the "ui.hide" attribute from every node of this graph
+     * 
+     * @author Nathan LIEGEON
      */
     public void showAllNodes() {
         // Tell graphstream to fix their bug (or fix our own skill issue)
         this.nodes().forEach(n -> {
-            n.edges().forEach(e -> e.removeAttribute("ui.hide"));
+            n.edges().forEach(e -> {
+                e.removeAttribute("ui.hide") ;
+            });
             n.removeAttribute("ui.hide") ;
         });
     }
@@ -151,7 +173,6 @@ public abstract class GraphSAE extends SingleGraph {
     /**
      * Shows only nodes with their colorAttribute set to color
      * Gives the attribute "ui.hide" to all the ones that don't
-     * 
      * 
      * @param color
      * 
@@ -168,5 +189,7 @@ public abstract class GraphSAE extends SingleGraph {
             }
         }) ;
     }
+
+    //#endregion
 
 }

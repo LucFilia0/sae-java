@@ -59,6 +59,7 @@ public class NMaxGraphFrame extends JFrame{
         this.infoGraph = new NGraphInfoPanel(app) ;
         JPanel infoGraphPanel = new JPanel() ;
         if (graphRenderer == null) {
+            // If no graph was imported
             graph = new NSkullPanel() ;
             this.setTitle("Vue sur rien du tout :(") ;
         }
@@ -87,6 +88,7 @@ public class NMaxGraphFrame extends JFrame{
         this.setSize(new Dimension(1100,700));
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);  
+        // Handles properly closing the window by moving back all the panels it moved
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {

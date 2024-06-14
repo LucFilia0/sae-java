@@ -31,6 +31,7 @@ public class NSkullPanel extends JPanel {
         int x ;
         int y ;
         try {
+            // Paints THE Skull
             this.setBackground(Color.BLACK) ;
             Image skullEmoji = ImageIO.read(new File("./icons/SkullEmoji.png"))
                 .getScaledInstance(-1, (int)(this.getHeight()*0.8), Image.SCALE_DEFAULT) ;
@@ -40,6 +41,9 @@ public class NSkullPanel extends JPanel {
         }
 
         catch (Exception e) {
+
+            // If the skull was deleted by some evil neferious awful mean heartless and possibly racist person
+            // then it paints a string instead
             x = this.getWidth() / (this.getWidth()/200) ;
             y = this.getHeight() / 2 ;
             Rectangle rect = new Rectangle(this.getWidth()/4, this.getHeight()/4, this.getWidth()/2, this.getHeight()/2) ;

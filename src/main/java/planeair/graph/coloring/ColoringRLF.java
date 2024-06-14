@@ -14,6 +14,13 @@ import org.graphstream.graph.implementations.Graphs;
 
 import planeair.graph.graphtype.GraphSAE;
 
+/**
+ * Class handling all the methods for the RLF graph Algorithm
+ * The algorithm was based on this source 
+ * {@link <a href = "https://en.wikipedia.org/wiki/Recursive_largest_first_algorithm">Source</a>}
+ * 
+ * @author Nathan LIEGEON
+ */
 public abstract class ColoringRLF {
     
     /** 
@@ -54,10 +61,13 @@ public abstract class ColoringRLF {
     /**
      * Recursive function which will progressively eliminate colored nodes from a copy of the original graph until
      * there is none left or kMax has been surpassed
+     * 
      * @param originalGraph
      * @param graph
      * @param color
      * @return
+     * 
+     * @author Nathan LIEGEON
      */
     public static int recursiveColoringRLF(GraphSAE originalGraph, GraphSAE graph, int color, int kMax) {
         if (graph.getNodeCount() == 0 || color >= kMax) {
@@ -119,6 +129,8 @@ public abstract class ColoringRLF {
      * @param addableNodesSet
      * @param colorSet
      * @return
+     * 
+     * @author Nathan LIEGEON
      */
     private static Node getNextNodeRLF(Set<Node> addableNodesSet, Set<Node> colorSet) {
         // Counts the number of common Neighbors between a node and all nodes in colorSet 

@@ -11,6 +11,7 @@ import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
 
 public abstract class ColoringDSATUR {
+    
     /**
      * Give a graph's coloring with less colision we can, use graph saturation principle (degree).
      * 

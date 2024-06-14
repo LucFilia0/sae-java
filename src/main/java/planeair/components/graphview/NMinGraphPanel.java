@@ -68,6 +68,10 @@ public class NMinGraphPanel extends JPanel {
 
     private JPanel buttonCenter = new JPanel(new GridLayout(1,1));
 
+    /**
+     * Frame that will be spawned when the "Agrandir" button is pressed
+     * Contains a bigger view on the graph
+     */
     private JFrame maxGraphFrame ;
 
     

@@ -6,15 +6,12 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.border.Border;
 
 import planeair.App;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-import planeair.graph.graphutil.Flight;
 import planeair.graph.graphutil.PanelCreator;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 
 //-- Import AWT
 
@@ -104,6 +101,7 @@ public class MapWaypointButton extends javax.swing.JButton {
      * @author Nathan LIEGEON
      */
     public void changeSelection(boolean isSelected) {
+        // You clicked on the waypoint you just selected
         if (isSelected) {
             this.setBorder(null) ;
             if (waypointSelected != null && waypointSelected.getMapWaypoint() instanceof FlightWaypoint) {
@@ -113,7 +111,11 @@ public class MapWaypointButton extends javax.swing.JButton {
             waypointSelected = null ;
 
         }
+        // You clicked on another waypoint
         else {
+            
+            // Checks if there is a selected waypoint
+            // And applies the relevant changes
             if (waypointSelected != null) {
                 waypointSelected.setBorder(null) ;
                 if (waypointSelected.getMapWaypoint() instanceof FlightWaypoint) {

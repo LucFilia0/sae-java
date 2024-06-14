@@ -557,6 +557,8 @@ public class NGraphMenuPanel extends JPanel{
         GraphSAE graph = graphRenderer.getGraph() ;
         graph.showAllNodes() ;
         if (lastColorSelected != 0) {
+            // Do not question, blame graphstream instead
+            graph.showNodesWithColor(lastColorSelected) ;
             graph.showNodesWithColor(lastColorSelected) ;
         }
     }
