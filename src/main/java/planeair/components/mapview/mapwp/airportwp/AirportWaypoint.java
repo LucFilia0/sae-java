@@ -1,69 +1,103 @@
 package planeair.components.mapview.mapwp.airportwp;
 
-//-- Import Java
+//#region IMPORTS
 
-import java.io.File;
+	//#region JAVA
+	
+	import java.io.File;
 
-//-- Import JxMapViewer
+	//#endregion
 
-import org.jxmapviewer.viewer.GeoPosition;
+	//#region JXMAPVIEWER
 
-import planeair.util.Airport;
+	import org.jxmapviewer.viewer.GeoPosition;
+
+	//#endregion
+
+	//#region PLANEAIR
+
+	import planeair.util.Airport;
+
+	//#endregion
+
+//#endregion
 
 /**
  * This class is the MapWaypoint which is used to represent Airports on the Map.
  * The Airport class's Waypoints can be "active", in red, or "inactive", in gray.
+ * 
  * The active/inactive visual is made by children classes :
- * {@link ihm.mapvisuals.mapwp.airportwp.ActiveAirportWaypoint ActiveAirportWaypoint} and {@link ihm.mapvisuals.mapwp.airportwp.InactiveAirportWaypoint InactiveAirportWaypoint}.
- * Extends {@link ihm.mapvisuals.mapwp.MapWaypoint MapWaypoint}
+ * {@link planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint ActiveAirportWaypoint} and {@link planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint InactiveAirportWaypoint}.
+ * AirportWaypoint extends {@link planeair.components.mapview.mapwp.MapWaypoint MapWaypoint}
  * 
  * @author Luc le Manifik
  */
 public abstract class AirportWaypoint extends planeair.components.mapview.mapwp.MapWaypoint {
 
-	//-- Airport Waypoint Attributes
+	//#region ATTRIBUTES
 	
+	/**
+	 * The Airport which is represented by the AirportWaypoint.
+	 * Used to get the informations of the clicked MapWaypoint
+	 */
 	private Airport airport;
 
-    //-- AirportWaypoint Consructor
+	//#endregion
+
+    //#region CONSTRUCTORS
 
     /**
-     * The AirportWaypoint class's constructor. Creates a new AirportWaypoint.
+     * Creates a new AirportWaypoint.
+	 * AirportWaypoints can be represented by two different visuals : The active ones (red), and the inactive ones (gray)
      * 
-     * @param iconFile ({@link java.io.File}) - The icon's File
-     * @param name (String) - The name of the Airport
-     * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The position of the Airport.
+     * @param iconFile ({@link java.io.File File}) - The icon's File, which is used to prompt the visual
+	 * @param airport ({@link planeair.util.Airport Airport}) - The Airport which is represented by the AirportWaypoint
+     * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition GeoPosition}) - The position of the Airport.
      * 
      * @author Luc le Manifik
      */
     AirportWaypoint(File iconFile, Airport airport, GeoPosition geoPosition) {
-        super(iconFile, geoPosition, 0);
+        super(iconFile, geoPosition, 0); // Degree = 0, because Airports are not spinning, bro...
 		this.airport = airport;
     }
 
-	//-- AirportWaypoint Getters
+	//#endregion
 	
+	//#region GETTERS
+
 	/**
 	 * Returns the Airport represented by the AirportWaypoint
+	 * 
+	 * @return ({@link planeair.util.Airport Airport}) - The Airport which is represented by the AirportWaypoint
 	 */
 	public Airport getAirport() {
 		return this.airport;
 	}
 
+	//#endregion
+
+	//#region SETTERS
+
 	/**
-	 * Sets the Aiprort which is represented by the AirportWaypoint
+	 * Sets the Airport which is represented by the AirportWaypoint.
+	 * Only if it's not null
 	 */
 	public void setAirport(Airport airport) {
 		if(airport != null) {
 			this.airport = airport;
 		}
 	}
+	
+	//#endregion
+
+	//#region TOSTRING
 
 	/**
-	 * Returns the prompt of the infos Airports
+	 * Returns the toString of the represented Airport
 	 */
 	public String toString() {
 		return this.airport.toString();
 	}
 
+	//#endregion
 }

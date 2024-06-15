@@ -1,7 +1,7 @@
 package planeair.exceptions;
 
 /**
- * This exception is threw when an invalid format of Coordinate is found in the source file
+ * This exception is threw when an invalid format of Coordinate is found in a source File
  * 
  * @auhor Luc le Manifik
  */

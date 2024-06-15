@@ -1,40 +1,56 @@
 package planeair.components.mapview.mapwp;
 
-//-- Import Java
+//#region IMPORTS
 
-import java.util.HashSet;
-import java.util.Set;
-import java.lang.Math;
+    //#region JAVA
 
-//-- Import AWT
+    import java.util.HashSet;
+    import java.util.Set;
+    import java.lang.Math;
 
-import java.awt.Rectangle;
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
+    //#endregion
 
-//-- Import JxMapViewer
+    //#region AWT
 
-import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.viewer.WaypointPainter;
+    import java.awt.Rectangle;
+    import java.awt.BasicStroke;
+    import java.awt.Graphics2D;
+    import java.awt.geom.Point2D;
 
-import planeair.App;
-import planeair.components.NMainScreen;
-import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
-import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-import planeair.graph.coloring.ColoringUtilities;
-import planeair.graph.graphtype.FlightsIntersectionGraph;
+    //#endregion
+
+    //#region JXMAPVIEWER
+
+    import org.jxmapviewer.JXMapViewer;
+    import org.jxmapviewer.viewer.WaypointPainter;
+
+    //#endregion
+
+    //#region PLANEAIR
+
+    import planeair.App;
+    import planeair.components.NMainScreen;
+    import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
+    import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+    import planeair.graph.coloring.ColoringUtilities;
+    import planeair.graph.graphtype.FlightsIntersectionGraph;
+
+    //#endregion
+
+//#endregion
 
 /**
  * This class paints the different Waypoints on a Map object.
- * It paints Airports, which are putted a little above, to allow their pic to point towards the exact location of the coordinate.
+ * It paints : Airports, which are putted a little above, to allow their pic to point towards the exact location of the coordinate.
  * Flights, which have their image centered.
- * FlightRoutes, which are made by reading the FIG.
+ * FlightRoutes, which are made by reading the FIG, and represents the routes of the Flights
  * 
  * @author Luc le Manifik
  */
 public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     
+    //#region ATTRIBUTES
+
     /**
      * The Set which contains all the AirportWaypoints
      */
@@ -46,7 +62,8 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     private HashSet<FlightWaypoint> flightWaypointSet;
 
     /**
-     * The Set which stores all the MapWaypointButtons
+     * The Set which stores all the MapWaypointButtons.
+     * This Set is needed to remove all the MapWaypointButtons from the Map, when we want to repaint it, for example.
      */
     private HashSet<MapWaypointButton> waypointButtonSet;
 
@@ -55,17 +72,64 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      */
     private App app ;
 
+    //#endregion
+
+    //#region CONSTRUCTORS
+
     /**
-     * The MapItemPainter class's constructor. Creates a new MapItemPainter.
+     * Creates a new MapWaypointPainter.
      * 
      * @author Luc le Manifik
      */
     public MapWaypointPainter(App app) {
-        this.airportWaypointSet = new HashSet<AirportWaypoint>();
-        this.flightWaypointSet = new HashSet<FlightWaypoint>();
-        this.waypointButtonSet = new HashSet<>();
+
         this.app = app ;
+
+        this.airportWaypointSet = new HashSet<AirportWaypoint>();
+        this.flightWaypointSet  = new HashSet<FlightWaypoint>();
+        this.waypointButtonSet  = new HashSet<MapWaypointButton>();
     }
+
+    //#endregion
+
+    //#region GETTERS
+
+    /**
+     * Returns the Sets which contains all the AirportWaypoints
+     * 
+     * @return ({@link java.util.HashSet}) - The sets which contains all the AirportWaypoints
+     * 
+     * @author Luc le Manifik
+     */
+    public HashSet<AirportWaypoint> getAirportWaypoints() {
+        return this.airportWaypointSet;
+    }
+
+    /**
+     * Returns the Set which contains all the FlightWaypoints
+     * 
+     * @return ({@link java.util.HashSet}) - The Sets which contains all the FlightWaypoints
+     * 
+     * @author Luc le Manifik
+     */
+    public HashSet<FlightWaypoint> getFlightWaypoints() {
+        return this.flightWaypointSet;
+    }
+
+    /**
+     * Returns the Set which contains all the MapWaypointButtons
+     * 
+     * @return ({@link java.util.HashSet HashSet}) - The Sets which contains all the MapWaypointButtons
+     * 
+     * @author Luc le Manifik
+     */
+    public HashSet<MapWaypointButton> getWpButtons() {
+        return this.waypointButtonSet;
+    }
+
+    //#endregion
+
+    //#region OVERRIDED METHODS
 
     /**
      * This method paints the Map's overlay, and diaplays all the different types of Waypoints on the Map.
@@ -114,10 +178,13 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
         }
 
         /*
-         * STEP 2 : We paint the current Flights' Waypoints
+         * STEP 2 : We paint the current Flights' Waypoints, and their routes
          */
         for(FlightWaypoint flightWp : this.flightWaypointSet) {
 
+            /*
+             * STEP 2.1 : Painting the Flights' waypoints
+             */
             Point2D flightWp_location = map.getTileFactory().geoToPixel(flightWp.getPosition(), mapZoom);
 
             MapWaypointButton waypointButton = flightWp.getWaypointButton();
@@ -127,7 +194,9 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             
             waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
 
-            
+            /*
+             * STEP 2.2 : Painting the Flights' routes
+             */
             Point2D departureAirport_location = map.getTileFactory().geoToPixel(flightWp.getFlight().getDepartureAirport().getCoordinate(), map.getZoom());
             Point2D arrivalAirport_location = map.getTileFactory().geoToPixel(flightWp.getFlight().getArrivalAirport().getCoordinate(), map.getZoom());
 
@@ -142,45 +211,10 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                 FlightsIntersectionGraph graph = (FlightsIntersectionGraph)flightWp.getFlight().getGraph() ;
                 g.setColor(graph.getColorTab()[color - 1]) ;
             }
-            g.setStroke(new BasicStroke(3)) ;
+
+            g.setStroke(new BasicStroke(3)) ; // Sets the stroke to 3, for better visibility on the Map
             g.drawLine(depX, depY, arrX, arrY);
-            
-
-            
         }
-    }
-
-    /**
-     * Returns the Sets which contains all the AirportWaypoints
-     * 
-     * @return ({@link java.util.HashSet}) - The sets which contains all the AirportWaypoints
-     * 
-     * @author Luc le Manifik
-     */
-    public HashSet<AirportWaypoint> getAirportWaypoints() {
-        return this.airportWaypointSet;
-    }
-
-    /**
-     * Returns the Set which contains all the FlightWaypoints
-     * 
-     * @return ({@link java.util.HashSet}) - The Sets which contains all the FlightWaypoints
-     * 
-     * @author Luc le Manifik
-     */
-    public HashSet<FlightWaypoint> getFlightWaypoints() {
-        return this.flightWaypointSet;
-    }
-
-    /**
-     * Returns the Set which contains all the MapWaypointButtons
-     * 
-     * @return ({@link java.util.HashSet HashSet}) - The Sets which contains all the MapWaypointButtons
-     * 
-     * @author Luc le Manifik
-     */
-    public HashSet<MapWaypointButton> getWpButtons() {
-        return this.waypointButtonSet;
     }
 
     /**
@@ -190,4 +224,6 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     public Set<MapWaypoint> getWaypoints() {
         return null;
     }
+
+    //#endregion
 }

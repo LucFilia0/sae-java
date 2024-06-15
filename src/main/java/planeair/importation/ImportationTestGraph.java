@@ -1,21 +1,39 @@
 package planeair.importation;
 
-// Import Java
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+//#region IMPORTS
 
-// Import GraphStream
-import org.graphstream.graph.EdgeRejectedException;
-import org.graphstream.graph.ElementNotFoundException;
-import org.graphstream.graph.IdAlreadyInUseException;
-import org.graphstream.graph.Node;
+    //#region JAVA
 
-// Import Exceptions
-import planeair.exceptions.InvalidEntryException;
-import planeair.exceptions.InvalidFileFormatException;
-import planeair.graph.coloring.ColoringUtilities;
-import planeair.graph.graphtype.TestGraph;
+    import java.io.File;
+    import java.io.FileNotFoundException;
+    import java.util.Scanner;
+
+    //#endregion
+
+    //#region GRAPHSTREAM
+
+    import org.graphstream.graph.EdgeRejectedException;
+    import org.graphstream.graph.ElementNotFoundException;
+    import org.graphstream.graph.IdAlreadyInUseException;
+    import org.graphstream.graph.Node;
+
+    //#endregion
+
+    //#region PLANEAIR
+
+    import planeair.exceptions.InvalidEntryException;
+    import planeair.exceptions.InvalidFileFormatException;
+
+    //#endregion
+
+    //#region EXCEPTIONS
+
+    import planeair.graph.coloring.ColoringUtilities;
+    import planeair.graph.graphtype.TestGraph;
+
+    //#endregion
+
+//#endregion
 
 /**
  * <html>
@@ -43,17 +61,23 @@ import planeair.graph.graphtype.TestGraph;
  */
 public class ImportationTestGraph {
 
+    //#region STATIC VARIABLES
+
     /**
-     * The RegEx which is used to clean the TestGraph files' lines
+     * The RegEx which is used to clean the TestGraph Files' lines
      */
     public static final String REGEX_TEST_GRAPH = "[^ 0-9]";
+
+    //#endregion
+
+    //#region PUBLIC IMPORTATION
 
     /**
      * Imports the TestGraph data specified in parameter
      * 
-     * @param testGraph ({@link planeair.graph.graphtype.TestGraph TestGraph}) - The TestGraph we want to import
-     * @param testGraphFile ({@link java.io.File File}) - The File which contains the TestGraph's data
-     * @param showErrorMessages (boolean) - True if you want that the error messages are prompt
+     * @param testGraph The {@link planeair.graph.graphtype.TestGraph TestGraph} we want to import
+     * @param testGraphFile The {@link java.io.File File} which contains the TestGraph's data
+     * @param showErrorMessages "True" if you want that the error messages are prompt, "false" if you don't
      * 
      * @throws FileNotFoundException Threw if the File does not exist, ot is not found
      * @throws InvalidFileFormatException Threw if the File format is incorrect
@@ -95,22 +119,23 @@ public class ImportationTestGraph {
         }catch(InvalidFileFormatException iffe) {
             throw iffe;
         }
-
     }
 
-    // PRIVATE PROCEDURES
+    //#endregion
+
+    //#region PRIVATE PROCEDURES
 
     /**
      * This methods is scanning the source file until it founds the k-max value.
      * 
-     * @param testGraph ({@link graph.TestGraph TestGraph}) - The TestGraph we are currently importing
-     * @param lineScanner ({@link java.util.Scanner Scanner}) - The Scanner which is currently reading the source File
-     * @param currentLine (Integer) - The source File's current line 
-     * @param showErrorMessages (boolean) - If "True", then some minor error messages will be prompt. Nothing will be prompt if you pu "False"
+     * @param testGraph The {@link planeair.graph.graphtype.TestGraph TestGraph} we are currently importing
+     * @param lineScanner The {@link java.util.Scanner Scanner} which is currently reading the source File
+     * @param currentLine The source File's current line 
+     * @param showErrorMessages If "True", then some minor error messages will be prompt. Nothing will be prompt if you put "False"
      * 
-     * @throws InvalidFileFormatException
+     * @throws InvalidFileFormatException Threw if the source File does not matches the required format for a correct importation to occur
      * 
-     * @return kMaxImported (boolean) - Return true if the kMax value is found in the file, else false
+     * @return Returns "true" if the kMax value is found in the file, else "false"
      * 
      * @author Luc le Manifik
      */
@@ -143,7 +168,7 @@ public class ImportationTestGraph {
                 }
 
                 if(showErrorMessages && dataScanner.hasNext()) { // Check if there is an other value on the line. Then prompts an error, but continue the execution of the program
-                    System.err.println("Error at Line " + currentLine +  " : Too many informations on line");
+                    System.err.println("At Line " + currentLine +  " : More information than required");
                 }
             }
 
@@ -156,10 +181,10 @@ public class ImportationTestGraph {
     /**
      * This methods is scanning the source file until it founds the number of nodes value.
      * 
-     * @param testGraph ({@link graph.TestGraph TestGraph}) - The TestGraph we are currently importing
-     * @param lineScanner ({@link java.util.Scanner Scanner}) - The Scanner which is currently reading the source File
-     * @param currentLine (Integer) - The source File's current line 
-     * @param showErrorMessages (boolean) - If "True", then some minor error messages will be prompt. Nothing will be prompt if you pu "False"
+     * @param testGraph The {@link planeair.graph.graphtype.TestGraph TestGraph} we are currently importing
+     * @param lineScanner The {@link java.util.Scanner Scanner} which is currently reading the source File
+     * @param currentLine The source File's current line 
+     * @param showErrorMessages If "True", then some minor error messages will be prompt. Nothing will be prompt if you pu "False"
      * 
      * @throws InvalidFileFormatException
      * 
@@ -196,7 +221,7 @@ public class ImportationTestGraph {
                 }
 
                 if(showErrorMessages && dataScanner.hasNext()) { // Check if there is an other value on the line. Then prompts an error, but continue the execution of the program
-                    System.err.println("Error at Line " + currentLine +  " : Too many informations on line");
+                    System.err.println("At Line " + currentLine +  " : More information than required");
                 }
             }
 
@@ -296,4 +321,6 @@ public class ImportationTestGraph {
             ++nodeId;
         }
     }
+
+    //#endregion
 }

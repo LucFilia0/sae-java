@@ -1,41 +1,58 @@
 package planeair.components.mapview.mapwp.airportwp;
 
-//-- Import Java
+//#region IMPORTS
 
-import java.io.File;
+    //#region JAVA
 
-//-- Import JxMapViewer
+    import java.io.File;
 
-import org.jxmapviewer.viewer.GeoPosition;
+    //#endregion
 
-import planeair.util.Airport;
+    //#region JXMAPVIEWER
+
+    import org.jxmapviewer.viewer.GeoPosition;
+
+    //#endregion
+
+    //#region PLANEAIR
+
+    import planeair.util.Airport;
+
+    //#endregion
+
+//#endregion
 
 /**
- * This class is a Waypoint on the {@link ihm.Map} which represents an active Airport.
- * Extends the {@link ihm.mapvisuals.mapwp.airportwp.AirportWaypoint AirportWaypoint} class.
+ * This class is a Waypoint on the {@link planeair.components.mapview.Map Map} which represents an active Airport (in red).
+ * Extends the {@link planeair.components.mapview.mapwp.airportwp.AirportWaypoint AirportWaypoint} class.
  * 
  * @author Luc le Manifik
  */
 public class ActiveAirportWaypoint extends AirportWaypoint {
     
-    //-- ActiveAirportWaypoint Static Variables
+    //#region STATIC VARIABLES
 
     /**
-     * The file which contains the icon of the active Airports ({@link java.io.File})
+     * The file which contains the icon of the active Airports ({@link java.io.File File})
      */
     public static final File ACTIVE_AIRPORT_WAYPOINT_ICON_FILE = new File("./icons/waypoints/active_airport.png");
 
-    //-- ActiveAirportWaypoint Constructor
+    //#endregion
+
+    //#region CONSTRUCTOR
 
     /**
-     * The ActiveAirportWaypoint class's constructor. Creates a new ActiveAirportWaypoint.
+     * Creates a new ActiveAirportWaypoint.
+     * ActiveAirports are represented in red on the Map
      * 
-     * @param name (String) - The name of the Airport
-     * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The position of the Airport.
+     * @param airport ({@link planeair.util.Airport Airport}) - The Airport which is represented by the ActiveAirportWaypoint
+     * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition GeoPosition}) - The position of the Airport
      * 
      * @author Luc le Manifik
      */
     public ActiveAirportWaypoint(Airport airport, GeoPosition position) {
         super(ActiveAirportWaypoint.ACTIVE_AIRPORT_WAYPOINT_ICON_FILE, airport, position);
     }
+
+    //#endregion
 }

@@ -1,29 +1,33 @@
 package planeair.graph.graphtype;
 
-//-- Import GraphStream
+//#region IMPORTS
 
-//-- Import Exceptions
+    //#region EXCEPTIONS
 
-import planeair.exceptions.InvalidEntryException;
+    import planeair.exceptions.InvalidEntryException;
+
+    //#endregion
+
+//#endregion
+
 /**
  * TestGraph is the basic class to handle the "graph-testX.txt" files.
  * This class extends the class SingleGraph, from GraphStream.
+ * It's basically an empty Graph, with ne peculiar meaning, and just allows you to test your code
  * 
- * @implNote Uses the GraphStream attributes.
+ * @implNote Uses the GraphStream attributes
  * 
  * @author Luc le Manifik
  */
 public class TestGraph extends GraphSAE {
 
-    //-- TestGraph Attributes
-
-    //-- TestGraph Constructor
+    //#region CONSTRUCTORS
 
     /**
-     * Constructor of the TestGraph class.
      * Creates a new TestGraph.
+     * A TestGraph is a basic graph for the SAE, and just allows you to test your algorithmes
      * 
-     * @param id (String) - The identifier of the TestGraph
+     * @param id The identifier of the TestGraph
      * 
      * @author Luc le Manifik
      */
@@ -31,7 +35,9 @@ public class TestGraph extends GraphSAE {
         super(id);
     }
 
-    //-- TestGraph toString()
+    //#endregion
+
+    //#region TOSTRING
 
     /**
      * This function prints the informations of its TestGraph.
@@ -42,15 +48,17 @@ public class TestGraph extends GraphSAE {
      * @author Luc le Manifik
      */
     public String toString() {
-        return "-- TestGraph\nIdentifier : " + super.id + "\nkMax : " + this.getKMax() + "\nNumber of nodes : " + this.getNodeCount() + "/" + this.getNbMaxNodes() + "\nNumber of edges : " + this.getEdgeCount();
+        return "<html><strong>TestGraph :</strong> " + super.id + "<br><strong>kMax :</strong> " + this.getKMax() + "<br><strong>Number of nodes :</strong> " + this.getNodeCount() + "/" + this.getNbMaxNodes() + "<br><strong>Number of edges :</strong> " + this.getEdgeCount() + "</html>";
     }
 
-    //-- TestGraph Getters
+    //#endregion
+
+    //#region GETTERS
 
     /**
      * Returns the identifier of the TestGraph.
      * 
-     * @return (String) - The identifier of the TestGraph
+     * @return The identifier of the TestGraph
      * 
      * @author Luc le Manifik
      */
@@ -61,7 +69,7 @@ public class TestGraph extends GraphSAE {
     /**
      * Returns the value of the expected amount of nodes in the GraphTest.
      * 
-     * @return (int) - The expected number of nodes in the TestGraph
+     * @return The expected number of nodes in the TestGraph
      * 
      * @author Luc le Manifik
      */
@@ -69,13 +77,16 @@ public class TestGraph extends GraphSAE {
         return (int)this.getAttribute(GraphSAE.NB_MAX_NODES);
     }
 
-    //-- TestGraph Setters
+    //#endregion
+
+    //#region SETTERS
 
     /**
-     * Sets the value of the expected amount of nodes in the TestGraph.
+     * Sets the value of the expected amount of nodes in the TestGraph
      * 
-     * @param nbMaxNodes (int) - The new value of nbMaxNodes.
-     * @throws InvalidEntryException Throwed if the wanted value of nbMaxValues is inferior to 0.
+     * @param nbMaxNodes The new value of nbMaxNodes
+     * 
+     * @throws InvalidEntryException Threw if the wanted value of nbMaxValues is inferior to 0
      * 
      * @author Luc le Manifik
      */
@@ -85,6 +96,8 @@ public class TestGraph extends GraphSAE {
         }
         this.setAttribute(TestGraph.NB_MAX_NODES, nbMaxNodes);
     }
+
+    //#endregion
 }
 
    

@@ -1,30 +1,38 @@
 package planeair.components.graphview;
 
-//-- Import Swing
+//#region IMPORTATION
 
-import javax.swing.JPanel;
-import javax.swing.JFrame;
+    //#region IMPORT SWING
 
-//-- Import AWT
+    import javax.swing.JPanel;
+    import javax.swing.JFrame;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+    import javax.swing.border.EmptyBorder;
 
-//-- Import PlaneAIR
-import javax.swing.border.EmptyBorder;
-import planeair.App;
-import planeair.components.menu.NGraphInfoPanel;
-import planeair.graph.graphutil.PanelCreator;
+    //#endregion
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-/**
- * Import awt components
- */
-import java.awt.FlowLayout;
-import java.awt.Insets;
+    //#region IMPORT AWT
 
+    import java.awt.Color;
+    import java.awt.Dimension;
+    import java.awt.Toolkit;
+    import java.awt.FlowLayout;
+    import java.awt.Insets;
+
+    import java.awt.event.WindowAdapter;
+    import java.awt.event.WindowEvent;
+
+    //#endregion
+
+    //#region IMPORT PLANEAIR
+
+    import planeair.App;
+    import planeair.components.menu.NGraphInfoPanel;
+    import planeair.graph.graphutil.PanelCreator;
+
+    //#endregion
+
+//#endregion
 
 /**
  * Create a Panel for MaxGraph, it's a frame for seeing the graph bigger (with informations)

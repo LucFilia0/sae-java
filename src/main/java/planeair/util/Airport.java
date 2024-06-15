@@ -1,26 +1,36 @@
 package planeair.util;
 
-//-- Import java
+//#region IMPORTS
 
-import java.util.Iterator;
+    //#region JAVA
 
-//-- Import GraphStream
+    import java.util.Iterator;
 
-import org.graphstream.graph.Node;
+    //#endregion
 
-//-- Import PlaneAIR
+    //#region GRAPHSTREAM
 
-import planeair.graph.graphtype.FlightsIntersectionGraph;
-import planeair.graph.graphutil.Flight;
+    import org.graphstream.graph.Node;
+
+    //#endregion
+
+    //#region PLANEAIR
+
+    import planeair.graph.graphtype.FlightsIntersectionGraph;
+    import planeair.graph.graphutil.Flight;
+
+    //#endregion
+
+//#endregion
 
 /**
- * Airport represents the different France's airports.
+ * the Airport class represents the different airports which are imported (in this case, France's airports).
  * 
  * @author Luc le Manifik
  */
 public class Airport {
     
-    //-- Airport Attributes
+    //#region ATTRIBUTES
 
     /**
      * The name of the Airport (String)
@@ -37,22 +47,25 @@ public class Airport {
      */
     private Coordinate coordinate;
 
-    //-- Airport Constructor
+    //#endregion
+
+    
+    //#region CONSTRUCTORS
 
     /**
-     * Constructor of the Airport class.
      * Creates a new Airport.
+     * Airports have Flights, going in and out of them, and needs to be imported BEFORE the Flights.
      * 
      * @param name (String) - The name of the Airport.
      * @param location (String) - The location/city of the Airport.
-     * @param longitude ({@link util.Longitude util.Longitude}) - The Longitude (extends {@link util.Coordinate util.Coordinate}) of the Airport.
-     * @param latitude ({@link util.Latitude util.Latitude}) - The Latitude (extends {@link util.Coordinate util.Coordinate}) of the Airport.
+     * @param coordinate ({@link planeair.util.Coordinate Coordinate}) - The Coordinate/location of the Airport. Extends {@link org.jxmapviewer.viewer.GeoPosition GeoPosition}
      * 
      * @throws NullPointerException Threw if the Object passed in parameter is Null / not declared
      * 
      * @author Luc le Manifik
      */
     public Airport(String name, String location, Coordinate coordinate) throws NullPointerException {
+
         try {
             this.setName(name);
             this.setLocation(location);
@@ -62,39 +75,46 @@ public class Airport {
         }
     }
 
-    //-- Airport toString()
+    //#endregion
+
+    //#region TOSTRING
 
     /**
-     * Returns the informations of the Airport in a (String).
+     * Returns the informations of the Airport in a correctly formated String.
      * 
      * @author Luc le Manifik
      */
     public String toString() {
-        return "<html><strong>-- Airport :</strong> " + this.name + "<br><strong>Location :</strong> " + this.location + "<br><strong>Latitude :</strong> " + this.coordinate.getLatitude() + "<br><strong>Longitude :</strong> " + this.coordinate.getLongitude() + "</html>";
+        return "<html><h1>Aéroport</h1><strong>Nom :</strong> " + this.name + "<br><strong>Ville :</strong> " + this.location + "<br><strong>Coordonnées :</strong> " + this.coordinate + "</html>";
     }
 
-    //-- Airport Getters
+    //#endregion
+
+    //#region GETTERS
 
     /**
-     * Get the name of the Airport.
-     * @return name (String)
+     * Gets the name of the Airport.
+     * The unique which is used to identifiate the Airport
+     * 
+     * @return The name of the Airport
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * Get the location of the Airport.
-     * @return location (String)
+     * Gets the location of the Airport.
+     * 
+     * @return The name of the city in which the Airport is
      */
     public String getLocation() {
         return this.location;
     }
 
     /**
-     * Returns the GeoPosition of the Airport.
+     * Gets the Coordinate of the Airport.
      * 
-     * @return ({@link org.jxmapviewer.viewer.GeoPosition}) - The GeoPosition of the Airport
+     * @return The {@link planeair.util.Coordinate Coordinate} of the Airport
      * 
      * @author Luc le Maifik
      */
@@ -102,17 +122,21 @@ public class Airport {
         return this.coordinate;
     }
 
-    //-- Airport Setters
+    //#endregion
+
+    //#region SETTERS
 
     /**
-     * Set the name of the Airport.
+     * Sets the name of the Airport.
      * 
      * @param name (String) - The new name of the Airport.
-     * @throws NullPointerException Throwed if the (String) passed  in parameter is null.
+     * 
+     * @throws NullPointerException Threw if the String passed in parameter is null.
      * 
      * @author Luc le Manifik
      */
     public void setName(String name) throws NullPointerException {
+
         if(name == null) {
             throw new NullPointerException();
         }
@@ -120,14 +144,16 @@ public class Airport {
     }
 
     /**
-     * Set the location of the Airport.
+     * Sets the location of the Airport.
      * 
      * @param location (String) - The new location of the Airport.
-     * @throws NullPointerException Throwed if the (String) passed  in parameter is null.
+     * 
+     * @throws NullPointerException Threw if the (String) passed in parameter is null.
      * 
      * @author Luc le Manifik
      */
     public void setLocation(String location) throws NullPointerException {
+
         if(location == null) {
             throw new NullPointerException();
         }
@@ -135,48 +161,54 @@ public class Airport {
     }
 
     /**
-     * Set the longitude of the Airport.
+     * Sets the longitude of the Airport.
      * 
-     * @param longitude ({@link util.Longitude util.Longitude}) - The new Longitude of the Airport.
-     * @throws NullPointerException Throwed if the ({@link util.Longitude util.Longitude}) passed  in parameter is null.
+     * @param coordinate ({@link planeair.util.Coordinate Coordinate}) - The new Coordinate of the Airport
+     * 
+     * @throws NullPointerException Threw if the {@link planeair.util.Coordinate Coordinate} passed  in parameter is null
      * 
      * @author Luc le Manifik
      */
     public void setCoordinate(Coordinate coordinate) throws NullPointerException {
+
         if(coordinate == null) {
             throw new NullPointerException();
         }
         this.coordinate = coordinate;
     }
 
-    //-- Airport Methods
+    //#endregion
+
+    //#region PUBLIC METHODS
 
     /**
      * This method returns if the Airport must be marked active (in red) on the Map, because one of the Flights
      * in the FIG is using this Airport.
      * 
      * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG, which contains the Flights to check
-     *
-     * @return (boolean) - True if the Flight must be marked as an active one
+     * 
+     * @return "True" if the Flight must be marked as an active one, else "false"
      * 
      * @author Luc le Manifik
      */
     public boolean mustBeActive(FlightsIntersectionGraph fig) {
 
-        boolean sort = false;
+        boolean mustBeActive = false;
 
         Iterator<Node> figIterator = fig.nodes().toList().iterator();
         Flight currentFlight = null;
         
-        while(figIterator.hasNext() && !sort) {
+        while(figIterator.hasNext() && !mustBeActive) {
 
             currentFlight = (Flight)figIterator.next();
 
             if(this.equals(currentFlight.getDepartureAirport()) || this.equals(currentFlight.getArrivalAirport())) {
-                sort = true;
+                mustBeActive = true;
             }
         }
 
-        return sort;
+        return mustBeActive;
     }
+
+    //#endregion
 }
