@@ -354,38 +354,37 @@ public abstract class Automation {
         char filenameBuffer, identifierBuffer ;
 
         // If string is too short it can't be similar
-        if (filenameLength >= identifierLength) {
-            int i = 0 ;
-            while (res && (i+ offset) < filenameLength) {
-                filenameBuffer = filename.charAt(i + offset) ;
-                identifierBuffer = identifier.charAt(i) ;
-
-                // Case when encountering placeholder
-                if (identifierBuffer == placeholder) {
-                    
-                    // Checking for digits
-                    while (Character.isDigit(filenameBuffer)) {
-                        offset++ ;
-                        filenameBuffer = filename.charAt(i + offset) ;
-                    }
-
-                    // Means there was no digit, so the placeholder was not filled
-                    // example : testGraphX.txt and we get testGraph.txt
-                    if (offset == 0) {
-                        res = false ;
-                    }
-                    offset-- ;
-                }
-                else {
-                    if (filenameBuffer != identifierBuffer) {
-                        res = false ;
-                    }
-                }
-                i++ ;
-            }
+        if (filenameLength < identifierLength) {
+            return false ;
         }
-        else {
-            res = false ;
+
+        int i = 0 ;
+        while (res && (i + offset) < filenameLength) {
+            filenameBuffer = filename.charAt(i + offset) ;
+            identifierBuffer = identifier.charAt(i) ;
+
+            // Case when encountering placeholder
+            if (identifierBuffer == placeholder) {
+                
+                // Checking for digits
+                while (Character.isDigit(filenameBuffer)) {
+                    offset++ ;
+                    filenameBuffer = filename.charAt(i + offset) ;
+                }
+
+                // Means there was no digit, so the placeholder was not filled
+                // example : testGraphX.txt and we get testGraph.txt
+                if (offset == 0) {
+                    res = false ;
+                }
+                offset-- ;
+            }
+
+            else if (filenameBuffer != identifierBuffer) {
+                res = false ;
+            }
+            
+            i++ ;
         }
 
         return res ;
@@ -429,23 +428,23 @@ public abstract class Automation {
         if (list.isEmpty()) {
             return null ;
         }
-        else {
-            Integer bestAlgorithm = 0 ;
-            Integer currentAlgorithm = 1 ;
-            boolean hasLessConflicts ;
-            boolean hasLessColors ;
-            while (currentAlgorithm < list.size()) {
-                hasLessConflicts = list.get(bestAlgorithm).getNbConflicts() > list.get(currentAlgorithm).getNbConflicts() ;
-                hasLessColors = list.get(bestAlgorithm).getNbColors() > list.get(currentAlgorithm).getNbColors() ;
-                if (hasLessColors || hasLessConflicts) {
-                    bestAlgorithm = currentAlgorithm ;
-                }
-                currentAlgorithm++ ;
-            }
 
-            return bestAlgorithm ;
+        Integer bestAlgorithm = 0 ;
+        Integer currentAlgorithm = 1 ;
+        boolean hasLessConflicts ;
+        boolean hasLessColors ;
+        while (currentAlgorithm < list.size()) {
+            hasLessConflicts = list.get(bestAlgorithm).getNbConflicts() > list.get(currentAlgorithm).getNbConflicts() ;
+            hasLessColors = list.get(bestAlgorithm).getNbColors() > list.get(currentAlgorithm).getNbColors() ;
+            if (hasLessColors || hasLessConflicts) {
+                bestAlgorithm = currentAlgorithm ;
+            }
+            currentAlgorithm++ ;
         }
 
-        //#endregion
+        return bestAlgorithm ;
+
     }
+
+    //#endregion
 } 

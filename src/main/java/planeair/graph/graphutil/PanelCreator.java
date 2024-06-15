@@ -188,7 +188,7 @@ public class PanelCreator {
 	}
 
 	//#endregion
-	
+
 	//#region FUNCTIONS
 
 	/**
@@ -354,8 +354,12 @@ public class PanelCreator {
 		}
 		
 		/**
-		 * Makes nodes bigger when hovering over them 
-		 * and shows their id
+		 * Makes the {@code Node} bigger when hovering 
+		 * over them and shows their id
+		 * If this node is a flight, selects the 
+		 * corresponding {@code FlightWaypoint}
+		 * 
+		 * @param id the Id of the node that is being hovered
 		 *
 		 * @author Nathan LIEGEON
 		 */
@@ -374,7 +378,12 @@ public class PanelCreator {
 		}
 
 		/**
-		 * Returns the nodes to their original state
+		 * Returns the {@code Node} to its original state
+		 * If this node is a flight,
+		 * removes the selection from this flight's
+		 * {@code FlightWaypoint}
+		 * 
+		 * @param id The id of the node the mouse just left
 		 * 
 		 * @author Nathan LIEGEON
 		 */
