@@ -186,7 +186,7 @@ public class NGraphInfoPanel extends JPanel {
         titleNbConflictsOccurred.setFont(App.KINDANORMAL);
 
 
-        this.setMaximumSize(new Dimension(225,200));
+        this.setMaximumSize(new Dimension(225,250));
         this.addComponents() ;
         this.computeGraphStats() ;
         this.setVisible(true);
