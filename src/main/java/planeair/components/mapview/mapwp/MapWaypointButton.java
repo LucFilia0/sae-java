@@ -5,7 +5,6 @@ package planeair.components.mapview.mapwp;
     //#region JAVA
 
     import java.io.File;
-    import javax.imageio.ImageIO;
 
     //#endregion
 

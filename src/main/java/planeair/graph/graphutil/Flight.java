@@ -7,8 +7,6 @@ package planeair.graph.graphutil;
 import planeair.util.NTime;
 import planeair.util.Airport;
 
-import org.bouncycastle.jce.provider.JDKDSASigner.ecDSARipeMD160;
-
 //#endregion
 
 //#region GRAPHSTREAM
