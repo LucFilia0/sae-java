@@ -64,6 +64,7 @@ public class FlightWaypoint extends MapWaypoint {
     public FlightWaypoint(Flight flight, GeoPosition geoPosition) {
         super(FlightWaypoint.FLIGHT_WAYPOINT_ICON_FILE, geoPosition, getFlightOrientation(flight));
         this.flight = flight;
+        this.flight.setFlightWaypoint(this) ;
     }
 
     //#endregion

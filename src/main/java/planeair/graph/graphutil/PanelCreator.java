@@ -23,9 +23,12 @@ import org.graphstream.ui.swing_viewer.util.MouseOverMouseManager;
 
 /**
  * Class handling the rendering of Graphs and the events on its panel
+ * 
+ * @author Nathan LIEGEON
  */
 public class PanelCreator {
 
+	//#region ATTRIBUTES
 	/**
 	 * boolean handling the pumping of events in a separate thread
 	 */
@@ -61,18 +64,31 @@ public class PanelCreator {
 	 */
 	protected Point3 dragPos = null ;
 
+	protected static int numberOfInstances = 0 ;
+	//#endregion
+	//#region CONSTRUCTORS
 	/**
-	 * Calls the default constructor with inOwnFrame set to false
+	 * Handles the creation of a view on the graph, giving access
+	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
+	 * moving around the view...
 	 * @param graph
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	public PanelCreator(GraphSAE graph) {
 		this(graph, false) ;
 	}
 	/**
-	 * Opens the graph in a JFrame and handles mouse events
+	 * Handles the creation of a view on the graph, giving access
+	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
+	 * moving around the view...
+	 * 
 	 * @param graph graph you are trying to render
-	 * @param inOwnFrame 
+	 * @param inOwnFrame if true the graph will open its own frame, else 
+	 * its viewPanel will have to be added to a JFrame
 	 * @see ViewPanel
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	public PanelCreator(GraphSAE graph, boolean inOwnFrame) {
 		this.graph = graph ;
@@ -82,6 +98,7 @@ public class PanelCreator {
 		panel = (ViewPanel)viewer.addDefaultView(inOwnFrame) ;
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
+		// Sets the way the graph handles mouse events over nodes
 		view.setMouseManager(new MouseOverMouseManager(EnumSet.of(InteractiveElement.NODE), 20) {
 			@Override
 			public void mouseDragged(MouseEvent event) {
@@ -96,7 +113,7 @@ public class PanelCreator {
 		
 		view.setShortcutManager(new DefaultShortcutManager());
 
-		ColoringUtilities.setGraphStyle(graph, 0) ;
+		ColoringUtilities.setGraphStyle(graph, graph.getKMax()) ;
 
 		// Adds a pipe to the graph which sends info from the GraphicGraph back to the actual graph
 		// and also checks for events
@@ -106,11 +123,12 @@ public class PanelCreator {
 		panel.addMouseListener(new MouseEventHandler()) ;
 		fromViewer.addSink(graph) ;
 		
-		// Thread running in the background constantly sending the changes to the Graph
+		// Thread running in the background constantly sending events that happened on the graph
 		Thread graphPump = new Thread(new Runnable() {
 			public void run() {
 				while(isRendering) {
 					try {
+						// Blocking pump waits for events so it's better for performances
 						fromViewer.blockingPump() ;
 					}
 
@@ -122,8 +140,8 @@ public class PanelCreator {
 		}) ;
 		graphPump.start() ;
 	}
-	
-	// Getters
+	//#endregion
+	//#region GETTERS
 		
 	/**
 	 * Getter for the graph contained in the panel
@@ -136,6 +154,7 @@ public class PanelCreator {
 	/**
 	 * Getter for the viewer related to the Graph in the panel
 	 * @return the Viewer object
+	 * @see Viewer
 	 */
 	public Viewer getViewer() {
 		return this.viewer;
@@ -143,6 +162,7 @@ public class PanelCreator {
 
 	/**
 	 * Getter for the pipe handling events
+	 * @see ViewerPipe
 	 * @return the ViewerPipe object
 	 */
 	public ViewerPipe getViewerPipe() {
@@ -152,6 +172,7 @@ public class PanelCreator {
 	/**
 	 * Getter for the panel containing the graph
 	 * @return the ViewPanel object
+	 * @see ViewPanel
 	 */
 	public ViewPanel getViewPanel() {
 		return this.panel;
@@ -159,16 +180,23 @@ public class PanelCreator {
 
 	/**
 	 * Getter for the view of the Graph
-	 * @return
+	 * @return 
+	 * @see View
 	 */
 	public View getView() {
 		return this.view ;
 	}
 
+	//#endregion
+
+	//#region FUNCTIONS
+
 	/**
 	 * Returns the mouse position in Graph Units while making sure it stays inside the authorized area
 	 * @param cam The View Camera
 	 * @return The Point representing the mouse's effective Position
+	 *
+	 * @author Nathan LIEGEON
 	 */
 	private Point3 getGraphPositionFromClick(Camera cam, Point mousePosPx) {
 		//Initialisation
@@ -185,6 +213,8 @@ public class PanelCreator {
 	 * @param cam
 	 * @param point The point we are adjusting
 	 * @return 
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	public Point3 getAdjustedPosition(Camera cam, Point3 point) {
 		Point3 res ;
@@ -209,6 +239,8 @@ public class PanelCreator {
 
 	/**
 	 * Moves the camera when dragging the mouse
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	private void dragMovement(MouseEvent e) {
 		double scaleFactor = 0.05 ;
@@ -222,14 +254,50 @@ public class PanelCreator {
 		cam.setViewCenter(newViewCenter.x, newViewCenter.y, 0) ;
 	}
 
-	
+	/**
+	 * Sets the default style for selected nodes
+	 * @param n
+	 */
+	public static void setSelectedStyle(Node n) {
+		n.removeAttribute("ui.size") ;
+		n.setAttribute("ui.size", ColoringUtilities.DEFAULT_NODE_SIZE*2) ;
+		n.setAttribute("ui.label", n.getId()) ;
+		n.setAttribute("ui.style", "text-alignment : center ; text-color : white ;" + 
+		"text-background-mode : rounded-box ; text-background-color : black ; text-padding : 2 ;" + 
+		"text-style : bold ;") ;	
+	}
+
+	/**
+	 * Removes all attributes related to the selected node style
+	 * @param n
+	 */
+	public static void removeSelectedStyle(Node n) {
+		n.removeAttribute("ui.size") ;
+		n.removeAttribute("ui.label") ;
+		n.removeAttribute("ui.style") ;
+	}
+	//#endregion
+
+	//region EVENTS
+
+	/**
+	 * Class handling all mouse events on this panel
+	 * 
+	 * @author Nathan LIEGEON
+	 */
 	private class MouseEventHandler extends MouseAdapter {
 
+		/**
+		 * Initializes the position where the mouse started dragging from
+		 */
 		@Override
 		public void mousePressed(MouseEvent e) {
 			dragPos = getGraphPositionFromClick(view.getCamera(), e.getPoint()) ;
 		}
 
+		/**
+		 * Deletes the position the mouse started dragging from
+		 */
 		public void mouseReleased(MouseEvent e) {
 			dragPos = null ;
 		}
@@ -237,6 +305,8 @@ public class PanelCreator {
 		/**
 		 * This event handles zooming on the graph from 0.1x to 2x while 
 		 * also moving the camera a bit so the zoom is less clunky to use
+		 * 
+		 * @author Nathan LIEGEON
 		 */
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent me) {
@@ -269,7 +339,10 @@ public class PanelCreator {
 	}
 		
 	/**
-	 * Class handling methods from ViewerListener
+	 * Class handling viewer events which are events related to graphical elements in the viewer
+	 * (nodes, edges and other stuff)
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	private class ViewerEventHandler implements ViewerListener {
 		/**
@@ -281,28 +354,51 @@ public class PanelCreator {
 		}
 		
 		/**
-		 * Makes nodes bigger when hovering over them
+		 * Makes the {@code Node} bigger when hovering 
+		 * over them and shows their id
+		 * If this node is a flight, selects the 
+		 * corresponding {@code FlightWaypoint}
+		 * 
+		 * @param id the Id of the node that is being hovered
+		 *
+		 * @author Nathan LIEGEON
 		 */
 		@Override
 		public void mouseOver(String id) {
 			Node n = graph.getNode(id) ;
-			n.removeAttribute("ui.size") ;
-			n.setAttribute("ui.size", ColoringUtilities.DEFAULT_NODE_SIZE*2) ;
-			n.setAttribute("ui.label", id) ;
-			n.setAttribute("ui.style", "text-alignment : center ; text-color : white ;" + 
-			"text-background-mode : rounded-box ; text-background-color : black ; text-padding : 2 ;" + 
-			"text-style : bold ;") ;	
+			boolean updated = false ;
+			if (n instanceof Flight) {
+				Flight f = (Flight)n ;
+				updated = f.fireSelectionUpdated() ;
+			}
+
+			if (!updated) {
+				setSelectedStyle(n) ;
+			}
 		}
 
 		/**
-		 * Returns the nodes to their original size
+		 * Returns the {@code Node} to its original state
+		 * If this node is a flight,
+		 * removes the selection from this flight's
+		 * {@code FlightWaypoint}
+		 * 
+		 * @param id The id of the node the mouse just left
+		 * 
+		 * @author Nathan LIEGEON
 		 */
 		@Override
 		public void mouseLeft(String id) {
 			Node n = graph.getNode(id) ;
-			n.removeAttribute("ui.size") ;
-			n.removeAttribute("ui.label") ;
-			n.removeAttribute("ui.style") ;
+			boolean updated = false ;
+			if (n instanceof Flight) {
+				Flight f = (Flight)n ;
+				updated = f.fireSelectionUpdated() ;
+			}
+
+			if (!updated) {
+				removeSelectedStyle(n) ;
+			}
 		}
 
 		/**
@@ -319,5 +415,7 @@ public class PanelCreator {
 		public void buttonReleased(String id) {
 		}
 	}
+
+	//#endregion
 
 }

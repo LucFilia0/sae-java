@@ -227,7 +227,7 @@ public class App extends javax.swing.JFrame {
     //-- GETTERS AND SETTERS
 
     /**
-     * Sets the value of the Graph, and makes the correct renderer
+     * Sets the value of the Graph, and instantiates the correct renderer
      * @param graph ({@link planeair.graph.GraphSAE TestGraph}) - The new Graph rendered on the App
      */
     public void setGraph(GraphSAE graph) {

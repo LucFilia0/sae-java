@@ -78,6 +78,7 @@ public class NGraphMenuPanel extends JPanel{
      * Title of the choose ComboBox 
      */
     private JLabel colorChoice = new JLabel("Choix de la couleur", SwingConstants.CENTER);
+
     /**
      * JComboBox for choose the altitude (or everyone)
      * "Toutes" -> for everyone
@@ -111,7 +112,7 @@ public class NGraphMenuPanel extends JPanel{
      */
     private JPanel borderPanelMargin = new JPanel();
 
-    //ALGORITHMES
+    //ALGORITHMS
 
     /**
      * Panel for algo option
@@ -333,8 +334,11 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Initializes all comboBoxes in the menu
+     * 
      * @param kMax
      * @param graphIsImported
+     * 
+     * @author Nathan LIEGEON
      */
     public void initAllComboBoxes(int kMax, boolean graphIsImported) {
         initAlgoComboBox(graphIsImported) ;
@@ -344,6 +348,8 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Initializes the different Renderers needed
+     * 
+     * @author Nathan LIEGEON
      */
     private void initRenderers() {
         altitudeComboBox.setRenderer(new NDefaultRenderer<Integer>() {
@@ -409,7 +415,7 @@ public class NGraphMenuPanel extends JPanel{
      * Getter for the comboBox containing the kMax options
      * @return
      */
-    public JComboBox<Integer> getKmaxComboBox() {
+    public NComboBoxGraph getKmaxComboBox() {
         return this.kmaxComboBox ;
     }
 
@@ -420,6 +426,12 @@ public class NGraphMenuPanel extends JPanel{
     public JComboBox<String> getAlgoChoice() {
         return this.algoChoice ;
     }
+
+    public NComboBoxGraph getAltitudesComboBox() {
+        return this.altitudeComboBox ;
+    }
+
+    private int lastColorSelected ;
 
     /**
      * Sets the range of values and the default value of the kMax comboBox in the menu
@@ -456,6 +468,10 @@ public class NGraphMenuPanel extends JPanel{
         return (String)this.algoChoice.getSelectedItem() ;
     }
 
+    public Integer getLastColorSelected() {
+        return this.lastColorSelected ;
+    }
+
     /**
      * Adds listeners to components
      */
@@ -463,6 +479,7 @@ public class NGraphMenuPanel extends JPanel{
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                lastColorSelected = (int)altitudeComboBox.getSelectedItem() ;
                 changeColoring(app.getGraph()) ;
                 changeColorShown(app.getGraphRenderer()) ;
             }
@@ -486,6 +503,8 @@ public class NGraphMenuPanel extends JPanel{
     /**
      * Changes the coloring of this graph best on the kmax and algorithm selected
      * @param graph
+     * 
+     * @author Nathan LIEGEON
      */
     private void changeColoring(GraphSAE graph) {
         boolean coloringChanged = false ;
@@ -498,17 +517,14 @@ public class NGraphMenuPanel extends JPanel{
         
         // The algorithm used changed so we need to update the coloring
         if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
-            if (lastAlgoSelected != null) {
-                ColoringUtilities.removeCurrentColoring(graph) ;
-            }
             lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
             coloringChanged = true ;
         }
         
-        // In case it didn't we check if it needs to be changed
+        // In case we didn't check if it needs to be changed
         else {
             // If the new KMax is smaller than the old one, if the coloration can be improved 
-            //or if the coloring has more colors than the currentKmax, then we change the coloration
+            // or if the coloring has more colors than the currentKmax, then we change the coloration
             if (oldKMax > currentKMax || oldKMax < currentKMax && graph.getNbConflicts() > 0 || graph.getNbColors() > currentKMax) {
                 coloringChanged = true ;
             }
@@ -534,13 +550,16 @@ public class NGraphMenuPanel extends JPanel{
     /**
      * Changes the color shown based on the value in the altitudeComboBox
      * @param graphRenderer
+     * 
+     * @author Nathan LIEGEON
      */
     private void changeColorShown(PanelCreator graphRenderer) {
-        int colorShown = (int)altitudeComboBox.getSelectedItem() ;
         GraphSAE graph = graphRenderer.getGraph() ;
         graph.showAllNodes() ;
-        if (colorShown != 0) {
-            graph.showNodesWithColor(colorShown) ;
+        if (lastColorSelected != 0) {
+            // Do not question, blame graphstream instead
+            graph.showNodesWithColor(lastColorSelected) ;
+            graph.showNodesWithColor(lastColorSelected) ;
         }
     }
 }

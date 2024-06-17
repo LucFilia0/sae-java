@@ -19,6 +19,8 @@ public abstract class ColoringWelshPowell {
      * the graph is a testGraph. If it can't do so, it will try to minimize conflicts
      * 
      * @param graph Graph getting colored
+     * 
+     * @author Nathan LIEGEON
      */
     public static void coloringWelshPowell(GraphSAE graph) {
         int kMax = graph.getKMax() ;

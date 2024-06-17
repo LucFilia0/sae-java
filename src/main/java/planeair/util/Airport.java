@@ -4,6 +4,7 @@ package planeair.util;
 
     //#region JAVA
 
+    import java.util.ArrayList;
     import java.util.Iterator;
 
     //#endregion
@@ -46,9 +47,13 @@ public class Airport {
      * The GeoPosition of the Airport 
      */
     private Coordinate coordinate;
+    
+    /**
+     * Contains all the flights arriving to or leaving from this airport
+     */
+    private ArrayList<Flight> flightList ;
 
     //#endregion
-
     
     //#region CONSTRUCTORS
 
@@ -70,6 +75,7 @@ public class Airport {
             this.setName(name);
             this.setLocation(location);
             this.setCoordinate(coordinate);
+            this.flightList = new ArrayList<>() ;
         }catch(NullPointerException e) {
             throw e;
         }
@@ -120,6 +126,16 @@ public class Airport {
      */
     public Coordinate getCoordinate() {
         return this.coordinate;
+    }
+    
+    /**
+     * Returns all the fligts coming to and going from this airport
+     * 
+     * @return
+     * 
+     */
+    public ArrayList<Flight> getFlightList() {
+        return this.flightList ;
     }
 
     //#endregion

@@ -6,6 +6,8 @@ package planeair.graph.graphutil;
 
 import planeair.util.NTime;
 import planeair.util.Airport;
+import planeair.components.mapview.mapwp.MapWaypointButton;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 
 //#endregion
 
@@ -76,9 +78,9 @@ public class Flight extends SingleNode {
     public static final String FLIGHT_DURATION = "flightDuration";
 
     /**
-     * The String identifier which represents the Flight's layer (int)
+     * The String identifier which represents the Flight's Waypoint on the map (FlightWaypoint)
      */
-    public static final String LAYER = "layer";
+    private static final String FLIGHT_WAYPOINT = "flightWaypoint" ;
 
     // #endregion
 
@@ -104,9 +106,8 @@ public class Flight extends SingleNode {
             this.setArrivalAirport(arrivalAirport); // -> The airport where it goes
             this.setDepartureTime(departureTime); // -> The time of the departure
             this.setFlightDuration(flightDuration); // -> The duration of the flight, in MINUTES
-
-            this.setLayer(0); // -> The coloration : The layer on which the Flight is placed (0 means no layer
-                              // attributed)
+            
+            this.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0); // -> The coloring : The layer on which the Flight is placed (0 means no layer attributed)
 
         } catch (NullPointerException | InvalidEntryException e) {
             throw e;
@@ -123,7 +124,7 @@ public class Flight extends SingleNode {
      * @return The informations of the Flight
      */
     public String toString() {
-        return "<html><h1>Vol</h1><strong>Nom :</strong> " +
+        return "<html><h1>Vol</h1><strong>Nom :</strong> " + 
                 super.getId() +
                 "<br><strong>Aéroport de départ :</strong> " +
                 this.getDepartureAirport().getName() +
@@ -180,12 +181,12 @@ public class Flight extends SingleNode {
     }
 
     /**
-     * Get the layer on which is the Flight.
+     * Get the waypoint object linked to this flight
      * 
-     * @return The layer/altitude on which is the Flight
+     * @return (FlightWaypoint)
      */
-    public int getLayer() {
-        return (int) this.getAttribute(Flight.LAYER);
+    public FlightWaypoint getFlightWaypoint() {
+        return (FlightWaypoint)this.getAttribute(Flight.FLIGHT_WAYPOINT) ;
     }
 
     // #endregion
@@ -253,19 +254,12 @@ public class Flight extends SingleNode {
     }
 
     /**
-     * Set the new layer on which the Flight is.
+     * Set the Flight Waypoint related to this flight
      * 
-     * @param layer The new layer of the {@link planeair.graph.graphutil.Flight
-     *              Flight}
-     * 
-     * @throws InvalidEntryException Threw if the entered layer value is inferior or
-     *                               equals to 0
+     * @param flightWaypoint
      */
-    public void setLayer(int layer) throws InvalidEntryException {
-        if (layer < 0) {
-            throw new InvalidEntryException();
-        }
-        this.setAttribute(Flight.LAYER, layer);
+    public void setFlightWaypoint(FlightWaypoint flightWaypoint) {
+        this.setAttribute(Flight.FLIGHT_WAYPOINT, flightWaypoint) ;
     }
 
     // #endregion
@@ -580,6 +574,26 @@ public class Flight extends SingleNode {
         }
 
         return currentGeoPosition;
+    }
+
+    /**
+     * Tells this flight's waypoint that its selection has to 
+     * be updated if it exists
+     * Also fire goofy aah word 🔥
+     * 
+     * @return true if the waypoint has been update, false if not
+     * (so true if the waypoint exists, false if it doesn't)
+     * 
+     * @author Nathan LIEGEON
+     */
+    public boolean fireSelectionUpdated() {
+        FlightWaypoint fwp = this.getFlightWaypoint() ;
+        if (fwp != null) {
+            fwp.getWaypointButton().changeSelection(
+                fwp.getWaypointButton().equals(MapWaypointButton.waypointSelected)) ;
+            return true ;
+        }
+        return false ;
     }
 
     // #endregion

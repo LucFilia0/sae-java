@@ -62,11 +62,12 @@ public class NMaxGraphFrame extends JFrame{
     /**
      * Constructor of NMaxGraphPanelApp
      */
-    public NMaxGraphFrame(App app, PanelCreator graphRenderer, NGraphInfoPanel infoGraph){
+    public NMaxGraphFrame(App app, PanelCreator graphRenderer){
         this.app = app ;
-        this.infoGraph = infoGraph ;
+        this.infoGraph = new NGraphInfoPanel(app) ;
         JPanel infoGraphPanel = new JPanel() ;
         if (graphRenderer == null) {
+            // If no graph was imported
             graph = new NSkullPanel() ;
             this.setTitle("Vue sur rien du tout :(") ;
         }
@@ -93,16 +94,16 @@ public class NMaxGraphFrame extends JFrame{
         graph.setBackground(Color.BLACK);
         this.add(graph);
         this.setSize(new Dimension(1100,700));
-        this.setAlwaysOnTop(true); 
-        this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);  
+        // Handles properly closing the window by moving back all the panels it moved
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 removeAll() ;
                 infoGraphPanel.removeAll() ;
                 graph.removeAll() ;
+                app.getMainScreen().getMinGraphPanel().getButtonAgr().setEnabled(true) ;
                 if (graphRenderer != null) {
                     infoGraph.setFontSize(12);
                     app.getMainScreen().initGraphBottomPanel() ;

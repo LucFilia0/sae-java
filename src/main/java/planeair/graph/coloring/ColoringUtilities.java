@@ -14,7 +14,10 @@ import planeair.graph.graphtype.GraphSAE;
 /**
  * Class handling Coloring algorithms, mostly consists of static methods
  */
-public class ColoringUtilities {
+public abstract class ColoringUtilities {
+
+    //#region ATTRIBUTES
+
     /**
      * default size for nodes in the stylesheet 
      */
@@ -44,6 +47,8 @@ public class ColoringUtilities {
      * Color for the default background color
      */
     public static final Color GRAPH_BACKGROUND_COLOR = new Color(250, 220, 87) ;
+
+    //#endregion
     
     /**
      * Checks if the coloring worked.
@@ -74,7 +79,10 @@ public class ColoringUtilities {
      * Reads the color attribute of the nodes to give them an actual color on the display by editing its stylesheet
      * 
      * @param graph graph getting colored
-     * @param nbColor number of colors the graph has
+     * @param nbColor number of colors the graph has, if 0 or less, initializes a default style
+     * coloring
+     * 
+     * @author Nathan LIEGEON
      */
     public static void setGraphStyle(GraphSAE graph, int nbColor) {
         StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ;\n size : " + DEFAULT_NODE_SIZE + " ; }\n") ;
@@ -110,8 +118,11 @@ public class ColoringUtilities {
     /**
      * Fills the leading digits of a hex code with 0 until the number has 6 digits
      * example : str FF (reprensenting #FF) becomes 0000FF
+     * 
      * @param str hex value of a number, HAS TO ONLY CONTAIN NUMBERS
      * @return the formatted hex string
+     * 
+     * @author Nathan LIEGEON
      */
     public static String toValidHex(String str) {
         int nbZero = (6 - str.length()) ;
@@ -124,8 +135,10 @@ public class ColoringUtilities {
 
     /**
      * Removes all attributes linked to the coloring of this graph
+     * 
      * @param graph
-     * @param conflictAttribute
+     * 
+     * @author Nathan LIEGEON
      */
     public static void removeCurrentColoring(GraphSAE graph) {
         graph.setAttribute(GraphSAE.COLOR_ATTRIBUTE, 0) ;
@@ -137,9 +150,12 @@ public class ColoringUtilities {
 
     /**
      * Calls the correct coloring method with the right algorithm
+     * 
      * @param graph
      * @param algorithm
      * @return
+     * 
+     * @author Nathan LIEGEON
      */
     public static void colorGraphWithChosenAlgorithm(GraphSAE graph, String algorithm) {
         switch (algorithm) {

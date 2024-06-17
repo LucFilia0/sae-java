@@ -10,19 +10,42 @@ import javax.swing.ListCellRenderer;
 
 /**
  * Haha figure it out by yourself loser 😂😂😂😂😂😂😂
+ * 
+ * @author Nathan LIEGEON
  */
 public class NDefaultRenderer<T> implements ListCellRenderer<T> {
+
+	/**
+     * Default text_color for this kind of combo boxes :
+	 * White
+     */
 	public static final Color DEFAULT_TEXT_COLOR = Color.WHITE ;
+
+	/**
+     * Default background_color for this kind of combo boxes : 
+	 * Black
+     */
 	public static final Color DEFAULT_BACKGROUND_COLOR = Color.BLACK ;
 
 	protected Color textColor ;
 	protected Color backgroundColor ;
 
+	/**
+	 * Overrides this Renderer's default text color and background colors
+	 * with whatever you want
+	 * 
+	 * @param textColor
+	 * @param backgroundColor
+	 */
 	public NDefaultRenderer(Color textColor, Color backgroundColor) {
 		this.textColor = textColor ;
 		this.backgroundColor = backgroundColor ;
 	}
 
+	/**
+	 * Initializes the Renderer with its default background and text colors
+	 * Gives a default font for all items in this comboBox
+	 */
 	public NDefaultRenderer() {
 		this.textColor = DEFAULT_TEXT_COLOR ;
 		this.backgroundColor = DEFAULT_BACKGROUND_COLOR ;

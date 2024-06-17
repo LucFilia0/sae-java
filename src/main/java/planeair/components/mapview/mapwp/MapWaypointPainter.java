@@ -132,8 +132,8 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     //#region OVERRIDED METHODS
 
     /**
-     * This method paints the Map's overlay, and diaplays all the different types of Waypoints on the Map.
-     * There is 3 foreach loops, wandering the three Sets, and displaying each type of Waypoint accrding to it's own specs.
+     * This method paints the Map's overlay, and displays all the different types of Waypoints on the Map.
+     * There are 3 foreach loops, wandering the three Sets, and displaying each type of Waypoint according to its own specs.
      * 
      * @author Luc le Manifik
      */
@@ -155,7 +155,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
             MapWaypointButton waypointButton = airportWp.getWaypointButton();
 
-            // In order to center the button on the whished position
+            // In order to center the button on the wished position
             x = airportWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = airportWp_location.getY() - screen.getY() - waypointButton.getHeight();
             NMainScreen main = app.getMainScreen() ;
@@ -165,10 +165,9 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             boolean mapMenuIntersects = main.isMapMenuVisible() && main.getMapMenuPanel().getBounds()
                 .intersects(waypointButton.getBounds()) ;
             
-            // If the waypoint is over once of the menus, don't paint it
+            // If the waypoint is over one of the menus, don't paint it
             if (graphMenuIntersects || mapMenuIntersects) {
-                    waypointButton.setVisible(false) ;
-                    
+                waypointButton.setVisible(false) ;   
             }
             else {
                 waypointButton.setVisible(true) ;
@@ -181,39 +180,42 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
          * STEP 2 : We paint the current Flights' Waypoints, and their routes
          */
         for(FlightWaypoint flightWp : this.flightWaypointSet) {
-
-            /*
-             * STEP 2.1 : Painting the Flights' waypoints
-             */
-            Point2D flightWp_location = map.getTileFactory().geoToPixel(flightWp.getPosition(), mapZoom);
-
-            MapWaypointButton waypointButton = flightWp.getWaypointButton();
-
-            x = flightWp_location.getX() - screen.getX() - MapWaypointButton.BUTTON_SIZE/2;
-            y = flightWp_location.getY() - screen.getY() - MapWaypointButton.BUTTON_SIZE/2;
             
-            waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
-
-            /*
-             * STEP 2.2 : Painting the Flights' routes
-             */
-            Point2D departureAirport_location = map.getTileFactory().geoToPixel(flightWp.getFlight().getDepartureAirport().getCoordinate(), map.getZoom());
-            Point2D arrivalAirport_location = map.getTileFactory().geoToPixel(flightWp.getFlight().getArrivalAirport().getCoordinate(), map.getZoom());
-
-            int depX = (int) (departureAirport_location.getX() - screen.getX());
-            int depY = (int) (departureAirport_location.getY() - screen.getY());
-
-            int arrX = (int) (arrivalAirport_location.getX() - screen.getX());
-            int arrY = (int) (arrivalAirport_location.getY() - screen.getY());
-
-            int color = (int)flightWp.getFlight().getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
-            if (color != 0) {
-                FlightsIntersectionGraph graph = (FlightsIntersectionGraph)flightWp.getFlight().getGraph() ;
-                g.setColor(graph.getColorTab()[color - 1]) ;
+            Integer drawnColor = app.getMainScreen().getGraphMenuPanel().getLastColorSelected() ;
+                
+            if (drawnColor == 0 || flightWp.getFlight().getAttribute(
+                    ColoringUtilities.NODE_COLOR_ATTRIBUTE) == drawnColor) {
+                Point2D flightWp_location = map.getTileFactory().geoToPixel(flightWp.getPosition(), mapZoom);
+                flightWp.getFlight().setFlightWaypoint(flightWp) ;
+    
+                MapWaypointButton waypointButton = flightWp.getWaypointButton();
+    
+                x = flightWp_location.getX() - screen.getX() - MapWaypointButton.BUTTON_SIZE/2;
+                y = flightWp_location.getY() - screen.getY() - MapWaypointButton.BUTTON_SIZE/2;
+                
+                waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
+    
+                
+                Point2D departureAirport_location = map.getTileFactory().geoToPixel(flightWp.getFlight().getDepartureAirport().getCoordinate(), map.getZoom());
+                Point2D arrivalAirport_location = map.getTileFactory().geoToPixel(flightWp.getFlight().getArrivalAirport().getCoordinate(), map.getZoom());
+    
+                int depX = (int) (departureAirport_location.getX() - screen.getX());
+                int depY = (int) (departureAirport_location.getY() - screen.getY());
+    
+                int arrX = (int) (arrivalAirport_location.getX() - screen.getX());
+                int arrY = (int) (arrivalAirport_location.getY() - screen.getY());
+    
+                int color = (int)flightWp.getFlight().getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
+                if (color != 0) {
+                    FlightsIntersectionGraph graph = (FlightsIntersectionGraph)flightWp.getFlight().getGraph() ;
+                    g.setColor(graph.getColorTab()[color - 1]) ;
+                }
+                g.setStroke(new BasicStroke(3)) ;
+                g.drawLine(depX, depY, arrX, arrY);
             }
-
-            g.setStroke(new BasicStroke(3)) ; // Sets the stroke to 3, for better visibility on the Map
-            g.drawLine(depX, depY, arrX, arrY);
+            else {
+                flightWp.getFlight().setFlightWaypoint(null) ;
+            }
         }
     }
 
