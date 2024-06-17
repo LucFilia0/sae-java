@@ -49,7 +49,6 @@ public class NMapMenuPanel extends JPanel {
         //#endregion
 
         //#region Flight Lines
-        
         /**
          * The checkBox for setting if flight lines are visible in the Map
          * Represent flight's trajectory

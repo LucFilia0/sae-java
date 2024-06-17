@@ -1,6 +1,6 @@
 package planeair.components.time;
 
-//#region
+//#region IMPORT
     //#region SWING
     import javax.swing.JPanel;
     import javax.swing.event.ChangeEvent;
@@ -53,39 +53,39 @@ public class NTimePanel extends JPanel {
         public static final int MIN = 59;
         //#endregion
 
-    //#region COMBOBOXS
-    /**
-     * Layout Panel For hour's panel, link to the GridLayout of header
-     */
-    private JPanel hourPanelComboBox = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    /**
-     * JComboBox for choose hour
-     */
-    private NComboBoxTime hourChoice = new NComboBoxTime(HOUR);
-    /**
-     * Label with " : " between hour ComboBox and minutes ComboBox
-     */
-    private JLabel betweenTime = new JLabel(" : ");
-    /**
-     * JComboBox for choose minutes
-     */
-    private NComboBoxTime minChoice = new NComboBoxTime(MIN);
-    //#endregion
-    
-    //#region SLIDER
-    /**
-     * Panel for the time's Slider
-     * FlowLayout at CENTER
-     */
-    private JPanel hourSliderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    /**
-     * Slider for Hour 
-     * Location : Top of the center of the frame, below the comboBox
-     */
-    private NSliderTime sliderTime = new NSliderTime();
-    //#endregion
+        //#region COMBOBOXS
+        /**
+         * Layout Panel For hour's panel, link to the GridLayout of header
+         */
+        private JPanel hourPanelComboBox = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        /**
+         * JComboBox for choose hour
+         */
+        private NComboBoxTime hourChoice = new NComboBoxTime(HOUR);
+        /**
+         * Label with " : " between hour ComboBox and minutes ComboBox
+         */
+        private JLabel betweenTime = new JLabel(" : ");
+        /**
+         * JComboBox for choose minutes
+         */
+        private NComboBoxTime minChoice = new NComboBoxTime(MIN);
+        //#endregion
+        
+        //#region SLIDER
+        /**
+         * Panel for the time's Slider
+         * FlowLayout at CENTER
+         */
+        private JPanel hourSliderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        /**
+         * Slider for Hour 
+         * Location : Top of the center of the frame, below the comboBox
+         */
+        private NSliderTime sliderTime = new NSliderTime();
+        //#endregion
 
-    //#region BUTTON SIMULATION
+        //#region BUTTON SIMULATION
     /**
      * Icon for the playing button (play)
      */

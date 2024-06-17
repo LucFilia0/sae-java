@@ -19,7 +19,7 @@ public class NFilledButton extends JButton {
     /**
      * The default width of the NFilledButton
      */
-    public static final int FILLED_BUTTON_WIDTH = 90;
+    public static final int FILLED_BUTTON_WIDTH = 110;
 
     /**
      * The default height of the NFilledButton

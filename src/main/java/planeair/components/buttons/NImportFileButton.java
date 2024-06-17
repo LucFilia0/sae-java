@@ -8,6 +8,6 @@ package planeair.components.buttons;
 public class NImportFileButton extends NFilledButton {
 
     public NImportFileButton(String title) {
-        super(title, 200, 125);
+        super(title, 230, 150);
     } 
 }

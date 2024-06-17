@@ -35,6 +35,7 @@ package planeair.components.menu;
         import planeair.components.comboboxes.renders.NTimeComboBoxRenderer;
         import planeair.components.menu.infos.NGraphInfoPanel;
         //#endregion
+        
         //#region GRAPH
         import planeair.graph.coloring.ColoringUtilities;
         import planeair.graph.graphtype.FlightsIntersectionGraph;

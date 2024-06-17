@@ -17,8 +17,10 @@ package planeair.components.menu.infos;
 
 /**
  * Model for JTable
- * The table have 3 colummn {"ID", "Heure", "Etat"} where the user will shows Flights informations link
+ * The table have 3 colummn {"ID", "Heure", "Etat"} where the user will shows link Flights informations 
  * to the selected airport
+ * 
+ * @author GIRAUD Nila
  */
 public class FlightTableInfoModel extends AbstractTableModel {
 

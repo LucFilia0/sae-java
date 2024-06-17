@@ -1,22 +1,28 @@
 package planeair.components.imports;
 
-//import SWING composants
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+//#region IMPORT
+    //#region SWING
+    import javax.swing.JLabel;
+    import javax.swing.JPanel;
+    import javax.swing.SwingConstants;
+    //#endregion
 
-//Import AWT composants
-import java.awt.Dimension;
+    //#region AWT
+    import java.awt.Dimension;
+    //#endregion
 
-//import Layout
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+    //#region LAYOUT
+    import java.awt.BorderLayout;
+    import java.awt.GridBagConstraints;
+    import java.awt.GridBagLayout;
+    import javax.swing.Box;
+    import javax.swing.BoxLayout;
+    //#endregion
 
-// Import PlaneAIR
-import planeair.App;
+    //#region PLANEAIR
+    import planeair.App;
+    //#endregion
+//#endregion
 
 /**
  * This class create a panel for information of the App and importantion of files necesseray
@@ -26,7 +32,7 @@ import planeair.App;
  */
 public class NImportScreen extends JPanel {
 
-    //STRUCT
+    //#region STRUCTURE
 
     /**
      * Panel header, explication of the App
@@ -38,8 +44,9 @@ public class NImportScreen extends JPanel {
      * Center bouttonsImport panel
      */
     private JPanel body;
+    //#endregion
 
-    //HEADER
+    //#region HEADER
 
     /**
      * Description of the App (part 1)
@@ -51,18 +58,22 @@ public class NImportScreen extends JPanel {
      * Location : in the header of the panel
      */
     private JLabel descriptionApp2;
+    //#endregion
 
+    //#region CENTER
     /**
      * Import Button Panel
      * Location : In the center of the panel (with gridBagLayouts)
      */
     private NImportButtonPanel buttonImport;
+    //#endregion
 
     /**
      * The current App
      */
     private App app;
 
+    //#region CONSTRUCTOR
     /**
      * Creates a new NImportScreen, which is in charge of the importation of data, from Files to the data structures in the App class
      * @param app ({@link planeair.App App}) - The current App
@@ -75,7 +86,9 @@ public class NImportScreen extends JPanel {
         this.placeComponents();
         this.addComponents();
     }
+    //#endregion
 
+    //#region INIT / PLACE / ADD
     /**
      * Creates all the components of the NImportScreen
      * 
@@ -132,4 +145,5 @@ public class NImportScreen extends JPanel {
         this.add(header, BorderLayout.NORTH);
         this.add(body, BorderLayout.CENTER);
     }
+    //#endregion
 }
