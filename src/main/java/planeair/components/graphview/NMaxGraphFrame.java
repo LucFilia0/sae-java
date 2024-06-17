@@ -1,37 +1,30 @@
 package planeair.components.graphview;
 
-//#region IMPORTATION
-
-    //#region IMPORT SWING
-
+//#region IMPORT
+    //#region .SWING
     import javax.swing.JPanel;
     import javax.swing.JFrame;
-
-    import javax.swing.border.EmptyBorder;
-
     //#endregion
 
-    //#region IMPORT AWT
-
+    //#region .AWT
     import java.awt.Color;
     import java.awt.Dimension;
     import java.awt.Toolkit;
-    import java.awt.FlowLayout;
-    import java.awt.Insets;
+    //#endregion
 
+    //#region PLANEAIR
+    import javax.swing.border.EmptyBorder;
+    import planeair.App;
+    import planeair.components.menu.infos.NGraphInfoPanel;
+    import planeair.graph.graphutil.PanelCreator;
+    //#endregion
+
+    //#region .AWT
     import java.awt.event.WindowAdapter;
     import java.awt.event.WindowEvent;
-
+    import java.awt.FlowLayout;
+    import java.awt.Insets;
     //#endregion
-
-    //#region IMPORT PLANEAIR
-
-    import planeair.App;
-    import planeair.components.menu.NGraphInfoPanel;
-    import planeair.graph.graphutil.PanelCreator;
-
-    //#endregion
-
 //#endregion
 
 /**
@@ -41,6 +34,7 @@ package planeair.components.graphview;
  */
 public class NMaxGraphFrame extends JFrame{
 
+    //#region INSTANTIALISATION AND INITIALISATION
     /**
      * Panel of the graph (Bigger than NInfoGraphPanelApp)
      * Location : all in the frame
@@ -51,21 +45,23 @@ public class NMaxGraphFrame extends JFrame{
      * NInfoGraphPanelApp created, have parameter of the graph
      * Location : In the left at the bottom of the graph
      */
-    private NGraphInfoPanel infoGraph ;
+    private NGraphInfoPanel graphInfo ;
 
     /**
      * Homepage babababa no one cares
      */
     @SuppressWarnings("unused")
     private App app ;
+    //#endregion
 
+    //#region CONSTRUCTOR
     /**
      * Constructor of NMaxGraphPanelApp
      */
     public NMaxGraphFrame(App app, PanelCreator graphRenderer){
         this.app = app ;
-        this.infoGraph = new NGraphInfoPanel(app) ;
-        JPanel infoGraphPanel = new JPanel() ;
+        this.graphInfo = new NGraphInfoPanel(app) ;
+        JPanel graphInfoPanel = new JPanel() ;
         if (graphRenderer == null) {
             // If no graph was imported
             graph = new NSkullPanel() ;
@@ -77,15 +73,16 @@ public class NMaxGraphFrame extends JFrame{
             this.setTitle("Vue sur le Graph " + graphRenderer.getGraph().getId()) ; 
 
             int inset = 12 + 5; // 12 forever
-            this.infoGraph.setBorder(new EmptyBorder(new Insets(inset, inset, inset, inset)));
+            this.graphInfo.setBorder(new EmptyBorder(new Insets(inset, inset, inset, inset)));
             
-            infoGraphPanel.add(this.infoGraph) ;
-            infoGraphPanel.setBackground(graph.getBackground()) ;
-            infoGraphPanel.setBorder(new EmptyBorder(new Insets(20, 20, 20, 20))) ;
-            infoGraphPanel.setOpaque(false);
+            graphInfoPanel.add(this.graphInfo) ;
+            graphInfo.computeGraphStats() ;
+            graphInfoPanel.setBackground(graph.getBackground()) ;
+            graphInfoPanel.setBorder(new EmptyBorder(new Insets(20, 20, 20, 20))) ;
+            graphInfoPanel.setOpaque(false);
 
-            graph.add(infoGraphPanel) ;
-            infoGraph.setFontSize(18) ;
+            graph.add(graphInfoPanel) ;
+            graphInfo.setFontSize(18) ;
         }
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -101,11 +98,11 @@ public class NMaxGraphFrame extends JFrame{
             @Override
             public void windowClosed(WindowEvent e) {
                 removeAll() ;
-                infoGraphPanel.removeAll() ;
+                graphInfoPanel.removeAll() ;
                 graph.removeAll() ;
                 app.getMainScreen().getMinGraphPanel().getButtonAgr().setEnabled(true) ;
                 if (graphRenderer != null) {
-                    infoGraph.setFontSize(12);
+                    graphInfo.setFontSize(12);
                     app.getMainScreen().initGraphBottomPanel() ;
                     app.getMainScreen().getMinGraphPanel().addGraphToPanel(app.getGraphRenderer()) ;
                     app.repaint();
@@ -114,5 +111,6 @@ public class NMaxGraphFrame extends JFrame{
             }
         });
     }
+    //#endregion
     
 }

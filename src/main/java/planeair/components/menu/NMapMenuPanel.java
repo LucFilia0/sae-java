@@ -1,18 +1,25 @@
 package planeair.components.menu;
 
-// import SWING components
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+//#region IMPORT
+    //#region .SWING
+    import javax.swing.JLabel;
+    import javax.swing.JPanel;
+    import javax.swing.SwingConstants;
+    //#endregion
 
-// import AWT components
-import java.awt.Dimension;
+    //#region .AWT
+    import java.awt.Dimension;
+    //#endregion
 
-// import LAYOUT
-import java.awt.GridLayout;
+    //#region LAYOUT
+    import java.awt.GridLayout;
+    //#endregion
 
-import planeair.App;
-import planeair.components.mapview.Map;
+    //#region PLANEAIR
+    import planeair.App;
+    import planeair.components.mapview.Map;
+    //#endregion
+//#endregion
 
 /**
  * Create a panel Menu for Map
@@ -32,42 +39,50 @@ import planeair.components.mapview.Map;
  */
 public class NMapMenuPanel extends JPanel {
 
-    /**
-     * JLabel for the title of the Panel NMenuPanelApp
-     */
-    private JLabel titleMenu = new JLabel("MENU MAP", SwingConstants.CENTER);
+    //#region INSTANTIALISATION AND INITIALISATION
 
-    // Flight Lines
+        //#region Title
+        /**
+         * JLabel for the title of the Panel NMenuPanelApp
+         */
+        private JLabel titleMenu = new JLabel("MENU MAP", SwingConstants.CENTER);
+        //#endregion
 
-    /**
-     * The checkBox for setting if flight lines are visible in the Map
-     * Represent flight's trajectory
-     */
-    private NMapCheckBox flightLines = new NMapCheckBox("Lignes de vols");
-
-
-    // Airoport Used
-
-    /**
-     * The checkBox for setting if Airport used are visible in the Map (red icon)
-     * Their is 2 possibility : the airport is used by a flight, or no, so it's call airport not used
-     */
-    private NMapCheckBox airportUsed = new NMapCheckBox("Aéroports utilisés");
+        //#region Flight Lines
+        /**
+         * The checkBox for setting if flight lines are visible in the Map
+         * Represent flight's trajectory
+         */
+        private NMapCheckBox flightLines = new NMapCheckBox("Lignes de vols");
+        //#endregion
 
 
-    // Airoport NOT Used
-    
-    /**
-     * The checkBox for setting if Airport not used are visible in the Map (grey icon)
-     * Their is 2 possibility : the airport used by a flight, or no, so it's call airport not used
-     */
-    private NMapCheckBox airportNotUsed = new NMapCheckBox("Aéroports non utilisés");
+        //#region Airoport Used
 
-    // Flight Icon
-
-    private NMapCheckBox flightIcon = new NMapCheckBox("Vols");
+        /**
+         * The checkBox for setting if Airport used are visible in the Map (red icon)
+         * Their is 2 possibility : the airport is used by a flight, or no, so it's call airport not used
+         */
+        private NMapCheckBox airportUsed = new NMapCheckBox("Aéroports utilisés");
+        //#endregion
 
 
+        //#region Airoport NOT Used
+        
+        /**
+         * The checkBox for setting if Airport not used are visible in the Map (grey icon)
+         * Their is 2 possibility : the airport used by a flight, or no, so it's call airport not used
+         */
+        private NMapCheckBox airportNotUsed = new NMapCheckBox("Aéroports non utilisés");
+        //#endregion
+
+        //#region Flight Icon
+
+        private NMapCheckBox flightIcon = new NMapCheckBox("Vols");
+        //#endregion
+    //#endregion
+
+    //#region CONSTRUCTOR
     /**
      * Constructor of NMenuPanelApp
      * @param map the used map of the App
@@ -78,6 +93,7 @@ public class NMapMenuPanel extends JPanel {
         this.setPreferredSize(new Dimension(225,300));
         this.setLayout( new GridLayout(5,1,0,15));
 
+       //#region ADD
        //Title Menu
        titleMenu.setFont(App.KINDATITLE);
        this.add(titleMenu);
@@ -94,5 +110,7 @@ public class NMapMenuPanel extends JPanel {
 
        //  Flight Icon
        this.add(flightIcon);
-    }    
+       //#endregion
+    } 
+    //#endregion   
 }

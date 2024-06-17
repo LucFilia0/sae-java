@@ -19,7 +19,7 @@ public class NImportFileButton extends NFilledButton {
      * @author Luc le Manifik
      */
     public NImportFileButton(String title) {
-        super(title, 200, 125);
+        super(title, 230, 150);
     } 
 
     //#endregion

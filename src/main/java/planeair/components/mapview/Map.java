@@ -37,7 +37,7 @@ package planeair.components.mapview;
     import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
     import planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint;
     import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-    import planeair.components.menu.NInfoPanel;
+    import planeair.components.menu.infos.NInfoPanel;
 
     //#endregion
 

@@ -1,42 +1,48 @@
 package planeair.components.comboboxes.renders;
 
-// import SWING components
-import javax.swing.JLabel;
-import javax.swing.JList;
-import java.awt.Color ;
+//#region IMPORT
+    //#region .SWING
+    import javax.swing.JLabel;
+    import javax.swing.JList;
+    import java.awt.Color ;
+    //#endregion
 
-// import AWT components
-import java.awt.Component;
+    //#region AWT
+    import java.awt.Component;
+    //#endregion
+//#endregion
 
 /**
- * Render handling hours by putting 0s in front of all 1 digit numbers
+ * Class of renderer for Time ComboBoxs
  * 
- * @author Giraud Nila mod. Nathan LIEGEON
+ * @author GIRAUD Nila
  */
 public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
+
+    //#region INSTANTIALISATION AND INITIALISATION
     /**
-     * Default text_color for this kind of combo boxes :
-     * Black
+     * Default color for text
      */
     public static final Color DEFAULT_TEXT_COLOR = Color.BLACK ;
 
     /**
-     * Default background_color for this kind of combo boxes :
-     * Yellow
+     * Default background Color
      */
 	public static final Color DEFAULT_BACKGROUND_COLOR = Color.YELLOW ;
+    //#endregion
 
+    //#region CONSTRUCTOR CHOOSE COLOR
     /**
-	 * Overrides this Renderer's default text color and background colors
-	 * with whatever you want
-	 * 
-	 * @param textColor
-	 * @param backgroundColor
-	 */
+     * Constructor of NTimeComboBoxRenderer
+     * @param textColor 
+     * @param backgroundColor
+     */
     public NTimeComboBoxRenderer(Color textColor, Color backgroundColor) {
         super(textColor, backgroundColor) ;
     }
+    //#endregion
 
+    //#region DEFAULT CONSTRUCTOR
     /**
 	 * Initializes the Renderer with its default background and text colors
 	 * Gives a default font for all items in this comboBox
@@ -44,7 +50,9 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
     public NTimeComboBoxRenderer() {
         super(DEFAULT_TEXT_COLOR, DEFAULT_BACKGROUND_COLOR) ;
     }
+    //#endregion
 
+    //#region GETTER
     public Component getListCellRendererComponent(
             JList<? extends Integer> list,
             Integer value,
@@ -64,5 +72,6 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
 
         return cell;
     }
+    //#endregion
 
 }

@@ -1,23 +1,40 @@
 package planeair.components.time;
 
-// import SWING components
-import javax.swing.JComponent;
-import javax.swing.JSlider;
-import javax.swing.plaf.basic.BasicSliderUI;
+//#region IMPORT
+    //#region .SWING
+    import javax.swing.JComponent;
+    import javax.swing.JSlider;
+    import javax.swing.plaf.basic.BasicSliderUI;
+    //#endregion
 
-import planeair.App;
+    //#region APP
+    import planeair.App;
+    //#endregion
 
-// import AWT components
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.geom.RoundRectangle2D;
+    //#region .AWT
+    import java.awt.Color;
+    import java.awt.Dimension;
+    import java.awt.Graphics;
+    import java.awt.Graphics2D;
+    import java.awt.RenderingHints;
+    import java.awt.Shape;
+    import java.awt.geom.RoundRectangle2D;
+    //#endregion
+//#endregion
 
+/**
+ * Slider situe in te center of the Body of the App
+ * The slider give the user access to change simulation time
+ * If the user push the button right to the Slider The simulation go and the slider move
+ * 
+ * @author GIRAUD Nila
+ */
 public class NSliderTime extends JSlider{
 
+    //#region CONSTRUCTOR
+    /**
+     * Constructor of the Slider
+     */
     public NSliderTime(){
 
         this.setMinimum(0);
@@ -26,11 +43,10 @@ public class NSliderTime extends JSlider{
         this.setValue(0000);
         this.setForeground(Color.BLACK);
         this.setOpaque(false);
-
-        
-        
     }
+    //#endregion
 
+    //#region SLIDER MODEL
     @Override
             public void updateUI() {
                 setUI(new CustomSliderUI(this));
@@ -140,6 +156,7 @@ public class NSliderTime extends JSlider{
         @Override
         public void paintFocus(final Graphics g) {}
     }
+    //#endregion
 }
 
 
