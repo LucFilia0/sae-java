@@ -12,7 +12,7 @@ import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 
-import planeair.graph.graphtype.GraphSAE;
+import planeair.graph.graphtype.GraphSAE;   
 
 /**
  * Class handling all the methods for the RLF graph Algorithm

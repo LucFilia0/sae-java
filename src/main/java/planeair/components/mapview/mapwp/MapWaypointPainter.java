@@ -2,8 +2,8 @@ package planeair.components.mapview.mapwp;
 
 //-- Import Java
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.lang.Math;
 
 //-- Import AWT
@@ -38,17 +38,17 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * The Set which contains all the AirportWaypoints
      */
-    private HashSet<AirportWaypoint> airportWaypointSet;
+    private Set<AirportWaypoint> airportWaypointSet;
 
     /**
      * The Set which contains all the FlightWaypoints
      */
-    private HashSet<FlightWaypoint> flightWaypointSet;
+    private Set<FlightWaypoint> flightWaypointSet;
 
     /**
      * The Set which stores all the MapWaypointButtons
      */
-    private HashSet<MapWaypointButton> waypointButtonSet;
+    private Set<MapWaypointButton> waypointButtonSet;
 
     /**
      * Homepage blablabla
@@ -61,9 +61,9 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      * @author Luc le Manifik
      */
     public MapWaypointPainter(App app) {
-        this.airportWaypointSet = new HashSet<AirportWaypoint>();
-        this.flightWaypointSet = new HashSet<FlightWaypoint>();
-        this.waypointButtonSet = new HashSet<>();
+        this.airportWaypointSet = ConcurrentHashMap.newKeySet() ;
+        this.flightWaypointSet = ConcurrentHashMap.newKeySet() ;
+        this.waypointButtonSet = ConcurrentHashMap.newKeySet() ;
         this.app = app ;
     }
 
@@ -147,8 +147,13 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                 }
                 g.setStroke(new BasicStroke(3)) ;
                 g.drawLine(depX, depY, arrX, arrY);
+
+                waypointButton.setSelectionStyle() ;
             }
             else {
+                if (flightWp.getWaypointButton().isSelected()) {
+                    app.getMainScreen().getInfoPanel().hideInfos() ;
+                }
                 flightWp.getFlight().setFlightWaypoint(null) ;
             }
         }
@@ -157,33 +162,33 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * Returns the Sets which contains all the AirportWaypoints
      * 
-     * @return ({@link java.util.HashSet}) - The sets which contains all the AirportWaypoints
+     * @return ({@link java.util.Set}) - The sets which contains all the AirportWaypoints
      * 
      * @author Luc le Manifik
      */
-    public HashSet<AirportWaypoint> getAirportWaypoints() {
+    public Set<AirportWaypoint> getAirportWaypoints() {
         return this.airportWaypointSet;
     }
 
     /**
      * Returns the Set which contains all the FlightWaypoints
      * 
-     * @return ({@link java.util.HashSet}) - The Sets which contains all the FlightWaypoints
+     * @return ({@link java.util.Set}) - The Sets which contains all the FlightWaypoints
      * 
      * @author Luc le Manifik
      */
-    public HashSet<FlightWaypoint> getFlightWaypoints() {
+    public Set<FlightWaypoint> getFlightWaypoints() {
         return this.flightWaypointSet;
     }
 
     /**
      * Returns the Set which contains all the MapWaypointButtons
      * 
-     * @return ({@link java.util.HashSet HashSet}) - The Sets which contains all the MapWaypointButtons
+     * @return ({@link java.util.Set Set}) - The Sets which contains all the MapWaypointButtons
      * 
      * @author Luc le Manifik
      */
-    public HashSet<MapWaypointButton> getWpButtons() {
+    public Set<MapWaypointButton> getWpButtons() {
         return this.waypointButtonSet;
     }
 

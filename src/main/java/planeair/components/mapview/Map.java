@@ -221,7 +221,14 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             GeoPosition flightPositionAtTime = flight.getGeoPositionAtTime(time);
             // The function returns null is the Flight is not currently flying
             if(flightPositionAtTime != null) {
-                this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight, flightPositionAtTime));
+                FlightWaypoint fwp = flight.getFlightWaypoint() ;
+                if (fwp != null) {
+                    fwp.setPosition(flightPositionAtTime);
+                    this.itemPainter.getFlightWaypoints().add(fwp);
+                }
+                else {
+                    this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight, flightPositionAtTime)) ;
+                }
             }
         });
 

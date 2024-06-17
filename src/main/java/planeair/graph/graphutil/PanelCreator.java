@@ -133,7 +133,7 @@ public class PanelCreator {
 					}
 
 					catch (Exception e) {
-						// ^^'  
+						// ^^' 
 					}
 				}
 			}
@@ -278,7 +278,7 @@ public class PanelCreator {
 	}
 	//#endregion
 
-	//region EVENTS
+	//#region MOUSE EVENTS
 
 	/**
 	 * Class handling all mouse events on this panel
@@ -337,6 +337,10 @@ public class PanelCreator {
 			}
 		}
 	}
+
+	//#endregion
+
+	//#region VIEWER EVENTS
 		
 	/**
 	 * Class handling viewer events which are events related to graphical elements in the viewer
@@ -366,15 +370,12 @@ public class PanelCreator {
 		@Override
 		public void mouseOver(String id) {
 			Node n = graph.getNode(id) ;
-			boolean updated = false ;
 			if (n instanceof Flight) {
 				Flight f = (Flight)n ;
-				updated = f.fireSelectionUpdated() ;
+				f.fireSelectionUpdated(false) ;
 			}
 
-			if (!updated) {
-				setSelectedStyle(n) ;
-			}
+			setSelectedStyle(n) ;
 		}
 
 		/**
@@ -390,15 +391,12 @@ public class PanelCreator {
 		@Override
 		public void mouseLeft(String id) {
 			Node n = graph.getNode(id) ;
-			boolean updated = false ;
 			if (n instanceof Flight) {
 				Flight f = (Flight)n ;
-				updated = f.fireSelectionUpdated() ;
+				f.fireSelectionUpdated(true) ;
 			}
 
-			if (!updated) {
-				removeSelectedStyle(n) ;
-			}
+			removeSelectedStyle(n) ;
 		}
 
 		/**

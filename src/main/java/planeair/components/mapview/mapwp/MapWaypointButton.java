@@ -7,11 +7,11 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 
-import planeair.App;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 import planeair.graph.graphutil.PanelCreator;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 
 //-- Import AWT
 
@@ -46,6 +46,8 @@ public class MapWaypointButton extends javax.swing.JButton {
      * The Waypoint currently being clicked
      */
     public static MapWaypointButton waypointSelected ;
+
+    private boolean selected ;
 
     //-- WaypointButton Constructor
 
@@ -100,40 +102,73 @@ public class MapWaypointButton extends javax.swing.JButton {
      * 
      * @author Nathan LIEGEON
      */
-    public void changeSelection(boolean isSelected) {
-        // You clicked on the waypoint you just selected
-        if (isSelected) {
-            this.setBorder(null) ;
-            if (waypointSelected != null && waypointSelected.getMapWaypoint() instanceof FlightWaypoint) {
-                FlightWaypoint selectedFWP = (FlightWaypoint)waypointSelected.getMapWaypoint() ;
-                PanelCreator.removeSelectedStyle(selectedFWP.getFlight()) ;
+    public void changeSelection(boolean isClicked) {
+        // Case when the button is first clicked
+        if (isClicked) {
+            // If it is selected, then remove the selection
+            if (this.isSelected()) {
+                selected = false ;
+                this.setSelectionStyle() ;
+                waypointSelected = null ;
             }
-            waypointSelected = null ;
-
-        }
-        // You clicked on another waypoint
-        else {
-            
-            // Checks if there is a selected waypoint
-            // And applies the relevant changes
-            if (waypointSelected != null) {
-                waypointSelected.setBorder(null) ;
-                if (waypointSelected.getMapWaypoint() instanceof FlightWaypoint) {
-                    FlightWaypoint selectedFWP = (FlightWaypoint)waypointSelected.getMapWaypoint() ;
-                    PanelCreator.removeSelectedStyle(selectedFWP.getFlight()) ;
+            else {
+                // Change the selection from the previous one to this one
+                if (waypointSelected != null) {
+                    waypointSelected.setSelected(false);
+                    waypointSelected.setSelectionStyle() ;
                 }
+                selected = true ;
+                this.setSelectionStyle() ;
+                waypointSelected = this ;
             }
-            this.setForeground(App.KINDAYELLOW) ;
+        }
+
+        // Case if its style has to be updated
+        else if (!this.isSelected()) {
+            this.setSelectionStyle() ;
+        }
+
+        this.repaint() ;
+    }
+
+    /**
+     * Changes this waypoint's style based on whether or not it is Selected
+     * If the waypoint is a FlightWaypoint, also update its Node
+     * 
+     * @param isSelected True if it is currently selected, false if not
+     * 
+     * @author Nathan LIEGEON
+     */
+    public void setSelectionStyle() {
+        if (this.isSelected()) {
+            this.setForeground(Color.RED) ;
             this.setBorder(BorderFactory.createStrokeBorder(new BasicStroke(3))) ;
             if (this.getMapWaypoint() instanceof FlightWaypoint) {
                 FlightWaypoint fwp = (FlightWaypoint)this.getMapWaypoint() ;
                 PanelCreator.setSelectedStyle(fwp.getFlight()) ;
             }
-
-            waypointSelected = this ;
-            
         }
+
+        else {
+            this.setBorder(null) ;
+            if (this.getMapWaypoint() instanceof FlightWaypoint) {
+                FlightWaypoint fwp = (FlightWaypoint)this.getMapWaypoint() ;
+                PanelCreator.removeSelectedStyle(fwp.getFlight()) ;
+            }
+        }
+
         this.repaint() ;
     }
+
+    /**
+     * Returns whether this waypoint is selected or not
+     */
+    public boolean isSelected() {
+        return this.selected ;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected ;
+    } 
 
 }

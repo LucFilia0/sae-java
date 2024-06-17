@@ -524,13 +524,11 @@ public class Flight extends SingleNode {
      * 
      * @author Nathan LIEGEON
      */
-    public boolean fireSelectionUpdated() {
+    public void fireSelectionUpdated(boolean isSelected) {
         FlightWaypoint fwp = this.getFlightWaypoint() ;
         if (fwp != null) {
-            fwp.getWaypointButton().changeSelection(
-                fwp.getWaypointButton().equals(MapWaypointButton.waypointSelected)) ;
-            return true ;
+            fwp.getWaypointButton().changeSelection(true) ;
+            fwp.getWaypointButton().equals(MapWaypointButton.waypointSelected) ;
         }
-        return false ;
     }
 }

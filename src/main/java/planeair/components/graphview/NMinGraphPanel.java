@@ -178,7 +178,7 @@ public class NMinGraphPanel extends JPanel {
      * Draws a centered String in a Rectangle
      * I didn't make this, I yonked it from StackOverflow
      * Here's the original question 
-     * https://stackoverflow.com/questions/27706197/how-can-i-center-graphics-drawstring-in-java
+     * https://stackoverflow.com/questions/27706197/how-can-i-center-graphics-drawstring-in-java 
      * @author Gilbert Le Blanc
      * @param g
      * @param r
