@@ -348,12 +348,12 @@ public class NMainScreen extends JPanel{
                 aside.setPreferredSize(new Dimension(385,100));
                 aside.setOpaque(false);
                 //#endregion
-            //#endregion   
+            //#endregion
          }
 
         public void initMap() {
             this.app.getAirportSet().setActiveAirportsFrom((FlightsIntersectionGraph)this.app.getGraph()) ;
-            this.map.paintAllAirports(this.app.getAirportSet());
+            this.map.addAirports(this.app.getAirportSet());
         }
         //#endregion
 

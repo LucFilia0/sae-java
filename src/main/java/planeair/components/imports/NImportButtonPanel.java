@@ -192,6 +192,20 @@ public class NImportButtonPanel extends JPanel {
      */
     private App app;
 
+    //#region BOOLEANS
+
+    /**
+     * Checks if the Airports are imported
+     */
+    private boolean airportsImported;
+
+    /**
+     * Checks if the Flights are imported
+     */
+    private boolean flightsImported;
+
+    //#endregion
+
     // VERIFICATIONS
     
     /**
@@ -218,6 +232,9 @@ public class NImportButtonPanel extends JPanel {
      * @author Luc le Manifik
      */
     private void initComponents() {
+
+        this.airportsImported  = false;
+        this.flightsImported = false;
 
         this.setBackground(App.KINDAYELLOW);
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5,true));
@@ -265,7 +282,7 @@ public class NImportButtonPanel extends JPanel {
 
         // First button : Step directly in the NMainScreen
         confirmStart.addActionListener((ActionEvent e) -> {
-            this.app.switchToMainScreen(); 
+            this.app.switchToMainScreen();
         });
 
         // Button to choose the TestGraph's File : Open JFileChooser
@@ -279,7 +296,6 @@ public class NImportButtonPanel extends JPanel {
                     this.app.setGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     ImportationTestGraph.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
                         fileChooser.getFile(), false);
-                    
                     
                     app.getMainScreen().initGraphBottomPanel();   
                     initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel()) ;
@@ -312,12 +328,12 @@ public class NImportButtonPanel extends JPanel {
 
             try {
                 fileChooser.userImportFile();
-                if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
-                    ImportationFIG.importAirportsFromFile(this.app.getAirportSet(), 
-                        fileChooser.getFile());
+                if(fileChooser.getFile() != null) {
+                    ImportationFIG.importAirportsFromFile(this.app.getAirportSet(), fileChooser.getFile());
+                    this.airportsImported = true;
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
-                JOptionPane.showMessageDialog(null, error.getMessage(),
+                JOptionPane.showMessageDialog(this.app, error.getMessage(),
                     "Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                 fileChooser.setFile(null);
             }   
@@ -331,7 +347,7 @@ public class NImportButtonPanel extends JPanel {
         
             try {
                 fileChooser.userImportFile();
-                if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
+                if(fileChooser.getFile() != null) {
                     app.setGraph(new FlightsIntersectionGraph(fileChooser.getFile().getName())) ;
                     ImportationFIG.importFlightsFromFile(this.app.getAirportSet(), 
                         (FlightsIntersectionGraph)this.app.getGraph(), fileChooser.getFile(), this.app.getTimeSecurity());
@@ -340,6 +356,7 @@ public class NImportButtonPanel extends JPanel {
                     ColoringUtilities.setGraphStyle(app.getGraph(), app.getGraph().getNbColors()) ;
                     app.getGraph().setKMax(app.getGraph().getNbColors()) ;
                     this.initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel());
+                    this.flightsImported = true;
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
                 JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
@@ -349,13 +366,15 @@ public class NImportButtonPanel extends JPanel {
         });
     
         confirmAirports.addActionListener((ActionEvent e) -> {
-            buttonsPanel.removeAll();
-            this.remove(confirmStart);
-            buttonsPanel.add(buttonFlightFileSelection);
-            this.remove(panelReturnConfirmAir);
-            this.add(panelReturnConfirmFlight);
-            panelReturnConfirmFlight.setAlignmentX(Component.CENTER_ALIGNMENT);
-            this.app.setVisible(true);
+            if(this.airportsImported) {
+                buttonsPanel.removeAll();
+                this.remove(confirmStart);
+                buttonsPanel.add(buttonFlightFileSelection);
+                this.remove(panelReturnConfirmAir);
+                this.add(panelReturnConfirmFlight);
+                panelReturnConfirmFlight.setAlignmentX(Component.CENTER_ALIGNMENT);
+                this.app.setVisible(true);
+            }
         });
 
         returnBackAirports.addActionListener((ActionEvent e) -> {
@@ -364,9 +383,11 @@ public class NImportButtonPanel extends JPanel {
         });
     
         confirmFlights.addActionListener((ActionEvent e) -> {
-            this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
-            this.app.switchToMainScreen();
-            this.app.getMainScreen().initMap();
+            if(this.airportsImported && this.flightsImported) {
+                this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
+                this.app.switchToMainScreen();
+                this.app.getMainScreen().initMap();
+            }
         });
     
         returnBackFlights.addActionListener((ActionEvent e) -> {

@@ -59,6 +59,7 @@ public abstract class AirportWaypoint extends planeair.components.mapview.mapwp.
     AirportWaypoint(File iconFile, Airport airport, GeoPosition geoPosition) {
         super(iconFile, geoPosition, 0); // Degree = 0, because Airports are not spinning, bro...
 		this.airport = airport;
+		this.airport.setWaypoint(this);
     }
 
 	//#endregion

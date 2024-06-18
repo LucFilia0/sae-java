@@ -13,7 +13,9 @@ package planeair.util;
 
     import org.graphstream.graph.Node;
 
-    //#endregion
+import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
+
+//#endregion
 
     //#region PLANEAIR
 
@@ -52,6 +54,11 @@ public class Airport {
      * Contains all the flights arriving to or leaving from this airport
      */
     private ArrayList<Flight> flightList ;
+
+    /**
+     * The MapWaypoint which represents the Airport
+     */
+    private AirportWaypoint waypoint;
 
     //#endregion
     
@@ -138,6 +145,14 @@ public class Airport {
         return this.flightList ;
     }
 
+    /**
+     * 
+     * @return
+     */
+    public AirportWaypoint getWaypoint() {
+        return this.waypoint;
+    }
+
     //#endregion
 
     //#region SETTERS
@@ -191,6 +206,14 @@ public class Airport {
             throw new NullPointerException();
         }
         this.coordinate = coordinate;
+    }
+
+    /**
+     * 
+     * @param waypoint
+     */
+    public void setWaypoint(AirportWaypoint waypoint) {
+        this.waypoint = waypoint;
     }
 
     //#endregion
