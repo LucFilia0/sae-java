@@ -109,7 +109,7 @@ public class FlightWaypoint extends MapWaypoint {
     private static double getFlightOrientation(Flight flight) {
 
         double radian = 0.;
-        int offset = 40;
+        int offset = 45;
 
         // Gets the departure and arrival Airports coordinates
         double latitudeDep = flight.getDepartureAirport().getCoordinate().getLatitude();

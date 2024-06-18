@@ -174,10 +174,14 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
         if(mapMenu.mustShowActiveAirports()) {
             paintActiveAirports(g, map, width, height, mapZoom, screen);
+        }else {
+            eraseActiveAirports();
         }
 
         if(mapMenu.mustShowInactiveAirports()) {
             paintInactiveAirports(g, map, width, height, mapZoom, screen);
+        }else {
+            eraseInactiveAirports();
         }
 
         /*
@@ -202,6 +206,8 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                     y = flightWp_location.getY() - screen.getY() - MapWaypointButton.BUTTON_SIZE/2;
                     
                     waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);        
+                }else {
+                    flightWp.getWaypointButton().setBounds(0, 0, 0, 0);
                 }
 
                 // Painting the Flight lines
@@ -230,6 +236,8 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             }
         }
     }
+
+    //#region ACTIVE AIRPORTS
 
     /**
      * Paints all the ActiveAirports
@@ -270,10 +278,22 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             }
 
             waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
+            ((Map)map).add(waypointButton);
         }
-
-        ((Map)map).paintActiveAirports();
     }
+
+    /**
+     * Erases all the ActiveAirports
+     */
+    private void eraseActiveAirports() {
+        for(ActiveAirportWaypoint airportWaypoint : this.activeAirportWaypointSet) {
+            airportWaypoint.getWaypointButton().setBounds(0, 0, 0, 0);
+        }
+    }
+
+    //#endregion
+
+    //#region INACTIVE AIRPORTS
 
     /**
      * Paint all the InactiveAirports
@@ -314,10 +334,20 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             }
 
             waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
+            ((Map)map).add(waypointButton);
         }
-
-        ((Map)map).paintInactiveAirports();
     }
+
+    /**
+     * Erases all the ActiveAirports
+     */
+    private void eraseInactiveAirports() {
+        for(InactiveAirportWaypoint airportWaypoint : this.inactiveAirportWaypointSet) {
+            airportWaypoint.getWaypointButton().setBounds(0, 0, 0, 0);
+        }
+    }
+
+    //#endregion
 
     /**
      * This overrided method does not allow to get the Waypoints of the WaypointPainter<MapItem>

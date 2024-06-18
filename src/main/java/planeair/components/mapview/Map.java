@@ -34,7 +34,6 @@ package planeair.components.mapview;
     import planeair.components.mapview.mapwp.MapWaypointButton;
     import planeair.components.mapview.mapwp.MapWaypointPainter;
     import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
-    import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
     import planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint;
     import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
     import planeair.components.menu.infos.NInfoPanel;
@@ -224,53 +223,90 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
         //#region WAYPOINTS
 
+            //#region ADD AIRPORTS
+
+            /**
+             * This method adds the Airports' icons on the Map.
+             * 
+             * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
+             * 
+             * @author Luc le Manifik
+             */
+            public void addAirports(AirportSet airportSet) {
+
+                addActiveAirports(airportSet);
+                addInactiveAirports(airportSet);
+            }
+
+            /**
+             * This method adds the ActiveAirports to the AirportSet
+             * 
+             * @param airportSet The {@link planeair.util.AirportSet AirportSet} which contains the Airports
+             */
+            private void addActiveAirports(AirportSet airportSet) {
+                for(Airport airport : airportSet.getActiveAirports()) {
+                    this.itemPainter.getActiveAirportWaypoints().add(new ActiveAirportWaypoint(airport, airport.getCoordinate()));
+                }
+            }
+
+            /**
+             * This method adds the InactiveAirports to the AirportSet
+             * 
+             * @param airportSet The {@link planeair.util.AirportSet AirportSet} which contains the Airports
+             */
+            private void addInactiveAirports(AirportSet airportSet) {
+                for(Airport airport : airportSet.getInactiveAirports()) {
+                    this.itemPainter.getInactiveAirportWaypoints().add(new InactiveAirportWaypoint(airport, airport.getCoordinate()));
+                }
+            }
+
+            //#endregion
+
+            //#region REMOVE AIRPORTS
+
+            /**
+             * This method removes and repaints the InactiveAirports from the {@link planeair.components.mapview.mapwp.MapWaypointPainter MapWaypointPainter}
+             * 
+             * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
+             */
+            public void removeAirports(AirportSet airportSet) {
+                removeActiveAirports(airportSet);
+                removeInactiveAirports(airportSet);
+            }
+            
+            /**
+             * This method removes the InactiveAirports from the {@link planeair.components.mapview.mapwp.MapWaypointPainter MapWaypointPainter}
+             * 
+             * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
+             */
+            private void removeActiveAirports(AirportSet airportSet) {
+                for(Airport airport : airportSet.getActiveAirports()) {
+                    this.itemPainter.getActiveAirportWaypoints().remove(airport.getWaypoint());
+                }
+            }
+
+            /**
+             * This method repaints the InactiveAirports from the {@link planeair.components.mapview.mapwp.MapWaypointPainter MapWaypointPainter}
+             * 
+             * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
+             */
+            private void removeInactiveAirports(AirportSet airportSet) {
+                for(Airport airport : airportSet.getInactiveAirports()) {
+                    this.itemPainter.getInactiveAirportWaypoints().remove(airport.getWaypoint());
+                }
+            }
+
+            //#endregion
+
+        //#region PAINT FLIGHTS
+
         /**
-         * This method adds the Airports' icons on the Map.
+         * Paints all the Flights at the {@link planeair.util.NTime time} passed in parameter
          * 
-         * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
+         * @param time The time when the Flights are painted
+         * @param fig The {@link planeair.graph.graphtype.FlightsIntersectionGraph FIG} from which are painted the Flights
          * 
          * @author Luc le Manifik
-         */
-        public void addAirports(AirportSet airportSet) {
-
-            addActiveAirports(airportSet);
-            addInactiveAirports(airportSet);
-        }
-
-        // TODO doc
-        public void addActiveAirports(AirportSet airportSet) {
-            for(Airport airport : airportSet.getActiveAirports()) {
-                this.itemPainter.getActiveAirportWaypoints().add(new ActiveAirportWaypoint(airport, airport.getCoordinate()));
-            }
-        }
-
-        public void addInactiveAirports(AirportSet airportSet) {
-            for(Airport airport : airportSet.getInactiveAirports()) {
-                this.itemPainter.getInactiveAirportWaypoints().add(new InactiveAirportWaypoint(airport, airport.getCoordinate()));
-            }
-        }
-
-        public void removeAirports(AirportSet airportSet) {
-            removeActiveAirports(airportSet);
-            removeInactiveAirports(airportSet);
-        }
-        
-        public void removeActiveAirports(AirportSet airportSet) {
-            for(Airport airport : airportSet.getActiveAirports()) {
-                this.itemPainter.getActiveAirportWaypoints().remove(airport.getWaypoint());
-            }
-        }
-
-        public void removeInactiveAirports(AirportSet airportSet) {
-            for(Airport airport : airportSet.getInactiveAirports()) {
-                this.itemPainter.getInactiveAirportWaypoints().remove(airport.getWaypoint());
-            }
-        }
-
-        /**
-         * //
-         * @param time
-         * @param fig
          */
         public void paintFlightsAtTime(NTime time, FlightsIntersectionGraph fig) {
 
@@ -280,7 +316,13 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             this.repaint();
         }
 
-        public void clearAllFlights() {
+        /**
+         * Removes all the {@link planeair.graph.graphutil.Flight Flight} Flights from the {@link planeair.components.mapview.mapwp.MapWaypointPainter MapItemPainter}
+         * before to repaint them on the Map, making the Fligths' movment
+         * 
+         * @author Luc le Manifik
+         */
+        private void clearAllFlights() {
 
             MapWaypointButton mwb = null;
 
@@ -293,9 +335,16 @@ public class Map extends org.jxmapviewer.JXMapViewer {
                 this.remove(mwb);
                 itWp.remove();
             }
-            //this.itemPainter.getFlightWaypoints().clear();
         }
 
+        /**
+         * Adds all the Flights, after calculating their new position, and replace them on the Map
+         * 
+         * @param time The {@link planeair.util.NTime NTime} when we want to paint the Fligths
+         * @param fig The {@link planeair.graph.graphtype.FlightsIntersectionGraph FIG} from which are painted the Flights
+         * 
+         * @author Luc le Manifik
+         */
         public void addAllFlightsAtTime(NTime time, FlightsIntersectionGraph fig) {
 
             MapWaypointButton mwb = null;
@@ -317,34 +366,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             }
         }
 
-        /**
-         * This procedure paints the MapWaypoints on the Map.
-         * the Flights are only painted id they are currently flying.
-         * 
-         * @author Luc le Manifik
-         */
-        public void paintAirports() {
-            paintActiveAirports();
-            paintInactiveAirports();
-        }
-
-        public void paintActiveAirports() {
-            MapWaypointButton mwb;
-            for(AirportWaypoint waypoint : this.itemPainter.getActiveAirportWaypoints()) {
-                mwb = waypoint.getWaypointButton();
-                this.add(mwb);
-                this.itemPainter.getWpButtons().add(mwb);
-            }
-        }
-
-        public void paintInactiveAirports() {
-            MapWaypointButton mwb;
-            for(AirportWaypoint waypoint : this.itemPainter.getInactiveAirportWaypoints()) {
-                mwb = waypoint.getWaypointButton();
-                this.add(mwb);
-                this.itemPainter.getWpButtons().add(mwb);
-            }
-        }
+        //#endregion
 
         /**
          * Clears all the MapWaypoints on the Map, by reseting the MapItemPainter

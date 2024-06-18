@@ -257,6 +257,7 @@ public class NMainScreen extends JPanel{
         @SuppressWarnings("unused")
         private NMaxGraphFrame maxGraphPanel; // DO NOT DELETE : Used in ActionListener
         //#endregion
+
     //#endregion
 
         //#region APP
@@ -287,6 +288,7 @@ public class NMainScreen extends JPanel{
     //#endregion
 
     //#region INIT
+
         //#region COMPONENTS
         private void initComponents() {
 
@@ -349,8 +351,13 @@ public class NMainScreen extends JPanel{
                 aside.setOpaque(false);
                 //#endregion
             //#endregion
-         }
+            }
 
+        /**
+         * Initiates the Map located at the center of the NMainScreen
+         * 
+         * @author Luc le Manifik
+         */
         public void initMap() {
             this.app.getAirportSet().setActiveAirportsFrom((FlightsIntersectionGraph)this.app.getGraph()) ;
             this.map.addAirports(this.app.getAirportSet());
