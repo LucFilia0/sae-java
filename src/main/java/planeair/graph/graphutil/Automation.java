@@ -186,27 +186,27 @@ public abstract class Automation {
      */
     public static void writeToFile(TestGraph graph, String path, ExecutorService threadPool) {
         try {
-            File resFile = new File(path + FOLDER_PATH + "colo-eval" + Automation.isolateNumberInString(graph.getId()) + ".txt") ;
+            File resFile = new File(path + FOLDER_PATH + "color-eval" + Automation.isolateNumberInString(graph.getId()) + ".txt") ;
             if (!resFile.createNewFile()) {
-                System.out.println("File " + graph.getId() + " already exists") ;
+                System.out.println("File " + graph.getId() + " already exists\n") ;
+                return ;
             }
-            else {
-                System.out.println("Writing file " + graph.getId()) ;
-                FileWriter resWriter = new FileWriter(resFile) ;
-                List<Node> list = graph.nodes().collect(Collectors.toList()) ;
-                list.sort(new Comparator<Node>() {
-                    @Override
-                    public int compare(Node arg0, Node arg1) {
-                        return Integer.compare(Integer.valueOf(arg0.getId()), Integer.valueOf(arg1.getId())) ;
-                    }
-                }) ;
 
-                for (Node node : list) {
-                    resWriter.write(node.getId() + " ; " + node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) + '\n') ;
+            System.out.println("Writing file " + graph.getId()) ;
+            FileWriter resWriter = new FileWriter(resFile) ;
+            List<Node> list = graph.nodes().collect(Collectors.toList()) ;
+            list.sort(new Comparator<Node>() {
+                @Override
+                public int compare(Node arg0, Node arg1) {
+                    return Integer.compare(Integer.valueOf(arg0.getId()), Integer.valueOf(arg1.getId())) ;
                 }
+            }) ;
 
-                resWriter.close() ;
+            for (Node node : list) {
+                resWriter.write(node.getId() + " ; " + node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) + '\n') ;
             }
+
+            resWriter.close() ;
 
             File conflictFile = new File(path + FOLDER_PATH + "coloration-groupe1.4.csv") ;
             FileWriter conflictWriter = new FileWriter(conflictFile, true) ;
@@ -218,6 +218,7 @@ public abstract class Automation {
         catch (Exception e) {
             System.err.println(e) ;
         }
+        System.out.println() ;
     }
 
     //#endregion
@@ -282,6 +283,7 @@ public abstract class Automation {
             @Override
             public void run() {
                 ColoringWelshPowell.coloringWelshPowell(graphList.get(WELSH_POWELL)) ;
+                System.out.println("WELSH_POWELL : " + graphList.get(WELSH_POWELL).getNbConflicts()) ;
                 latch.countDown() ;
             }
         } ;
@@ -289,6 +291,7 @@ public abstract class Automation {
         Runnable dsatur = new Runnable() {
             public void run() {
                 ColoringDSATUR.coloringDsatur(graphList.get(DSATUR));
+                System.out.println("DSATUR : " + graphList.get(DSATUR).getNbConflicts()) ;
                 latch.countDown() ;
             };
         } ;
@@ -297,6 +300,7 @@ public abstract class Automation {
             @Override
             public void run() {
                 ColoringRLF.coloringRLF(graphList.get(RLF)) ;
+                System.out.println("RLF : " + graphList.get(RLF).getNbConflicts()) ;
                 latch.countDown() ;
             }
         } ;
@@ -428,7 +432,7 @@ public abstract class Automation {
         if (list.isEmpty()) {
             return null ;
         }
-
+        
         Integer bestAlgorithm = 0 ;
         Integer currentAlgorithm = 1 ;
         boolean hasLessConflicts ;
@@ -441,7 +445,7 @@ public abstract class Automation {
             }
             currentAlgorithm++ ;
         }
-
+        
         return bestAlgorithm ;
 
     }

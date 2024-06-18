@@ -58,12 +58,7 @@ public abstract class ColoringWelshPowell {
         }
 
         // Conflicts management
-        int[] nodeTab ;
-        for (Node node : nodeList) {
-            nodeTab = ColoringUtilities.getLeastConflictingColor(graph, node) ;
-            node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, nodeTab[0]) ;
-            res[1] += nodeTab[1] ;
-        }
+        res[1] = ColoringUtilities.colorWithLeastConflicts(graph) ;
         graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, res[1]) ;
         graph.setAttribute(GraphSAE.COLOR_ATTRIBUTE, res[0]) ;
     }

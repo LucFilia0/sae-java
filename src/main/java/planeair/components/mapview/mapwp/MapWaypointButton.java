@@ -162,11 +162,15 @@ public class MapWaypointButton extends javax.swing.JButton {
 
     /**
      * Returns whether this waypoint is selected or not
+     * @return true if it is selected, false if not
      */
     public boolean isSelected() {
         return this.selected ;
     }
 
+    /**
+     * Change the selection of this button
+     */
     public void setSelected(boolean selected) {
         this.selected = selected ;
     } 

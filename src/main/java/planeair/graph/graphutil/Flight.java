@@ -13,7 +13,6 @@ import org.graphstream.graph.implementations.*;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-import planeair.components.mapview.mapwp.MapWaypointButton;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 
 //-- Import Exceptions
@@ -527,8 +526,8 @@ public class Flight extends SingleNode {
     public void fireSelectionUpdated(boolean isSelected) {
         FlightWaypoint fwp = this.getFlightWaypoint() ;
         if (fwp != null) {
+            fwp.getWaypointButton().setSelected(isSelected) ;
             fwp.getWaypointButton().changeSelection(true) ;
-            fwp.getWaypointButton().equals(MapWaypointButton.waypointSelected) ;
         }
     }
 }

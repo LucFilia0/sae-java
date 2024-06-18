@@ -61,9 +61,11 @@ public abstract class ColoringUtilities {
      */
     public static int computeNumberOfConflicts(GraphSAE graph, boolean showErrorMessages) {
         int nbProblems = 0 ;
+        int color ;
         for (Node node : graph) {
             for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
-                if (node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) == neighbor.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) {
+                color = (int)node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
+                if (color != 0 && color == (int)neighbor.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) {
                     nbProblems++ ;
                     if (showErrorMessages) {
                         System.out.println("Probleme entre " + node + " et " + neighbor) ;
@@ -181,7 +183,7 @@ public abstract class ColoringUtilities {
      * 
      * @author Nathan LIEGEON
      */
-    public static int[] getLeastConflictingColor(GraphSAE graph, Node node) {
+    public static int[] getLeastConflictingColor(Node node, int kMax) {
         int[] minConflict = {1, Integer.MAX_VALUE} ;
         int[] currentConflict  = new int[2];
         HashMap<Integer, Integer> conflictCount = new HashMap<>() ;
@@ -192,11 +194,34 @@ public abstract class ColoringUtilities {
             }
         }) ;
 
-        for (Integer color : conflictCount.keySet()) {
-            currentConflict[0] = color ;
-            currentConflict[1] = conflictCount.get(color) ;
-            if (minConflict[1] > currentConflict[1]) {
-                minConflict = currentConflict ;
+        if (conflictCount.keySet().size() < kMax) {
+            // Means one color is available
+            TreeSet<Integer> set = new TreeSet<>() ;
+            set.addAll(conflictCount.keySet()) ;
+            Iterator<Integer> itr = set.iterator() ;
+
+            Integer currentColor = 0 ;
+            Integer previousColor = 0;
+
+            if (itr.hasNext())
+                currentColor = itr.next() ;
+
+            while ((previousColor + 1) == currentColor && itr.hasNext()) {
+                previousColor = currentColor ;
+                currentColor = itr.next() ;
+            }
+
+            minConflict[0] = previousColor + 1 ;
+        }
+        else {
+            // No color was available
+            for (Integer color : conflictCount.keySet()) {
+                currentConflict[0] = color ;
+                currentConflict[1] = conflictCount.get(color) ;
+                if (minConflict[1] > currentConflict[1]) {
+                    minConflict[0] = currentConflict[0] ;
+                    minConflict[1] = currentConflict[1] ;
+                }
             }
         }
 
@@ -205,5 +230,35 @@ public abstract class ColoringUtilities {
         }
 
         return minConflict ;
+    }
+
+    public static int colorWithLeastConflicts(Set<Node> graphSet, int kMax) {
+        TreeSet<Node> set = new TreeSet<>((node1, node2) -> {
+            if (node1.getDegree() == node2.getDegree()) {
+                return node1.getId().compareTo(node2.getId()) ;
+            }
+            return Integer.compare(node2.getDegree(), node1.getDegree()) ;
+        }) ;
+
+        int nbConflicts = 0 ;
+        int[] res = {0,0} ;
+
+        for (Node node : graphSet) {
+            if ((int)node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) == 0) {
+                set.add(node) ;
+            }
+        }
+
+        for (Node node : set) {
+            res = getLeastConflictingColor(node, kMax) ;
+            node.setAttribute(NODE_COLOR_ATTRIBUTE, res[0]) ;
+            nbConflicts += res[1] ;
+        }
+
+        return nbConflicts ;
+    }
+
+    public static int colorWithLeastConflicts(GraphSAE graph) {
+        return colorWithLeastConflicts(graph.nodes().collect(Collectors.toSet()), graph.getKMax()) ;
     }
 }

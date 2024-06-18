@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -33,7 +35,6 @@ public abstract class ColoringRLF {
      */
     public static void coloringRLF(GraphSAE graph) {
         // INITIALISATION
-        int nbConflicts = 0 ;
         int kMax = graph.getKMax() ;
         if (kMax < 2) {
             kMax = Integer.MAX_VALUE ;
@@ -46,12 +47,9 @@ public abstract class ColoringRLF {
         int color = recursiveColoringRLF(graph, newGraph, 0, kMax) ;
         
         // Conflict management 
-        int res[] = {0,0} ;
-        for (Node nodeLeft : newGraph) {
-            res = ColoringUtilities.getLeastConflictingColor(graph, nodeLeft) ;
-            nodeLeft.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, res[0]) ;
-            nbConflicts += res[1] ;
-        }
+        HashSet<Node> tempSet = new HashSet<>() ;
+        newGraph.nodes().forEach(n -> tempSet.add(graph.getNode(n.getId()))) ;
+        int nbConflicts = ColoringUtilities.colorWithLeastConflicts(tempSet, graph.getKMax()) ;
 
         graph.setNbColors(color) ;
         graph.setNbConflicts(nbConflicts) ;
@@ -73,52 +71,50 @@ public abstract class ColoringRLF {
         if (graph.getNodeCount() == 0 || color >= kMax) {
             return color ;
         }
-        else {
-            color++ ;
-            // Doing this prevents randomness in the node selected, we will always select the node with biggest Id
-            // Choosing the biggest Id is arbitrary and only for consistency
-            ArrayList<Node> degreeMap = Toolkit.degreeMap(graph) ;
-            int i = 1 ;
-            int maxI = 0 ;
-            while (i < degreeMap.size() && degreeMap.get(i) == degreeMap.get(i-1)) {
-                if (degreeMap.get(i).getId().compareTo(degreeMap.get(maxI).getId()) > 0) {
-                    maxI = i ;
-                }
+        color++ ;
+        // Doing this prevents randomness in the node selected, we will always select the node with biggest Id
+        // Choosing the biggest Id is arbitrary and only for consistency
+        ArrayList<Node> degreeMap = Toolkit.degreeMap(graph) ;
+        int i = 1 ;
+        int maxI = 0 ;
+        while (i < degreeMap.size() && degreeMap.get(i) == degreeMap.get(i-1)) {
+            if (degreeMap.get(i).getId().compareTo(degreeMap.get(maxI).getId()) > 0) {
+                maxI = i ;
             }
+        }
 
-            Node firstNode = degreeMap.get(maxI) ;
-            Node nextNode ;
+        Node firstNode = degreeMap.get(maxI) ;
+        Node nextNode ;
 
-            // Orders the nodes by id
-            TreeSet<Node> colorSet = new TreeSet<>(new Comparator<Node>() {
-                @Override
-                public int compare(Node o1, Node o2) {
-                    return o2.getId().compareTo(o1.getId()) ;
-                }
-            }) ;
-            Set<Node> addableNodesSet = graph.nodes().collect(Collectors.toSet()) ;
-
-            // We add the first node and remove all its neighbors from the set
-            colorSet.add(firstNode) ;
-            addableNodesSet.remove(firstNode) ;
-            addableNodesSet.removeAll(firstNode.neighborNodes().toList()) ;
-
-            // We add the node with the most common neighbors
-            // with nodes in the color set, then remove all of 
-            //its neighbors and itself from the set of addable nodes
-            while (!addableNodesSet.isEmpty()) {
-                nextNode = getNextNodeRLF(addableNodesSet, colorSet) ;
-                colorSet.add(nextNode) ;
-                addableNodesSet.remove(nextNode) ;
-                addableNodesSet.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
+        // Orders the nodes by id
+        TreeSet<Node> colorSet = new TreeSet<>(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return o2.getId().compareTo(o1.getId()) ;
             }
+        }) ;
+        Set<Node> addableNodesSet = graph.nodes().collect(Collectors.toSet()) ;
 
-            // Apply the coloration to the original graph and remove the node from the copy
-            for (Node node : colorSet) {
-                // We are working on a copy of the graph so we have to get the real node from the id of node in the copy
-                originalGraph.getNode(node.getId()).setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, color) ;
-                graph.removeNode(node) ;
-            }
+        // We add the first node and remove all its neighbors from the set
+        colorSet.add(firstNode) ;
+        addableNodesSet.remove(firstNode) ;
+        addableNodesSet.removeAll(firstNode.neighborNodes().toList()) ;
+
+        // We add the node with the most common neighbors
+        // with nodes in the color set, then remove all of 
+        //its neighbors and itself from the set of addable nodes
+        while (!addableNodesSet.isEmpty()) {
+            nextNode = getNextNodeRLF(addableNodesSet, colorSet) ;
+            colorSet.add(nextNode) ;
+            addableNodesSet.remove(nextNode) ;
+            addableNodesSet.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
+        }
+
+        // Apply the coloring to the original graph and remove the node from the copy
+        for (Node node : colorSet) {
+            // We are working on a copy of the graph so we have to get the real node from the id of node in the copy
+            originalGraph.getNode(node.getId()).setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, color) ;
+            graph.removeNode(node) ;
         }
 
         return recursiveColoringRLF(originalGraph, graph, color, kMax) ;
@@ -137,35 +133,52 @@ public abstract class ColoringRLF {
         HashMap<Node, Integer> countNeighborsInSet = new HashMap<>() ;
         HashMap<Node, Integer> countNeighborsNotInSet = new HashMap<>() ;
         Node res = null ;
+
+        // All nodes in addableNodesSet are at best 2nd degree neighbors to nodes in colorSet
         for (Node node : addableNodesSet) {
             countNeighborsInSet.put(node, 0) ;
             countNeighborsNotInSet.put(node, 0) ;
-            node.neighborNodes().forEach(neighbor -> {  
-                if (colorSet.contains(neighbor)) {
+            node.neighborNodes().forEach(neighbor -> {                             
+                if (isNeighborOfSet(addableNodesSet, neighbor)) {
                     countNeighborsInSet.merge(node, 1, Integer::sum) ;
                 }
-                else {
-                    countNeighborsNotInSet.merge(node, 1, Integer::sum) ;
+                else {  
+                    countNeighborsNotInSet.merge(node, 1, Integer::sum) ; 
                 }
             });
         }
 
         // Recovers the one with the highest number of common neighbors
-        if (!countNeighborsInSet.isEmpty()) {
-            // Prevents randomness in the answer provided
-            res = Collections.max(countNeighborsInSet.keySet(), (node1, node2) -> {
-                int comp1 = countNeighborsInSet.get(node1) ;
-                int comp2 = countNeighborsInSet.get(node2) ;
-                if (comp1 == comp2) {
-                    comp2 = countNeighborsNotInSet.get(node1) ;
-                    comp1 = countNeighborsNotInSet.get(node2) ;
-                    if (comp1 == comp2) {
-                        return node1.getId().compareTo(node2.getId()) ;
-                    }
+        // Prevents randomness in the answer provided
+        res = Collections.max(countNeighborsInSet.keySet(), (node1, node2) -> {
+            int neighbors1 = countNeighborsInSet.get(node1) ;
+            int neighbors2 = countNeighborsInSet.get(node2) ;
+            if (neighbors1 == neighbors2) {
+                neighbors1 = countNeighborsNotInSet.get(node1) ;
+                neighbors2 = countNeighborsNotInSet.get(node2) ;
+                if (neighbors1 == neighbors2) {
+                    return node1.getId().compareTo(node2.getId()) ;
                 }
-                return Integer.compare(comp1, comp2) ;
-            }) ;
-        }
+                return Integer.compare(neighbors2, neighbors1) ;
+            }
+
+            return Integer.compare(neighbors1, neighbors2) ;
+        }) ;
+
         return res ;
+    }
+
+    public static boolean isNeighborOfSet(Set<Node> nodeSet, Node node) {
+        boolean isNeighbor = false ;
+        Iterator<Node> itr = nodeSet.iterator() ;
+        while (!isNeighbor && itr.hasNext()) {
+            Node neighbor = itr.next() ;
+            if (neighbor.neighborNodes().collect(Collectors.toSet()).contains(node)) {
+                isNeighbor = true ;
+                break ;
+            }
+        }
+
+        return isNeighbor ;
     }
 }

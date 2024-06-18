@@ -95,6 +95,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             x = airportWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = airportWp_location.getY() - screen.getY() - waypointButton.getHeight();
             NMainScreen main = app.getMainScreen() ;
+
             // Calculates whether the waypoint would be on top of one of the menus
             boolean graphMenuIntersects = main.isGraphMenuVisible() && main.getGraphMenuPanel().getBounds()
                 .intersects(waypointButton.getBounds()) ;
@@ -151,7 +152,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                 waypointButton.setSelectionStyle() ;
             }
             else {
-                if (flightWp.getWaypointButton().isSelected()) {
+                if (flightWp != null && flightWp.getWaypointButton().isSelected()) {
                     app.getMainScreen().getInfoPanel().hideInfos() ;
                 }
                 flightWp.getFlight().setFlightWaypoint(null) ;
@@ -173,7 +174,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * Returns the Set which contains all the FlightWaypoints
      * 
-     * @return ({@link java.util.Set}) - The Sets which contains all the FlightWaypoints
+     * @return ({@link java.util.Set}) - The Sets which contain all the FlightWaypoints
      * 
      * @author Luc le Manifik
      */
@@ -184,7 +185,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * Returns the Set which contains all the MapWaypointButtons
      * 
-     * @return ({@link java.util.Set Set}) - The Sets which contains all the MapWaypointButtons
+     * @return ({@link java.util.Set Set}) - The Sets which contain all the MapWaypointButtons
      * 
      * @author Luc le Manifik
      */
@@ -193,10 +194,12 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     }
 
     /**
-     * This overrided method does not allow to get the Waypoints of the WaypointPainter<MapItem>
+     * This method is not supported for a MapWaypointPainter
+     * 
+     * @throws UnsupportedOperationException
      */
     @Override
     public Set<MapWaypoint> getWaypoints() {
-        return null;
+        throw new UnsupportedOperationException() ;
     }
 }
