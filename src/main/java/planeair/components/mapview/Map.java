@@ -245,7 +245,9 @@ public class Map extends org.jxmapviewer.JXMapViewer {
              */
             private void addActiveAirports(AirportSet airportSet) {
                 for(Airport airport : airportSet.getActiveAirports()) {
-                    this.itemPainter.getActiveAirportWaypoints().add(new ActiveAirportWaypoint(airport, airport.getCoordinate()));
+                    ActiveAirportWaypoint wp = new ActiveAirportWaypoint(airport, airport.getCoordinate());
+                    this.itemPainter.getActiveAirportWaypoints().add(wp);
+                    this.itemPainter.getWpButtons().add(wp.getWaypointButton());
                 }
             }
 
@@ -256,7 +258,9 @@ public class Map extends org.jxmapviewer.JXMapViewer {
              */
             private void addInactiveAirports(AirportSet airportSet) {
                 for(Airport airport : airportSet.getInactiveAirports()) {
-                    this.itemPainter.getInactiveAirportWaypoints().add(new InactiveAirportWaypoint(airport, airport.getCoordinate()));
+                    InactiveAirportWaypoint wp = new InactiveAirportWaypoint(airport, airport.getCoordinate());
+                    this.itemPainter.getInactiveAirportWaypoints().add(wp);
+                    this.itemPainter.getWpButtons().add(wp.getWaypointButton());
                 }
             }
 
@@ -282,6 +286,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             private void removeActiveAirports(AirportSet airportSet) {
                 for(Airport airport : airportSet.getActiveAirports()) {
                     this.itemPainter.getActiveAirportWaypoints().remove(airport.getWaypoint());
+                    this.itemPainter.getWpButtons().remove(airport.getWaypoint().getWaypointButton());
                 }
             }
 
@@ -293,6 +298,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             private void removeInactiveAirports(AirportSet airportSet) {
                 for(Airport airport : airportSet.getInactiveAirports()) {
                     this.itemPainter.getInactiveAirportWaypoints().remove(airport.getWaypoint());
+                    this.itemPainter.getWpButtons().remove(airport.getWaypoint().getWaypointButton());
                 }
             }
 
@@ -378,7 +384,9 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         public void clearAll() {
         
             for(MapWaypointButton mwb : this.itemPainter.getWpButtons()) {
+                System.out.println("helo");
                 this.remove(mwb);
+                this.itemPainter.getWpButtons().remove(mwb);
             }
 
             this.itemPainter.clearAll();

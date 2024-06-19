@@ -282,6 +282,8 @@ public class NImportButtonPanel extends JPanel {
 
         // First button : Step directly in the NMainScreen
         confirmStart.addActionListener((ActionEvent e) -> {
+            if(app.getMainScreen().getMap() != null)
+                app.getMainScreen().getMap().clearAll();
             this.app.switchToMainScreen();
         });
 
@@ -291,12 +293,13 @@ public class NImportButtonPanel extends JPanel {
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
             fileChooser.userImportFile();
 
-            if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
+            if(fileChooser.getFile() != null) {
                 try {
                     this.app.setGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     ImportationTestGraph.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
                         fileChooser.getFile(), false);
                     
+                    app.getMainScreen().getMap().clearAll();
                     app.getMainScreen().initGraphBottomPanel();   
                     initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
@@ -386,6 +389,7 @@ public class NImportButtonPanel extends JPanel {
             if(this.airportsImported && this.flightsImported) {
                 this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
                 this.app.switchToMainScreen();
+                this.app.getMainScreen().getMap().clearAll();
                 this.app.getMainScreen().initMap();
             }
         });

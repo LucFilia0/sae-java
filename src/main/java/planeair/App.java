@@ -175,7 +175,7 @@ public class App extends javax.swing.JFrame {
      */
     private void initAttributes() {
 
-        this.airportSet = new AirportSet() ;
+        this.airportSet = null; //new AirportSet() ;
         this.fig = new FlightsIntersectionGraph("FIG") ;
         this.testGraph = new TestGraph("TestGraph") ;
 
