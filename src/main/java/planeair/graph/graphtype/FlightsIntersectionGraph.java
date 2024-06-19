@@ -1,15 +1,24 @@
 package planeair.graph.graphtype;
 
-//-- Import Plane AIR
+//#region IMPORTS
 
-import planeair.exceptions.InvalidEntryException;
+    //#region EXCEPTIONS
 
-//-- Import GraphStream
+    import planeair.exceptions.InvalidEntryException;
 
+    //#endregion
+
+//#endregion
 
 /**
- * The FlightIntersectionGraph represents the collisions between Flights.
- * The nodes of the Graph are the Flights.
+ * The FlightIntersectionGraph (aka. FIG) represents the collisions between Flights.
+ * The nodes of the Graph are the Flights. Nodes (Flights) of the same color are placed
+ * at the same altitude.
+ * 
+ * An edge between two Nodes(Flights) means that, if these Flights were on the same layer(altitude),
+ * then they will collide.
+ *  
+ * To avoid that, coloring algorithms are used to spread Flights on different altitudes.
  * 
  * @implNote Uses the GraphStream attributes.
  * 
@@ -17,15 +26,19 @@ import planeair.exceptions.InvalidEntryException;
  */
 public class FlightsIntersectionGraph extends GraphSAE {
 
-    //-- FIG Attributes
-
-    //-- FIG Constructor
+    //#region CONSTRUCTORS
 
     /**
-     * Constructor of the FlightsIntersectionGraph (FIG) class.
-     * Creates a new FIG.
+     * Creates a new FlightsIntersectionGraph.
+     * The Nodes of a FIG are Flights, and their color represents their altitude.
+     * Flights of the same color are placed on the same altitude.
      * 
-     * @param id (String) - The identifier of the FIG.
+     * An edge between two Nodes(Flights) means that, if these Flights were on the same layer(altitude),
+     * then they will collide.
+     * 
+     * To avoid that, coloring algorithms are used to spread Flights on different altitudes.
+     * 
+     * @param id The identifier of the FIG
      * 
      * @author Luc le Manifik
      */
@@ -33,18 +46,31 @@ public class FlightsIntersectionGraph extends GraphSAE {
         super(id); // -> The identifier of the FIG, in the parent class (SingleGraph)
     }
 
-    //-- FIG toString()
+    //#endregion
+
+    //#region TOSTRING
 
     /**
      * toString() FIG's method.
+     * Prompts the informations of the FIG in a nice format
+     * 
+     * @return The informations of the FIG
      */
     public String toString() {
-        return "-- Flights Intersection Graph\nIdentifier : " + super.id + "\nNumber of Flights : " + this.getNodeCount() + "\nNumber of collisions : " + this.getNbConflicts();
+        return "<html><strong>FIG :</strong> " + 
+            super.id + 
+            "<br><strong>Number of Flights :</strong> " + 
+            this.getNodeCount() + 
+            "<br><strong>Number of collisions :</strong> " + 
+            this.getNbConflicts() + 
+            "</html>";
     }
+
+    //#endregion
 
     /**
      * Sets the total number of colors used to color the graph
-     * @param nbConflicts new number of colors
+     * @param nbColors new number of colors
      */
     public void setNbColors(int nbColors) {
         if (nbColors < 0) {

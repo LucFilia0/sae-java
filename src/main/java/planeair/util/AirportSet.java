@@ -1,27 +1,36 @@
 package planeair.util;
 
-//-- Import Java
+//#region IMPORTS
 
-import java.util.HashSet;
+    //#region JAVA
 
-//-- Import Exceptions
+    import java.util.HashSet;
 
-import planeair.exceptions.ObjectNotFoundException;
-import planeair.graph.graphtype.FlightsIntersectionGraph;
+    //#endregion
+
+    //#region PLANEAIR
+
+    import planeair.exceptions.ObjectNotFoundException;
+    import planeair.graph.graphtype.FlightsIntersectionGraph;
+
+    //#endregion
+
+//#endregion
 
 /**
  * The AirportSet class is a container for the Airport class.
  * It stores the Airports in a HashSet<Airport>.
- * It also has the importations functions, to read a file and create a Set of Airport from it.
+ * It also contains two other Sets : the "activeAirports" Set and the "inactiveAirports" Set,
+ * which each contains the ActiveAirports (in red) and the InactiveAirports (in gray) 
  * 
  * @author Luc le Manifik
  */
 public class AirportSet extends HashSet<Airport> {
 
-    //-- AirportSet Attributes
+    //#region ATTRIBUTES
 
     /**
-     * Set which contains all the active Airports. The red ones.
+     * Set which contains all the active Airports. The red ones
      */
     private HashSet<Airport> activeAirports;
 
@@ -30,10 +39,14 @@ public class AirportSet extends HashSet<Airport> {
      */
     private HashSet<Airport> inactiveAirports;
 
-    //-- AirportSet Constructor
+    //#endregion
+
+    //#region CONSTRUCTORS
 
     /**
      * Creates a new AirportSet.
+     * AirportSets Extends {@link java.util.HashSet HashSets} and contains two more Sets : "activeAirports" and "inactiveAirports".
+     * These two Sets need to be filled whith the "setActiveAirportsFrom(FlightsIntersectionGraph)" 
      * 
      * @author Luc le Manifik
      */
@@ -42,13 +55,15 @@ public class AirportSet extends HashSet<Airport> {
         this.inactiveAirports = new HashSet<Airport>();
     }
 
-    //-- AirportSet Getters
+    //#endregion
+
+    //#region GETTERS
 
     /**
      * Returns the Set of the active Airports, which means the ones that are crossed by Flights.
      * They are in red on the Map.
      * 
-     * @return ({@link java.util.HashSet HashSet<Airport>}) - The Set which contains all the active Airports
+     * @return The {@link java.util.HashSet HashSet} which contains all the active Airports
      * 
      * @author Luc le Manifik
      */
@@ -60,7 +75,7 @@ public class AirportSet extends HashSet<Airport> {
      * Returns the Set of the inactive Airports, which means the ones that ARE NOT used by the Flights.
      * They are in red on the Map.
      * 
-     * @return ({@link java.util.HashSet HashSet<Airport>}) - The Set which contains all the unused Airports
+     * @return The {@link java.util.HashSet HashSet} which contains all the unused Airports
      * 
      * @author Luc le Manifik
      */
@@ -68,16 +83,20 @@ public class AirportSet extends HashSet<Airport> {
         return this.inactiveAirports;
     }
 
-    //-- AirportSet Methods
-
     /**
-     * Get an Aiport by his name.
+     * Searches and returns an {@link planeair.util.Aiport Airport}, by giving his name.
+     * If the Airport does not exist, then an exception is raised.
      * 
-     * @param name (String) - The name searched.
-     * @return airport ({@link util.Airport util.Airport})
-     * @throws ObjectNotFoundException Throwed if none airport in AiportSet has the searched name.
+     * @param name The name of the searched Airport
+     * 
+     * @return The found {@link util.Airport util.Airport}
+     * 
+     * @throws ObjectNotFoundException Threw if none airport in the AiportSet has the searched name
+     * 
+     * @author Luc le Manifik
      */
     public Airport getAirport(String name) throws ObjectNotFoundException {
+
         for(Airport airport : this) {
             if(airport.getName().equals(name)) {
                 return (Airport)airport;
@@ -86,8 +105,12 @@ public class AirportSet extends HashSet<Airport> {
         throw new ObjectNotFoundException();
     }
 
+    //#endregion
+
+    //#region PUBLIC METHODS
+
     /**
-     * Prompt all the informations of all the Flights in the console
+     * Prompts all the informations of all the Airports in the console
      * 
      * @author Luc le Manifik
      */
@@ -102,7 +125,7 @@ public class AirportSet extends HashSet<Airport> {
      * It must be called after the Flights' importation, because it needs the Flights to know
      * if it's used or not.
      * 
-     * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG which contains all the Airports
+     * @param fig The {@link graph.FlightsIntersectionGraph FIG} which contains all the Airports
      * 
      * @author Luc le Manifik
      */
@@ -118,4 +141,6 @@ public class AirportSet extends HashSet<Airport> {
             }
         }
     }
+
+    //#endregion
 }

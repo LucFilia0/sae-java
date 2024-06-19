@@ -1,18 +1,27 @@
 package planeair.components.menu;
 
-// import SWING components
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+//#region IMPORT
+    //#region .SWING
+    import javax.swing.JLabel;
+    import javax.swing.JPanel;
+    import javax.swing.SwingConstants;
+    //#endregion
 
-// import AWT components
-import java.awt.Dimension;
+    //#region .AWT
+    import java.awt.Dimension;
+    //#endregion
 
-// import LAYOUT
-import java.awt.GridLayout;
+    //#region LAYOUT
+    import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+//#endregion
+import java.awt.event.ItemListener;
 
-import planeair.App;
-import planeair.components.mapview.Map;
+//#region PLANEAIR
+    import planeair.App;
+    import planeair.components.mapview.Map;
+    //#endregion
+//#endregion
 
 /**
  * Create a panel Menu for Map
@@ -32,67 +41,130 @@ import planeair.components.mapview.Map;
  */
 public class NMapMenuPanel extends JPanel {
 
-    /**
-     * JLabel for the title of the Panel NMenuPanelApp
-     */
-    private JLabel titleMenu = new JLabel("MENU MAP", SwingConstants.CENTER);
-
-    // Flight Lines
+    //#region STATIC VARIABLES
 
     /**
-     * The checkBox for setting if flight lines are visible in the Map
-     * Represent flight's trajectory
+     * The number of NMapCheckBoxes in the Panel
      */
-    private NMapCheckBox flightLines = new NMapCheckBox("Lignes de vols");
+    public static final int NB_CHECK_BOXES = 4;
 
+    //#endregion
 
-    // Airoport Used
+    //#region INSTANTIALISATION AND INITIALISATION
 
-    /**
-     * The checkBox for setting if Airport used are visible in the Map (red icon)
-     * Their is 2 possibility : the airport is used by a flight, or no, so it's call airport not used
-     */
-    private NMapCheckBox airportUsed = new NMapCheckBox("Aéroports utilisés");
+        //#region Title
+        /**
+         * JLabel for the title of the Panel NMenuPanelApp
+         */
+        private JLabel titleMenu = new JLabel("MENU MAP", SwingConstants.CENTER);
+        //#endregion
 
+        //#region CheckBoxes
 
-    // Airoport NOT Used
-    
-    /**
-     * The checkBox for setting if Airport not used are visible in the Map (grey icon)
-     * Their is 2 possibility : the airport used by a flight, or no, so it's call airport not used
-     */
-    private NMapCheckBox airportNotUsed = new NMapCheckBox("Aéroports non utilisés");
+        /**
+         * The different NCheckBoxes of the panel
+         */
+        private NMapCheckBox[] checkBoxes = new NMapCheckBox[NB_CHECK_BOXES];
 
-    // Flight Icon
+        /**
+         * The labels linked to the different NCheckBoxes
+         */
+        private String[] parameterNames = new String[] {"Lignes de vol", "Aéroports utilisés", "Aéroports inutilisés", "Vols"};
 
-    private NMapCheckBox flightIcon = new NMapCheckBox("Vols");
+        /**
+         * the Map which the panel repaints 
+         */
+        private Map map;
+        
+        //#endregion
 
+    //#endregion
 
+    //#region CONSTRUCTOR
     /**
      * Constructor of NMenuPanelApp
      * @param map the used map of the App
      */
     public NMapMenuPanel(Map map){
 
+        this.map = map;
+
         this.setBackground(App.KINDAYELLOW);
         this.setPreferredSize(new Dimension(225,300));
         this.setLayout( new GridLayout(5,1,0,15));
+
+        initComponents();
+
+       //#region ADD
 
        //Title Menu
        titleMenu.setFont(App.KINDATITLE);
        this.add(titleMenu);
 
-       //Flight Lines
-       this.add(flightLines);
+       //#endregion
 
-       // Airoport Used
-       this.add(airportUsed);
+       //#region DEFAULT SETUP
+        for(int i = 0; i < NB_CHECK_BOXES; ++i) {
+            this.checkBoxes[i].setSelected(true);
+        }
+       //#endregion
+    } 
+    //#endregion   
 
+    //#region PRIVATE METHODS
 
-       // Airoport NOT Used
-       this.add(airportNotUsed);
+    /**
+     * This method initiates the components of the panel
+     */
+    private void initComponents() {
+        for(int i = 0; i < NB_CHECK_BOXES; ++i) {
+            this.checkBoxes[i] = new NMapCheckBox(this.parameterNames[i]);
+            addEvent(this.checkBoxes[i]);
+            this.add(this.checkBoxes[i]);
+        }
+    }
 
-       //  Flight Icon
-       this.add(flightIcon);
-    }    
+    private void addEvent(NMapCheckBox checkBox) {
+        checkBox.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                map.repaint();
+            }
+            
+        });
+    }
+
+    //#endregion
+
+    //#region GETTERS
+
+    /**
+     * @return "True" if the lines of the Flights must be prompt, else "false"
+     */
+    public boolean mustShowFlightLines() {
+        return this.checkBoxes[0].isSelected();
+    }
+
+    /**
+     * @return "True" if the ActiveAirports must be prompt, else "false"
+     */
+    public boolean mustShowActiveAirports() {
+        return this.checkBoxes[1].isSelected();
+    }
+
+    /**
+     * @return "True" if the InactiveAirport must be prompt, else "false"
+     */
+    public boolean mustShowInactiveAirports() {
+        return this.checkBoxes[2].isSelected();
+    }
+
+    /**
+     * @return "True" if the Flights must be prompt, else "false"
+     */
+    public boolean mustShowFlights() {
+        return this.checkBoxes[3].isSelected();
+    }
+    //#endregion
 }

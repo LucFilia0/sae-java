@@ -1,36 +1,49 @@
 package planeair.components.menu;
 
+//#region IMPORT
+    //#region .SWING
+    import javax.swing.JPanel;
+    import javax.swing.JLabel;
+    import javax.swing.JList;
+    import javax.swing.JButton;
+    import javax.swing.JComboBox;
+    import javax.swing.SwingConstants;
+    //#endregion
 
-// Import swing components
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.SwingConstants;
+    //#region .AWT
+    import java.awt.Color;
+    import java.awt.Component;
+    import java.awt.Dimension;
+    import java.awt.Font;
+    import java.awt.GridBagLayout;
+    //#endregion
 
+    //#region LAYOUT
+    import java.awt.GridLayout;
+    import java.awt.event.ActionEvent;
+    import java.awt.event.ActionListener;
+    import java.awt.FlowLayout;
+    //#endregion
 
-// Import awt components
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-//Import Layout
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.FlowLayout;
+    //#region PLANEAIR
 
-import planeair.App;
-import planeair.components.comboboxes.NComboBoxGraph;
-import planeair.components.comboboxes.NComboBoxTime;
-import planeair.components.comboboxes.renders.NDefaultRenderer;
-import planeair.components.comboboxes.renders.NTimeComboBoxRenderer;
-import planeair.graph.coloring.ColoringUtilities;
-import planeair.graph.graphtype.FlightsIntersectionGraph;
-import planeair.graph.graphtype.GraphSAE;
-import planeair.graph.graphutil.PanelCreator;
+        import planeair.App;
+        //#region COMPONENTS
+        import planeair.components.comboboxes.NComboBoxGraph;
+        import planeair.components.comboboxes.NComboBoxTime;
+        import planeair.components.comboboxes.renders.NDefaultRenderer;
+        import planeair.components.comboboxes.renders.NTimeComboBoxRenderer;
+        import planeair.components.menu.infos.NGraphInfoPanel;
+        //#endregion
+        
+        //#region GRAPH
+        import planeair.graph.coloring.ColoringUtilities;
+        import planeair.graph.graphtype.FlightsIntersectionGraph;
+        import planeair.graph.graphtype.GraphSAE;
+        import planeair.graph.graphutil.PanelCreator;
+        //#endregion
+//#endregion 
+//#endregion
 
 /**
  * Class which create a JPanel of MENU for the graph 
@@ -41,125 +54,137 @@ import planeair.graph.graphutil.PanelCreator;
  */
 public class NGraphMenuPanel extends JPanel{
 
-    /**
-     * 
-     */
-    public static final Dimension KINDACOMBOBOXDIMENSION = new Dimension(200,33);
+    //#region INSTANTIALISATION AND INITIALISATION
 
-    /**
-     * JLabel for the title of the Panel NMenuPanelApp
-     */
-    private JLabel titleMenu = new JLabel("MENU GRAPHE", SwingConstants.CENTER);
+        //#region STATIC
+        /**
+         * Default Dimension for Menu Graph ComboBox
+         */
+        public static final Dimension KINDACOMBOBOXDIMENSION = new Dimension(200,33);
+        //#endregion
 
-    //KMAX
+        //#region TITLE
+        /**
+         * JLabel for the title of the Panel NMenuPanelApp
+         */
+        private JLabel titleMenu = new JLabel("MENU GRAPHE", SwingConstants.CENTER);
+        //#endregion
 
-    /**
-     * Panel for Kmax option
-     */
-    private JPanel kmaxOption = new JPanel();
+        //#region KMAX
+        /**
+         * Panel for Kmax option
+         */
+        private JPanel kmaxOption = new JPanel();
 
-    /**
-     * JLabel change KMax
-     */
-    private JLabel changeKmax = new JLabel("Changer Kmax", SwingConstants.CENTER);
+        /**
+         * JLabel change KMax
+         */
+        private JLabel changeKmax = new JLabel("Changer Kmax", SwingConstants.CENTER);
 
-    /**
-     * Panel for create an empty border to the JComboBox Kmax
-     */
-    private JPanel borderPanelKmax = new JPanel();
+        /**
+         * Panel for create an empty border to the JComboBox Kmax
+         */
+        private JPanel borderPanelKmax = new JPanel();
+        //#endregion
 
-    //ALTITUDES
+        //#region ALTITUDES
+        /**
+         * Panel for altitudeMax option
+         */
+        private JPanel altitudeMaxOption = new JPanel();
+        /**
+         * Title of the choose ComboBox 
+         */
+        private JLabel colorChoice = new JLabel("Choix de la couleur", SwingConstants.CENTER);
+        /**
+         * JComboBox for choose the altitude (or everyone)
+         * "Toutes" -> for everyone
+         * A number between [first altitude; last altitude]
+         */
+        private NComboBoxGraph altitudeComboBox = new NComboBoxGraph();
 
-    /**
-     * Panel for altitudeMax option
-     */
-    private JPanel altitudeMaxOption = new JPanel();
-    /**
-     * Title of the choose ComboBox 
-     */
-    private JLabel colorChoice = new JLabel("Choix de la couleur", SwingConstants.CENTER);
+        /**
+         * Panel for create an empty border to the JComboBox altitude
+         */
+        private JPanel borderPanelAlt = new JPanel();
+        //#endregion
 
-    /**
-     * JComboBox for choose the altitude (or everyone)
-     * "Toutes" -> for everyone
-     * A number between [first altitude; last altitude]
-     */
-    private NComboBoxGraph altitudeComboBox = new NComboBoxGraph();
+        //#region SAFETY MARGIN
+        /**
+         * Panel for Margin option
+         */
+        private JPanel marginOptionPanel = new JPanel();
+        /**
+         * Title of the choose ComboBox 
+         */
+        private JLabel safetyMargin = new JLabel("Changer marge sécurité", SwingConstants.CENTER);
+        /**
+         * JComboBox for choose the margin (default : 15min)
+         * A number between [  ;  ]
+         */
+        private NComboBoxTime marginComboBox = new NComboBoxTime(59, NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
 
-    /**
-     * Panel for create an empty border to the JComboBox altitude
-     */
-    private JPanel borderPanelAlt = new JPanel();
+        /**
+         * Panel for create an empty border to the JComboBox safety margin
+         */
+        private JPanel borderPanelMargin = new JPanel();
+        //#endregion
 
-    //CHANGE SAFETY MARGIN 
+        //#region ALGORITHMES
+        /**
+         * Panel for algo option
+         */
+        private JPanel algoOption = new JPanel();
+        /**
+         * JLabel title for algorithmes (DSATUR + RLF)
+         */
+        private JLabel algorithmes = new JLabel("Algorithmes", SwingConstants.CENTER );
+        /**
+         * JcomboBox that help too choose an algo for the coloration
+         */
+        private JComboBox<String> algoChoice = new JComboBox<>();
+        /**
+         * JPanel for put the JComboBox (choose algo) next to JButton (validate) 
+         */
+        private JPanel borderPanelAlgo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        //#endregion
 
-    /**
-     * Panel for Margin option
-     */
-    private JPanel marginOptionPanel = new JPanel();
-    /**
-     * Title of the choose ComboBox 
-     */
-    private JLabel safetyMargin = new JLabel("Changer marge sécurité", SwingConstants.CENTER);
-    /**
-     * JComboBox for choose the margin (default : 15min)
-     * A number between [  ;  ]
-     */
-    private NComboBoxTime marginComboBox = new NComboBoxTime(59, NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
+        //#region CONFIRM
+        /**
+         * Panel For confirm button , CENTER alignement(BoxLayout)
+         */
+        private JPanel layoutConfirm = new JPanel(new GridBagLayout());
 
-    /**
-     * Panel for create an empty border to the JComboBox safety margin
-     */
-    private JPanel borderPanelMargin = new JPanel();
+        /**
+         * Use the algo of the ComboBox (validate)
+         * For help the PC to not automatally have to change of coloration all the time the user change of SelectedItem
+         */
+        private JButton confirmButton = new JButton("Valider");
+        //#endregion
 
-    //ALGORITHMS
+        //#region COMBOBOX
+        /**
+         * ComboBox containing kMax 
+         */
+        private NComboBoxGraph kmaxComboBox ;
+        //#endregion
 
-    /**
-     * Panel for algo option
-     */
-    private JPanel algoOption = new JPanel();
-    /**
-     * JLabel title for algorithmes (DSATUR + RLF)
-     */
-    private JLabel algorithmes = new JLabel("Algorithmes", SwingConstants.CENTER );
-     /**
-     * JcomboBox that help too choose an algo for the coloration
-     */
-    private JComboBox<String> algoChoice = new JComboBox<>();
-    /**
-     * JPanel for put the JComboBox (choose algo) next to JButton (validate) 
-     */
-    private JPanel borderPanelAlgo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        //#region SELECTED
+        /**
+         * String containing the last algo selected
+         */
+        private String lastAlgoSelected = null ;
+        //#endregion
 
-    //CONFIRM
+        //#region APP
+        /**
+         * Homepage blablabla
+         */
+        private App app ;
+        //#endregion
+    //#endregion 
 
-    /**
-     * Panel For confirm button , CENTER alignement(BoxLayout)
-     */
-    private JPanel layoutConfirm = new JPanel(new GridBagLayout());
-
-    /**
-     * Use the algo of the ComboBox (validate)
-     * For help the PC to not automatally have to change of coloration all the time the user change of SelectedItem
-     */
-    private JButton confirmButton = new JButton("Valider");
-
-    /**
-     * ComboBox containing kMax 
-     */
-    private NComboBoxGraph kmaxComboBox ;
-
-    /**
-     * String containing the last algo selected
-     */
-    private String lastAlgoSelected = null ;
-
-    /**
-     * Homepage blablabla
-     */
-    private App app ;
-
-
+    //#region CONSTRUCTOR
     /**
      * Constructor of NMenuPanelApp
      * @param kmax
@@ -295,7 +320,9 @@ public class NGraphMenuPanel extends JPanel{
         initListeners() ;
         initRenderers() ;
     }
+    //#endregion
 
+    //#region INIT / SETTER /GETTER
     /**
      * Fills the altitude comboBox with the correct values and defines its Render
      * @param kmax
@@ -468,6 +495,10 @@ public class NGraphMenuPanel extends JPanel{
         return (String)this.algoChoice.getSelectedItem() ;
     }
 
+    /**
+     * Fuck Liegeon
+     * @return
+     */
     public Integer getLastColorSelected() {
         return this.lastColorSelected ;
     }
@@ -499,7 +530,9 @@ public class NGraphMenuPanel extends JPanel{
     public void setLastAlgoSelected(String lastAlgoSelected) {
         this.lastAlgoSelected = lastAlgoSelected ;
     }
+    //#endregion
 
+    //#region COLORING
     /**
      * Changes the coloring of this graph best on the kmax and algorithm selected
      * @param graph
@@ -562,4 +595,5 @@ public class NGraphMenuPanel extends JPanel{
             graph.showNodesWithColor(lastColorSelected) ;
         }
     }
+    //#endregion
 }

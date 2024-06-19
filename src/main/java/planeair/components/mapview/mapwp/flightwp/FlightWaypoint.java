@@ -1,49 +1,63 @@
 package planeair.components.mapview.mapwp.flightwp;
 
-//-- Import Java
+//#region IMPORTS
 
-import java.io.File;
+    //#region JAVA
 
-//-- Import JxMapViewer
+    import java.io.File;
 
-import org.jxmapviewer.viewer.GeoPosition;
+    //#endregion
 
-import planeair.components.mapview.mapwp.MapWaypoint;
-import planeair.graph.graphutil.Flight;
+    //#region JXMAPVIEWER
+
+    import org.jxmapviewer.viewer.GeoPosition;
+
+    //#endregion
+
+    //#region PLANEAIR
+
+    import planeair.components.mapview.mapwp.MapWaypoint;
+    import planeair.graph.graphutil.Flight;
+
+    //#endregion
+
+//#endregion
 
 /**
  * This class is the MapWaypoint which is used to represent Flights on the Map.
+ * It is represented by little planes, flying across the Map.
  * 
  * @author Luc le Manifik
  */
 public class FlightWaypoint extends MapWaypoint {
     
-    //-- FlightWaypoint Constants
+    //#region STATIC VARIABLES
 
     /**
-     * The file which contains the icon of the flights ({@link java.io.File})
+     * The file which contains the icon of the flights ({@link java.io.File File})
      */
     public static final File FLIGHT_WAYPOINT_ICON_FILE = new File("./icons/waypoints/plane.png");
 
-    /**
-     * The file which contains the icon of the flights ({@link java.io.File})
-     */
-    public static final File FLIGHT_CLICKED_WAYPOINT_ICON_FILE = new File("./icons/waypoints/planeClicked.png") ;
+    //#endregion
 
-    //-- FlightWaypoint Attributes
+    //#region ATTRIBUTES
 
     /**
-     * The Flight which is represented by the FlightWaypoint
+     * The Flight which is represented by the FlightWaypoint.
+     * Used to get the informations of the clicked Flight
      */
     private Flight flight;
 
-    //-- FlightWaypoint Constructor
+    //#endregion
+
+    //#region CONSTRUCTORS
 
     /**
-     * The FlightWaypoint class constructor. Creates a new FlightWaypoint.
+     * Creates a new FlightWaypoint.
+     * FlightWaypoints are represented by planes, flying across the Map.
      * 
-     * @param name (String) - The name of the Flight
-     * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The (current) position of the Flight.
+     * @param flight ({@link planeair.graph.graphutil.Flight Flight}) - The Flight which is represented by the FlightWaypoint
+     * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition GeoPosition}) - The (current) position of the Flight
      * 
      * @author Luc le Manifik
      */
@@ -53,17 +67,22 @@ public class FlightWaypoint extends MapWaypoint {
         this.flight.setFlightWaypoint(this) ;
     }
 
-	//-- FlightWaypoint Getters
+    //#endregion
+
+    //#region GETTERS
 	
 	/**
 	 * Returns the Flight represented by the FlightWaypoint
-	 *
+     * 
+     * @return ({@link planeair.graph.graphutil.Flight Flight}) - The Flight represented by the FlightWaypoint 
 	 */
 	public Flight getFlight() {
 		return this.flight;
 	}
 
-	//-- FlightWaypoint Setters
+    //#endregion
+
+	//#region SETTERS
 	
 	/**
 	 * Sets the new value of the flight represented by the FlightWaypoint
@@ -74,27 +93,32 @@ public class FlightWaypoint extends MapWaypoint {
 		}
 	}
 
+    //#endregion
+
+    //#region PRIVATE FUNCTIONS
+
     /**
-     * Returns the toString value of the represented Flight : Its informations and all...
+     * Returns the current orientation of the Flight, based on the departure and arrival Airports.
+     * 
+     * @param flight ({@link planeair.graph.graphutil.Flight Flight}) - The Flight we wish to represent, and from which we will calculate the orientation, based on the departure and arrival airports
+     * 
+     * @return (double) - The orientation, in radians, of the Flight
      * 
      * @author Luc le Manifik
      */
-    public String toString() {
-        return this.flight.toString();
-    }
-
     private static double getFlightOrientation(Flight flight) {
 
         double radian = 0.;
         int offset = 45;
 
+        // Gets the departure and arrival Airports coordinates
         double latitudeDep = flight.getDepartureAirport().getCoordinate().getLatitude();
         double longitudeDep = flight.getDepartureAirport().getCoordinate().getLongitude();
 
         double latitudeArr = flight.getArrivalAirport().getCoordinate().getLatitude();
         double longitudeArr = flight.getArrivalAirport().getCoordinate().getLongitude();
 
-        // TRIGO
+        // TRIGO 🤓
 
         double adj = longitudeArr - longitudeDep;
         double op = latitudeArr - latitudeDep;
@@ -104,7 +128,7 @@ public class FlightWaypoint extends MapWaypoint {
         double cos = adj / hyp;
 
         if(sin > 0) {
-            radian = -(Math.acos(cos)); // DONT touch or you dead :angry_skull:
+            radian = -(Math.acos(cos)); // DONT touch or you dead 🤬
         }else {
             radian = -(Math.toRadians(360) - Math.acos(cos));
         }
@@ -112,7 +136,18 @@ public class FlightWaypoint extends MapWaypoint {
         return radian + Math.toRadians(offset);
     }
 
-    
+    //#endregion
 
+    //#region TOSTRING
 
+    /**
+     * Returns the toString of the Represented Flight
+     * 
+     * @author Luc le Manifik
+     */
+    public String toString() {
+        return this.flight.toString();
+    }
+
+    //#endregion
 }

@@ -1,9 +1,21 @@
 package planeair.util;
 
-import java.sql.Time;
-import java.time.LocalTime;
+//#region IMPORTS
 
-import planeair.exceptions.InvalidTimeException;
+    //#region JAVA
+
+    import java.sql.Time;
+    import java.time.LocalTime;
+
+    //#endregion
+
+    //#region PLANEAIR
+
+    import planeair.exceptions.InvalidTimeException;
+
+    //#endregion
+
+//#endregion
 
 /**
  * Class handling hours and minutes only for easier access and manipulation in the {@link graph.Flight Flight class}

@@ -1,15 +1,24 @@
 package planeair.util;
 
-// Import PlaneAIR
-import planeair.exceptions.InvalidCoordinateException;
+//#region IMPORTS
+
+    //#region PLANEAIR
+
+    import planeair.exceptions.InvalidCoordinateException;
+
+    //#endregion
+
+//#endregion
 
 /**
- * This class extends {@link org.jxmapviewer.viewer.GeoPosition GeoPosition} but takes care of the direction char ('N', 'E'...) that are
- * stored in the source file.
+ * This class extends {@link org.jxmapviewer.viewer.GeoPosition GeoPosition}, from JxMapViewer, but takes care of the direction char ('N', 'E'...) that are
+ * stored in the source file. The final values of the Coordinate are stored as doubles.
  * 
  * @author Luc le Manifik
  */
 public class Coordinate extends org.jxmapviewer.viewer.GeoPosition {
+
+    //#region ATTRIBUTES
 
     // Latitude
 
@@ -54,15 +63,20 @@ public class Coordinate extends org.jxmapviewer.viewer.GeoPosition {
      * Longitude's direction
      */
     private char lonDirection;
+
+    //#endregion
     
+    //#region CONSTRUCTORS
+
     /**
      * Creates a new Coordinate. Extends {@link org.jxmapviewer.viewer.GeoPosition GeoPosition}, so it can be used with JXMapViewer
-     * and contains both Latitude and Longitude values
+     * and contains both Latitude and Longitude values.
      * 
      * @param latDegree The latitude degree
      * @param latMinutes The latitude minutes
      * @param latSeconds The latitude seconds
      * @param latDirection The latitude direction ('N' or 'S')
+     * 
      * @param lonDegree The longitude degree
      * @param lonMinutes The longitude minutes
      * @param lonSeconds The longitude seconds
@@ -93,6 +107,29 @@ public class Coordinate extends org.jxmapviewer.viewer.GeoPosition {
         this.lonSeconds = lonSeconds;
         this.lonDirection = lonDirection;
     }
+
+    //#endregion
+
+    //#region TOSTRING
+
+    /**
+     * Returns the Coordinate in a great format (Ex: 12° 13' 14'' | 12° 12' 12'')
+     * 
+     * @return The String which represents the Coordinate
+     * 
+     * @author Luc le Manifik
+     */
+    @Override
+    public String toString() {
+
+        return this.latDegree + "° " + this.latMinutes + "' " + this.latSeconds + "'' " + this.latDirection
+         + " | " +
+         this.lonDegree + "° " + this.lonMinutes + "' " + this.lonSeconds + "'' " + this.lonDirection;
+    }
+
+    //#endregion
+
+    //#region PRIVATE FUNCTIONS
 
     /**
      * Creates a new Coordinate, but putting a negative value if there is 'S' or 'O'
@@ -138,17 +175,5 @@ public class Coordinate extends org.jxmapviewer.viewer.GeoPosition {
         return decimalCoordinate;
     }
 
-    /**
-     * Returns the Coordinate in a great format
-     * 
-     * @return The String which represents the Coordinate
-     * 
-     * @author Luc le Manifik
-     */
-    @Override
-    public String toString() {
-        return this.latDegree + "° " + this.latMinutes + "' " + this.latSeconds + "'' " + this.latDirection
-         + " | " +
-         this.lonDegree + "° " + this.lonMinutes + "' " + this.lonSeconds + "'' " + this.lonDirection;
-    }
+    //#endregion
 }

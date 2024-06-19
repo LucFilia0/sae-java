@@ -1,13 +1,27 @@
 package planeair.components.buttons;
 
-// IMPORT SWING
-import javax.swing.JButton;
+//#region IMPORTATION
 
-import planeair.App;
+    //#region IMPORT SWING
 
-// IMPORT AWT
-import java.awt.Color;
-import java.awt.Dimension;
+    import javax.swing.JButton;
+
+    //#endregion
+
+    //#region IMPORT PLANEAIR
+
+    import planeair.App;
+
+    //#endregion
+
+    //#region IMPORT AWT
+
+    import java.awt.Color;
+    import java.awt.Dimension;
+
+    //#endregion
+
+//#endregion
 
 /**
  * A nice button, filled in black, with text written in white
@@ -16,16 +30,22 @@ import java.awt.Dimension;
  */
 public class NFilledButton extends JButton {
 
+    //#region STATIC VARIABLES
+
     /**
      * The default width of the NFilledButton
      */
-    public static final int FILLED_BUTTON_WIDTH = 90;
+    public static final int FILLED_BUTTON_WIDTH = 110;
 
     /**
      * The default height of the NFilledButton
      */
     public static final int FILLED_BUTTON_HEIGHT = 40;
+
+    //#endregion
     
+    //#region CONSTRUCTORS
+
     /**
      * Creates a new NFilledButton, with default size (width:90, height:40)
      * 
@@ -50,6 +70,10 @@ public class NFilledButton extends JButton {
         this.setPreferredSize(new Dimension(width, height));
     }
 
+    //#endregion
+
+    //#region PRIVATE METHODS
+
     /**
      * Sets the same style for all the constructors 
      */
@@ -58,4 +82,6 @@ public class NFilledButton extends JButton {
         this.setForeground(Color.WHITE);
         this.setBackground(Color.BLACK);
     }
+
+    //#endregion
 }
