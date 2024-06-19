@@ -99,7 +99,7 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
                 if(Map.infoPanel != null)
                     Map.infoPanel.showInfos(mwp.getMapWaypoint());
                 boolean isSelected = mwp.equals(MapWaypointButton.waypointSelected) ;
-                mwp.changeSelection(isSelected) ;
+                mwp.changeSelection(isSelected);
                 if (mwp.getMapWaypoint() instanceof FlightWaypoint) {
                     FlightWaypoint fwp = (FlightWaypoint)mwp.getMapWaypoint() ;
                     if (!isSelected) {

@@ -58,26 +58,18 @@ public class NMainScreen extends JPanel{
         //#region STRUCTURE
         /**
          * Panel wish will situe in the North of the borderLayout of the frame
-         * nb LINE : 3 (PanelNav + HourPanelCenter + HourSliderPanel)
+         * nb LINE : 3 (PanelNav + HourPanelCenter)
          * nb COLUMN : 1
          * hgap : 0
          * vgap : 0
          */
         private JPanel header = new JPanel(new GridLayout(1,1,0,0));
-
         /**
-         * Panel situe in the CENTER of the Frame's borderLayout 
-         * For view the map even if we have the different Panel
+         * Panel locate int the BODY of the Map borderLayout
          */
-        private Map map ;
-
+        // private JPanel body = new JPanel();
         /**
-         * Layout for the BorderLayout CENTER of body
-         */
-        private JPanel bodyCenter = new JPanel();
-
-        /**
-         * Panel situe in the WEST of the body's borderLayout
+         * Panel locate int the ARTICLE of the Map borderLayout
          * Two MENU can appeair here
          * 1) NMenuGraphPanelApp
          * 2) NMenuMapPanelApp
@@ -85,9 +77,25 @@ public class NMainScreen extends JPanel{
         private JPanel article = new JPanel();
 
         /**
-         * Panel situe in the EAST of the body's borderLayout
+         * Panel locate int the ASIDE of the Map borderLayout
          */
         private JPanel aside = new JPanel(new GridLayout());
+
+        /**
+         * Panel locate int th SOUTH of the Map borderLayout
+         * Contain Info for mapWaipoint
+         */
+        private JPanel footer = new JPanel();
+
+        /**
+         * Panel situe in the CENTER of the Frame's borderLayout 
+         * For view the map even if we have the different Panel
+         */
+        private Map map ;
+
+        
+
+        
         //#endregion
 
         //#region HEADER COMPONENTS
@@ -297,8 +305,8 @@ public class NMainScreen extends JPanel{
             //#region LAYOUT
             this.setLayout(new BorderLayout());
             map.setLayout(new BorderLayout());
+            // footer.setLayout(new GridBagLayout());
             panelButton.setLayout(new BoxLayout(panelButton,BoxLayout.X_AXIS));
-            bodyCenter.setLayout(new BoxLayout(bodyCenter, BoxLayout.Y_AXIS));
             //#endregion
 
             //#region HEADER 
@@ -331,7 +339,7 @@ public class NMainScreen extends JPanel{
             //#region BODY 
 
                 //#region ARTICLE
-                bodyCenter.setOpaque(false);
+                // body.setOpaque(false);
                 article.setOpaque(false);
                 article.setPreferredSize(new Dimension(385,100));
                 //#endregion
@@ -348,7 +356,13 @@ public class NMainScreen extends JPanel{
                 aside.setPreferredSize(new Dimension(385,100));
                 aside.setOpaque(false);
                 //#endregion
-            //#endregion   
+
+                //#region FOOTER
+                footer.setOpaque(false);
+                footer.setPreferredSize(new Dimension(this.getWidth(), 150));
+                //#endregion
+            //#endregion  
+            
          }
 
         public void initMap() {
@@ -414,13 +428,20 @@ public class NMainScreen extends JPanel{
             //#region RIGHT
             initGraphBottomPanel();
             aside.add(graphLRightBottom);
-            map.add(aside,BorderLayout.EAST);
+            //#endregion
+
+            //#region FOOTER
+            footer.add(infoPanel);
+        
+
             //#endregion
 
             //#region ADD BORDER LAYOUT
             this.add(header, BorderLayout.NORTH);
             this.add(map, BorderLayout.CENTER);
-            this.map.add(this.infoPanel, BorderLayout.SOUTH);
+            this.map.add(article,BorderLayout.WEST);
+            this.map.add(aside,BorderLayout.EAST);
+            this.map.add(footer, BorderLayout.SOUTH);
             //#endregion
         };
             

@@ -120,25 +120,41 @@ public class Flight extends SingleNode {
 
     /**
      * Returns the informations of Flight in String
+     * It's the first part of the ToString
+     * We need that configuration for the infoPanel of MapWaypoint
      * 
      * @return The informations of the Flight
      */
-    public String toString() {
-        return "<html><h1>Vol</h1><strong>Nom :</strong> " + 
-                super.getId() +
-                "<br><strong>Aéroport de départ :</strong> " +
-                this.getDepartureAirport().getName() +
-                "<br><strong>Aéroport d'arrivée :</strong> " +
-                this.getArrivalAirport().getName() +
-                "<br><strong>Heure de décollage :</strong> " +
-                this.getDepartureTime() +
-                "<br><strong>Durée du vol :</strong> " +
-                this.getFlightDuration() +
-                "<br><strong>Altitude :</strong> " +
-                this.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) +
+    public String toStringFirst() {
+        return "<html><h3>Vol</h3><strong>Nom : </strong> " + super.getId() +"<strong>Heure de décollage :</strong> " + this.getDepartureTime() +
+                
+                "<br><strong>Aéroport de départ : </strong> " + this.getDepartureAirport().getName()  +"<strong>Durée du vol :</strong> " + this.getFlightDuration() + 
+                
+                "<br><strong>Aéroport d'arrivée : </strong> " + this.getArrivalAirport().getName() +"<strong>Altitude :</strong> " + this.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) +
+                                                                                                    
                 "</html>";
     }
 
+    /**
+     * Returns the informations of Flight in String
+     * It's the first part of the ToString
+     * We need that configuration for the infoPanel of MapWaypoint
+     * 
+     * @return The informations of the Flight
+     */
+    public String toStringSecond(){
+
+        return "<html><h3> </h3><strong>Nom : </strong> " + super.getId() +"<strong>Heure de décollage :</strong> " + this.getDepartureTime() +
+                
+                "<strong>Durée du vol :</strong> " + this.getFlightDuration() + 
+                
+                "<strong>Altitude :</strong> " + this.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) +
+                                                                                                    
+                "</html>";
+
+
+
+    }
     // #endregion
 
     // #region GETTERS

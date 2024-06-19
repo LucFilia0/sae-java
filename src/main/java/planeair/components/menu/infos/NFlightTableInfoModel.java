@@ -8,7 +8,9 @@ package planeair.components.menu.infos;
 
     //#region .SWING
     import javax.swing.table.AbstractTableModel;
-    //#endregion
+import javax.swing.table.TableColumnModel;
+
+//#endregion
     //#region .GRAPH
     import planeair.graph.graphutil.Flight;
     //#endregion
@@ -21,35 +23,14 @@ package planeair.components.menu.infos;
  * 
  * @author GIRAUD Nila
  */
-public class FlightTableInfoModel extends AbstractTableModel {
+public class NFlightTableInfoModel extends AbstractTableModel {
 
     /**
      * The airport button selected in the Map IHM component 
      */
     private Airport airport;
 
-    //#region STATIC VARIABLE
-    /**
-     * The Flight leave the airport choose
-     */
-    private static String DEPARTURE = "Départ";
-
-    /**
-     * The Flight arrive in the airport choose
-     */
-    private static String ARRIVAL = "Arrive";
-    //#endregion
-
-    /**
-     * Constructor of the class, Need for taken the choose Airport 
-     * @param airport
-     */
-    public FlightTableInfoModel(Airport airport){
-        super();
-        this.airport = airport;
-    }
-
-    /**
+     /**
      * Title of each section of the table (columns)
      */
     private final String[] titles = {"ID", "Heure", "Etat"};
@@ -58,7 +39,29 @@ public class FlightTableInfoModel extends AbstractTableModel {
      *ArrayList which contain all Flight link witch the choosen Airport
      * In the oject Airport
      */
-    private final List<Flight> listFlight = airport.getFlightList(); 
+    private final List<Flight> listFlight; 
+
+    //#region STATIC VARIABLE
+    /**
+     * The Flight leave the airport choose
+     */
+    private static final String DEPARTURE = "Départ";
+
+    /**
+     * The Flight arrive in the airport choose
+     */
+    private static final String ARRIVAL = "Arrive";
+    //#endregion
+
+    /**
+     * Constructor of the class, Need for taken the choose Airport 
+     * @param airport
+     */
+    public NFlightTableInfoModel(Airport airport){
+        super();
+        this.airport = airport;
+        this.listFlight = airport.getFlightList(); 
+    }
 
     @Override
     public int getRowCount() { return listFlight.size(); }
@@ -81,10 +84,10 @@ public class FlightTableInfoModel extends AbstractTableModel {
                 return flight.getDepartureTime();
             case 2:
                 if (flight.getDepartureAirport() ==  airport) {
-                    return FlightTableInfoModel.DEPARTURE;
+                    return NFlightTableInfoModel.DEPARTURE;
                 } 
                 else {
-                    return FlightTableInfoModel.ARRIVAL;
+                    return NFlightTableInfoModel.ARRIVAL;
                 }   
             default:
                 return null;
