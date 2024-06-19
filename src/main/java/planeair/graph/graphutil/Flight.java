@@ -126,11 +126,11 @@ public class Flight extends SingleNode {
      * @return The informations of the Flight
      */
     public String toStringFirst() {
-        return "<html><h3>Vol</h3><strong>Nom : </strong> " + super.getId() +"<strong>Heure de décollage :</strong> " + this.getDepartureTime() +
+        return "<html><h1>Vol</h1><strong>Nom : </strong> " + super.getId() +
                 
-                "<br><strong>Aéroport de départ : </strong> " + this.getDepartureAirport().getName()  +"<strong>Durée du vol :</strong> " + this.getFlightDuration() + 
+                "<br><strong>Aéroport de départ : </strong> " + this.getDepartureAirport().getName()  +
                 
-                "<br><strong>Aéroport d'arrivée : </strong> " + this.getArrivalAirport().getName() +"<strong>Altitude :</strong> " + this.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) +
+                "<br><strong>Aéroport d'arrivée : </strong> " + this.getArrivalAirport().getName()  +
                                                                                                     
                 "</html>";
     }
@@ -144,11 +144,13 @@ public class Flight extends SingleNode {
      */
     public String toStringSecond(){
 
-        return "<html><h3> </h3><strong>Nom : </strong> " + super.getId() +"<strong>Heure de décollage :</strong> " + this.getDepartureTime() +
+        return "<html>" +
+                "<h1> </h1> " +
+                "<strong>Heure de décollage :</strong> " + this.getDepartureTime() +
                 
-                "<strong>Durée du vol :</strong> " + this.getFlightDuration() + 
+                "<br><strong>Durée du vol :</strong> " + this.getFlightDuration() + 
                 
-                "<strong>Altitude :</strong> " + this.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) +
+                "<br><strong>Altitude :</strong> " + this.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) +
                                                                                                     
                 "</html>";
 

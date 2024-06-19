@@ -149,5 +149,15 @@ public class FlightWaypoint extends MapWaypoint {
         return this.flight.toString();
     }
 
+    @Override
+    public String toStringFirst() {
+        return this.flight.toStringFirst();
+    }
+
+    @Override
+    public String toStringSecond() {
+        return this.flight.toStringSecond();
+    }
+
     //#endregion
 }

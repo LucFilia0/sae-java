@@ -38,4 +38,16 @@ public class InactiveAirportWaypoint extends AirportWaypoint {
     public InactiveAirportWaypoint(Airport airport, GeoPosition position) {
         super(InactiveAirportWaypoint.INACTIVE_AIRPORT_WAYPOINT_ICON_FILE, airport, position);
     }
+
+    @Override
+    public String toStringFirst() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toStringFirst'");
+    }
+
+    @Override
+    public String toStringSecond() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toStringSecond'");
+    }
 }

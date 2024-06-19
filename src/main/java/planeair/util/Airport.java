@@ -91,7 +91,7 @@ public class Airport {
      * @author Luc le Manifik
      */
     public String toString() {
-        return "<html><h3>Aéroport</h3><strong>Nom :</strong> " + this.name 
+        return "<html><h1>Aéroport</h1><strong>Nom :</strong> " + this.name 
                 + "<br><strong>Ville :</strong> " + this.location 
                 + "<br><strong>Coordonnées :</strong> " 
                 + this.coordinate + "</html>";

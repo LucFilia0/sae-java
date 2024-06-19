@@ -12,7 +12,8 @@ package planeair.components;
 
     //#region .AWT
     import java.awt.Dimension;
-    import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
     //#endregion
 
     //#region LAYOUT
@@ -85,7 +86,7 @@ public class NMainScreen extends JPanel{
          * Panel locate int th SOUTH of the Map borderLayout
          * Contain Info for mapWaipoint
          */
-        private JPanel footer = new JPanel();
+        private JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         /**
          * Panel situe in the CENTER of the Frame's borderLayout 
@@ -359,7 +360,7 @@ public class NMainScreen extends JPanel{
 
                 //#region FOOTER
                 footer.setOpaque(false);
-                footer.setPreferredSize(new Dimension(this.getWidth(), 150));
+                footer.setPreferredSize(new Dimension(this.getWidth(), 140));
                 //#endregion
             //#endregion  
             
@@ -431,6 +432,9 @@ public class NMainScreen extends JPanel{
             //#endregion
 
             //#region FOOTER
+            JPanel emptyfooter = new JPanel();
+            emptyfooter.setPreferredSize(new Dimension(5,footer.getHeight()));
+            footer.add(emptyfooter);
             footer.add(infoPanel);
         
 

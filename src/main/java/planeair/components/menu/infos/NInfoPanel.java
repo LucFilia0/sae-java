@@ -1,29 +1,35 @@
 package planeair.components.menu.infos;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.LayoutManager;
+//#region IMPORT
+    //#region .AWT
+    import java.awt.Dimension;
+    //#endregion
 
-import javax.swing.BoxLayout;
+    //#region LAYOUT
+    import java.awt.FlowLayout;
+    import java.awt.GridLayout;
+    //#endregion
 
-//-- Import AWT
 
-//-- Import Swing
+    //#region .SWING
+    import javax.swing.JLabel;
+    import javax.swing.JPanel;
+    import javax.swing.JScrollPane;
+    import javax.swing.JTable;
+    import javax.swing.ScrollPaneConstants;
+    //#endregion
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.table.TableColumnModel;
-
-import planeair.App;
-import planeair.components.mapview.Map;
-import planeair.components.mapview.mapwp.MapWaypoint;
-import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
-import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-import planeair.util.Airport;
+    //#region PLANEAIR
+    import planeair.App;
+    //#region COMPONENTS
+    import planeair.components.mapview.Map;
+    import planeair.components.mapview.mapwp.MapWaypoint;
+    import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
+    import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+    //#endregion
+    import planeair.util.Airport;
+//#endregion
+//#endregion
 
 /**
  * The JPannel that is prompted when a MapItem is pressed, showing all the required informations
@@ -32,59 +38,65 @@ import planeair.util.Airport;
  */
 public class NInfoPanel extends JPanel {
 
-    //#region AIRPORT
-    /**
-     * The first line of the prompt
-     */
-    private JLabel labelAirport;
-    /**
-     * Panel that contain labelAirport
-     */
-    private JPanel airportPanel;
+    //#region INSTANTIALISATION
+        //#region AIRPORT
+        /**
+         * The first line of the prompt
+         */
+        private JLabel labelAirport;
+        /**
+         * Panel that contain labelAirport
+         */
+        private JPanel airportPanel;
 
-    /**
-     * Panel for the Table and this Scroll pane
-     */
-    JPanel panelTable;
-    /**
-     * JScrollBar for the Table
-     */
-    JScrollPane scrollPane;
-
-
-    /**
-     *  JTable for departure/arrival flight of the airport
-     * Row Informations : 
-     * ID
-     * Time
-     * Arrival or Dpearture
-     */
-    JTable table;
-
-    /**
-     * Model for the JTable
-     */
-    NFlightTableInfoModel model;
+        /**
+         * Panel for the Table and this Scroll pane
+         */
+        JPanel panelTable;
+        /**
+         * JScrollBar for the Table
+         */
+        JScrollPane scrollPane;
 
 
+        /**
+         *  JTable for departure/arrival flight of the airport
+         * Row Informations : 
+         * ID
+         * Time
+         * Arrival or Dpearture
+         */
+        JTable table;
+
+        /**
+         * Model for the JTable
+         */
+        NFlightTableInfoModel model;
+
+
+        /**
+         * The airport selected by the user
+         */
+        Airport airport;
+        //#endregion
+        
+        //#region FLIGHT
     /**
-     * The airport selected by the user
+     * The first COLUMN of the prompt
      */
-    Airport airport;
-    //#endregion
-    
-    //#region FLIGHT
+    private JLabel labelFlightLeft;
     /**
-     * The first line of the prompt
+     * The Second COLULMN of the prompt
      */
-    private JLabel labelFlight;
+    private JLabel labelFlightRight;
     /**
      * Panel which contain labelFlight
      */
     private JPanel flightPanel;
     //#endregion
-    
+    //#endregion
 
+    //#region CONSTRUCTOR
     /**
      * Creates a new NInfoPanel, which prompts the infos of the clicked elements
      *
@@ -96,7 +108,9 @@ public class NInfoPanel extends JPanel {
         this.initComponents();
         this.addComponents();
     }
+    //#endregion
 
+    //#region INITISALISATION
     /**
      * Creates all the components of the NInfoPanel
      */
@@ -114,26 +128,30 @@ public class NInfoPanel extends JPanel {
         this.labelAirport.setOpaque(false);
         this.airportPanel.setBackground(App.KINDAYELLOW);
 
-        this.scrollPane.setPreferredSize(new Dimension(300,90));
+        this.scrollPane.setPreferredSize(new Dimension(300,100));
         this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setBackground(App.KINDAYELLOW);
 
         panelTable.setBackground(App.KINDAYELLOW);
-        
-        
         //#endregion
 
         //#region FLIGHT
-        this.labelFlight = new JLabel();
-        this.flightPanel = new JPanel();
+        this.labelFlightLeft = new JLabel();
+        this.labelFlightRight = new JLabel();
+        this.flightPanel = new JPanel(new GridLayout(1,2));
 
-        this.labelFlight.setOpaque(false);
+        this.labelFlightLeft.setOpaque(false);
+        this.labelFlightRight.setOpaque(false);
         this.flightPanel.setBackground(App.KINDAYELLOW);
         //#endregion
     }
+    //#endregion
 
-
+    //#region ADD
+    /**
+     * Adding components in the class panel
+     */
     private void addComponents(){
 
         //#region AIRPORT
@@ -141,18 +159,20 @@ public class NInfoPanel extends JPanel {
         //#endregion
 
         //#region FLight
-        flightPanel.add(labelFlight);
+        flightPanel.add(labelFlightLeft);
+        flightPanel.add(labelFlightRight);
         this.scrollPane.setViewportView(table);
         panelTable.add(scrollPane);
         //#endregion
 
-
     }
+    //#endregion
 
+    //#region SET INFORMATIONS --> SHOW AND HIDE
     /**
      * Makes the NInfoPanel visible, and prompts the infos of the MapItem that was clicked
      * 
-     * @author Luc le Manifik
+     * @author GIRAUD Nila 
      */
     public void showInfos(MapWaypoint mapWaypoint) {
 
@@ -163,16 +183,13 @@ public class NInfoPanel extends JPanel {
         this.addComponents();
 
         if(mapWaypoint instanceof FlightWaypoint){
-
-            System.out.println("Salut");
             
-            this.labelFlight.setText(mapWaypoint.toString());
+            this.labelFlightLeft.setText(mapWaypoint.toStringFirst());
+            this.labelFlightRight.setText(mapWaypoint.toStringSecond());
             this.add(this.flightPanel);
 
         }
         else{
-
-            System.out.println("Salut");
             
 
             this.airport = ((AirportWaypoint) mapWaypoint).getAirport();
@@ -200,7 +217,8 @@ public class NInfoPanel extends JPanel {
      */
     public void hideInfosFlight() {
         this.setOpaque(true);
-        this.labelFlight.setText("");
+        this.labelFlightLeft.setText("");
+        this.labelFlightRight.setText("");
     }
 
     /**
@@ -222,5 +240,6 @@ public class NInfoPanel extends JPanel {
     public void setPrincipal() {
 	    Map.infoPanel = this;
     }
+    //#endregion
     
 }

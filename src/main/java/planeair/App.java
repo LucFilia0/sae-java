@@ -70,7 +70,7 @@ public class App extends javax.swing.JFrame {
     /**
      * The height of the application's screen
      */
-    public final static int APPLICATION_SCREEN_HEIGHT = 950;
+    public final static int APPLICATION_SCREEN_HEIGHT = 900;
 
     /**
      * THE COLOR OF THE APP (not really yellow but quand même)

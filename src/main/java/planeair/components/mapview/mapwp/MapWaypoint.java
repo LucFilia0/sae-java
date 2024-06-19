@@ -162,6 +162,19 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
 
     /**
      * Returns the correctly formated informations of the MapWaypointButton
+     * First part
+     */
+    public abstract String toStringFirst();
+
+    /**
+     * Returns the correctly formated informations of the MapWaypointButton
+     * First part
+     */
+    public abstract String toStringSecond();
+
+
+    /**
+     * Returns the correctly formated informations of the MapWaypointButton
      */
     public abstract String toString();
 
