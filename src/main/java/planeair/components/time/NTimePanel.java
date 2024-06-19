@@ -102,11 +102,6 @@ public class NTimePanel extends JPanel {
     //#endregion
 
     /**
-     * The App whichh contains the NTimePanelApp
-     */
-    private App app;
-
-    /**
      * The boolean which says if the simulation is currently playing (if the Flights are currenly moving)
      */
     private boolean simulationPlaying;
@@ -122,12 +117,8 @@ public class NTimePanel extends JPanel {
     //#region CONSTRUCTOR
     /**
      * Constructor of NTimePANEL
-     * 
-     * @param app The Frame of the App
      */
-    public NTimePanel(App app) {
-
-        this.app = app;
+    public NTimePanel() {
         this.simulationPlaying = false;
 
         //this.setLayout(new GridLayout(11,1));
@@ -210,8 +201,8 @@ public class NTimePanel extends JPanel {
                 minChoice.setSelectedItem(minutes);
                 
                 // Paints the Flights on the Map, at the selected NTime
-                if(this.app.getGraph() != null && this.app.getGraph() instanceof FlightsIntersectionGraph)
-                    this.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), (FlightsIntersectionGraph)this.app.getGraph());
+                if(App.app.getGraph() != null && App.app.getGraph() instanceof FlightsIntersectionGraph)
+                    App.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), (FlightsIntersectionGraph)App.app.getGraph());
             });
 
             playButton.addActionListener(e -> {
@@ -261,6 +252,10 @@ public class NTimePanel extends JPanel {
 
     public boolean isSimulationPlaying() {
         return this.simulationPlaying;
+    }
+
+    public NSliderTime getSliderTime() {
+        return sliderTime;
     }
     //#endregion
     

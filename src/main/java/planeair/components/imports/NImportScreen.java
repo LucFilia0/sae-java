@@ -68,19 +68,12 @@ public class NImportScreen extends JPanel {
     private NImportButtonPanel buttonImport;
     //#endregion
 
-    /**
-     * The current App
-     */
-    private App app;
-
     //#region CONSTRUCTOR
     /**
      * Creates a new NImportScreen, which is in charge of the importation of data, from Files to the data structures in the App class
      * @param app ({@link planeair.App App}) - The current App
      */
-    public NImportScreen(App app){
-
-        this.app = app;
+    public NImportScreen(){
 
         this.initComponents();
         this.placeComponents();
@@ -108,7 +101,7 @@ public class NImportScreen extends JPanel {
         descriptionApp1.setFont(App.KINDABOLD);
         descriptionApp2.setFont(App.KINDABOLD);
 
-        buttonImport = new NImportButtonPanel(this.app);
+        buttonImport = new NImportButtonPanel(App.app);
     }
 
     /**

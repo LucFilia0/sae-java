@@ -168,20 +168,13 @@ public class NGraphInfoPanel extends JPanel {
         private JLabel titleNbConflictsOccurred = new JLabel(NB_CONFLICTS_TEXT + "-") ;
         //#endregion
 
-        //#region APP
-        /**
-         * Homepage blablabla
-         */
-        private App app ;
-        //#endregion
     //#endregion
 
     //#region CONSTRUCTOR
     /**
      * Contructor of NInfoGraphPanelApps
      */
-    public NGraphInfoPanel(App app){
-        this.app = app ;
+    public NGraphInfoPanel() {
         this.setBackground(App.KINDAYELLOW);
 
         this.setLayout(new GridBagLayout());
@@ -223,7 +216,7 @@ public class NGraphInfoPanel extends JPanel {
     private void addComponents(){
         this.removeAll() ;
         GridBagConstraints gbc = new GridBagConstraints();
-        if (app.getGraphRenderer() != null) {
+        if (App.app.getGraphRenderer() != null) {
             gbc.gridx = -1; // colonne 1
             gbc.gridy = 0; // ligne 0
             gbc.anchor = GridBagConstraints.WEST;
@@ -418,8 +411,8 @@ public class NGraphInfoPanel extends JPanel {
          */
         public void computeGraphStats() {
             this.setDefaultValues() ;
-            if (app.getGraphRenderer() != null) { 
-                GraphSAE graph = app.getGraph() ;  
+            if (App.app.getGraphRenderer() != null) { 
+                GraphSAE graph = App.app.getGraph() ;  
                 ConnectedComponents cc = new ConnectedComponents(graph) ;
                 cc.compute() ;
 

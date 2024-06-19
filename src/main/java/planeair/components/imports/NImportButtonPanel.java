@@ -282,6 +282,12 @@ public class NImportButtonPanel extends JPanel {
 
         // First button : Step directly in the NMainScreen
         confirmStart.addActionListener((ActionEvent e) -> {
+            if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof TestGraph) {
+                app.getMainScreen().getMap().clearAll();
+            }else if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof FlightsIntersectionGraph) {
+                app.getMainScreen().initMap();
+                app.getMainScreen().refreshTime();
+            }
             this.app.switchToMainScreen();
         });
 
@@ -291,13 +297,16 @@ public class NImportButtonPanel extends JPanel {
             NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
             fileChooser.userImportFile();
 
-            if(fileChooser.getFile() != null && !fileChooser.getFile().equals(null)) {
+            if(fileChooser.getFile() != null) {
                 try {
                     this.app.setGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     ImportationTestGraph.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
                         fileChooser.getFile(), false);
+
+                    this.flightsImported = false;
+                    this.airportsImported = false;
                     
-                    app.getMainScreen().initGraphBottomPanel();   
+                    app.getMainScreen().initGraphBottomPanel();
                     initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
