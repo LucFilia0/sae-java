@@ -144,7 +144,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                 int color = (int)flightWp.getFlight().getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
                 if (color != 0) {
                     FlightsIntersectionGraph graph = (FlightsIntersectionGraph)flightWp.getFlight().getGraph() ;
-                    g.setColor(graph.getColorTab()[color - 1]) ;
+                    g.setColor(graph.getColorMap().get(color - 1)) ;
                 }
                 g.setStroke(new BasicStroke(3)) ;
                 g.drawLine(depX, depY, arrX, arrY);

@@ -2,9 +2,9 @@ package planeair.graph.coloring;
 
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.graphstream.graph.Node;
@@ -29,30 +29,35 @@ public abstract class ColoringWelshPowell {
         }
 
         int[] res = {0,0} ;
-        LinkedList<Node> nodeList = new LinkedList<>() ;
-        Set<Node> nodeSet ;
-        graph.nodes().forEach(node -> nodeList.addFirst(node));
-
-        // Descending order sort by degree
-        nodeList.sort(new Comparator<Node>() {
-            public int compare(Node arg0, Node arg1) {
-                return Integer.compare(arg1.getDegree(), arg0.getDegree()) ;
+        TreeSet<Node> sortedSet = new TreeSet<>(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                int comp = Integer.compare(o2.getDegree(), o1.getDegree()) ;
+                if (comp == 0) {
+                   return o1.getId().compareTo(o2.getId()) ;
+                }
+                return comp ;
             }
         }) ;
+        Set<Node> nodeSet ;
+        graph.nodes().forEach(node -> sortedSet.add(node));
 
         // Implementation of the algorithm
-        while (!nodeList.isEmpty() && res[0] < kMax) {
+        while (!sortedSet.isEmpty() && res[0] < kMax) {
             nodeSet = new HashSet<>() ;
             res[0]++ ;
-            ListIterator<Node> itr = nodeList.listIterator() ;
+            Iterator<Node> itr = sortedSet.iterator() ;
             while (itr.hasNext()) {
                 Node currentNode = itr.next() ;
-                if ((int)currentNode.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) == 0 
-                    && !nodeSet.contains(currentNode)) {
-                    itr.previous() ;
+                if ((int)currentNode.getAttribute(ColoringUtilities
+                    .NODE_COLOR_ATTRIBUTE) == 0 
+                        && !nodeSet.contains(currentNode)) {
+
                     itr.remove() ;
-                    currentNode.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, res[0]) ;
-                    nodeSet.addAll(currentNode.neighborNodes().collect(Collectors.toSet())) ;
+                    currentNode.setAttribute(ColoringUtilities
+                        .NODE_COLOR_ATTRIBUTE, res[0]) ;
+                    nodeSet.addAll(currentNode.neighborNodes()
+                        .collect(Collectors.toSet())) ;
                 }
             }
         }

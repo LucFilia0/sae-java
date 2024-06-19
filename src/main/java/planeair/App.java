@@ -18,7 +18,6 @@ import planeair.util.AirportSet;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
-import planeair.graph.graphutil.Automation;
 import planeair.graph.graphutil.PanelCreator;
 import planeair.components.NMainScreen;
 import planeair.components.imports.NImportScreen;
@@ -56,7 +55,6 @@ public class App extends javax.swing.JFrame {
         
         App app = new App();
         app.setVisible(true);
-        Automation.startAutomation("./data", new String[]{"graph-testX.txt"}, 'X', Runtime.getRuntime().availableProcessors());
 
         }
 

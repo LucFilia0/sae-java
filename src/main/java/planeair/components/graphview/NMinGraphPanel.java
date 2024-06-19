@@ -180,10 +180,10 @@ public class NMinGraphPanel extends JPanel {
      * Here's the original question 
      * https://stackoverflow.com/questions/27706197/how-can-i-center-graphics-drawstring-in-java 
      * @author Gilbert Le Blanc
-     * @param g
-     * @param r
-     * @param s
-     * @param font
+     * @param g Graphic object used to paint the string
+     * @param r Bounds of the String
+     * @param s The String we are painting
+     * @param font Font used to draw it
      */
     public static void centerString(Graphics g, Rectangle r, String s, 
             Font font) {

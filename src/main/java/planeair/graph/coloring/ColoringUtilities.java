@@ -89,29 +89,41 @@ public abstract class ColoringUtilities {
     public static void setGraphStyle(GraphSAE graph, int nbColor) {
         StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ;\n size : " + DEFAULT_NODE_SIZE + " ; }\n") ;
         Integer color ;
-        graph.setColorTab(new Color[nbColor]) ;
-        if (nbColor > 0) {
-            for (Node coloringNode : graph) {
-                color = (Integer)coloringNode.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
-                coloringNode.setAttribute("ui.class", "color" + color) ;
-            }
-            
-            // FFFFFF in decimal (i asked Google 👍) - 15 
-            //to get to FFFFF0 to avoid white nodes
-            int maxHexValue = 16777200 ;
-            
-            // Hexadecimal value used for the color stored as an int
-            int currentHexValue ;
+        HashMap<Integer, Color> colorMap = graph.getColorMap() ;
+        colorMap.clear() ;
+        
+        if (nbColor <= 0) {
+            graph.setAttribute("ui.stylesheet", stylesheet.toString()) ;
+            return ;
+        }
+        
+        for (Node coloringNode : graph) {
+            color = (Integer)coloringNode.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
+            coloringNode.setAttribute("ui.class", "color" + color) ;
+        }
+        
+        // FFFFFF in decimal (i asked Google 👍) - 15 
+        //to get to FFFFF0 to avoid white nodes
+        int maxHexValue = 16777200 ;
+        
+        // Hexadecimal value used for the color stored as an int
+        int currentHexValue ;
+        Color addedColor ;
+        StringBuilder buffer = new StringBuilder() ;
 
-            Color[] colorTab = new Color[nbColor] ;
-            for (int i = 0 ; i < nbColor ; i++) {
+        for (int i = 0 ; i < nbColor ; i++) {
+            do {
+                buffer.delete(0, buffer.length()) ;
                 currentHexValue = (int)Math.round(maxHexValue*Math.random()) ; 
-                stylesheet.append("node.color" + (i+1) + "{fill-color : #" + 
+                
+                buffer.append("node.color" + (i+1) + "{fill-color : #" + 
                     toValidHex(Integer.toHexString(currentHexValue)) + " ; }\n") ;
-                colorTab[i] = new Color(currentHexValue) ;
-            }
+                
+                addedColor = new Color(currentHexValue) ;
+            } while (colorMap.values().contains(addedColor)) ;
 
-            graph.setColorTab(colorTab) ;
+            stylesheet.append(buffer) ;
+            colorMap.put(i, addedColor) ;
         }
         
         graph.setAttribute("ui.stylesheet", stylesheet.toString()) ;
@@ -151,11 +163,11 @@ public abstract class ColoringUtilities {
     }
 
     /**
-     * Calls the correct coloring method with the right algorithm
+     * Colors the graph with the chosen algorithm
+     * if the algorithm passed doesn't exist, doesn't do anything
      * 
-     * @param graph
-     * @param algorithm
-     * @return
+     * @param graph The graph we wanna color
+     * @param algorithm The String representing the algorithm
      * 
      * @author Nathan LIEGEON
      */
@@ -175,7 +187,7 @@ public abstract class ColoringUtilities {
     }
 
     /**
-     * Colors a node by minimizing conflicts (2 nodes with the same color touching each other)
+     * Colors a node by minimizing conflicts
      * 
      * @param graph graph you are trying to color
      * @param node node you are trying to color 
@@ -232,6 +244,19 @@ public abstract class ColoringUtilities {
         return minConflict ;
     }
 
+    /**
+     * Colors all {@code Nodes} that don't yet have a color with the least
+     * conflicting color.
+     * 
+     * A conflict is an edge whose extremeties have the same color
+     * @param graphSet Set containing Nodes we are trying to color
+     * If one of the nodes has a color, it gets skipped
+     * @param kMax Maximum color that can be assigned to a node
+     * 
+     * @return The number of conflicts that occurred
+     * 
+     * @author Nathan LIEGEON
+     */
     public static int colorWithLeastConflicts(Set<Node> graphSet, int kMax) {
         TreeSet<Node> set = new TreeSet<>((node1, node2) -> {
             if (node1.getDegree() == node2.getDegree()) {
@@ -258,6 +283,21 @@ public abstract class ColoringUtilities {
         return nbConflicts ;
     }
 
+    /**
+     * Colors all {@code Nodes} that don't yet have a color with the least
+     * conflicting color
+     * 
+     * a conflict is an edge whose extremeties have the same color
+     * @param graphSet Set containing Nodes we are trying to color
+     * If one of the nodes has a color, it gets skipped
+     * 
+     * calls the default implementation of this method (the one with a set)
+     * with the graph's kmax and all its nodes in the set without filtering them
+     * 
+     * @return The number of conflicts that occurred
+     * 
+     * @author Nathan LIEGEON
+     */
     public static int colorWithLeastConflicts(GraphSAE graph) {
         return colorWithLeastConflicts(graph.nodes().collect(Collectors.toSet()), graph.getKMax()) ;
     }

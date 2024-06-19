@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -18,8 +17,8 @@ import planeair.graph.graphtype.GraphSAE;
 
 /**
  * Class handling all the methods for the RLF graph Algorithm
- * The algorithm was based on this source 
- * {@link <a href = "https://en.wikipedia.org/wiki/Recursive_largest_first_algorithm">Source</a>}
+ * The algorithm was based on this
+ * {@link <a href = "https://en.wikipedia.org/wiki/Recursive_largest_first_algorithm">source</a>}
  * 
  * @author Nathan LIEGEON
  */
@@ -27,7 +26,8 @@ public abstract class ColoringRLF {
     
     /** 
      * Colors the graph using the RLF (Recursive Larget First) Algorithm
-     * If the number of colors used reaches kMax, a different algorithm will be used to minimize conflicts.
+     * If the number of colors used reaches kMax, a different algorithm 
+     * will be used to minimize conflicts.
      * 
      * @param graph Graph which will be colored
      * 
@@ -49,7 +49,8 @@ public abstract class ColoringRLF {
         // Conflict management 
         HashSet<Node> tempSet = new HashSet<>() ;
         newGraph.nodes().forEach(n -> tempSet.add(graph.getNode(n.getId()))) ;
-        int nbConflicts = ColoringUtilities.colorWithLeastConflicts(tempSet, graph.getKMax()) ;
+        int nbConflicts = ColoringUtilities
+            .colorWithLeastConflicts(tempSet, graph.getKMax()) ;
 
         graph.setNbColors(color) ;
         graph.setNbConflicts(nbConflicts) ;
@@ -57,28 +58,33 @@ public abstract class ColoringRLF {
     }
 
     /**
-     * Recursive function which will progressively eliminate colored nodes from a copy of the original graph until
+     * Recursive function which will progressively eliminate colored 
+     * nodes from a copy of the original graph until
      * there is none left or kMax has been surpassed
      * 
-     * @param originalGraph
-     * @param graph
-     * @param color
+     * @param originalGraph The graph we are trying to color
+     * @param graph The clone of the graph getting progressively emptied
+     * @param color The color used to color nodes 
+     * (will get incremented before doing treatments)
      * @return
      * 
      * @author Nathan LIEGEON
      */
-    public static int recursiveColoringRLF(GraphSAE originalGraph, GraphSAE graph, int color, int kMax) {
+    private static int recursiveColoringRLF(GraphSAE originalGraph, 
+                            GraphSAE graph, int color, int kMax) {
         if (graph.getNodeCount() == 0 || color >= kMax) {
             return color ;
         }
         color++ ;
-        // Doing this prevents randomness in the node selected, we will always select the node with biggest Id
+        // Doing this prevents randomness in the node selected, we will always 
+        // select the node with biggest Id
         // Choosing the biggest Id is arbitrary and only for consistency
         ArrayList<Node> degreeMap = Toolkit.degreeMap(graph) ;
         int i = 1 ;
         int maxI = 0 ;
         while (i < degreeMap.size() && degreeMap.get(i) == degreeMap.get(i-1)) {
-            if (degreeMap.get(i).getId().compareTo(degreeMap.get(maxI).getId()) > 0) {
+            if (degreeMap.get(i).getId()
+                .compareTo(degreeMap.get(maxI).getId()) > 0) {
                 maxI = i ;
             }
         }
@@ -102,17 +108,21 @@ public abstract class ColoringRLF {
 
         // We add the node with the most common neighbors
         // with nodes in the color set, then remove all of 
-        //its neighbors and itself from the set of addable nodes
+        // its neighbors and itself from the set of addable nodes
         while (!addableNodesSet.isEmpty()) {
             nextNode = getNextNodeRLF(addableNodesSet, colorSet) ;
             colorSet.add(nextNode) ;
             addableNodesSet.remove(nextNode) ;
-            addableNodesSet.removeAll(nextNode.neighborNodes().collect(Collectors.toSet())) ;
+            addableNodesSet.removeAll(nextNode
+                .neighborNodes().collect(Collectors.toSet())) ;
         }
 
-        // Apply the coloring to the original graph and remove the node from the copy
+        // Apply the coloring to the original graph and 
+        // remove the node from the copy
         for (Node node : colorSet) {
-            // We are working on a copy of the graph so we have to get the real node from the id of node in the copy
+
+            // We are working on a copy of the graph so we have to get the real 
+            // node from the id of node in the copy
             originalGraph.getNode(node.getId()).setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, color) ;
             graph.removeNode(node) ;
         }
@@ -121,30 +131,38 @@ public abstract class ColoringRLF {
     }
 
     /**
-     * Returns the node from addableNodesSet that has the most common neighbors with all nodes in colorSet
-     * @param addableNodesSet
-     * @param colorSet
-     * @return
+     * Returns the node from addableNodesSet that has the most common neighbors 
+     * with all nodes in colorSet
+     * @param addableNodesSet Set containing all the nodes that can be chosen
+     * @param colorSet Set containing the nodes 
+     * @return the node that was selected 
      * 
      * @author Nathan LIEGEON
      */
-    private static Node getNextNodeRLF(Set<Node> addableNodesSet, Set<Node> colorSet) {
-        // Counts the number of common Neighbors between a node and all nodes in colorSet 
+    private static Node getNextNodeRLF(Set<Node> addableNodesSet, 
+                                            Set<Node> colorSet) {
+        // Counts the number of common Neighbors between 
+        // a node and all nodes in colorSet 
         HashMap<Node, Integer> countNeighborsInSet = new HashMap<>() ;
         HashMap<Node, Integer> countNeighborsNotInSet = new HashMap<>() ;
         Node res = null ;
 
-        // All nodes in addableNodesSet are at best 2nd degree neighbors to nodes in colorSet
+        // All nodes in addableNodesSet are at best 
+        // 2nd degree neighbors to nodes in colorSet
         for (Node node : addableNodesSet) {
             countNeighborsInSet.put(node, 0) ;
             countNeighborsNotInSet.put(node, 0) ;
-            node.neighborNodes().forEach(neighbor -> {                             
-                if (isNeighborOfSet(addableNodesSet, neighbor)) {
+
+            // Actual black magic bro wtf did I cook here 😭😭😭😭😭
+            node.neighborNodes().forEach(neighbor -> {
+                boolean isNeighbor = neighbor.neighborNodes().anyMatch(
+                    neighbor2 -> colorSet.contains(neighbor2)) ;
+                
+                if (isNeighbor) 
                     countNeighborsInSet.merge(node, 1, Integer::sum) ;
-                }
-                else {  
-                    countNeighborsNotInSet.merge(node, 1, Integer::sum) ; 
-                }
+                else
+                    countNeighborsNotInSet.merge(node, 1, Integer::sum) ;
+                
             });
         }
 
@@ -166,19 +184,5 @@ public abstract class ColoringRLF {
         }) ;
 
         return res ;
-    }
-
-    public static boolean isNeighborOfSet(Set<Node> nodeSet, Node node) {
-        boolean isNeighbor = false ;
-        Iterator<Node> itr = nodeSet.iterator() ;
-        while (!isNeighbor && itr.hasNext()) {
-            Node neighbor = itr.next() ;
-            if (neighbor.neighborNodes().collect(Collectors.toSet()).contains(node)) {
-                isNeighbor = true ;
-                break ;
-            }
-        }
-
-        return isNeighbor ;
     }
 }

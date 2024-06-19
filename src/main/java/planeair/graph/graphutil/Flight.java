@@ -96,12 +96,7 @@ public class Flight extends SingleNode {
      * @return (String)
      */
     public String toString() {
-        return "<html>Flight<br><strong>Name :</strong> " + super.getId() 
-        + "<br><strong>Departure Airport :</strong> " + this.getAttribute(Flight.DEPARTURE_AIRPORT) 
-        + "<br><strong>Arrival Airport :</strong> " + this.getAttribute(Flight.ARRIVAL_AIRPORT) 
-        + "<br><strong>Departure Time :</strong> " + this.getAttribute(Flight.DEPARTURE_TIME) 
-        + "<br><strong>Duration Flight :</strong> " + this.getAttribute(Flight.FLIGHT_DURATION) 
-        + "<br><strong>Layer :</strong> " + this.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE);
+        return this.getAttribute(DEPARTURE_TIME).toString() ;
     }
 
     //-- Flight Getters
