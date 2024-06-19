@@ -122,6 +122,11 @@ public class App extends javax.swing.JFrame {
      * The AirportSet which contains all the Airports
      */
     private AirportSet airportSet;
+    
+    /**
+     * The main app of this project
+     */
+    public static App app ; // ChokBar de Bzzzz
 
     /**
      * The FIG which contains all the Flights
@@ -152,6 +157,7 @@ public class App extends javax.swing.JFrame {
      * @author Luc le Manifik
      */
     App() {
+        app = this ;
 
         // Basic configuration
         this.setTitle("Plane AIR");
@@ -179,8 +185,8 @@ public class App extends javax.swing.JFrame {
         this.fig = new FlightsIntersectionGraph("FIG") ;
         this.testGraph = new TestGraph("TestGraph") ;
 
-        this.mainScreen = new NMainScreen(this);
-        this.importScreen = new NImportScreen(this);
+        this.mainScreen = new NMainScreen();
+        this.importScreen = new NImportScreen();
     }
 
     /**

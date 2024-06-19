@@ -50,14 +50,14 @@ public abstract class ColoringWelshPowell {
             while (itr.hasNext()) {
                 Node currentNode = itr.next() ;
                 if ((int)currentNode.getAttribute(ColoringUtilities
-                    .NODE_COLOR_ATTRIBUTE) == 0 
-                        && !nodeSet.contains(currentNode)) {
-
+                .NODE_COLOR_ATTRIBUTE) == 0 
+                && !nodeSet.contains(currentNode)) {
+                    
                     itr.remove() ;
                     currentNode.setAttribute(ColoringUtilities
-                        .NODE_COLOR_ATTRIBUTE, res[0]) ;
+                    .NODE_COLOR_ATTRIBUTE, res[0]) ;
                     nodeSet.addAll(currentNode.neighborNodes()
-                        .collect(Collectors.toSet())) ;
+                    .collect(Collectors.toSet())) ;
                 }
             }
         }

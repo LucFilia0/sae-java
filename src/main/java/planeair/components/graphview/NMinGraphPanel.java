@@ -58,12 +58,6 @@ public class NMinGraphPanel extends JPanel {
          * FlowLayout CENTER
          */
         private JPanel FlowPanelGraph = new JPanel(new BorderLayout());
-
-        /**
-         * Having acces to homePage (setVisible elements change)
-         * the panel NPrincipalePanelApp is put in this frame
-         */
-        private App app;
         //#endregion
 
         //#region SECOND COMPONENT 
@@ -91,9 +85,7 @@ public class NMinGraphPanel extends JPanel {
     /**
      * Constructor of NMinGraphPanelApp
      */
-    public NMinGraphPanel(App app) {
-        this.app = app ;
-
+    public NMinGraphPanel() {
         this.setBackground(App.KINDAYELLOW);  
         //STRUCT
         
@@ -104,7 +96,7 @@ public class NMinGraphPanel extends JPanel {
         /*FIRST COMPONENT */
         
         this.setMaximumSize(new Dimension(350,400));
-        if (app.getGraphRenderer() == null) {
+        if (App.app.getGraphRenderer() == null) {
             FlowPanelGraph = new NSkullPanel() ;
             FlowPanelGraph.setLayout(new BorderLayout());
         }
@@ -160,7 +152,7 @@ public class NMinGraphPanel extends JPanel {
      */
     public void removeGraphFromPanel() {
         this.FlowPanelGraph.removeAll();
-        this.app.setGraph(null);
+        App.app.setGraph(null);
     }
     //#endregion
 
@@ -184,7 +176,7 @@ public class NMinGraphPanel extends JPanel {
     private void initListeners() {
         buttonAgr.addActionListener((ActionEvent e) -> {
             buttonAgr.setEnabled(false) ;
-            maxGraphFrame = new NMaxGraphFrame(app, app.getGraphRenderer());
+            maxGraphFrame = new NMaxGraphFrame(App.app.getGraphRenderer());
             maxGraphFrame.setVisible(true) ;
             addGraphToPanel(null) ;
         });

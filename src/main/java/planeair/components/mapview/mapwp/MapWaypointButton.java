@@ -26,11 +26,14 @@ import java.awt.Color;
 
     import java.io.IOException;
 
-    //#endregion
+import planeair.App;
+
+//#endregion
 
     //#region PLANEAIR
     import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-    import planeair.graph.graphutil.PanelCreator;
+import planeair.components.menu.infos.NInfoPanel;
+import planeair.graph.graphutil.PanelCreator;
     //#endregion
 
 //#endregion
@@ -126,12 +129,15 @@ public class MapWaypointButton extends javax.swing.JButton {
      */
     public void changeSelection(boolean isClicked) {
         // Case when the button is first clicked
+        NInfoPanel infoPanel = App.app.getMainScreen().getInfoPanel() ;
         if (isClicked) {
             // If it is selected, then remove the selection
             if (this.isSelected()) {
                 selected = false ;
                 this.setSelectionStyle() ;
                 waypointSelected = null ;
+                infoPanel.hideInfos() ;
+                
             }
             else {
                 // Change the selection from the previous one to this one
@@ -142,6 +148,7 @@ public class MapWaypointButton extends javax.swing.JButton {
                 selected = true ;
                 this.setSelectionStyle() ;
                 waypointSelected = this ;
+                infoPanel.showInfos(mapWaypoint) ;
             }
         }
 

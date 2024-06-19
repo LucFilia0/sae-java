@@ -76,11 +76,6 @@ public class Map extends org.jxmapviewer.JXMapViewer {
      */
     private MapWaypointPainter itemPainter;
 
-    /**
-     * Homepage blablabla
-     */
-    private App app ;
-
     //#endregion
 
     //#region CONSTRUCTORS
@@ -91,8 +86,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
      * 
      * @author Luc le Manifik
      */
-    public Map(App app) {
-        this.app = app ;
+    public Map() {
 
         this.initAttributes();
         this.initEvents();
@@ -171,7 +165,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         this.defaultZoom = 13; // Not 12 T_T
 
         // Waypoints stuff...
-        this.itemPainter = new MapWaypointPainter(this.app);
+        this.itemPainter = new MapWaypointPainter();
         this.setOverlayPainter(this.itemPainter);
 
         // Default JxMapViewer settings
@@ -376,7 +370,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
                 
                 else {
                     if (fwp != null && flight.getFlightWaypoint().getWaypointButton().isSelected()) {
-                        app.getMainScreen().getInfoPanel().hideInfos() ;
+                        App.app.getMainScreen().getInfoPanel().hideInfos() ;
                     }
                 }
             });

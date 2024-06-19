@@ -51,7 +51,7 @@ package planeair.components;
  * 
  * @author GIRAUD Nila
  */
-public class NMainScreen extends JPanel{
+public class NMainScreen extends JPanel {
 
     //#region INSTANTIALISATION AND INITIALISATION
 
@@ -78,9 +78,9 @@ public class NMainScreen extends JPanel{
 
         /**
          * Panel situe in the WEST of the body's borderLayout
-         * Two MENU can appeair here
-         * 1) NMenuGraphPanelApp
-         * 2) NMenuMapPanelApp
+         * Two MENU can appear here
+         * 1) NMenuGraphPanel
+         * 2) NMenuMapPanel
          */
         private JPanel article = new JPanel();
 
@@ -94,7 +94,7 @@ public class NMainScreen extends JPanel{
 
             //#region NAV PANEL
             /**
-             * Layout's panel for Navigation bar (Button MENU  + LOGO and NAME of the APP)
+             * Layout's panel for Navigation bar (Button MENU  + LOGO and NAME of the App)
              * nb LINE : 1
              * nb COLUMN : 3
              * hgap : 200
@@ -260,25 +260,15 @@ public class NMainScreen extends JPanel{
 
     //#endregion
 
-        //#region APP
-        /**
-         * Having acces to homePage (setVisible elements change)
-         * the panel NPrincipalePanelApp is put in this frame
-         */
-        private App app; 
-        //#endregion
-
     //#endregion
 
     //#region CONSTRUCTOR
     /**
-     * Constructor of NPrincipalePanelApp
-     * @param app the frame where this panel is put
+     * Constructor of NMainScreen
      */
-    public NMainScreen (App app){
+    public NMainScreen (){
 
-        this.app = app;
-        this.map = new Map(app) ;
+        this.map = new Map() ;
 
         this.initComponents();
         this.addComponents();
@@ -339,7 +329,7 @@ public class NMainScreen extends JPanel{
                 //#endregion
 
                 //#region ASIDE
-                minGraphPanel = new NMinGraphPanel(app);
+                minGraphPanel = new NMinGraphPanel();
                 minGraphPanel.addComponents();
 
                 graphLRightBottom.setLayout(new BoxLayout(graphLRightBottom, BoxLayout.Y_AXIS));
@@ -359,8 +349,8 @@ public class NMainScreen extends JPanel{
          * @author Luc le Manifik
          */
         public void initMap() {
-            this.app.getAirportSet().setActiveAirportsFrom((FlightsIntersectionGraph)this.app.getGraph()) ;
-            this.map.addAirports(this.app.getAirportSet());
+            App.app.getAirportSet().setActiveAirportsFrom((FlightsIntersectionGraph)App.app.getGraph()) ;
+            this.map.addAirports(App.app.getAirportSet());
         }
         //#endregion
 
@@ -374,7 +364,7 @@ public class NMainScreen extends JPanel{
             graphLRightBottom.add(minGraphPanel);
             graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
             
-            graphInfo = new NGraphInfoPanel(this.app);
+            graphInfo = new NGraphInfoPanel();
             graphInfo.computeGraphStats() ;
             graphLRightBottom.add(this.graphInfo);
 
@@ -410,7 +400,7 @@ public class NMainScreen extends JPanel{
             //#endregion
 
             //#region BODY
-            graphMenu = new NGraphMenuPanel(app, 0, kmaxComboBox);
+            graphMenu = new NGraphMenuPanel(App.app, 0, kmaxComboBox);
             mapMenu = new NMapMenuPanel(map);
             //#endregion
             
@@ -442,10 +432,10 @@ public class NMainScreen extends JPanel{
          * @author Luc le Manifik
          */
         public void addTimePanel() {
-            if(this.app.getGraphRenderer() != null && this.timePanel == null && app.getGraph() instanceof FlightsIntersectionGraph) {
-                this.timePanel = new NTimePanel(this.app);
+            if(App.app.getGraphRenderer() != null && this.timePanel == null && App.app.getGraph() instanceof FlightsIntersectionGraph) {
+                this.timePanel = new NTimePanel();
                 map.add(timePanel, BorderLayout.CENTER);
-            }else if(this.app.getGraphRenderer() != null && this.timePanel != null && app.getGraph() instanceof TestGraph) {
+            }else if(App.app.getGraphRenderer() != null && this.timePanel != null && App.app.getGraph() instanceof TestGraph) {
                 map.remove(this.timePanel);
                 this.timePanel = null;
             }
@@ -478,13 +468,13 @@ public class NMainScreen extends JPanel{
                         article.paintComponents(article.getGraphics());
 
                         buttonMenuGraph.setIcon(iconCloseGraph);
-                        this.app.revalidate();
+                        App.app.revalidate();
                         this.repaint() ;
                     }
                     else{
                         mapMenuIsVisible = false ;
                         map.remove(article);
-                        this.app.setVisible(true);
+                        App.app.setVisible(true);
                         article.removeAll();
 
                         GridBagConstraints GridBagC = new GridBagConstraints(); 
@@ -497,17 +487,17 @@ public class NMainScreen extends JPanel{
                         buttonMenuMap.setIcon(iconMenuMap);
                         buttonMenuGraph.setIcon(iconCloseGraph);
 
-                        this.app.revalidate();
+                        App.app.revalidate();
                         this.repaint() ;
                     }               
                 }
                 else{
                     graphMenuIsVisible = false ;
                     map.remove(article);
-                    this.app.setVisible(true);
+                    App.app.setVisible(true);
                     article.removeAll();
                     map.add(article,BorderLayout.WEST); 
-                    this.app.setVisible(true);
+                    App.app.setVisible(true);
                     buttonMenuGraph.setIcon(iconMenuGraph);
                     this.repaint() ;
                 }
@@ -523,13 +513,13 @@ public class NMainScreen extends JPanel{
                         article.paintComponents(article.getGraphics());
     ;
                         buttonMenuMap.setIcon(iconCloseMap);
-                        this.app.revalidate();
+                        App.app.revalidate();
                         this.repaint() ;
                     }
                     else{
                         graphMenuIsVisible = false ;
                         map.remove(article);
-                        this.app.setVisible(true);
+                        App.app.setVisible(true);
                         article.removeAll();
 
                         GridBagConstraints GridBagC = new GridBagConstraints(); 
@@ -541,7 +531,7 @@ public class NMainScreen extends JPanel{
 
                         buttonMenuGraph.setIcon(iconMenuGraph);
                         buttonMenuMap.setIcon(iconCloseMap);
-                        this.app.revalidate();
+                        App.app.revalidate();
                         this.repaint() ;
 
                     }               
@@ -549,10 +539,10 @@ public class NMainScreen extends JPanel{
                 else{
                     mapMenuIsVisible = false ;
                     map.remove(article);
-                    this.app.setVisible(true);
+                    App.app.setVisible(true);
                     article.removeAll();
                     map.add(article,BorderLayout.WEST); 
-                    this.app.setVisible(true);
+                    App.app.setVisible(true);
                     buttonMenuMap.setIcon(iconMenuMap);
                     this.repaint() ;
                 }
@@ -560,8 +550,8 @@ public class NMainScreen extends JPanel{
             });
 
             leaveButtonToImport.addActionListener((ActionEvent e) ->{
-                this.app.switchToImportScreen();
-                this.app.setVisible(true);
+                App.app.switchToImportScreen();
+                App.app.setVisible(true);
                 this.map.clearAll();
             });
 
