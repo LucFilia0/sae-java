@@ -398,7 +398,6 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         public void clearAll() {
         
             for(MapWaypointButton mwb : this.itemPainter.getWpButtons()) {
-                System.out.println("helo");
                 this.remove(mwb);
                 this.itemPainter.getWpButtons().remove(mwb);
             }

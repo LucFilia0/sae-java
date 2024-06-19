@@ -450,6 +450,14 @@ public class NMainScreen extends JPanel{
                 this.timePanel = null;
             }
         }
+
+        public void refreshTime() {
+            if(this.timePanel != null) {
+                int value = this.timePanel.getSliderTime().getValue();
+                this.timePanel.getSliderTime().setValue(12);
+                this.timePanel.getSliderTime().setValue(value); // Briganderie
+            }
+        }
         //#endregion
 
         //#region EVENTS

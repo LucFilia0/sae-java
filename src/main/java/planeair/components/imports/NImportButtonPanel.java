@@ -282,8 +282,12 @@ public class NImportButtonPanel extends JPanel {
 
         // First button : Step directly in the NMainScreen
         confirmStart.addActionListener((ActionEvent e) -> {
-            if(app.getMainScreen().getMap() != null)
+            if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof TestGraph) {
                 app.getMainScreen().getMap().clearAll();
+            }else if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof FlightsIntersectionGraph) {
+                app.getMainScreen().initMap();
+                app.getMainScreen().refreshTime();
+            }
             this.app.switchToMainScreen();
         });
 
@@ -298,9 +302,11 @@ public class NImportButtonPanel extends JPanel {
                     this.app.setGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     ImportationTestGraph.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
                         fileChooser.getFile(), false);
+
+                    this.flightsImported = false;
+                    this.airportsImported = false;
                     
-                    app.getMainScreen().getMap().clearAll();
-                    app.getMainScreen().initGraphBottomPanel();   
+                    app.getMainScreen().initGraphBottomPanel();
                     initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
@@ -390,7 +396,6 @@ public class NImportButtonPanel extends JPanel {
             if(this.airportsImported && this.flightsImported) {
                 this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
                 this.app.switchToMainScreen();
-                this.app.getMainScreen().getMap().clearAll();
                 this.app.getMainScreen().initMap();
             }
         });

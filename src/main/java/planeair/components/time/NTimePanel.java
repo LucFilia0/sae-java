@@ -3,7 +3,8 @@ package planeair.components.time;
 //#region IMPORT
     //#region SWING
     import javax.swing.JPanel;
-    import javax.swing.event.ChangeEvent;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
     //#endregion
 
     //#region PLANEAIR
@@ -261,6 +262,10 @@ public class NTimePanel extends JPanel {
 
     public boolean isSimulationPlaying() {
         return this.simulationPlaying;
+    }
+
+    public NSliderTime getSliderTime() {
+        return sliderTime;
     }
     //#endregion
     
