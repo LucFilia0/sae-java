@@ -47,7 +47,7 @@ public class TestGraphImportationTest {
 	public void testImportTestGraphFromFile() {
 		File file = null;
 		try {
-			file = new File("src/test/java/planeairtest/importation/testfiles/shitty-graph1.txt");
+			file = new File("src/test/java/planeairtest/testfiles/shitty-graph1.txt");
 		}catch(NullPointerException e) {
 			e.printStackTrace();
 		}

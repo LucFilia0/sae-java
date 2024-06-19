@@ -282,7 +282,8 @@ public class ImportationTestGraph {
 
             if(!line.equals("\n")) { // If the line is not empty
                 nodeScanner = new Scanner(line);
-                System.out.println("[" + line + "]" + currentLine);
+                if (showErrorMessages)
+                    System.out.println("[" + line + "] " + currentLine);
 
                 // Get node A
                 if(nodeScanner.hasNext()) {
