@@ -1,32 +1,19 @@
 package planeairtest.graph.coloring;
 
+import static org.junit.Assert.assertEquals;
 
-//#region IMPORTS
+import org.junit.Test;
 
-	//#region JUNIT
-	import org.junit.Test;
-	import static org.junit.Assert.*;
-	//#endregion
-
-	//#region JAVA
-    import planeair.graph.coloring.ColoringUtilities;
-    import planeair.graph.coloring.ColoringWelshPowell;
-    //#endregion
-    
-    //#region PLANEAIR
-    //#endregion
-//#endregion
-
-//#endregion
+import planeair.graph.coloring.ColoringDSATUR;
+import planeair.graph.coloring.ColoringUtilities;
 
 /**
- * Test class for the Welsh Powell coloring algorithm
+ * Test class for the DSATUR coloring algorithm
  */
-public class TestColoringWelshPowell extends TestColoring {
-
+public class TestColoringDSATUR extends TestColoring {
     @Test
-    public void testColoringWelshPowell() {
-        ColoringWelshPowell.coloringWelshPowell(testGraph1) ;
+    public void testColoringDSATUR() {
+        ColoringDSATUR.coloringDsatur(testGraph1) ;
         assertEquals(2, testGraph1.getNode("1").getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
         assertEquals(3, testGraph1.getNode("2").getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
         assertEquals(2, testGraph1.getNode("3").getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
@@ -35,7 +22,7 @@ public class TestColoringWelshPowell extends TestColoring {
         assertEquals(3, testGraph1.getNode("6").getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
         assertEquals(1, testGraph1.getNode("7").getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
 
-        ColoringWelshPowell.coloringWelshPowell(testGraph2) ;
+        ColoringDSATUR.coloringDsatur(testGraph2) ;
         assertEquals(1, testGraph2.getNode("1").getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
         assertEquals(2, testGraph2.getNode("2").getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
         assertEquals(1, testGraph2.getNode("3").getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) ;
