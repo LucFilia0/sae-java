@@ -221,7 +221,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
         //#endregion
 
-        //#region WAYPOINTS
+        //#region PAINT AIRPORTS
 
             //#region ADD AIRPORTS
 
@@ -298,6 +298,8 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
             //#endregion
 
+        //#endregion
+        
         //#region PAINT FLIGHTS
 
         /**
