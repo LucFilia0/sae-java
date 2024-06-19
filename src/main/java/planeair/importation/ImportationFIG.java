@@ -401,8 +401,17 @@ public abstract class ImportationFIG {
 
         fig.nodes().forEach(e -> {
             if(flight.isBooming((Flight)e, timeSecurity)) {
-                fig.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
+                if(fig.getEdge(e.getId() + "-" + idFlight) == null && fig.getEdge(idFlight + "-" + e.getId()) == null) {
+                    fig.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
+                }
             }
         });   
+    }
+
+    public static void reDoCollisions(FlightsIntersectionGraph fig, int securityMargin) {
+        fig.edges().forEach(e -> fig.removeEdge(e));
+        fig.nodes().forEach(e -> 
+            createCollisions(fig, (Flight)e, securityMargin)
+        );
     }
 }

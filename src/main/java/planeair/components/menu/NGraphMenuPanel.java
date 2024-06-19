@@ -44,6 +44,7 @@ package planeair.components.menu;
         //#endregion
 //#endregion 
 //#endregion
+import planeair.importation.ImportationFIG;
 
 /**
  * Class which create a JPanel of MENU for the graph 
@@ -181,6 +182,11 @@ public class NGraphMenuPanel extends JPanel{
          * Homepage blablabla
          */
         private App app ;
+
+        /**
+         * The last registered securityMargin, to check if it needs a new importation 
+         */
+        private int lastSecurityMarginSelected;
         //#endregion
     //#endregion 
 
@@ -194,6 +200,7 @@ public class NGraphMenuPanel extends JPanel{
 
         this.app = app ;
         this.kmaxComboBox = kmaxComboBox ;
+        this.lastSecurityMarginSelected = FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN;
 
         this.setBackground(App.KINDAYELLOW);
 
@@ -504,6 +511,14 @@ public class NGraphMenuPanel extends JPanel{
     }
 
     /**
+     * Returns the security margin used to coloring the Graphs
+     * @return The chosen marginn in min
+     */
+    public int getSecurityMargin() {
+        return (int)this.marginComboBox.getSelectedItem();
+    }
+
+    /**
      * Adds listeners to components
      */
     private void initListeners() {
@@ -511,8 +526,19 @@ public class NGraphMenuPanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 lastColorSelected = (int)altitudeComboBox.getSelectedItem() ;
-                changeColoring(app.getGraph()) ;
+                if(app.getGraph() instanceof FlightsIntersectionGraph) {
+                    int sm = getSecurityMargin();
+                    FlightsIntersectionGraph fig = (FlightsIntersectionGraph)app.getGraph();
+                    if(sm != lastSecurityMarginSelected) {
+                        lastSecurityMarginSelected = sm;
+                        fig.setSecurityMargin(sm);
+                        changeSecurityMargin(fig, sm);
+                        changeColoring(app.getGraph(), true);
+                    }
+                }
+                changeColoring(app.getGraph(), false) ;
                 changeColorShown(app.getGraphRenderer()) ;
+                app.getMainScreen().getMap().repaint();
             }
         });
 
@@ -539,7 +565,7 @@ public class NGraphMenuPanel extends JPanel{
      * 
      * @author Nathan LIEGEON
      */
-    private void changeColoring(GraphSAE graph) {
+    private void changeColoring(GraphSAE graph, boolean forcefully) {
         boolean coloringChanged = false ;
         if (graph == null) {
             return ;
@@ -564,7 +590,7 @@ public class NGraphMenuPanel extends JPanel{
         }
 
         // Treatment is done here because too much indentation is ugly
-        if (coloringChanged) {
+        if (coloringChanged || forcefully) {
             if (lastAlgoSelected != null) {
                 ColoringUtilities.removeCurrentColoring(graph) ;
             }
@@ -594,6 +620,10 @@ public class NGraphMenuPanel extends JPanel{
             graph.showNodesWithColor(lastColorSelected) ;
             graph.showNodesWithColor(lastColorSelected) ;
         }
+    }
+
+    private void changeSecurityMargin(FlightsIntersectionGraph fig, int securityMargin) {
+        ImportationFIG.reDoCollisions(fig, securityMargin);
     }
     //#endregion
 }

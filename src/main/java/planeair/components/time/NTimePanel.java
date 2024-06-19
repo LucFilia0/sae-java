@@ -3,8 +3,11 @@ package planeair.components.time;
 //#region IMPORT
     //#region SWING
     import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
+    import javax.swing.event.ChangeEvent;
+    import javax.swing.Icon;
+    import javax.swing.ImageIcon;
+    import javax.swing.JLabel;
+    import javax.swing.JButton;
     //#endregion
 
     //#region PLANEAIR
@@ -13,11 +16,6 @@ import javax.swing.event.ChangeEvent;
     import planeair.graph.graphtype.FlightsIntersectionGraph;
     import planeair.util.NTime;
     //#endregion
-
-    import javax.swing.Icon;
-    import javax.swing.ImageIcon;
-    import javax.swing.JLabel;
-    import javax.swing.JButton;
 
     //#region AWR
     import java.awt.event.ActionEvent;
@@ -221,20 +219,18 @@ public class NTimePanel extends JPanel {
                     // Stops the simulation
                     this.simulationPlaying = false;
                     this.playButton.setIcon(this.iconPlay);
-                    this.sliderTime.setEnabled(true);
                 }else {
                     // Starts the simulation
                     this.simulationPlaying = true;
                     this.playButton.setIcon(this.iconPause);
-                    this.sliderTime.setEnabled(false);
 
                     this.simulation = new Thread() {
                         @Override
                         public void run() {
                             while(simulationPlaying) {
-                                sliderTime.setValue(sliderTime.getValue() + 2); // Plus 2mn in the simulation every second in the real life
+                                sliderTime.setValue(sliderTime.getValue() + 1); // Plus 2mn in the simulation every second in the real life
                                 try {
-                                    Thread.sleep(1000);
+                                    Thread.sleep(500);
                                 }catch(InterruptedException e) {
                                     e.printStackTrace();
                                 }

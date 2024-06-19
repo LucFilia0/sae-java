@@ -26,6 +26,21 @@ package planeair.graph.graphtype;
  */
 public class FlightsIntersectionGraph extends GraphSAE {
 
+    //#region STATIC VARIABLES
+
+    public static final int DEFAULT_SECURITY_MARGIN = 15;
+
+    //#endregion
+
+    //#region ATTRIBUTES
+
+    /**
+     * The minutes value under which two Flights are colliding
+     */
+    private int securityMargin;
+
+    //#endregion
+
     //#region CONSTRUCTORS
 
     /**
@@ -44,6 +59,7 @@ public class FlightsIntersectionGraph extends GraphSAE {
      */
     public FlightsIntersectionGraph(String id) {
         super(id); // -> The identifier of the FIG, in the parent class (SingleGraph)
+        this.securityMargin = DEFAULT_SECURITY_MARGIN;
     }
 
     //#endregion
@@ -68,6 +84,16 @@ public class FlightsIntersectionGraph extends GraphSAE {
 
     //#endregion
 
+    //#region GETTERS
+
+    public int getSecurityMargin() {
+        return this.securityMargin;
+    }
+
+    //#endregion
+
+    //#region SETTERS
+
     /**
      * Sets the total number of colors used to color the graph
      * @param nbColors new number of colors
@@ -79,5 +105,11 @@ public class FlightsIntersectionGraph extends GraphSAE {
         this.setAttribute(COLOR_ATTRIBUTE, nbColors) ;
         this.setKMax(nbColors) ;
     }
+
+    public void setSecurityMargin(int securityMargin) {
+        this.securityMargin = securityMargin;
+    }
+    
+    //#endregion
 
 }
