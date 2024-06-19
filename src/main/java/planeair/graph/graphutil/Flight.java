@@ -6,7 +6,6 @@ package planeair.graph.graphutil;
 
 import planeair.util.NTime;
 import planeair.util.Airport;
-import planeair.components.mapview.mapwp.MapWaypointButton;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 
 //#endregion
@@ -586,14 +585,12 @@ public class Flight extends SingleNode {
      * 
      * @author Nathan LIEGEON
      */
-    public boolean fireSelectionUpdated() {
+    public void fireSelectionUpdated(boolean isSelected) {
         FlightWaypoint fwp = this.getFlightWaypoint() ;
         if (fwp != null) {
-            fwp.getWaypointButton().changeSelection(
-                fwp.getWaypointButton().equals(MapWaypointButton.waypointSelected)) ;
-            return true ;
+            fwp.getWaypointButton().setSelected(isSelected) ;
+            fwp.getWaypointButton().changeSelection(true) ;
         }
-        return false ;
     }
 
     // #endregion

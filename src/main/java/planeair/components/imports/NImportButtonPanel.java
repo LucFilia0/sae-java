@@ -358,6 +358,7 @@ public class NImportButtonPanel extends JPanel {
                     ColoringDSATUR.coloringDsatur(app.getGraph()) ;
                     ColoringUtilities.setGraphStyle(app.getGraph(), app.getGraph().getNbColors()) ;
                     app.getGraph().setKMax(app.getGraph().getNbColors()) ;
+                    app.getMainScreen().initGraphBottomPanel() ;
                     this.initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel());
                     this.flightsImported = true;
                 }

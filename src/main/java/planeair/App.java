@@ -52,7 +52,7 @@ public class App extends javax.swing.JFrame {
             System.out.println("Sorry this is not supported for Mac, get a better OS 👍👍👍\n "+
                 "If you're using anything else then just cry harder 🦈") ;
         }
-
+        
         App app = new App();
         app.setVisible(true);
 

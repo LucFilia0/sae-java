@@ -3,6 +3,7 @@ package planeair.importation;
 // Import Java
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Comparator;
 import java.util.Scanner;
 
 // Import PlaneAIR
@@ -269,6 +270,16 @@ public abstract class ImportationFIG {
             }
         }
 
+        // Sorts all flights in the its list by departure time
+        for (Airport airport : airportSet) {
+            airport.getFlightList().sort(new Comparator<Flight>() {
+                @Override
+                public int compare(Flight o1, Flight o2) {
+                    return o1.getDepartureTime().compareTo(o2.getDepartureTime()) ;
+                }
+            });
+        }
+
         scanLine.close();
     }
 
@@ -360,8 +371,8 @@ public abstract class ImportationFIG {
             Airport end = airportSet.getAirport(s_arrival) ;
             start.getFlightList().add(flight) ;
             end.getFlightList().add(flight) ;
+            flight.setFlightAttributes(start, end, departureTime, duration) ;
             
-            flight.setFlightAttributes(start, end, departureTime, duration);
         }catch(ObjectNotFoundException onfe) {
             throw new InvalidFileFormatException(currentLine, "Airport does not exist");
         }catch(InvalidEntryException iee) {

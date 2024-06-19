@@ -594,6 +594,14 @@ public class NMainScreen extends JPanel{
         }
 
         /**
+         * The InfoPanel containing the information of the selected waypoint
+         * @return the panel in question
+         */
+        public NInfoPanel getInfoPanel() {
+            return this.infoPanel;
+        }
+
+        /**
          * Returns the Map of the NMainScreen
          * 
          * @return The {@link planeair.components.mapview.Map Map} of the NMainScreen
@@ -604,10 +612,18 @@ public class NMainScreen extends JPanel{
         //#endregion
 
         //#region IS
+        /**
+         * Returns whether or not the graph menu is visible to the user
+         * @return True if it is, false if it isn't
+         */
         public boolean isGraphMenuVisible() {
             return this.graphMenuIsVisible ;
         }
 
+        /**
+         * Returns whether or not the map menu is visible to the user
+         * @return True if it is, false if it isn't
+         */
         public boolean isMapMenuVisible() {
             return this.mapMenuIsVisible ;
         }

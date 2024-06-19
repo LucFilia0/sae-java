@@ -1,6 +1,7 @@
 package planeair.graph.graphtype;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import org.graphstream.graph.implementations.SingleGraph;
 
@@ -40,7 +41,7 @@ public abstract class GraphSAE extends SingleGraph {
      * array the size of the number of color used to color 
      * the graph containing at the index i the Color assigned to the color i+1
      */
-    private Color[] colorTab ;
+    private HashMap<Integer, Color> colorMap ;
 
     //#endregion
 
@@ -56,6 +57,7 @@ public abstract class GraphSAE extends SingleGraph {
         this.setAttribute(GraphSAE.K_MAX, 0);
         this.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, 0);
         this.setAttribute(GraphSAE.NB_MAX_NODES, 0);
+        colorMap = new HashMap<>() ;
         ColoringUtilities.setGraphStyle(this, 0) ;
     }
 
@@ -97,8 +99,8 @@ public abstract class GraphSAE extends SingleGraph {
      * the graph containing at the index i the Color assigned to the color i+1
      * @return
      */
-    public Color[] getColorTab() {
-        return this.colorTab ;
+    public HashMap<Integer, Color> getColorMap() {
+        return this.colorMap ;
     }
 
     //#endregion
@@ -141,14 +143,6 @@ public abstract class GraphSAE extends SingleGraph {
             throw new InvalidEntryException() ;
         }
         this.setAttribute(CONFLICT_ATTRIBUTE, nbConflicts) ;
-    }
-
-    /**
-     * Overrides the old array containing the colors with this one
-     * @param colorTab
-     */
-    public void setColorTab(Color[] colorTab) {
-        this.colorTab = colorTab ;
     }
 
     //#endregion

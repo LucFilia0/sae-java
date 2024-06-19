@@ -359,11 +359,25 @@ public class Map extends org.jxmapviewer.JXMapViewer {
 
             fig.forEach(node -> {
                 Flight flight = (Flight)node;
+                FlightWaypoint fwp = flight.getFlightWaypoint() ;
 
                 GeoPosition flightPositionAtTime = flight.getGeoPositionAtTime(time);
                 // The function returns null is the Flight is not currently flying
                 if(flightPositionAtTime != null) {
-                    this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight, flightPositionAtTime));
+                    if (fwp != null) {
+                        fwp.setPosition(flightPositionAtTime);
+                        this.itemPainter.getFlightWaypoints().add(fwp);
+                    }
+    
+                    else {
+                        this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight, flightPositionAtTime)) ;
+                    }
+                }
+                
+                else {
+                    if (fwp != null && flight.getFlightWaypoint().getWaypointButton().isSelected()) {
+                        app.getMainScreen().getInfoPanel().hideInfos() ;
+                    }
                 }
             });
 

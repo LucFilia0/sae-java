@@ -6,7 +6,8 @@ package planeair.components.mapview.mapwp;
 
     import java.util.HashSet;
     import java.util.Set;
-    import java.lang.Math;
+import java.util.concurrent.ConcurrentHashMap;
+import java.lang.Math;
 
     //#endregion
 
@@ -57,24 +58,24 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * The Set which contains all the ActiveAirports waypoints
      */
-    private HashSet<ActiveAirportWaypoint> activeAirportWaypointSet;
+    private Set<ActiveAirportWaypoint> activeAirportWaypointSet;
 
     /**
      * The Set which contains all the InactiveAirports' waypoints
      */
-    private HashSet<InactiveAirportWaypoint> inactiveAirportWaypointSet;
+    private Set<InactiveAirportWaypoint> inactiveAirportWaypointSet;
 
 
     /**
      * The Set which contains all the FlightWaypoints
      */
-    private HashSet<FlightWaypoint> flightWaypointSet;
+    private Set<FlightWaypoint> flightWaypointSet;
 
     /**
      * The Set which stores all the MapWaypointButtons.
      * This Set is needed to remove all the MapWaypointButtons from the Map, when we want to repaint it, for example.
      */
-    private HashSet<MapWaypointButton> waypointButtonSet;
+    private Set<MapWaypointButton> waypointButtonSet;
 
     /**
      * Homepage blablabla
@@ -91,13 +92,12 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      * @author Luc le Manifik
      */
     public MapWaypointPainter(App app) {
-
         this.app = app ;
 
-        this.activeAirportWaypointSet = new HashSet<ActiveAirportWaypoint>();
-        this.inactiveAirportWaypointSet = new HashSet<InactiveAirportWaypoint>();
-        this.flightWaypointSet  = new HashSet<FlightWaypoint>();
-        this.waypointButtonSet  = new HashSet<MapWaypointButton>();
+        this.activeAirportWaypointSet = ConcurrentHashMap.newKeySet() ;
+        this.inactiveAirportWaypointSet = ConcurrentHashMap.newKeySet() ;
+        this.flightWaypointSet  = ConcurrentHashMap.newKeySet() ;
+        this.waypointButtonSet  = ConcurrentHashMap.newKeySet() ;
     }
 
     //#endregion
@@ -111,7 +111,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      * 
      * @author Luc le Manifik
      */
-    public HashSet<ActiveAirportWaypoint> getActiveAirportWaypoints() {
+    public Set<ActiveAirportWaypoint> getActiveAirportWaypoints() {
         return this.activeAirportWaypointSet;
     }
 
@@ -122,7 +122,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      * 
      * @author Luc le Manifik
      */
-    public HashSet<InactiveAirportWaypoint> getInactiveAirportWaypoints() {
+    public Set<InactiveAirportWaypoint> getInactiveAirportWaypoints() {
         return this.inactiveAirportWaypointSet;
     }
 
@@ -133,7 +133,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      * 
      * @author Luc le Manifik
      */
-    public HashSet<FlightWaypoint> getFlightWaypoints() {
+    public Set<FlightWaypoint> getFlightWaypoints() {
         return this.flightWaypointSet;
     }
 
@@ -144,7 +144,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
      * 
      * @author Luc le Manifik
      */
-    public HashSet<MapWaypointButton> getWpButtons() {
+    public Set<MapWaypointButton> getWpButtons() {
         return this.waypointButtonSet;
     }
 
@@ -225,7 +225,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                     int color = (int)flightWp.getFlight().getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
                     if (color != 0) {
                         FlightsIntersectionGraph graph = (FlightsIntersectionGraph)flightWp.getFlight().getGraph() ;
-                        g.setColor(graph.getColorTab()[color - 1]) ;
+                        g.setColor(graph.getColorMap().get(color - 1)) ;
                     }
                     g.setStroke(new BasicStroke(3)) ;
                     g.drawLine(depX, depY, arrX, arrY);
@@ -263,6 +263,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             x = airportWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = airportWp_location.getY() - screen.getY() - waypointButton.getHeight();
             NMainScreen main = app.getMainScreen() ;
+
             // Calculates whether the waypoint would be on top of one of the menus
             boolean graphMenuIntersects = main.isGraphMenuVisible() && main.getGraphMenuPanel().getBounds()
                 .intersects(waypointButton.getBounds()) ;
@@ -350,11 +351,13 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     //#endregion
 
     /**
-     * This overrided method does not allow to get the Waypoints of the WaypointPainter<MapItem>
+     * This method is not supported for a MapWaypointPainter
+     * 
+     * @throws UnsupportedOperationException
      */
     @Override
-    public Set<MapWaypoint> getWaypoints() {
-        return null;
+    public HashSet<MapWaypoint> getWaypoints() {
+        throw new UnsupportedOperationException() ;
     }
 
     public void clearAll() {

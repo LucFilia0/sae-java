@@ -22,7 +22,7 @@ package planeair.util;
  * 
  * @author Nathan LIEGEON
  */
-public class NTime {
+public class NTime implements Comparable<NTime> {
 
     /**
      * The number of hour - [0; 23]
@@ -145,5 +145,10 @@ public class NTime {
      */
     public static NTime getCurrentTime() {
         return new NTime(LocalTime.now().getHour(), LocalTime.now().getMinute()) ;
+    }
+    
+    @Override
+    public int compareTo(NTime o) {
+        return Integer.compare(this.getValueInMinutes(), o.getValueInMinutes()) ;
     }
 }

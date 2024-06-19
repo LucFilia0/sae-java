@@ -20,13 +20,11 @@ package planeair.components.mapview.mapwp;
 
     import org.jxmapviewer.viewer.GeoPosition;
 
-    //#endregion
+//#endregion
 
     //#region PLANEAIR
 
     import planeair.components.mapview.Map;
-    import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-    import planeair.graph.graphutil.PanelCreator;
     
     //#endregion
 
@@ -96,19 +94,7 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
             @Override
             public void actionPerformed(ActionEvent e) {
                 MapWaypointButton mwp = (MapWaypointButton) e.getSource();
-                if(Map.infoPanel != null)
-                    Map.infoPanel.showInfos(mwp.getMapWaypoint());
-                boolean isSelected = mwp.equals(MapWaypointButton.waypointSelected) ;
-                mwp.changeSelection(isSelected) ;
-                if (mwp.getMapWaypoint() instanceof FlightWaypoint) {
-                    FlightWaypoint fwp = (FlightWaypoint)mwp.getMapWaypoint() ;
-                    if (!isSelected) {
-                        PanelCreator.setSelectedStyle(fwp.getFlight()) ;
-                    }
-                    else {
-                        PanelCreator.removeSelectedStyle(fwp.getFlight());
-                    }
-                }
+                mwp.changeSelection(true) ;
 
                 Map.infoPanel.showInfos(mwp.getMapWaypoint());
             }
