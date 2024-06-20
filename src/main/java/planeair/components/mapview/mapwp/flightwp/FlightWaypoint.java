@@ -1,27 +1,13 @@
 package planeair.components.mapview.mapwp.flightwp;
 
 //#region IMPORTS
+import java.io.File;
 
-    //#region JAVA
+import org.jxmapviewer.viewer.GeoPosition;
 
-    import java.io.File;
-
-    //#endregion
-
-    //#region JXMAPVIEWER
-
-    import org.jxmapviewer.viewer.GeoPosition;
-
-    //#endregion
-
-    //#region PLANEAIR
-
-    import planeair.components.mapview.mapwp.MapWaypoint;
-    import planeair.graph.graphutil.Flight;
-    import planeair.graph.graphutil.PanelCreator;
-
-    //#endregion
-
+import planeair.components.mapview.mapwp.MapWaypoint;
+import planeair.graph.graphutil.Flight;
+import planeair.graph.graphutil.PanelCreator;
 //#endregion
 
 /**

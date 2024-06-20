@@ -1,31 +1,10 @@
 package planeair.components.mapview.mapwp;
 
 //#region IMPORTS
+import java.io.File;
+import java.io.IOException;
 
-    //#region JAVA
-
-    import java.io.File;
-    import java.io.IOException;
-
-    //#endregion
-
-    //#region AWT
-
-    import java.awt.event.ActionEvent;
-    import java.awt.event.ActionListener;
-
-    //#endregion
-
-    //#region JXMAPVIEWER
-
-    import org.jxmapviewer.viewer.GeoPosition;
-
-//#endregion
-
-    //#region PLANEAIR
-    
-    //#endregion
-
+import org.jxmapviewer.viewer.GeoPosition;
 //#endregion
 
 /**

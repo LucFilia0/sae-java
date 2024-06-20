@@ -1,8 +1,6 @@
 package planeair.components.mapview.mapwp;
 
 //#region IMPORTS
-
-
 import javax.swing.JToggleButton;
 import javax.swing.border.StrokeBorder;
 
@@ -15,11 +13,8 @@ import java.awt.event.ItemListener;
 import java.awt.BasicStroke;
 import java.awt.Color;
 
-
-
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 import planeair.App;
-
 //#endregion
 
 /**
