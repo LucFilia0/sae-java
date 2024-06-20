@@ -66,7 +66,7 @@ public class ImportationTestGraph {
     /**
      * The line number used to throw exceptions
      */
-    private static int currentLine = 0;
+    private static int currentLine;
 
     /**
      * The RegEx which is used to clean the TestGraph Files' lines

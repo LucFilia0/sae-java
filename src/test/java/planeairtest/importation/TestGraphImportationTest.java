@@ -11,27 +11,34 @@ package planeairtest.importation;
 	//#region JAVA
 	import java.io.File;
 	//#endregion
-import java.io.FileNotFoundException;
 
-import planeair.exceptions.InvalidFileFormatException;
-//#region PLANEAIR
+	//#region PLANEAIR
 	import planeair.graph.graphtype.TestGraph;
 	import planeair.importation.ImportationTestGraph;
+	//#endregion
+
+	//#region EXCEPTIONS
+	import planeair.exceptions.InvalidFileFormatException;
+	import java.io.FileNotFoundException;
 	//#endregion
 
 //#endregion
 
 /**
- * This class test is made to test the importation of the TestGraphs
+ * Test for the importation of the TestGraphs
  * 
  * @author Luc le Manifik
  */
 public class TestGraphImportationTest {
 
+	//#region ATTRIBUTES
+
 	/**
 	 * The TestGraph we wish to test
 	 */
 	private TestGraph testGraph;
+
+	//#endregion
 	
 	/**
 	 * This procedure is launched before the importation test
@@ -40,9 +47,14 @@ public class TestGraphImportationTest {
 	 */
 	@Before
 	public void init() {
-		this.testGraph = new TestGraph("test");
+		this.testGraph = new TestGraph("Test-TestGraph");
 	}
 	
+	/**
+	 * This method tests the importation of the TestGraph
+	 * 
+	 * @author Luc le Manifik
+	 */
 	@Test
 	public void testImportTestGraphFromFile() {
 		File file = null;
@@ -60,6 +72,9 @@ public class TestGraphImportationTest {
 			fail("File is not well treated : " + iffe.getMessage());
 		}
 
-		System.out.println("done fdp");
+		assertTrue(this.testGraph.getNbMaxNodes() == 11);
+		assertTrue(this.testGraph.getNodeCount() == 11);
+		assertTrue(this.testGraph.getEdgeCount() == 20);
+		assertTrue(this.testGraph.getKMax() == 2);
 	}
 }

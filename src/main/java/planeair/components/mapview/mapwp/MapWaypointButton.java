@@ -2,39 +2,21 @@ package planeair.components.mapview.mapwp;
 
 //#region IMPORTS
 
-    //#region SWING
+import javax.swing.BorderFactory;
 
-    import javax.swing.BorderFactory;
+import java.io.File;
+import java.io.IOException;
 
-    //#endregion
-
-    //#region JAVA
-
-    import java.io.File;
-
-    //#endregion
-
-    //#region AWT
-
-    import java.awt.Cursor;
-    import java.awt.BasicStroke;
+import java.awt.Cursor;
+import java.awt.BasicStroke;
 import java.awt.Color;
-
-//#endregion
-
-    //#region EXCEPTIONS
-
-    import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import planeair.App;
-
-//#endregion
-
-    //#region PLANEAIR
-    import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 import planeair.components.menu.infos.NInfoPanel;
 import planeair.graph.graphutil.PanelCreator;
-    //#endregion
 
 //#endregion
 
@@ -97,6 +79,30 @@ public class MapWaypointButton extends javax.swing.JButton {
 
         this.setIcon(rotatedImage);
         this.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Makes a little funny hand when the button is hovered :)
+
+        this.initEvents();
+    }
+
+    //#endregion
+
+    //#region PRIVATE METHODS
+
+    /**
+     * This method initiates the performed action when the MapWaypointButton is clicked.
+     * 
+     * @author Luc le Manifik
+     */
+    private void initEvents() {
+
+        this.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MapWaypointButton mwp = (MapWaypointButton) e.getSource();
+                mwp.changeSelection(true) ;
+            }
+        });
+
     }
 
     //#endregion
@@ -111,6 +117,25 @@ public class MapWaypointButton extends javax.swing.JButton {
      */
     public MapWaypoint getMapWaypoint() {
         return this.mapWaypoint;
+    }
+
+    /**
+     * Returns whether this waypoint is selected or not
+     * @return true if it is selected, false if not
+     */
+    public boolean isSelected() {
+        return this.selected ;
+    }
+
+    //#endregion
+
+    //#region GETTERS
+
+    /**
+     * Change the selection of this button
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected ;
     }
 
     //#endregion
@@ -188,21 +213,6 @@ public class MapWaypointButton extends javax.swing.JButton {
 
         this.repaint() ;
     }
-
-    /**
-     * Returns whether this waypoint is selected or not
-     * @return true if it is selected, false if not
-     */
-    public boolean isSelected() {
-        return this.selected ;
-    }
-
-    /**
-     * Change the selection of this button
-     */
-    public void setSelected(boolean selected) {
-        this.selected = selected ;
-    } 
     
     //#endregion
 
