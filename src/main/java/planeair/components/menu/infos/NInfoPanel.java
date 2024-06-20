@@ -119,7 +119,7 @@ public class NInfoPanel extends JPanel {
         this.labelAirport.setOpaque(false);
         this.airportPanel.setBackground(App.KINDAYELLOW);
 
-        this.scrollPane.setPreferredSize(new Dimension(300,100));
+        this.scrollPane.setPreferredSize(new Dimension(400,100));
         this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setBackground(App.KINDAYELLOW);

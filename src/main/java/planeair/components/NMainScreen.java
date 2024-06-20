@@ -34,8 +34,8 @@ import planeair.graph.graphtype.TestGraph;
 //#endregion*
 
 /**
- * This class creates the principal panel of the App where you can see the map and the graph
- * The class is one of the two Panel ADD in the JFrame (App)
+ * This class creates the amin panel of the App where you can see the map and the graph of choosen files
+ * The class is one of the two Panel ADD directely in the JFrame (App)
  * 
  * @author GIRAUD Nila
  */
@@ -45,7 +45,7 @@ public class NMainScreen extends JPanel {
 
         //#region STRUCTURE
         /**
-         * Panel wish will situe in the North of the borderLayout of the frame
+         * Locate in the North of the borderLayout of the frame
          * nb LINE : 3 (PanelNav + HourPanelCenter)
          * nb COLUMN : 1
          * hgap : 0
@@ -54,37 +54,33 @@ public class NMainScreen extends JPanel {
         private JPanel header = new JPanel(new GridLayout(1,1,0,0));
 
         /**
-         * Panel situe in the WEST of the body's borderLayout
+         * Locate in the WEST of the body's borderLayout
          * Two MENU can appear here
          * 1) NMenuGraphPanel
          * 2) NMenuMapPanel
-         * Panel locate int the ARTICLE of the Map borderLayout
-         * Two MENU can appeair here
-         * 1) NMenuGraphPanelApp
-         * 2) NMenuMapPanelApp
          */
         private JPanel article = new JPanel();
 
         /**
-         * Panel locate int the ASIDE of the Map borderLayout
+         * Locate int the EAST of the Map borderLayout
+         * Two panel appear here
+         * 1) NMinGraphPanel
+         * 2) NGraphInfoPanel
          */
         private JPanel aside = new JPanel(new GridLayout());
 
         /**
-         * Panel locate int th SOUTH of the Map borderLayout
+         * Locate int th SOUTH of the Map borderLayout
          * Contain Info for mapWaipoint
          */
         private JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         /**
-         * Panel situe in the CENTER of the Frame's borderLayout 
+         * Locate in the CENTER of the Frame's borderLayout 
          * For view the map even if we have the different Panel
          */
         private Map map ;
 
-        
-
-        
         //#endregion
 
         //#region HEADER COMPONENTS
@@ -95,16 +91,15 @@ public class NMainScreen extends JPanel {
              * nb LINE : 1
              * nb COLUMN : 3
              * hgap : 200
-             * vgap : 0
              * Location : top of the frame (represent the header)
              */
-            private JPanel panelNav = new JPanel(new GridLayout(1,3,0,0));
+            private JPanel panelNav = new JPanel(new GridLayout(1,3));
             //#endregion
 
             //#region NAV BUTTONS
                 //#region PANEL
                 /**
-                 * Panel for put all buttons in the nav
+                 * Put all buttons in the nav
                  * Grid
                  * LINE : 1
                  * COLUMN : 2 (menu + import)
@@ -169,7 +164,7 @@ public class NMainScreen extends JPanel {
 
             //#region NAME + LOGO
             /**
-             * Label for App's name + Logo
+             * App's name + Logo
              */
             private JLabel labelLogoName = new JLabel("Plane AIR",JLabel.CENTER);
             //#endregion
@@ -203,10 +198,11 @@ public class NMainScreen extends JPanel {
             private NTimePanel timePanel;
             /**
              * Panel for timePanel
+             * Override PaintComponent() --> Center it
              */
             private JPanel bodyCenter;
             /**
-             * JLabel for see the number altitudes choose
+             * See the number altitudes choose
              * Location : in the panel menu --> need here for Events
              */
             private NComboBoxGraph kmaxComboBox = new NComboBoxGraph(); 
@@ -215,14 +211,14 @@ public class NMainScreen extends JPanel {
             //#region LEFT
             /**
              * Menu for changing graph composition
-             * Appear after push the button with the icon menu.png
+             * Appear after push the button with the icon graph.png
              * Location : left in the frame
              */
             private NGraphMenuPanel graphMenu; 
 
             /**
-             * Menu for changing graph composition
-             * Appear after push the button with the icon menu.png
+             * Menu for changing map composition
+             * Appear after push the button with the icon map.png
              * Location : left in the frame
              */
             private NMapMenuPanel mapMenu;
@@ -423,11 +419,13 @@ public class NMainScreen extends JPanel {
             //#endregion
 
             //#region BODY
-            graphMenu = new NGraphMenuPanel(App.app, 0, kmaxComboBox);
-            mapMenu = new NMapMenuPanel(map);
+            
+            
             //#endregion
             
             //#region LEFT
+            graphMenu = new NGraphMenuPanel(App.app, 0, kmaxComboBox);
+            mapMenu = new NMapMenuPanel(map);
             map.add(article,BorderLayout.WEST);
             //#endregion
 
