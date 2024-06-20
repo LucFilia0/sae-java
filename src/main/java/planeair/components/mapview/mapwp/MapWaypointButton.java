@@ -145,10 +145,16 @@ public class MapWaypointButton extends javax.swing.JButton {
                     waypointSelected.setSelected(false);
                     waypointSelected.setSelectionStyle() ;
                 }
-                selected = true ;
-                this.setSelectionStyle() ;
-                waypointSelected = this ;
-                infoPanel.showInfos(mapWaypoint) ;
+
+                if (this.getMapWaypoint().getWaypointButton().isVisible()) {
+                    selected = true ;
+                    this.setSelectionStyle() ;
+                    waypointSelected = this ;
+                    infoPanel.showInfos(mapWaypoint) ;
+                }
+                else {
+                    infoPanel.hideInfos() ;
+                }
             }
         }
 
@@ -158,6 +164,7 @@ public class MapWaypointButton extends javax.swing.JButton {
         }
 
         this.repaint() ;
+        infoPanel.repaint() ;
     }
 
     /**

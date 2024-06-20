@@ -64,12 +64,12 @@ public class App extends javax.swing.JFrame {
     /**
      * The width of the application's screen
      */
-    public final static int APPLICATION_SCREEN_WIDTH = 1080;
+    public final static int APPLICATION_SCREEN_WIDTH = 1200;
 
     /**
      * The height of the application's screen
      */
-    public final static int APPLICATION_SCREEN_HEIGHT = 720;
+    public final static int APPLICATION_SCREEN_HEIGHT = 900;
 
     /**
      * THE COLOR OF THE APP (not really yellow but quand même)
@@ -161,7 +161,7 @@ public class App extends javax.swing.JFrame {
         // Basic configuration
         this.setTitle("Plane AIR");
         this.setSize(App.APPLICATION_SCREEN_WIDTH, App.APPLICATION_SCREEN_HEIGHT);
-        this.setMinimumSize(new Dimension(1200,800));
+        this.setMinimumSize(new Dimension(APPLICATION_SCREEN_WIDTH,APPLICATION_SCREEN_HEIGHT));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);

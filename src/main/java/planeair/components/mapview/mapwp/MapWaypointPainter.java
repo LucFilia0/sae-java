@@ -198,9 +198,11 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                     x = flightWp_location.getX() - screen.getX() - MapWaypointButton.BUTTON_SIZE/2;
                     y = flightWp_location.getY() - screen.getY() - MapWaypointButton.BUTTON_SIZE/2;
                     
-                    waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);        
+                    waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
+                    waypointButton.setVisible(true) ;        
                 }else {
-                    flightWp.getWaypointButton().setBounds(0, 0, 0, 0);
+                    flightWp.getWaypointButton().setVisible(false) ;
+                    flightWp.getWaypointButton().changeSelection(true) ;
                 }
 
                 // Painting the Flight lines
@@ -223,9 +225,12 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                     g.setStroke(new BasicStroke(3)) ;
                     g.drawLine(depX, depY, arrX, arrY);
                 }
-            }
-            else {
-                flightWp.getFlight().setFlightWaypoint(null) ;
+            } else {
+                if (flightWp.getFlight().getFlightWaypoint() != null) {
+                    flightWp.getWaypointButton().setVisible(false) ;
+                    flightWp.getWaypointButton().changeSelection(true) ;
+                    flightWp.getFlight().setFlightWaypoint(null) ;
+                }
             }
         }
     }

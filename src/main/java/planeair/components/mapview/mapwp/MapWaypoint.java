@@ -106,7 +106,8 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
      * Gets the MapWaypointButton of the MapWaypoint. 
      * The MapWaypointButton actually contains the visual of the MapWaypoint.
      * 
-     * @return ({@link ihm.mapvisuals.mapwp.MapWaypointButton MapWaypointButton}) - The MapWaypointButton linked to the MapWaypoint
+     * @return ({@link ihm.mapvisuals.mapwp.MapWaypointButton MapWaypointButton}) 
+     * - The MapWaypointButton linked to the MapWaypoint
      * 
      * @author Luc le Manifik
      */
@@ -141,6 +142,19 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
     //#endregion
 
     //#region TOSTRING
+
+    /**
+     * Returns the correctly formated informations of the MapWaypointButton
+     * First part
+     */
+    public abstract String toStringFirst();
+
+    /**
+     * Returns the correctly formated informations of the MapWaypointButton
+     * First part
+     */
+    public abstract String toStringSecond();
+
 
     /**
      * Returns the correctly formated informations of the MapWaypointButton
