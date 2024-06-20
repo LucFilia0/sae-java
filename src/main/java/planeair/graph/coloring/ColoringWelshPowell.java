@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import org.graphstream.graph.Node;
 
 import planeair.graph.graphtype.GraphSAE;
-import planeair.graph.graphtype.TestGraph;
 
 public abstract class ColoringWelshPowell {
     
@@ -64,7 +63,7 @@ public abstract class ColoringWelshPowell {
 
         // Conflicts management
         res[1] = ColoringUtilities.colorWithLeastConflicts(graph) ;
-        graph.setAttribute(TestGraph.CONFLICT_ATTRIBUTE, res[1]) ;
-        graph.setAttribute(GraphSAE.COLOR_ATTRIBUTE, res[0]) ;
+        graph.setNbColors(res[0]) ;
+        graph.setNbConflicts(res[1]) ;
     }
 }

@@ -1,26 +1,19 @@
 package planeair.components.menu;
 
 //#region IMPORT
-    //#region .SWING
     import javax.swing.JLabel;
     import javax.swing.JPanel;
     import javax.swing.SwingConstants;
-    //#endregion
 
-    //#region .AWT
     import java.awt.Dimension;
-    //#endregion
 
-    //#region LAYOUT
     import java.awt.GridLayout;
-import java.awt.event.ItemEvent;
+    import java.awt.event.ItemEvent;
+    import java.awt.event.ItemListener;
+    
 //#endregion
-import java.awt.event.ItemListener;
-
-//#region PLANEAIR
     import planeair.App;
     import planeair.components.mapview.Map;
-    //#endregion
 //#endregion
 
 /**

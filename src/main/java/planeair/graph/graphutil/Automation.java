@@ -7,12 +7,10 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
-import java.util.List ;
 import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -29,8 +27,8 @@ import planeair.graph.graphtype.TestGraph;
 import planeair.importation.ImportationTestGraph;
 
 /**
- * Automates every step of the test where we have to import 20 graphs, 
- * color them and store the results.
+ * Automates every step of the Coloring Challenge where we 
+ * have to import 20 graphs, color them and store the results.
  * 
  * @author Nathan LIEGEON
  */
@@ -44,27 +42,27 @@ public abstract class Automation {
     private static final int NUMBER_OF_ALGORITHMS = 3 ;
 
     /**
-     * Int identifier for the Welsh_Powell algorithm, represents its index in lists where its results are stored
-     * and its identifying value for switch statements
+     * Constant representing the Welsh & Powell algorithm 
+     * for list indexing and switch statements
      */
     private static final int WELSH_POWELL = 0 ;
 
     /**
-     * Int identifier for the DSATUR algorithm, represents its index in lists where its results are stored
-     * and its identifying value for switch statements
+     * Constant representing the DSATUR algorithm 
+     * for list indexing and switch statements
      */
     private static final int DSATUR = 1 ;
 
     /**
-     * Int identifier for the RLF algorithm, represents its index in lists where its results are stored
-     * and its identifying value for switch statements
+     * Constant representing the RLF algorithm 
+     * for list indexing and switch statements
      */
     private static final int RLF = 2 ;
 
     /**
      * Default folder where the solution will be stored
      */
-    private static final String FOLDER_PATH = "/Solution_Equipe_G1-4/" ;
+    private static final String FOLDER_PATH = "/4/" ;
 
     //#endregion
 
@@ -84,29 +82,14 @@ public abstract class Automation {
         ExecutorService threadPool = Executors.newFixedThreadPool(numberOfCores) ;
         TreeSet<TestGraph> graphSet = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
         new File(path + FOLDER_PATH).mkdirs() ;
-        CountDownLatch latch = new CountDownLatch(graphSet.size()) ;
+
         for (TestGraph graph : graphSet) {
             TestGraph coloredGraph = Automation.useBestColoringAlgorithm(graph, threadPool) ;
-            threadPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (graph != null) {
-                        Automation.writeToFile(coloredGraph, path, threadPool) ;
-                        latch.countDown() ;
-                    }
-                }
-            });
+            Automation.writeToFile(coloredGraph, path) ;
                 
         }
-        try {
-            latch.await() ;
-        }
 
-        catch (InterruptedException e) {
-            System.out.println(e) ;
-        }
-
-        System.out.println("Done importing") ;
+        System.out.println("Done Writing") ;
         System.out.println("Time taken : " + (double)((System.nanoTime() - start)) /1000000000);
         threadPool.shutdown() ;
     }
@@ -151,12 +134,12 @@ public abstract class Automation {
                         TestGraph temp = new TestGraph(file.getName()) ;
                         try {
                             ImportationTestGraph.importTestGraphFromFile(temp, file, false);
+                            res.add(temp) ;
                         }
 
                         catch (FileNotFoundException e) {
                             System.err.println(e) ;
                         }
-                        res.add(temp) ;
                         latch.countDown() ;
                     }
                 }) ;
@@ -184,25 +167,25 @@ public abstract class Automation {
      * 
      * @author Nathan LIEGEON
      */
-    public static void writeToFile(TestGraph graph, String path, ExecutorService threadPool) {
+    public static void writeToFile(TestGraph graph, String path) {
         try {
-            File resFile = new File(path + FOLDER_PATH + "color-eval" + Automation.isolateNumberInString(graph.getId()) + ".txt") ;
+            File resFile = new File(path + FOLDER_PATH + "colo-eval" + Automation.isolateNumberInString(graph.getId()) + ".txt") ;
             if (!resFile.createNewFile()) {
                 System.out.println("File " + graph.getId() + " already exists\n") ;
                 return ;
             }
 
-            System.out.println("Writing file " + graph.getId()) ;
+            System.out.println("Writing file " + graph.getId() + "\n") ;
             FileWriter resWriter = new FileWriter(resFile) ;
-            List<Node> list = graph.nodes().collect(Collectors.toList()) ;
-            list.sort(new Comparator<Node>() {
+            TreeSet<Node> set = new TreeSet<>(new Comparator<Node>() {
                 @Override
                 public int compare(Node arg0, Node arg1) {
                     return Integer.compare(Integer.valueOf(arg0.getId()), Integer.valueOf(arg1.getId())) ;
                 }
             }) ;
 
-            for (Node node : list) {
+            graph.nodes().forEach(n -> set.add(n)) ;
+            for (Node node : set) {
                 resWriter.write(node.getId() + " ; " + node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) + '\n') ;
             }
 
@@ -218,7 +201,6 @@ public abstract class Automation {
         catch (Exception e) {
             System.err.println(e) ;
         }
-        System.out.println() ;
     }
 
     //#endregion
@@ -311,16 +293,14 @@ public abstract class Automation {
 
         try {
             latch.await() ;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Interrupted 🤓🤓🤓") ;
         }
-
         // Finds the best solution
 
         int bestAlgorithm = findBestAlgorithmInList(graphList) ;
         switch (bestAlgorithm) {
-            case WELSH_POWELL:
+            case WELSH_POWELL :
                 System.out.println("WP") ;
                 break ;
             case DSATUR:
@@ -328,6 +308,9 @@ public abstract class Automation {
                 break ;
             case RLF:
                 System.out.println("RLF") ;
+                break ;
+            default : 
+                System.out.println("ALGORITHM UNDEFINED") ;
                 break ;
         }
 
@@ -341,17 +324,20 @@ public abstract class Automation {
 
     /**
      * Tells whether or not a file is of a similar form to the identifier
-     * ex : identifier is "testGraphX.txt" filename is "testGraph12.txt", placeholder is 'X'
+     * ex : identifier is "testGraphX.txt" filename is 
+     * "testGraph12.txt", placeholder is 'X'
      * The function will return true for the example
      * 
      * @param filename name your are testing
      * @param identifier identifier the filename will be compared to
      * @param placeholder character which should be replaced by numbers
-     * @return boolean telling whether the file was similar to the identifier or not
+     * @return boolean telling whether the file was similar to the 
+     * identifier or not
      * 
      * @author Nathan LIEGEON
      */
-    public static boolean isFileLike(String filename, String identifier, char placeholder) {
+    public static boolean isFileLike(String filename, String identifier, 
+                                    char placeholder) {
         // Initialisation
         boolean res = true ;
         int offset = 0, filenameLength = filename.length(), identifierLength = identifier.length();
@@ -398,6 +384,7 @@ public abstract class Automation {
      * Tells whether or not a file is of a similar form to one of the identifiers
      * ex : identifier is "testGraphX.txt" filename is "testGraph12.txt", placeholder is 'X'
      * The function will return true for the example
+     * This function is also case sensitive
      * 
      * @param filename name your are testing
      * @param identifier array containing different identifiers the filename will be compared to
@@ -406,7 +393,8 @@ public abstract class Automation {
      * 
      * @author Nathan LIEGEON
      */
-    public static boolean isFileLike(String filename, String[] identifiers, char placeholder) {
+    public static boolean isFileLike(String filename, String[] identifiers, 
+                                    char placeholder) {
         int i = 0 ;
         boolean res = false ;
         while (!res && i < identifiers.length) {
@@ -420,10 +408,8 @@ public abstract class Automation {
     /**
      * Returns which algorithm in the list has the best solution
      * 
-     * @param arg0
-     * @param arg1
-     * @param arg2
-     * @return index of the best algorithm
+     * @param list the list we are checking
+     * @return index of the best algorithm or null if the list is empty
      * 
      * @author Nathan LIEGEON
      */
@@ -438,8 +424,10 @@ public abstract class Automation {
         boolean hasLessConflicts ;
         boolean hasLessColors ;
         while (currentAlgorithm < list.size()) {
-            hasLessConflicts = list.get(bestAlgorithm).getNbConflicts() > list.get(currentAlgorithm).getNbConflicts() ;
-            hasLessColors = list.get(bestAlgorithm).getNbColors() > list.get(currentAlgorithm).getNbColors() ;
+            hasLessConflicts = list.get(bestAlgorithm).getNbConflicts() 
+                > list.get(currentAlgorithm).getNbConflicts() ;
+            hasLessColors = list.get(bestAlgorithm).getNbColors() 
+                > list.get(currentAlgorithm).getNbColors() ;
             if (hasLessColors || hasLessConflicts) {
                 bestAlgorithm = currentAlgorithm ;
             }

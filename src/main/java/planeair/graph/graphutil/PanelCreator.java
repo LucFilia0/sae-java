@@ -128,12 +128,14 @@ public class PanelCreator {
 			public void run() {
 				while(isRendering) {
 					try {
-						// Blocking pump waits for events so it's better for performances
+						// Blocking pump waits for events so 
+						//it's better for performances
 						fromViewer.blockingPump() ;
-					}
-
-					catch (Exception e) {
-						// ^^' 
+					} catch (Exception e) {
+						// pls I beg you never happen
+						// catch Exception to catch all kind of graph event 
+						// related issues (because a lot of stuff can get thrown)
+						System.out.println(e) ; 
 					}
 				}
 			}
@@ -154,7 +156,7 @@ public class PanelCreator {
 	/**
 	 * Getter for the viewer related to the Graph in the panel
 	 * @return the Viewer object
-	 * @see Viewer
+	 * @see Viewer Viewer for more detail
 	 */
 	public Viewer getViewer() {
 		return this.viewer;
@@ -180,7 +182,7 @@ public class PanelCreator {
 
 	/**
 	 * Getter for the view of the Graph
-	 * @return 
+	 * @return the view on this graph
 	 * @see View
 	 */
 	public View getView() {

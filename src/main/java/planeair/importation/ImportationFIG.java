@@ -12,6 +12,7 @@ import org.graphstream.graph.IdAlreadyInUseException;
 import planeair.exceptions.InvalidCoordinateException;
 import planeair.exceptions.InvalidEntryException;
 import planeair.exceptions.InvalidFileFormatException;
+import planeair.exceptions.InvalidTimeException;
 import planeair.exceptions.ObjectNotFoundException;
 
 import planeair.graph.graphutil.Flight;
@@ -73,8 +74,8 @@ public abstract class ImportationFIG {
      * 
      * @param airportsFile ({@link java.io.File File}) - The File read.
      *
-     * @throws FileNotFoundException Threw if the source File is not found or does not exist
-     * @throws InvalidFileFormatException Threw if the File is not found or does not exist 
+     * @throws FileNotFoundException Thrown if the source File is not found or does not exist
+     * @throws InvalidFileFormatException Thrown if the File is not found or does not exist 
      * 
      * @author Luc le Manifik
      */
@@ -99,7 +100,7 @@ public abstract class ImportationFIG {
                     ImportationFIG.createAirportFrom(airportSet, line, currentLine); // Creates an Airport with the informations of the line.
                 }catch(InvalidFileFormatException errorInFile) {
                     scanLine.close();
-                    // All errors are threw as InvalidFileFormatException, because the File is not in the correct format, non-dependant of which error precisely
+                    // All errors are Thrown as InvalidFileFormatException, because the File is not in the correct format, non-dependant of which error precisely
                     throw new InvalidFileFormatException(currentLine, errorInFile.getMessage());
                 }
             }
@@ -116,7 +117,7 @@ public abstract class ImportationFIG {
      * @param line (String) - The String that is read and contains the informations about the Airport.
      * @param currentLine (int) - The current line in the source file. Used to report errors.
      * 
-     * @throws InvalidFileFormatException Threw if the source file does not match the required format. So if there is an error on the line.
+     * @throws InvalidFileFormatException Thrown if the source file does not match the required format. So if there is an error on the line.
      * 
      * @author Luc le Manifik
      */
@@ -232,8 +233,8 @@ public abstract class ImportationFIG {
      * @param flightsFile ({@link java.io.File java.io.File}) - The source file where the informations  on the Flights are stored.
      * @param timeSecurity (double) - The time Gap below which the Flights are considered like in collision (in MINUTES).
      * 
-     * @throws FileNotFoundException Threw if the file is not found or does not exist.
-     * @throws InvalidEntryException Threw if the values passed in the Flights's constructor are not correct.
+     * @throws FileNotFoundException Thrown if the file is not found or does not exist.
+     * @throws InvalidEntryException Thrown if the values passed in the Flights's constructor are not correct.
      * 
      * @author Luc le Manifik
      */
@@ -291,7 +292,7 @@ public abstract class ImportationFIG {
      * @param line (String) - The line on which the relatives informations of the Flight are registered.
      * @param currentLine (int) - The current line of the source file, used to report the errors.
      * 
-     * @throws InvalidFileFormatException Threw if the line does not meet the requirement. Like missing informations, etc...
+     * @throws InvalidFileFormatException Thrown if the line does not meet the requirement. Like missing informations, etc...
      * 
      * @author Luc le Manifik
      */
@@ -335,12 +336,14 @@ public abstract class ImportationFIG {
                         duration = Integer.parseInt(string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, ""));
                         break;
                     default : 
-                        System.err.println("Error at Line " + currentLine + " : More informations than required.");
+                        System.err.println("Erreur à la ligne " + currentLine 
+                            + " : Trop d'informations données");
                         break;
                 }
             }catch(NumberFormatException e) {
                 scanData.close();
-                throw new InvalidFileFormatException(currentLine, "Problem occured when cast String to int");
+                throw new InvalidFileFormatException(currentLine, 
+                    "Problème lors du cast d'une String vers un int");
             }
             
             ++currentAttribute; // Increment to pass to the next attribute
@@ -349,10 +352,17 @@ public abstract class ImportationFIG {
 
         // Check if the line contains all the required informations (if currentAttribute == 5)
         if(currentAttribute < 5) {
-            throw new InvalidFileFormatException(currentLine, "Missing informations to correctly create the Flight");
+            throw new InvalidFileFormatException(currentLine, 
+                "Il manque des informations pour créer le vol");
         }
 
-        departureTime = new NTime(departureTime_h, departureTime_m);
+        try {
+            departureTime = new NTime(departureTime_h, departureTime_m);
+        }
+        catch (InvalidTimeException e) {
+            throw new InvalidFileFormatException(currentLine, 
+                "L'heure donnée n'est pas valide") ;
+        } 
 
         // If everything is ok, the Flight is initialized
 
@@ -392,7 +402,7 @@ public abstract class ImportationFIG {
      * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG which contains all the Flights
      * @param flight ({@link graph.Flight graph.Flight}) - The Flight from which we are adding the collisions.
      * @param timeSecurity (double) - The value, in MINUTES, of the threshold under which two Flights are in collision.
-     * @throws ObjectNotFoundException Threw if the departure Airport or the arrival Airport of one of the two Flights is not found.
+     * @throws ObjectNotFoundException Thrown if the departure Airport or the arrival Airport of one of the two Flights is not found.
      * 
      * @author Luc le Manifik
      */

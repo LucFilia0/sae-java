@@ -45,8 +45,8 @@ public abstract class ColoringDSATUR {
                 res[0] = (int)node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE);
             }
         }
-        graph.setAttribute(TestGraph.COLOR_ATTRIBUTE, res[0]) ;
-        res[1] = (int)graph.getAttribute(TestGraph.CONFLICT_ATTRIBUTE) ;
+        graph.setAttribute(GraphSAE.COLOR_ATTRIBUTE, res[0]) ;
+        res[1] = (int)graph.getAttribute(GraphSAE.CONFLICT_ATTRIBUTE) ;
     }
 
     /**

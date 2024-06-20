@@ -100,7 +100,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * Returns the Sets which contains all the ActiveAirports' Waypoints
      * 
-     * @return ({@link java.util.HashSet}) - The sets which contains all the ActiveAirports' Waypoints
+     * @return ({@link java.util.Set}) - The sets which contains all the ActiveAirports' Waypoints
      * 
      * @author Luc le Manifik
      */
@@ -111,7 +111,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * Returns the Sets which contains all the InactiveAirports' Waypoints
      * 
-     * @return ({@link java.util.HashSet}) - The sets which contains all the InactiveAirports' Waypoints
+     * @return ({@link java.util.Set}) - The sets which contains all the InactiveAirports' Waypoints
      * 
      * @author Luc le Manifik
      */
@@ -122,7 +122,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * Returns the Set which contains all the FlightWaypoints
      * 
-     * @return ({@link java.util.HashSet}) - The Sets which contains all the FlightWaypoints
+     * @return ({@link java.util.Set}) - The Sets which contains all the FlightWaypoints
      * 
      * @author Luc le Manifik
      */
@@ -133,7 +133,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * Returns the Set which contains all the MapWaypointButtons
      * 
-     * @return ({@link java.util.HashSet HashSet}) - The Sets which contains all the MapWaypointButtons
+     * @return ({@link java.util.Set}) - The Sets which contains all the MapWaypointButtons
      * 
      * @author Luc le Manifik
      */

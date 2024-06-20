@@ -13,7 +13,8 @@ package planeair.components.time;
     //#region PLANEAIR
     import planeair.App;
     import planeair.components.comboboxes.NComboBoxTime;
-    import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.exceptions.InvalidTimeException;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
     import planeair.util.NTime;
     //#endregion
 
@@ -200,8 +201,15 @@ public class NTimePanel extends JPanel {
                 minChoice.setSelectedItem(minutes);
                 
                 // Paints the Flights on the Map, at the selected NTime
-                if(App.app.getGraph() != null && App.app.getGraph() instanceof FlightsIntersectionGraph)
-                    App.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), (FlightsIntersectionGraph)App.app.getGraph());
+                try {
+                    if(App.app.getGraph() != null && App.app.getGraph() instanceof FlightsIntersectionGraph)
+                        App.app.getMainScreen().getMap().paintFlightsAtTime(getSelectedTime(), (FlightsIntersectionGraph)App.app.getGraph());
+
+                }
+
+                catch (InvalidTimeException ite) {
+                    System.err.println("how did you even do that\n" + ite) ;
+                }
             });
 
             playButton.addActionListener(e -> {
@@ -242,9 +250,14 @@ public class NTimePanel extends JPanel {
      * //
      * @return
      */
-    public NTime getSelectedTime() {
+    public NTime getSelectedTime() throws InvalidTimeException {
         int value = this.sliderTime.getValue();
-        return new NTime(value/60, value%60);
+        try {
+            return new NTime(value/60, value%60);
+        }
+        catch (InvalidTimeException e) {
+            throw e ;
+        }
     }
 
     public boolean isSimulationPlaying() {

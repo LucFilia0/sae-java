@@ -112,6 +112,8 @@ public abstract class ColoringUtilities {
         StringBuilder buffer = new StringBuilder() ;
 
         for (int i = 0 ; i < nbColor ; i++) {
+
+            // Ensures all colors are different
             do {
                 buffer.delete(0, buffer.length()) ;
                 currentHexValue = (int)Math.round(maxHexValue*Math.random()) ; 

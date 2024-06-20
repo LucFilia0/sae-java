@@ -35,23 +35,24 @@ public class NTime implements Comparable<NTime> {
     private int min ;
 
     /**
-     * Instantiates a FlightTime object
+     * Instantiates a NTime object
      * 
-     * @param hour Values go from 0 to 23
-     * @param min Values go from 0 to 59
+     * @param hour In the range [0 ; 23]
+     * @param min In the range [0 ; 23]
+     * 
+     * @throws InvalidTimeException Thrown if the value of the hour 
+     * or minute field is outside of the allowed range
      * 
      * @author Nathan LIEGEON
      */
-    public NTime(int hour, int min) {
+    public NTime(int hour, int min) throws InvalidTimeException {
         try {
             this.setHour(hour) ;
             this.setMinute(min) ;
         }
 
         catch (InvalidTimeException ite) {
-            System.err.println(ite) ;
-            this.hour = 0 ;
-            this.min = 0 ;
+            throw ite ;
         }
 
     }
@@ -69,8 +70,8 @@ public class NTime implements Comparable<NTime> {
     /**
      * Setter for the hour field
      * 
-     * @param hour Values go from 0 to 23
-     * @throws InvalidTimeException
+     * @param hour In the range [0 ; 23]
+     * @throws InvalidTimeException Thrown if not in the valid range
      */
     public void setHour(int hour) throws InvalidTimeException {
         this.hour = hour ;
@@ -91,8 +92,8 @@ public class NTime implements Comparable<NTime> {
     /**
      * Setter for the min field
      * 
-     * @param min Values go from 0 to 59
-     * @throws InvalidTimeException
+     * @param min In the range [0 ; 59]
+     * @throws InvalidTimeException Thrown if not in the valid range
      */
     public void setMinute(int min) throws InvalidTimeException {
         this.min = min;
@@ -126,15 +127,22 @@ public class NTime implements Comparable<NTime> {
     /**
      * Converts a time object to a FlightTime object
      * @param time (Time) - object to convert
-     * @return (FlightTime) - converted time
+     * @return (NTime) - converted time
+     * 
+     * @throws InvalidTimeException Thrown if the converted time ever has
+     * invalid values (should basically never happen)
      * 
      * @author Nathan LIEGEON
      */
-    public NTime convertTime(Time time) {
+    public NTime convertTime(Time time) throws InvalidTimeException {
         int hour = (int)time.getTime()%(1000000 * 60 * 60)/24 ;
         int minute = (int) time.getTime()%(1000000 * 60 * 60) / (24*60) ;
-        NTime returnTime = new NTime(hour, minute) ;
-        return returnTime ;
+        try {
+            NTime returnTime  = new NTime(hour, minute) ;
+            return returnTime ;
+        } catch (InvalidTimeException e) {
+            throw e ;
+        }
     }
 
     /**
@@ -144,7 +152,14 @@ public class NTime implements Comparable<NTime> {
      * @author Nathan LIEGEON
      */
     public static NTime getCurrentTime() {
-        return new NTime(LocalTime.now().getHour(), LocalTime.now().getMinute()) ;
+        try {
+            return new NTime(LocalTime.now().getHour(), 
+                LocalTime.now().getMinute()) ;
+        } catch (InvalidTimeException e) {
+            System.err.println(
+                "if this ever happens then the world is fuck f-ed") ;
+            return null ;
+        }
     }
     
     @Override

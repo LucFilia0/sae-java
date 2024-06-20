@@ -23,8 +23,6 @@ package planeair.components.mapview.mapwp;
 //#endregion
 
     //#region PLANEAIR
-
-    import planeair.components.mapview.Map;
     
     //#endregion
 

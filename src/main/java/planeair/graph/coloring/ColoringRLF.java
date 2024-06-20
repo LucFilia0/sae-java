@@ -54,6 +54,7 @@ public abstract class ColoringRLF {
 
         graph.setNbColors(color) ;
         graph.setNbConflicts(nbConflicts) ;
+        
 
     }
 

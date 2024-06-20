@@ -51,11 +51,10 @@ public class App extends javax.swing.JFrame {
         else {
             System.out.println("Sorry this is not supported for Mac, get a better OS 👍👍👍\n "+
                 "If you're using anything else then just cry harder 🦈") ;
-        }
+        }   
         
         App app = new App();
         app.setVisible(true);
-
         }
 
     //-- APP ATTRIBUTES
@@ -182,8 +181,8 @@ public class App extends javax.swing.JFrame {
     private void initAttributes() {
 
         this.airportSet = null; //new AirportSet() ;
-        this.fig = new FlightsIntersectionGraph("FIG") ;
-        this.testGraph = new TestGraph("TestGraph") ;
+        this.fig = null ;
+        this.testGraph = null ;
 
         this.mainScreen = new NMainScreen();
         this.importScreen = new NImportScreen();

@@ -282,11 +282,13 @@ public class NImportButtonPanel extends JPanel {
 
         // First button : Step directly in the NMainScreen
         confirmStart.addActionListener((ActionEvent e) -> {
-            if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof TestGraph) {
-                app.getMainScreen().getMap().clearAll();
-            }else if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof FlightsIntersectionGraph) {
-                app.getMainScreen().initMap();
-                app.getMainScreen().refreshTime();
+            if (App.app.getGraphRenderer() != null) {
+                if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof TestGraph) {
+                    app.getMainScreen().getMap().clearAll();
+                }else if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof FlightsIntersectionGraph) {
+                    app.getMainScreen().initMap();
+                    app.getMainScreen().refreshTime();
+                }
             }
             this.app.switchToMainScreen();
         });

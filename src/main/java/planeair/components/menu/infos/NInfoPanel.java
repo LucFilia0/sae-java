@@ -47,7 +47,6 @@ public class NInfoPanel extends JPanel {
      */
     private void placeComponents() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
         this.add(this.label);
     }
 
@@ -58,7 +57,6 @@ public class NInfoPanel extends JPanel {
      */
     public void showInfos(MapWaypoint mapWaypoint) {
         this.label.setText(mapWaypoint.toString());
-
         this.setOpaque(false);
     }
 
