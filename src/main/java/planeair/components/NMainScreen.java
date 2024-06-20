@@ -12,7 +12,9 @@ package planeair.components;
 
     //#region .AWT
     import java.awt.Dimension;
-    import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
     //#endregion
 
     //#region LAYOUT
@@ -58,7 +60,7 @@ public class NMainScreen extends JPanel {
         //#region STRUCTURE
         /**
          * Panel wish will situe in the North of the borderLayout of the frame
-         * nb LINE : 3 (PanelNav + HourPanelCenter + HourSliderPanel)
+         * nb LINE : 3 (PanelNav + HourPanelCenter)
          * nb COLUMN : 1
          * hgap : 0
          * vgap : 0
@@ -66,28 +68,37 @@ public class NMainScreen extends JPanel {
         private JPanel header = new JPanel(new GridLayout(1,1,0,0));
 
         /**
+         * Panel situe in the WEST of the body's borderLayout
+         * Two MENU can appear here
+         * 1) NMenuGraphPanel
+         * 2) NMenuMapPanel
+         * Panel locate int the ARTICLE of the Map borderLayout
+         * Two MENU can appeair here
+         * 1) NMenuGraphPanelApp
+         * 2) NMenuMapPanelApp
+         */
+        private JPanel article = new JPanel();
+
+        /**
+         * Panel locate int the ASIDE of the Map borderLayout
+         */
+        private JPanel aside = new JPanel(new GridLayout());
+
+        /**
+         * Panel locate int th SOUTH of the Map borderLayout
+         * Contain Info for mapWaipoint
+         */
+        private JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        /**
          * Panel situe in the CENTER of the Frame's borderLayout 
          * For view the map even if we have the different Panel
          */
         private Map map ;
 
-        /**
-         * Layout for the BorderLayout CENTER of body
-         */
-        private JPanel bodyCenter = new JPanel();
+        
 
-        /**
-         * Panel situe in the WEST of the body's borderLayout
-         * Two MENU can appear here
-         * 1) NMenuGraphPanel
-         * 2) NMenuMapPanel
-         */
-        private JPanel article = new JPanel();
-
-        /**
-         * Panel situe in the EAST of the body's borderLayout
-         */
-        private JPanel aside = new JPanel(new GridLayout());
+        
         //#endregion
 
         //#region HEADER COMPONENTS
@@ -205,6 +216,10 @@ public class NMainScreen extends JPanel {
              */
             private NTimePanel timePanel;
             /**
+             * Panel for timePanel
+             */
+            private JPanel bodyCenter;
+            /**
              * JLabel for see the number altitudes choose
              * Location : in the panel menu --> need here for Events
              */
@@ -280,6 +295,9 @@ public class NMainScreen extends JPanel {
     //#region INIT
 
         //#region COMPONENTS
+        /**
+         * 
+         */
         private void initComponents() {
 
             // Make Info Panel principal
@@ -290,7 +308,6 @@ public class NMainScreen extends JPanel {
             this.setLayout(new BorderLayout());
             map.setLayout(new BorderLayout());
             panelButton.setLayout(new BoxLayout(panelButton,BoxLayout.X_AXIS));
-            bodyCenter.setLayout(new BoxLayout(bodyCenter, BoxLayout.Y_AXIS));
             //#endregion
 
             //#region HEADER 
@@ -322,8 +339,22 @@ public class NMainScreen extends JPanel {
 
             //#region BODY 
 
-                //#region ARTICLE
+                //#region CENTER
+
+                //#endregion
+                bodyCenter = new JPanel(){
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        super.paintComponent(g);
+                        bodyCenter.setBounds(NMainScreen.this.getWidth()/2-(bodyCenter.getWidth()/2) + 5,0,bodyCenter.getWidth(),bodyCenter.getHeight()); //butiful
+                        bodyCenter.validate();
+                    }
+                };
+
                 bodyCenter.setOpaque(false);
+                
+                //#region ARTICLE
+                // body.setOpaque(false);
                 article.setOpaque(false);
                 article.setPreferredSize(new Dimension(385,100));
                 //#endregion
@@ -340,8 +371,14 @@ public class NMainScreen extends JPanel {
                 aside.setPreferredSize(new Dimension(385,100));
                 aside.setOpaque(false);
                 //#endregion
-            //#endregion
-            }
+
+                //#region FOOTER
+                footer.setOpaque(false);
+                footer.setPreferredSize(new Dimension(this.getWidth(), 140));
+                //#endregion
+            //#endregion  
+            
+         }
 
         /**
          * Initiates the Map located at the center of the NMainScreen
@@ -411,13 +448,23 @@ public class NMainScreen extends JPanel {
             //#region RIGHT
             initGraphBottomPanel();
             aside.add(graphLRightBottom);
-            map.add(aside,BorderLayout.EAST);
+            //#endregion
+
+            //#region FOOTER
+            JPanel emptyfooter = new JPanel();
+            emptyfooter.setPreferredSize(new Dimension(5,footer.getHeight()));
+            footer.add(emptyfooter);
+            footer.add(infoPanel);
+        
+
             //#endregion
 
             //#region ADD BORDER LAYOUT
             this.add(header, BorderLayout.NORTH);
             this.add(map, BorderLayout.CENTER);
-            this.map.add(this.infoPanel, BorderLayout.SOUTH);
+            this.map.add(article,BorderLayout.WEST);
+            this.map.add(aside,BorderLayout.EAST);
+            this.map.add(footer, BorderLayout.SOUTH);
             //#endregion
         };
             
@@ -434,9 +481,11 @@ public class NMainScreen extends JPanel {
         public void addTimePanel() {
             if(App.app.getGraphRenderer() != null && this.timePanel == null && App.app.getGraph() instanceof FlightsIntersectionGraph) {
                 this.timePanel = new NTimePanel();
-                map.add(timePanel, BorderLayout.CENTER);
+                bodyCenter.add(timePanel);
+                map.add(this.bodyCenter, BorderLayout.CENTER);
             }else if(App.app.getGraphRenderer() != null && this.timePanel != null && App.app.getGraph() instanceof TestGraph) {
-                map.remove(this.timePanel);
+                bodyCenter.remove(timePanel);
+                map.remove(this.bodyCenter);
                 this.timePanel = null;
             }
         }

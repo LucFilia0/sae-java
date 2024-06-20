@@ -200,8 +200,7 @@ public class NGraphInfoPanel extends JPanel {
         nbConflictPanel.setBackground(App.KINDAYELLOW);
         titleNbConflictsOccurred.setFont(App.KINDANORMAL);
 
-
-        this.setMaximumSize(new Dimension(225,300));
+        this.setMaximumSize(new Dimension(225,230));
         this.addComponents();
        
         this.setVisible(true);

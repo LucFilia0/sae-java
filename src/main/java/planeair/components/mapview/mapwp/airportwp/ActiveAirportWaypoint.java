@@ -54,5 +54,17 @@ public class ActiveAirportWaypoint extends AirportWaypoint {
         super(ActiveAirportWaypoint.ACTIVE_AIRPORT_WAYPOINT_ICON_FILE, airport, position);
     }
 
+    @Override
+    public String toStringFirst() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toStringFirst'");
+    }
+
+    @Override
+    public String toStringSecond() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toStringSecond'");
+    }
+
     //#endregion
 }
