@@ -190,21 +190,18 @@ public class NInfoPanel extends JPanel {
 
         }
         else{
-            
-
-            this.airport = ((AirportWaypoint) mapWaypoint).getAirport();
             this.labelAirport.setText(mapWaypoint.toString());
-    
             this.add(airportPanel);
 
             //#region TABLE
-            this.table = new JTable();
-            this.model = new NFlightTableInfoModel(this.airport);
-            this.table.setModel(model);
-            //#endregion
-        
-            this.add(panelTable);
-            
+            this.airport = ((AirportWaypoint) mapWaypoint).getAirport();
+            if(!this.airport.getFlightList().isEmpty()){
+                this.table = new JTable();
+                this.model = new NFlightTableInfoModel(this.airport);
+                this.table.setModel(model);
+                this.add(panelTable);
+            }
+            //#endregion 
         }
     }
 
