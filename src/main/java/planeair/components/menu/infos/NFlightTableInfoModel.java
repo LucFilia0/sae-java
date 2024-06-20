@@ -9,6 +9,7 @@ package planeair.components.menu.infos;
     //#region .SWING
     import javax.swing.table.AbstractTableModel;
 
+import planeair.graph.coloring.ColoringUtilities;
 //#endregion
     //#region .GRAPH
     import planeair.graph.graphutil.Flight;
@@ -32,7 +33,7 @@ public class NFlightTableInfoModel extends AbstractTableModel {
      /**
      * Title of each section of the table (columns)
      */
-    private final String[] titles = {"ID", "Heure", "Etat"};
+    private final String[] titles = {"Altitude","ID", "Heure", "Etat"};
 
     /**
      *ArrayList which contain all Flight link witch the choosen Airport
@@ -83,10 +84,12 @@ public class NFlightTableInfoModel extends AbstractTableModel {
 
         switch(columnIndex){
             case 0:
-                return flight.getId();
+                return flight.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE);
             case 1:
-                return flight.getDepartureTime();
+                return flight.getId();
             case 2:
+                return flight.getDepartureTime();
+            case 3:
                 if (flight.getDepartureAirport() ==  airport) {
                     return NFlightTableInfoModel.DEPARTURE;
                 } 
