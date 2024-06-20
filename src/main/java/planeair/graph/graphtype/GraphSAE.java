@@ -1,5 +1,6 @@
 package planeair.graph.graphtype;
 
+//#region IMPORTS
 import java.awt.Color;
 import java.util.HashMap;
 
@@ -7,6 +8,8 @@ import org.graphstream.graph.implementations.SingleGraph;
 
 import planeair.exceptions.InvalidEntryException;
 import planeair.graph.coloring.ColoringUtilities;
+//#endregion
+
 /**
  * Abstract class containing our default graph attributes
  * @see TestGraph

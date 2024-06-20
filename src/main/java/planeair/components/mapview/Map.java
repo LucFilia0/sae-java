@@ -1,45 +1,30 @@
 package planeair.components.mapview;
 
 //#region IMPORTS
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Iterator;
 
-    //#region AWT
+import org.jxmapviewer.OSMTileFactoryInfo; // For default parameters of the Map
 
-    import java.awt.event.KeyEvent;
-    import java.awt.event.KeyListener;
-    import java.util.Iterator;
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.TileFactoryInfo;
+import org.jxmapviewer.viewer.DefaultTileFactory; // For default paramters of the Map
 
-    //#endregion
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
-    //#region JXMAPVIEWER
-
-    import org.jxmapviewer.OSMTileFactoryInfo; // For default parameters of the Map
-
-    import org.jxmapviewer.viewer.GeoPosition;
-    import org.jxmapviewer.viewer.TileFactoryInfo;
-    import org.jxmapviewer.viewer.DefaultTileFactory; // For default paramters of the Map
-
-    import org.jxmapviewer.input.PanMouseInputListener;
-    import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
-
-    //#endregion
-
-    //#region PLANEAIR
-
-    import planeair.util.Airport;
-    import planeair.util.AirportSet;
-    import planeair.util.NTime;
-    import planeair.graph.graphtype.FlightsIntersectionGraph;
-    import planeair.graph.graphutil.Flight;
-    import planeair.App;
-    import planeair.components.mapview.mapwp.MapWaypointButton;
-    import planeair.components.mapview.mapwp.MapWaypointPainter;
-    import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
-    import planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint;
-    import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-    import planeair.components.menu.infos.NInfoPanel;
-
-    //#endregion
-
+import planeair.util.Airport;
+import planeair.util.AirportSet;
+import planeair.util.NTime;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphutil.Flight;
+import planeair.components.mapview.mapwp.MapWaypointButton;
+import planeair.components.mapview.mapwp.MapWaypointPainter;
+import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
+import planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.components.menu.infos.NInfoPanel;
 //#endregion
 
 /**
@@ -367,11 +352,8 @@ public class Map extends org.jxmapviewer.JXMapViewer {
                         this.itemPainter.getFlightWaypoints().add(new FlightWaypoint(flight, flightPositionAtTime)) ;
                     }
                 }
-                
                 else {
-                    if (fwp != null && flight.getFlightWaypoint().getWaypointButton().isSelected()) {
-                        App.app.getMainScreen().getInfoPanel().hideInfos() ;
-                    }
+                    flight.setFlightWaypoint(null) ;
                 }
             });
 

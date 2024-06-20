@@ -1,5 +1,6 @@
 package planeair.graph.coloring;
 
+//#region IMPORTS
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,6 +10,7 @@ import org.graphstream.graph.Node;
 
 import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
+//#endregion
 
 public abstract class ColoringDSATUR {
     

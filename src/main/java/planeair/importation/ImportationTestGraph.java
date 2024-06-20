@@ -1,38 +1,20 @@
 package planeair.importation;
 
 //#region IMPORTS
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-    //#region JAVA
+import org.graphstream.graph.EdgeRejectedException;
+import org.graphstream.graph.ElementNotFoundException;
+import org.graphstream.graph.IdAlreadyInUseException;
+import org.graphstream.graph.Node;
 
-    import java.io.File;
-    import java.io.FileNotFoundException;
-    import java.util.Scanner;
+import planeair.exceptions.InvalidEntryException;
+import planeair.exceptions.InvalidFileFormatException;
 
-    //#endregion
-
-    //#region GRAPHSTREAM
-
-    import org.graphstream.graph.EdgeRejectedException;
-    import org.graphstream.graph.ElementNotFoundException;
-    import org.graphstream.graph.IdAlreadyInUseException;
-    import org.graphstream.graph.Node;
-
-    //#endregion
-
-    //#region PLANEAIR
-
-    import planeair.exceptions.InvalidEntryException;
-    import planeair.exceptions.InvalidFileFormatException;
-
-    //#endregion
-
-    //#region EXCEPTIONS
-
-    import planeair.graph.coloring.ColoringUtilities;
-    import planeair.graph.graphtype.TestGraph;
-
-    //#endregion
-
+import planeair.graph.coloring.ColoringUtilities;
+import planeair.graph.graphtype.TestGraph;
 //#endregion
 
 /**

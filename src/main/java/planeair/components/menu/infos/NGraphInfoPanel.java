@@ -1,35 +1,22 @@
 package planeair.components.menu.infos;
 
 //#region
-    //#region .SWING
-    import javax.swing.JPanel;
-    import javax.swing.JLabel;
-    //#endregion
+import javax.swing.JPanel;
+import javax.swing.JLabel;
 
-    //#region .ORG.GRAPHSTREAM.ALGORITHM
-    import org.graphstream.algorithm.ConnectedComponents;
-    import org.graphstream.algorithm.Toolkit;
-    //#endregion
+import org.graphstream.algorithm.ConnectedComponents;
+import org.graphstream.algorithm.Toolkit;
 
-    //#region .APP
-    import planeair.App;
-    //#endregion
+import planeair.App;
+import planeair.graph.graphtype.GraphSAE;
 
-    //#region GRAPH;GRAPHTYPE
-    import planeair.graph.graphtype.GraphSAE;
-    //#endregion
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
-    //#region LAYOUT
-    import java.awt.Dimension;
-    import java.awt.Font;
-    import java.awt.GridBagConstraints;
-    import java.awt.GridBagLayout;
-    //#endregion
-
-    //#region MATHS
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-//#endregion
 //#endregion
 
 /**

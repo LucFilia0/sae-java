@@ -56,13 +56,11 @@ public class ActiveAirportWaypoint extends AirportWaypoint {
 
     @Override
     public String toStringFirst() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'toStringFirst'");
     }
 
     @Override
     public String toStringSecond() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'toStringSecond'");
     }
 

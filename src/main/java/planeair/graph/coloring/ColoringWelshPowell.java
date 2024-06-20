@@ -1,5 +1,6 @@
 package planeair.graph.coloring;
 
+//#region IMPORTS
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,7 +11,10 @@ import java.util.stream.Collectors;
 import org.graphstream.graph.Node;
 
 import planeair.graph.graphtype.GraphSAE;
-
+//#endregion
+/**
+ * Class handling the Welsh & Powell algorithm
+ */
 public abstract class ColoringWelshPowell {
     
     /**

@@ -1,5 +1,6 @@
 package planeair.components.graphview;
 
+//#region IMPORTS
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -9,6 +10,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+//#endregion
 
 /**
  * Panel shown if no graph has been imported, it contains a single giant skull image 

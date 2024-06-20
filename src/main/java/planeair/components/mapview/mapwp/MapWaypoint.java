@@ -72,31 +72,11 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
         }catch(IOException e) {
             e.printStackTrace();
         }
-
-        this.initEvents();
     }
 
     //#endregion
 
     //#region PRIVATE METHODS
-
-    /**
-     * This method initiates the performed action when the MapWaypointButton is clicked.
-     * 
-     * @author Luc le Manifik
-     */
-    private void initEvents() {
-
-        this.waypointButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MapWaypointButton mwp = (MapWaypointButton) e.getSource();
-                mwp.changeSelection(true) ;
-            }
-        });
-
-    }
 
     //#endregion
 

@@ -1,13 +1,7 @@
 package planeair.graph.graphtype;
 
 //#region IMPORTS
-
-    //#region EXCEPTIONS
-
-    import planeair.exceptions.InvalidEntryException;
-
-    //#endregion
-
+import planeair.exceptions.InvalidEntryException;
 //#endregion
 
 /**

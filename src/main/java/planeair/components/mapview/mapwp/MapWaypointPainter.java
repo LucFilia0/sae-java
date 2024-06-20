@@ -2,45 +2,28 @@ package planeair.components.mapview.mapwp;
 
 //#region IMPORTS
 
-    //#region JAVA
-
-    import java.util.HashSet;
-    import java.util.Set;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.Math;
 
-    //#endregion
+import java.awt.Rectangle;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 
-    //#region AWT
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.WaypointPainter;
 
-    import java.awt.Rectangle;
-    import java.awt.BasicStroke;
-    import java.awt.Graphics2D;
-    import java.awt.geom.Point2D;
-
-    //#endregion
-
-    //#region JXMAPVIEWER
-
-    import org.jxmapviewer.JXMapViewer;
-    import org.jxmapviewer.viewer.WaypointPainter;
-
-    //#endregion
-
-    //#region PLANEAIR
-
-    import planeair.App;
-    import planeair.components.mapview.Map;
-    import planeair.components.NMainScreen;
-    import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
-    import planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint;
-    import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-    import planeair.components.menu.NMapMenuPanel;
-    import planeair.graph.coloring.ColoringUtilities;
-    import planeair.graph.graphtype.FlightsIntersectionGraph;
-
-    //#endregion
-
+import planeair.App;
+import planeair.components.mapview.Map;
+import planeair.components.NMainScreen;
+import planeair.components.mapview.mapwp.airportwp.ActiveAirportWaypoint;
+import planeair.components.mapview.mapwp.airportwp.InactiveAirportWaypoint;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.components.menu.NMapMenuPanel;
+import planeair.graph.coloring.ColoringUtilities;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 //#endregion
 
 /**
@@ -164,7 +147,6 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
         /*
          * STEP 1 : We paint the Airports' Waypoints
          */
-
         if(mapMenu.mustShowActiveAirports()) {
             paintActiveAirports(g, map, width, height, mapZoom, screen);
         }else {
@@ -199,10 +181,9 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                     y = flightWp_location.getY() - screen.getY() - MapWaypointButton.BUTTON_SIZE/2;
                     
                     waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
-                    waypointButton.setVisible(true) ;        
+                    waypointButton.setVisible(true) ;      
                 }else {
-                    flightWp.getWaypointButton().setVisible(false) ;
-                    flightWp.getWaypointButton().changeSelection(true) ;
+                    flightWp.getFlight().setFlightWaypoint(null) ;
                 }
 
                 // Painting the Flight lines
@@ -226,11 +207,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                     g.drawLine(depX, depY, arrX, arrY);
                 }
             } else {
-                if (flightWp.getFlight().getFlightWaypoint() != null) {
-                    flightWp.getWaypointButton().setVisible(false) ;
-                    flightWp.getWaypointButton().changeSelection(true) ;
-                    flightWp.getFlight().setFlightWaypoint(null) ;
-                }
+                flightWp.getFlight().setFlightWaypoint(null) ;
             }
         }
     }

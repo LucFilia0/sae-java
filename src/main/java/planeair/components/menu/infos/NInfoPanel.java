@@ -1,34 +1,23 @@
 package planeair.components.menu.infos;
 
 //#region IMPORT
-    //#region .AWT
-    import java.awt.Dimension;
-    //#endregion
+import java.awt.Dimension;
 
-    //#region LAYOUT
-    import java.awt.FlowLayout;
-    import java.awt.GridLayout;
-    //#endregion
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 
-    //#region .SWING
-    import javax.swing.JLabel;
-    import javax.swing.JPanel;
-    import javax.swing.JScrollPane;
-    import javax.swing.JTable;
-    import javax.swing.ScrollPaneConstants;
-    //#endregion
-
-    //#region PLANEAIR
-    import planeair.App;
-    //#region COMPONENTS
-    import planeair.components.mapview.Map;
-    import planeair.components.mapview.mapwp.MapWaypoint;
-    import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
-    import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-    //#endregion
-    import planeair.util.Airport;
-//#endregion
+import planeair.App;
+import planeair.components.mapview.Map;
+import planeair.components.mapview.mapwp.MapWaypoint;
+import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
+import planeair.util.Airport;
 //#endregion
 
 /**
@@ -182,7 +171,7 @@ public class NInfoPanel extends JPanel {
 
         this.initComponents();
         this.addComponents();
-        
+
         if(mapWaypoint instanceof FlightWaypoint){
             
             this.labelFlightLeft.setText(mapWaypoint.toStringFirst());

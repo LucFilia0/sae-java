@@ -1,50 +1,36 @@
 package planeair.components;
 
-//#region IMPORT
-    //#region .SWING
-    import javax.swing.Icon;
-    import javax.swing.ImageIcon;
-    import javax.swing.JButton;
-    import javax.swing.JLabel;
-    import javax.swing.JPanel;
-    import javax.swing.Box;
-    //#endregion
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Box;
 
-    //#region .AWT
-    import java.awt.Dimension;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-    //#endregion
 
-    //#region LAYOUT
-    import java.awt.BorderLayout;
-    import java.awt.GridLayout;
-    import java.awt.Insets;
-    import java.awt.GridBagConstraints;
-    import javax.swing.BoxLayout;
-    //#endregion
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.GridBagConstraints;
+import javax.swing.BoxLayout;
 
-    //#region PLANEAIR
-        import planeair.App;
+import planeair.App;
+import planeair.components.comboboxes.NComboBoxGraph;
+import planeair.components.graphview.NMaxGraphFrame;
+import planeair.components.graphview.NMinGraphPanel;
+import planeair.components.mapview.Map;
+import planeair.components.menu.NMapMenuPanel;
+import planeair.components.menu.infos.NGraphInfoPanel;
+import planeair.components.menu.infos.NInfoPanel;
+import planeair.components.menu.NGraphMenuPanel;
+import planeair.components.time.NTimePanel;
 
-        //#region COMPONENTS
-        import planeair.components.comboboxes.NComboBoxGraph;
-        import planeair.components.graphview.NMaxGraphFrame;
-        import planeair.components.graphview.NMinGraphPanel;
-        import planeair.components.mapview.Map;
-        import planeair.components.menu.NMapMenuPanel;
-        import planeair.components.menu.infos.NGraphInfoPanel;
-        import planeair.components.menu.infos.NInfoPanel;
-        import planeair.components.menu.NGraphMenuPanel;
-        import planeair.components.time.NTimePanel;
-        //#endregion
-        
-        //#region GRAPH
-        import planeair.graph.graphtype.FlightsIntersectionGraph;
-        import planeair.graph.graphtype.TestGraph;
-        //#endregion
-    //#endregion
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphtype.TestGraph;
 //#endregion*
 
 /**

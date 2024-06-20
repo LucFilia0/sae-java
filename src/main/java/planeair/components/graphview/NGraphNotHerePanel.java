@@ -1,10 +1,12 @@
 package planeair.components.graphview;
 
+//#region IMPORTS
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
+//#endregion
 
 /**
  * Placeholder panel for when the graph has been moved to another frame

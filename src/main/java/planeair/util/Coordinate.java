@@ -1,13 +1,7 @@
 package planeair.util;
 
 //#region IMPORTS
-
-    //#region PLANEAIR
-
-    import planeair.exceptions.InvalidCoordinateException;
-
-    //#endregion
-
+import planeair.exceptions.InvalidCoordinateException;
 //#endregion
 
 /**

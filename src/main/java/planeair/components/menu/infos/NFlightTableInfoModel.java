@@ -1,18 +1,12 @@
 package planeair.components.menu.infos;
 
 //#region IMPORT
-    //#region .UTIL
-    import java.util.List;
-    import planeair.util.Airport;
-    //#endregion
+import java.util.List;
+import planeair.util.Airport;
 
-    //#region .SWING
-    import javax.swing.table.AbstractTableModel;
+import javax.swing.table.AbstractTableModel;
 
-//#endregion
-    //#region .GRAPH
-    import planeair.graph.graphutil.Flight;
-    //#endregion
+import planeair.graph.graphutil.Flight;
 //#endregion
 
 /**

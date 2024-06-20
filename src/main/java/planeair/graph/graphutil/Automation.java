@@ -1,7 +1,6 @@
 package planeair.graph.graphutil;
 
-// Import java
-
+//#region IMPORTS
 import java.io.File ;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
@@ -14,8 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-// Import graphstream
-
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 
@@ -25,6 +22,7 @@ import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.coloring.ColoringWelshPowell;
 import planeair.graph.graphtype.TestGraph;
 import planeair.importation.ImportationTestGraph;
+//#endregion
 
 /**
  * Automates every step of the Coloring Challenge where we 

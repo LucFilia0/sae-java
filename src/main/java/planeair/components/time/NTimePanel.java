@@ -1,35 +1,26 @@
 package planeair.components.time;
 
 //#region IMPORT
-    //#region SWING
-    import javax.swing.JPanel;
-    import javax.swing.event.ChangeEvent;
-    import javax.swing.Icon;
-    import javax.swing.ImageIcon;
-    import javax.swing.JLabel;
-    import javax.swing.JButton;
-    //#endregion
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JButton;
 
-    //#region PLANEAIR
-    import planeair.App;
-    import planeair.components.comboboxes.NComboBoxTime;
+import planeair.App;
+import planeair.components.comboboxes.NComboBoxTime;
 import planeair.exceptions.InvalidTimeException;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
-    import planeair.util.NTime;
-    //#endregion
+import planeair.util.NTime;
 
-    //#region AWR
-    import java.awt.event.ActionEvent;
-    import java.awt.Dimension;
-    //#endregion
+import java.awt.event.ActionEvent;
+import java.awt.Dimension;
 
-    //#region LAYOUT
-    import java.awt.FlowLayout;
-    import java.awt.GridLayout;
-    //#endregion
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
-    import java.lang.Thread;
-//#endregion
+import java.lang.Thread;
 
 /**
  * A time Panel for JcomboxBoxs (hour/min) + the Slider (time) + PLAY button (simulation)

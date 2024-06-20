@@ -1,3 +1,4 @@
+//#region IMPORTS
 package planeair.graph.graphutil ;
 
 import java.awt.* ;
@@ -14,12 +15,14 @@ import org.graphstream.ui.view.camera.Camera;
 import org.graphstream.ui.view.util.GraphMetrics;
 import org.graphstream.ui.view.util.InteractiveElement;
 
+import planeair.components.mapview.mapwp.MapWaypointButton;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.GraphSAE;
 
 import org.graphstream.ui.swing_viewer.* ;
 import org.graphstream.ui.swing_viewer.util.DefaultShortcutManager;
 import org.graphstream.ui.swing_viewer.util.MouseOverMouseManager;
+//#endregion
 
 /**
  * Class handling the rendering of Graphs and the events on its panel
@@ -63,8 +66,6 @@ public class PanelCreator {
 	 * Field storing the mouse position for where it first started dragging
 	 */
 	protected Point3 dragPos = null ;
-
-	protected static int numberOfInstances = 0 ;
 	//#endregion
 	//#region CONSTRUCTORS
 	/**
@@ -195,7 +196,9 @@ public class PanelCreator {
 
 	/**
 	 * Returns the mouse position in Graph Units while making sure it stays inside the authorized area
+	 * 
 	 * @param cam The View Camera
+	 * @param mousePosPx The position of the mouse in pixels
 	 * @return The Point representing the mouse's effective Position
 	 *
 	 * @author Nathan LIEGEON
@@ -212,9 +215,9 @@ public class PanelCreator {
 
 	/**
 	 * Adjusts the point's position so that it stays inside the graph's bounds
-	 * @param cam
+	 * @param cam The View Camera
 	 * @param point The point we are adjusting
-	 * @return 
+	 * @return The point with its position adjusted
 	 * 
 	 * @author Nathan LIEGEON
 	 */
@@ -242,6 +245,8 @@ public class PanelCreator {
 	/**
 	 * Moves the camera when dragging the mouse
 	 * 
+	 * @param e the mouse event giving the information
+	 * 
 	 * @author Nathan LIEGEON
 	 */
 	private void dragMovement(MouseEvent e) {
@@ -258,7 +263,7 @@ public class PanelCreator {
 
 	/**
 	 * Sets the default style for selected nodes
-	 * @param n
+	 * @param n The Node
 	 */
 	public static void setSelectedStyle(Node n) {
 		n.removeAttribute("ui.size") ;
@@ -271,7 +276,7 @@ public class PanelCreator {
 
 	/**
 	 * Removes all attributes related to the selected node style
-	 * @param n
+	 * @param n The node
 	 */
 	public static void removeSelectedStyle(Node n) {
 		n.removeAttribute("ui.size") ;
@@ -326,7 +331,7 @@ public class PanelCreator {
 					Point mousePosPx = me.getLocationOnScreen() ;
 					Point3 mousePos = getGraphPositionFromClick(cam, mousePosPx) ;
 
-					finalCamPos = camPos.interpolate(mousePos, 0.15 * cam.getViewPercent()) ;
+					finalCamPos = camPos.interpolate(mousePos, 0.15 * Math.sqrt(cam.getViewPercent())) ;
 					cam.setViewCenter(finalCamPos.x, finalCamPos.y, finalCamPos.z) ;
 				}
 
@@ -372,12 +377,23 @@ public class PanelCreator {
 		@Override
 		public void mouseOver(String id) {
 			Node n = graph.getNode(id) ;
-			if (n instanceof Flight) {
-				Flight f = (Flight)n ;
-				f.fireSelectionUpdated(false) ;
-			}
-
 			setSelectedStyle(n) ;
+			if (!(n instanceof Flight)) {
+				return ;
+			}
+			
+			Flight f = (Flight)n ;
+			
+			if (f.getFlightWaypoint() != null && 
+				f.getFlightWaypoint().getWaypointButton() != null) {
+				
+				MapWaypointButton mwp = 
+					((Flight)n).getFlightWaypoint().getWaypointButton() ;
+				
+				if (!mwp.isSelected()) {
+					mwp.select() ;
+				}
+			}
 		}
 
 		/**
@@ -393,12 +409,25 @@ public class PanelCreator {
 		@Override
 		public void mouseLeft(String id) {
 			Node n = graph.getNode(id) ;
-			if (n instanceof Flight) {
-				Flight f = (Flight)n ;
-				f.fireSelectionUpdated(true) ;
-			}
-
 			removeSelectedStyle(n) ;
+			if (!(n instanceof Flight)) {
+				return ;
+			}
+			
+			Flight f = (Flight)n ;
+			
+			if (f.getFlightWaypoint() != null && 
+				f.getFlightWaypoint().getWaypointButton() != null) {
+
+				MapWaypointButton mwp = 
+					((Flight)n).getFlightWaypoint().getWaypointButton() ;
+				
+				if (mwp.isSelected()) {
+					mwp.deselect() ;
+				}
+			} 
+
+			return ;
 		}
 
 		/**

@@ -1,5 +1,4 @@
 package planeair.components.buttons;
-
 /**
  * The default button for importation panel.
  * Some big squares, like Nila designed it
@@ -11,7 +10,7 @@ public class NImportFileButton extends NFilledButton {
     //#region CONSTRUCTORS
 
     /**
-     * Creates a new NImportFileButton. Theses buttons are squared, have black background,
+     * Creates a new NImportFileButton. These buttons are squares, have black background,
      * and white text
      * 
      * @param title (String) - The title of the NImportFileButton

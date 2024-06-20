@@ -1,25 +1,19 @@
 package planeair.components.time;
 
 //#region IMPORT
-    //#region .SWING
-    import javax.swing.JComponent;
-    import javax.swing.JSlider;
-    import javax.swing.plaf.basic.BasicSliderUI;
-    //#endregion
+import javax.swing.JComponent;
+import javax.swing.JSlider;
+import javax.swing.plaf.basic.BasicSliderUI;
 
-    //#region APP
-    import planeair.App;
-    //#endregion
+import planeair.App;
 
-    //#region .AWT
-    import java.awt.Color;
-    import java.awt.Dimension;
-    import java.awt.Graphics;
-    import java.awt.Graphics2D;
-    import java.awt.RenderingHints;
-    import java.awt.Shape;
-    import java.awt.geom.RoundRectangle2D;
-    //#endregion
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.RoundRectangle2D;
 //#endregion
 
 /**

@@ -1,63 +1,40 @@
 package planeair.components.imports;
 
 //#region IMPORT
-    //#region .SWING
-    import javax.swing.JPanel;
-    import javax.swing.border.TitledBorder;
-    import javax.swing.JButton;
-    import javax.swing.JOptionPane;
-    import javax.swing.BorderFactory;
-    //#endregion
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.BorderFactory;
 
-    //#region .AWT
-    import java.awt.Color;
-    import java.awt.Component;
-    import java.awt.Dimension;
-    import java.awt.event.ActionEvent;
-    //#endregion
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
-    //#region LAYOUT
-    import java.awt.FlowLayout;
-    import javax.swing.BoxLayout;
-    import javax.swing.Box;
-    //#endregion
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
 
-    //#region PLANEAIR
-        //#region .APP
-        import planeair.App;
-        //#endregion
+import planeair.App;
 
-        //#region .COMPONENTS
-        import planeair.components.buttons.NImportFileButton;
-        import planeair.components.menu.infos.NGraphInfoPanel;
-        import planeair.components.buttons.NFilledButton;
-        //#endregion
+import planeair.components.buttons.NImportFileButton;
+import planeair.components.menu.infos.NGraphInfoPanel;
+import planeair.components.buttons.NFilledButton;
 
-        //#region .EXCEPTIONS
-        import planeair.exceptions.InvalidFileFormatException;
-        //#endregion
+import planeair.exceptions.InvalidFileFormatException;
 
-        //#region .GRAPH
-        import planeair.graph.coloring.ColoringDSATUR;
-        import planeair.graph.coloring.ColoringUtilities;
-        import planeair.graph.graphtype.FlightsIntersectionGraph;
-        import planeair.graph.graphtype.TestGraph;
-        //#endregion
+import planeair.graph.coloring.ColoringDSATUR;
+import planeair.graph.coloring.ColoringUtilities;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphtype.TestGraph;
 
-        //#region IMPORTATION
-        import planeair.importation.ImportationFIG;
-        import planeair.importation.ImportationTestGraph;
-        //#endregion
+import planeair.importation.ImportationFIG;
+import planeair.importation.ImportationTestGraph;
 
-        //#region .UTIL
-        import planeair.util.AirportSet;
-        //#endregion
-    //#endregion
+import planeair.util.AirportSet;
 
-    //#region. IO
 import java.io.FileNotFoundException;
-//#endregion
-
 //#endregion
 
 /**

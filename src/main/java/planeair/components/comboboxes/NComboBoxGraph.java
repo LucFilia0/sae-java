@@ -1,24 +1,15 @@
 package planeair.components.comboboxes;
 
 
-//#region IMPORT
-    //#region .SWING
-    // import SWING components
-    import javax.swing.JComboBox;
-    //#endregion
+//#region IMPORTS
+import javax.swing.JComboBox;
 
-    //#region .AWT
-    import java.awt.Color;
-    import java.awt.Font;
-    //#endregion
+import java.awt.Color;
+import java.awt.Font;
 
-    //#region COMPONENTS.COMBOBOXS.RENDERS
-    import planeair.components.comboboxes.renders.NDefaultRenderer;
-    //#endregion
+import planeair.components.comboboxes.renders.NDefaultRenderer;
 
-    //#region COMPONENTS.MENU
-    import planeair.components.menu.NGraphMenuPanel;
-    //#endregion
+import planeair.components.menu.NGraphMenuPanel;
 //#endregion
 
 

@@ -1,20 +1,10 @@
 package planeair.util;
 
 //#region IMPORTS
+import java.util.HashSet;
 
-    //#region JAVA
-
-    import java.util.HashSet;
-
-    //#endregion
-
-    //#region PLANEAIR
-
-    import planeair.exceptions.ObjectNotFoundException;
-    import planeair.graph.graphtype.FlightsIntersectionGraph;
-
-    //#endregion
-
+import planeair.exceptions.ObjectNotFoundException;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
 //#endregion
 
 /**

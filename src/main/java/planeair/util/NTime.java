@@ -1,20 +1,10 @@
 package planeair.util;
 
 //#region IMPORTS
+import java.sql.Time;
+import java.time.LocalTime;
 
-    //#region JAVA
-
-    import java.sql.Time;
-    import java.time.LocalTime;
-
-    //#endregion
-
-    //#region PLANEAIR
-
-    import planeair.exceptions.InvalidTimeException;
-
-    //#endregion
-
+import planeair.exceptions.InvalidTimeException;
 //#endregion
 
 /**

@@ -2,39 +2,23 @@ package planeair.components.mapview.mapwp;
 
 //#region IMPORTS
 
-    //#region SWING
 
-    import javax.swing.BorderFactory;
+import javax.swing.JToggleButton;
+import javax.swing.border.StrokeBorder;
 
-    //#endregion
+import java.io.File;
+import java.io.IOException;
 
-    //#region JAVA
-
-    import java.io.File;
-
-    //#endregion
-
-    //#region AWT
-
-    import java.awt.Cursor;
-    import java.awt.BasicStroke;
+import java.awt.Cursor;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.BasicStroke;
 import java.awt.Color;
 
-//#endregion
 
-    //#region EXCEPTIONS
 
-    import java.io.IOException;
-
+import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 import planeair.App;
-
-//#endregion
-
-    //#region PLANEAIR
-    import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-import planeair.components.menu.infos.NInfoPanel;
-import planeair.graph.graphutil.PanelCreator;
-    //#endregion
 
 //#endregion
 
@@ -44,7 +28,7 @@ import planeair.graph.graphutil.PanelCreator;
  * 
  * @author Luc le Manifik
  */
-public class MapWaypointButton extends javax.swing.JButton {
+public class MapWaypointButton extends JToggleButton {
 
     //#region ATTRIBUTES
 
@@ -60,14 +44,9 @@ public class MapWaypointButton extends javax.swing.JButton {
     private MapWaypoint mapWaypoint;
     
     /**
-     * The Waypoint currently being clicked
+     * The Waypoint currently selected
      */
     public static MapWaypointButton waypointSelected ;
-
-    /**
-     * Tells whether or not this waypoint is selected
-     */
-    private boolean selected ;
 
     //-- WaypointButton Constructor
 
@@ -91,6 +70,8 @@ public class MapWaypointButton extends javax.swing.JButton {
             throw e;
         }
 
+        initListeners() ;
+
         // Sets the background of the button unfilled, and makes the border disapear
         this.setContentAreaFilled(false);
         this.setBorder(null);
@@ -100,6 +81,20 @@ public class MapWaypointButton extends javax.swing.JButton {
     }
 
     //#endregion
+
+    private void initListeners() {
+        this.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    MapWaypointButton.this.select() ;
+                }
+                else {
+                    MapWaypointButton.this.deselect() ;
+                }
+            }
+        }) ;
+    }
 
     //#region GETTERS
 
@@ -115,101 +110,73 @@ public class MapWaypointButton extends javax.swing.JButton {
 
     //#endregion
 
+    //#region SETTERS
+
+     /**
+     * Changes this waypoint's style based on whether or not it is Selected
+     * If the waypoint is a FlightWaypoint, also update its Node
+     * 
+     * @param selected True if it is currently selected, false if not
+     * 
+     * @author Nathan LIEGEON
+     */
+    public void setSelectionStyle(boolean selected) {
+        if (selected) {
+            this.setForeground(Color.RED) ;
+            this.setBorder(new StrokeBorder(new BasicStroke(3))) ;
+        }
+        else {
+            this.setBorder(null) ;
+        }
+
+        if (this.getMapWaypoint() instanceof FlightWaypoint) {
+            ((FlightWaypoint)this.getMapWaypoint())
+                .updateFlightStyle(selected) ;
+        }
+    }
+
     //#region PUBLIC METHODS
+
+    /**
+     * <html>Undoes the selection on a waypoint by removing the border around 
+     * and by hiding the info panel showing its information.<br>
+     * If this waypoint is a {@link FlightWaypoint} then also highlight its
+     * corresponding Flight on the graph.<br>
+     * <br>
+     * <strong>/!\ GETS CALLED BY select() ON THE PREVIOUSLY SELECTED
+     * WAYPOINT /!\</strong>
+     * </html>
+     * 
+     * @author Nathan LIEGEON
+     * @see select
+     */
+    public void deselect() {
+        setSelectionStyle(false) ;
+        this.setSelected(false) ;
+        waypointSelected = null ;
+        App.app.getMainScreen().getInfoPanel().hideInfos() ;
+    }
 
     /**
      * Highlights a waypoint when clicked on by putting a
      * colored border around it, only one button
-     * can have be selected at a time
+     * can be selected at a time
      * 
      * If the waypoint corresponds to a flight, then also updates
      * its related graph node's style to also appear selected
      * 
      * @author Nathan LIEGEON
+     * @see deselect
      */
-    public void changeSelection(boolean isClicked) {
-        // Case when the button is first clicked
-        NInfoPanel infoPanel = App.app.getMainScreen().getInfoPanel() ;
-        if (isClicked) {
-            // If it is selected, then remove the selection
-            if (this.isSelected()) {
-                selected = false ;
-                this.setSelectionStyle() ;
-                waypointSelected = null ;
-                infoPanel.hideInfos() ;
-                
-            }
-            else {
-                // Change the selection from the previous one to this one
-                if (waypointSelected != null) {
-                    waypointSelected.setSelected(false);
-                    waypointSelected.setSelectionStyle() ;
-                }
-
-                if (this.getMapWaypoint().getWaypointButton().isVisible()) {
-                    selected = true ;
-                    this.setSelectionStyle() ;
-                    waypointSelected = this ;
-                    infoPanel.showInfos(mapWaypoint) ;
-                }
-                else {
-                    infoPanel.hideInfos() ;
-                }
-            }
+    public void select() {
+        if (waypointSelected != null) {
+            waypointSelected.deselect() ;
         }
-
-        // Case if its style has to be updated
-        else if (!this.isSelected()) {
-            this.setSelectionStyle() ;
-        }
-
-        this.repaint() ;
-        infoPanel.repaint() ;
+        setSelectionStyle(true) ;
+        this.setSelected(true) ;
+        waypointSelected = this ;
+        App.app.getMainScreen().getInfoPanel().showInfos(mapWaypoint) ;
     }
-
-    /**
-     * Changes this waypoint's style based on whether or not it is Selected
-     * If the waypoint is a FlightWaypoint, also update its Node
-     * 
-     * @param isSelected True if it is currently selected, false if not
-     * 
-     * @author Nathan LIEGEON
-     */
-    public void setSelectionStyle() {
-        if (this.isSelected()) {
-            this.setForeground(Color.RED) ;
-            this.setBorder(BorderFactory.createStrokeBorder(new BasicStroke(3))) ;
-            if (this.getMapWaypoint() instanceof FlightWaypoint) {
-                FlightWaypoint fwp = (FlightWaypoint)this.getMapWaypoint() ;
-                PanelCreator.setSelectedStyle(fwp.getFlight()) ;
-            }
-        }
-
-        else {
-            this.setBorder(null) ;
-            if (this.getMapWaypoint() instanceof FlightWaypoint) {
-                FlightWaypoint fwp = (FlightWaypoint)this.getMapWaypoint() ;
-                PanelCreator.removeSelectedStyle(fwp.getFlight()) ;
-            }
-        }
-
-        this.repaint() ;
-    }
-
-    /**
-     * Returns whether this waypoint is selected or not
-     * @return true if it is selected, false if not
-     */
-    public boolean isSelected() {
-        return this.selected ;
-    }
-
-    /**
-     * Change the selection of this button
-     */
-    public void setSelected(boolean selected) {
-        this.selected = selected ;
-    } 
     
     //#endregion
 

@@ -1,5 +1,6 @@
 package planeair.components.comboboxes.renders;
 
+//#region IMPORTS
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Color;
@@ -7,6 +8,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+//#endregion
 
 /**
  * Haha figure it out by yourself loser 😂😂😂😂😂😂😂

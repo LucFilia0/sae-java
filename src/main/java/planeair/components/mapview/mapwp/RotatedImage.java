@@ -1,31 +1,16 @@
 package planeair.components.mapview.mapwp;
 
 //#region IMPORTS
+import java.io.File;
 
-	//#region JAVA
-
-	import java.io.File;
-
-	//#endregion
-
-	//#region AWT
-
-	import java.awt.Component;
-	import java.awt.Graphics;
-	import java.awt.Graphics2D;
-	import java.awt.Image;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-//#endregion
-
-	//#region SWING
-	
-	import javax.swing.ImageIcon;
-
-	//#endregion
-
+import javax.swing.ImageIcon;
 //#endregion
 
 /**

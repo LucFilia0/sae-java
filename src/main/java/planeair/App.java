@@ -1,18 +1,12 @@
 package planeair;
 
-//-- Import Swing
-
+//#region IMPORTS
 import javax.swing.JFrame;
-
-
-//-- Import AWT
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-
-//-- Import Plane AIR
 
 import planeair.util.AirportSet;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
@@ -21,6 +15,7 @@ import planeair.graph.graphtype.TestGraph;
 import planeair.graph.graphutil.PanelCreator;
 import planeair.components.NMainScreen;
 import planeair.components.imports.NImportScreen;
+//#endregion
 
 /**
  * This class loads the application. It extends JFrame and loads itself. Beautiful isn't it ?

@@ -1,34 +1,17 @@
 package planeair.graph.graphutil;
 
 //#region IMPORTS
-
-//#region PLANEAIR
-
 import planeair.util.NTime;
 import planeair.util.Airport;
+import planeair.components.mapview.mapwp.MapWaypointButton;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
-
-//#endregion
-
-//#region GRAPHSTREAM
 
 import org.graphstream.graph.implementations.*;
 
-//#endregion
-
-//#region JXMAPVIEWER
-
 import org.jxmapviewer.viewer.GeoPosition;
-
-//#endregion
-
-//#region EXCEPTION
 
 import planeair.exceptions.InvalidEntryException;
 import planeair.graph.coloring.ColoringUtilities;
-
-//#endregion
-
 //#endregion
 
 /**
@@ -276,6 +259,12 @@ public class Flight extends SingleNode {
      * @param flightWaypoint
      */
     public void setFlightWaypoint(FlightWaypoint flightWaypoint) {
+        if (flightWaypoint == null && this.getFlightWaypoint() != null) {
+            MapWaypointButton fwpButton = 
+                this.getFlightWaypoint().getWaypointButton() ;  
+        
+            fwpButton.deselect() ;
+        }
         this.setAttribute(Flight.FLIGHT_WAYPOINT, flightWaypoint) ;
     }
 
@@ -606,8 +595,7 @@ public class Flight extends SingleNode {
     public void fireSelectionUpdated(boolean isSelected) {
         FlightWaypoint fwp = this.getFlightWaypoint() ;
         if (fwp != null) {
-            fwp.getWaypointButton().setSelected(isSelected) ;
-            fwp.getWaypointButton().changeSelection(true) ;
+            fwp.getWaypointButton().doClick() ;
         }
     }
 

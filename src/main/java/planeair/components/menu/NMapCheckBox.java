@@ -2,13 +2,9 @@ package planeair.components.menu;
 
 
 //#region IMPORT
-    //#region PLANEAIR
-    import planeair.App;
-    //#endregion
+import planeair.App;
 
-    //#region Swing
-    import javax.swing.JCheckBox;
-    //#endregion
+import javax.swing.JCheckBox;
 //#endregion
 
 /**

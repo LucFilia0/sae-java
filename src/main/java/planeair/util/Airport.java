@@ -1,29 +1,15 @@
 package planeair.util;
 
 //#region IMPORTS
+import java.util.ArrayList;
+import java.util.Iterator;
 
-    //#region JAVA
-
-    import java.util.ArrayList;
-    import java.util.Iterator;
-
-    //#endregion
-
-    //#region GRAPHSTREAM
-
-    import org.graphstream.graph.Node;
+import org.graphstream.graph.Node;
 
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
 
-//#endregion
-
-    //#region PLANEAIR
-
-    import planeair.graph.graphtype.FlightsIntersectionGraph;
-    import planeair.graph.graphutil.Flight;
-
-    //#endregion
-
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphutil.Flight;
 //#endregion
 
 /**

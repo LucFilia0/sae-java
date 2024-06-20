@@ -1,5 +1,6 @@
 package planeair.graph.coloring;
 
+//#region IMPORTS
 import java.awt.Color;
 //-- Import Java
 import java.util.* ;
@@ -8,8 +9,7 @@ import java.util.stream.Collectors;
 import org.graphstream.graph.Node;
 
 import planeair.graph.graphtype.GraphSAE;
-
-//-- Import Exceptions
+//#endregion
 
 /**
  * Class handling Coloring algorithms, mostly consists of static methods

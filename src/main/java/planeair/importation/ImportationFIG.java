@@ -1,12 +1,11 @@
 package planeair.importation;
 
-// Import Java
+//#region IMPORTS
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.Scanner;
 
-// Import PlaneAIR
 import org.graphstream.graph.IdAlreadyInUseException;
 
 import planeair.exceptions.InvalidCoordinateException;
@@ -23,6 +22,7 @@ import planeair.util.Airport;
 import planeair.util.AirportSet;
 import planeair.util.Coordinate;
 import planeair.util.NTime;
+//#endregion
 
 /**
  * <html>

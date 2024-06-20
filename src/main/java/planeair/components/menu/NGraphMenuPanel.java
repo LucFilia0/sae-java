@@ -1,51 +1,38 @@
 package planeair.components.menu;
 
 //#region IMPORT
-    //#region .SWING
-    import javax.swing.JPanel;
-    import javax.swing.JLabel;
-    import javax.swing.JList;
-    import javax.swing.JButton;
-    import javax.swing.JComboBox;
-    import javax.swing.SwingConstants;
-    //#endregion
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.SwingConstants;
 
-    //#region .AWT
-    import java.awt.Color;
-    import java.awt.Component;
-    import java.awt.Dimension;
-    import java.awt.Font;
-    import java.awt.GridBagLayout;
-    //#endregion
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagLayout;
 
-    //#region LAYOUT
-    import java.awt.GridLayout;
-    import java.awt.event.ActionEvent;
-    import java.awt.event.ActionListener;
-    import java.awt.FlowLayout;
-    //#endregion
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
 
-    //#region PLANEAIR
 
-        import planeair.App;
-        //#region COMPONENTS
-        import planeair.components.comboboxes.NComboBoxGraph;
-        import planeair.components.comboboxes.NComboBoxTime;
-        import planeair.components.comboboxes.renders.NDefaultRenderer;
-        import planeair.components.comboboxes.renders.NTimeComboBoxRenderer;
-        import planeair.components.menu.infos.NGraphInfoPanel;
-        //#endregion
-        
-        //#region GRAPH
-        import planeair.graph.coloring.ColoringUtilities;
-        import planeair.graph.graphtype.FlightsIntersectionGraph;
-        import planeair.graph.graphtype.GraphSAE;
-        import planeair.graph.graphutil.PanelCreator;
-        //#endregion
-//#endregion 
-//#endregion
+import planeair.App;
+import planeair.components.comboboxes.NComboBoxGraph;
+import planeair.components.comboboxes.NComboBoxTime;
+import planeair.components.comboboxes.renders.NDefaultRenderer;
+import planeair.components.comboboxes.renders.NTimeComboBoxRenderer;
+import planeair.components.menu.infos.NGraphInfoPanel;
+
+import planeair.graph.coloring.ColoringUtilities;
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphtype.GraphSAE;
+import planeair.graph.graphutil.PanelCreator;
 import planeair.importation.ImportationFIG;
-
+//#endregion
 /**
  * Class which create a JPanel of MENU for the graph 
  * Change parameter of the graph

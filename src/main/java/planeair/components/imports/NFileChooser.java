@@ -1,13 +1,14 @@
 package planeair.components.imports;
 
+//#region IMPORTS
 import java.io.File;
 
-//import swing componant
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import planeair.App;
 import planeair.exceptions.InvalidFileFormatException;
+//#endregion
 
 /**
  * The customized file chooser, with all the correct filters, etc...

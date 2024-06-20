@@ -1,5 +1,6 @@
 package planeair.graph.coloring;
 
+//#region IMPORTS
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,6 +15,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 
 import planeair.graph.graphtype.GraphSAE;   
+//#endregion
 
 /**
  * Class handling all the methods for the RLF graph Algorithm

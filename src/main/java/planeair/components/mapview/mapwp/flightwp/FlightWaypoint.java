@@ -18,6 +18,7 @@ package planeair.components.mapview.mapwp.flightwp;
 
     import planeair.components.mapview.mapwp.MapWaypoint;
     import planeair.graph.graphutil.Flight;
+    import planeair.graph.graphutil.PanelCreator;
 
     //#endregion
 
@@ -157,6 +158,20 @@ public class FlightWaypoint extends MapWaypoint {
     @Override
     public String toStringSecond() {
         return this.flight.toStringSecond();
+    }
+
+    /**
+     * Updates the style of this flight based on if its 
+     * waypoint is selected or not
+     * @param selected True if it is selected, else false
+     */
+    public void updateFlightStyle(boolean selected) {
+        if (selected) {
+            PanelCreator.setSelectedStyle(flight) ;
+        }
+        else {
+            PanelCreator.removeSelectedStyle(flight) ;
+        }
     }
 
     //#endregion

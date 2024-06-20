@@ -1,25 +1,19 @@
 package planeair.components.graphview;
 
 //#region IMPORT
-    //#region .SWING
-    import javax.swing.JPanel;
-    import javax.swing.Box;
-    import javax.swing.JButton;
-    import javax.swing.JFrame;
-    //#endregion
+import javax.swing.JPanel;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
-    //#region PLANEAIR
-    import planeair.App;
-    import planeair.graph.graphutil.PanelCreator;
-    //#endregion
+import planeair.App;
+import planeair.graph.graphutil.PanelCreator;
 
-    //#region .AWT
-    import java.awt.Color;
-    import java.awt.Dimension;
-    import java.awt.Font;
-    import java.awt.Graphics;
-    //#endregion
-
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+//#endregion
 //#region LAYOUT
 
 import java.awt.GridLayout;

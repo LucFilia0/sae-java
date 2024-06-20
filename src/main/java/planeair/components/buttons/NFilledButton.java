@@ -2,25 +2,13 @@ package planeair.components.buttons;
 
 //#region IMPORTATION
 
-    //#region IMPORT SWING
 
-    import javax.swing.JButton;
+import javax.swing.JButton;
 
-    //#endregion
+import planeair.App;
 
-    //#region IMPORT PLANEAIR
-
-    import planeair.App;
-
-    //#endregion
-
-    //#region IMPORT AWT
-
-    import java.awt.Color;
-    import java.awt.Dimension;
-
-    //#endregion
-
+import java.awt.Color;
+import java.awt.Dimension;
 //#endregion
 
 /**

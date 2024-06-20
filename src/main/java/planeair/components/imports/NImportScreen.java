@@ -1,27 +1,19 @@
 package planeair.components.imports;
 
 //#region IMPORT
-    //#region SWING
-    import javax.swing.JLabel;
-    import javax.swing.JPanel;
-    import javax.swing.SwingConstants;
-    //#endregion
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
-    //#region AWT
-    import java.awt.Dimension;
-    //#endregion
+import java.awt.Dimension;
 
-    //#region LAYOUT
-    import java.awt.BorderLayout;
-    import java.awt.GridBagConstraints;
-    import java.awt.GridBagLayout;
-    import javax.swing.Box;
-    import javax.swing.BoxLayout;
-    //#endregion
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 
-    //#region PLANEAIR
-    import planeair.App;
-    //#endregion
+import planeair.App;
 //#endregion
 
 /**

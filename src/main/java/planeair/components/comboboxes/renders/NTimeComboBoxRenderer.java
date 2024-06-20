@@ -1,15 +1,11 @@
 package planeair.components.comboboxes.renders;
 
 //#region IMPORT
-    //#region .SWING
-    import javax.swing.JLabel;
-    import javax.swing.JList;
-    import java.awt.Color ;
-    //#endregion
+import javax.swing.JLabel;
+import javax.swing.JList;
 
-    //#region AWT
-    import java.awt.Component;
-    //#endregion
+import java.awt.Color ;
+import java.awt.Component;
 //#endregion
 
 /**
