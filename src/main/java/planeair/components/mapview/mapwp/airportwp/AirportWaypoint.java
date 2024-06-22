@@ -1,25 +1,11 @@
 package planeair.components.mapview.mapwp.airportwp;
 
 //#region IMPORTS
+import java.io.File;
 
-	//#region JAVA
-	
-	import java.io.File;
+import org.jxmapviewer.viewer.GeoPosition;
 
-	//#endregion
-
-	//#region JXMAPVIEWER
-
-	import org.jxmapviewer.viewer.GeoPosition;
-
-	//#endregion
-
-	//#region PLANEAIR
-
-	import planeair.util.Airport;
-
-	//#endregion
-
+import planeair.util.Airport;
 //#endregion
 
 /**

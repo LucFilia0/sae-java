@@ -271,7 +271,7 @@ public abstract class ImportationFIG {
             }
         }
 
-        // Sorts all flights in the its list by departure time
+        // Sorts all flights in its list by departure time
         for (Airport airport : airportSet) {
             airport.getFlightList().sort(new Comparator<Flight>() {
                 @Override

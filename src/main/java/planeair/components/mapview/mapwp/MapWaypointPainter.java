@@ -72,6 +72,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
         this.activeAirportWaypointSet = ConcurrentHashMap.newKeySet() ;
         this.inactiveAirportWaypointSet = ConcurrentHashMap.newKeySet() ;
         this.flightWaypointSet  = ConcurrentHashMap.newKeySet() ;
+        this.flightWaypointSet  = ConcurrentHashMap.newKeySet() ;
         this.waypointButtonSet  = ConcurrentHashMap.newKeySet() ;
     }
 
@@ -125,7 +126,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
     //#endregion
 
-    //#region OVERRIDED METHODS
+    //#region OVERRIDEN METHODS
 
     /**
      * This method paints the Map's overlay, and displays all the different types of Waypoints on the Map.
@@ -178,9 +179,8 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
         
                     x = flightWp_location.getX() - screen.getX() - MapWaypointButton.BUTTON_SIZE/2;
                     y = flightWp_location.getY() - screen.getY() - MapWaypointButton.BUTTON_SIZE/2;
-                    
+                   
                     waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
-                    waypointButton.setVisible(true) ;      
                 }else {
                     flightWp.getFlight().setFlightWaypoint(null) ;
                 }
@@ -205,9 +205,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                     g.setStroke(new BasicStroke(3)) ;
                     g.drawLine(depX, depY, arrX, arrY);
                 }
-            } else {
-                flightWp.getFlight().setFlightWaypoint(null) ;
-            }
+            } 
         }
     }
 

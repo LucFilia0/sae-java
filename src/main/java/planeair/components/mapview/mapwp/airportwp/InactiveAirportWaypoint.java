@@ -1,14 +1,12 @@
 package planeair.components.mapview.mapwp.airportwp;
 
-//-- Import Java
-
+//#region IMPORTS
 import java.io.File;
-
-//-- Import JxMapViewer
 
 import org.jxmapviewer.viewer.GeoPosition;
 
 import planeair.util.Airport;
+//#endregion
 
 /**
  * This class is a Waypoint on the {@link ihm.Map} which represents an inactive Airport.

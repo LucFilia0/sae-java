@@ -286,6 +286,9 @@ public class NImportButtonPanel extends JPanel {
                     this.airportsImported = false;
                     
                     app.getMainScreen().initGraphBottomPanel();
+                    if (app.getMainScreen().getInfoPanel() != null)
+                        app.getMainScreen().getInfoPanel().hideInfos();
+                        
                     initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
                     JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);

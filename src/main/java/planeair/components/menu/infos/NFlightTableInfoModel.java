@@ -1,21 +1,27 @@
 package planeair.components.menu.infos;
 
 //#region IMPORT
+import java.awt.Font;
 import java.util.List;
+
 import planeair.util.Airport;
+import planeair.util.NTime;
 
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
 
+import planeair.components.menu.infos.renders.NFlightTableRenderer;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphutil.Flight;
 //#endregion
 
 /**
  * Model for JTable
- * The table have 3 colummn {"ID", "Heure", "Etat"} where the user will shows link Flights informations 
- * to the selected airport
+ * The table's columns are defined  by the enum {@code Titles} and the
+ * values contained will depend on the Airport's {@code FlightList}
  * 
- * @author GIRAUD Nila
+ * @author GIRAUD Nila mod. Nathan LIEGEON
  */
 public class NFlightTableInfoModel extends AbstractTableModel {
 
@@ -24,37 +30,38 @@ public class NFlightTableInfoModel extends AbstractTableModel {
      */
     private Airport airport;
 
-     /**
-     * Title of each section of the table (columns)
-     */
-    private final String[] titles = {"Altitude","ID", "Heure", "Etat"};
-
     /**
      *ArrayList which contain all Flight link witch the choosen Airport
      * In the oject Airport
      */
-    private final List<Flight> listFlight; 
+    private List<Flight> listFlight; 
 
     //#region STATIC VARIABLE
     /**
-     * The Flight leave the airport choose
+     * String shown if the flight leaves from this airport
      */
     private static final String DEPARTURE = "Départ";
 
     /**
-     * The Flight arrive in the airport choose
+     * String shown if the flight arrives to this airport
      */
     private static final String ARRIVAL = "Arrive";
     //#endregion
+
+    //#region CONSTRUCTORS
 
     /**
      * Constructor of the class, Need for taken the choose Airport 
      * @param airport
      */
-    public NFlightTableInfoModel(Airport airport) {
+    public NFlightTableInfoModel(JTable table, Airport airport) {
+        initRenders(table) ;
         this.airport = airport;
         this.listFlight = airport.getFlightList(); 
     }
+    //#endregion
+
+    //#region OVERRIDEN METHODS
 
     @Override
     public int getRowCount() { 
@@ -63,36 +70,92 @@ public class NFlightTableInfoModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) { 
-        return titles[column]; 
+        return Titles.values()[column].columnName ; 
     }
 
     @Override
     public int getColumnCount() { 
-        return titles.length; 
+        return Titles.values().length ;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return Titles.values()[columnIndex].objectClass ;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        
         Flight flight = listFlight.get(rowIndex);
+        Titles title = Titles.values()[columnIndex] ;
 
-        switch(columnIndex){
-            case 0:
-                return flight.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE);
-            case 1:
+        switch(title){
+            case ID:
                 return flight.getId();
-            case 2:
+            case HOUR:
                 return flight.getDepartureTime();
-            case 3:
+            case STATE:
                 if (flight.getDepartureAirport() ==  airport) {
                     return NFlightTableInfoModel.DEPARTURE;
                 } 
                 else {
                     return NFlightTableInfoModel.ARRIVAL;
                 }   
+            case ALTITUDE:
+                return flight.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE);
             default:
                 return null;
         }
     }
+
+    //#endregion
+    //#region ENUMS
+
+    /**
+     * Enum containing for each column its title and type
+     */
+    public enum Titles {
+        ID("ID", String.class),
+        HOUR("Heure", NTime.class),
+        STATE("Etat", String.class),
+        ALTITUDE("Altitude", Integer.class) ;
+
+        /**
+         * Text of the column header
+         */
+        private String columnName ;
+
+        /**
+         * Type of the data stored in that column
+         */
+        private Class<? extends Object> objectClass ;
+
+        /**
+         * Constructor 
+         * @param columnName the header
+         * @param objectClass the type
+         */
+        private Titles(String columnName, Class<? extends Object> objectClass) {
+            this.columnName = columnName ;
+            this.objectClass = objectClass ;
+        }
+    }
+    //#endregion
+
+    //#region PRIVATE METHODS
+
+    /**
+     * Initializes the renders for each column and the general header style
+     * @param table The table on which the renders get set
+     */
+    private void initRenders(JTable table) {
+        for (int i = 0 ; i < Titles.values().length ; i++) {
+            table.setDefaultRenderer(Titles.values()[i].objectClass, 
+            new NFlightTableRenderer());
+        }
+
+        JTableHeader header = table.getTableHeader() ;
+        header.setFont(new Font("Arial", Font.BOLD, 14)) ;
+    }
+    //#endregion
     
 }

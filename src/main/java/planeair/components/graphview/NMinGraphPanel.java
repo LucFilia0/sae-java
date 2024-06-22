@@ -13,8 +13,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-//#endregion
-//#region LAYOUT
 
 import java.awt.GridLayout;
 import java.awt.Rectangle;
@@ -23,7 +21,6 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
-//#endregion
 //#endregion
 
 /**

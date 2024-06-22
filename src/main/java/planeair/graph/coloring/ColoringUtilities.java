@@ -173,7 +173,8 @@ public abstract class ColoringUtilities {
      * 
      * @author Nathan LIEGEON
      */
-    public static void colorGraphWithChosenAlgorithm(GraphSAE graph, String algorithm) {
+    public static void colorGraphWithChosenAlgorithm(GraphSAE graph, ColoringAlgorithms algorithm) {
+        
         switch (algorithm) {
                 case DSATUR :
                     ColoringDSATUR.coloringDsatur(graph) ;
@@ -232,6 +233,7 @@ public abstract class ColoringUtilities {
             for (Integer color : conflictCount.keySet()) {
                 currentConflict[0] = color ;
                 currentConflict[1] = conflictCount.get(color) ;
+                
                 if (minConflict[1] > currentConflict[1]) {
                     minConflict[0] = currentConflict[0] ;
                     minConflict[1] = currentConflict[1] ;

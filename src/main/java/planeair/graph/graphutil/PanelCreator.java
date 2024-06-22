@@ -125,23 +125,8 @@ public class PanelCreator {
 		fromViewer.addSink(graph) ;
 		
 		// Thread running in the background constantly sending events that happened on the graph
-		Thread graphPump = new Thread(new Runnable() {
-			public void run() {
-				while(isRendering) {
-					try {
-						// Blocking pump waits for events so 
-						//it's better for performances
-						fromViewer.blockingPump() ;
-					} catch (Exception e) {
-						// pls I beg you never happen
-						// catch Exception to catch all kind of graph event 
-						// related issues (because a lot of stuff can get thrown)
-						System.out.println(e) ; 
-					}
-				}
-			}
-		}) ;
-		graphPump.start() ;
+		Thread graphPump = new GraphEventPumper() ;
+		graphPump.start(); ;
 	}
 	//#endregion
 	//#region GETTERS
@@ -189,7 +174,6 @@ public class PanelCreator {
 	public View getView() {
 		return this.view ;
 	}
-
 	//#endregion
 
 	//#region FUNCTIONS
@@ -262,10 +246,13 @@ public class PanelCreator {
 	}
 
 	/**
-	 * Sets the default style for selected nodes
+	 * Sets the default style for selected nodes.
+	 * 
+	 * This method is synchronized because it might be called twice at the
+	 * same time which would result in an exception being thrown.
 	 * @param n The Node
 	 */
-	public static void setSelectedStyle(Node n) {
+	public synchronized static void setSelectedStyle(Node n) {
 		n.removeAttribute("ui.size") ;
 		n.setAttribute("ui.size", ColoringUtilities.DEFAULT_NODE_SIZE*2) ;
 		n.setAttribute("ui.label", n.getId()) ;
@@ -275,10 +262,13 @@ public class PanelCreator {
 	}
 
 	/**
-	 * Removes all attributes related to the selected node style
+	 * Removes all attributes related to the selected node style.
+	 * 
+	 * This method is synchronized because it might be called twice at the
+	 * same time which would result in an exception being thrown.
 	 * @param n The node
 	 */
-	public static void removeSelectedStyle(Node n) {
+	public synchronized static void removeSelectedStyle(Node n) {
 		n.removeAttribute("ui.size") ;
 		n.removeAttribute("ui.label") ;
 		n.removeAttribute("ui.style") ;
@@ -444,7 +434,32 @@ public class PanelCreator {
 		public void buttonReleased(String id) {
 		}
 	}
-
 	//#endregion
+
+	/**
+	 * Thread used to pump graph events
+	 */
+	public class GraphEventPumper extends Thread {
+		public GraphEventPumper() {
+			super(new Runnable() {
+				public void run() {
+					while(isRendering) {
+						try {
+							
+							// Blocking pump waits for events so 
+							//it's better for performances
+							fromViewer.blockingPump() ;
+						} catch (Exception e) {
+
+							// Restarts a Thread if this one got interrupted,
+							// else ignores the exception
+							if (interrupted())
+								(new GraphEventPumper()).start() ;
+						}
+					}
+				}
+			}) ;
+		}
+	} 
 
 }

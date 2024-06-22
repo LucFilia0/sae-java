@@ -4,6 +4,7 @@ package planeair.components.menu;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
@@ -26,7 +27,7 @@ import planeair.components.comboboxes.NComboBoxTime;
 import planeair.components.comboboxes.renders.NDefaultRenderer;
 import planeair.components.comboboxes.renders.NTimeComboBoxRenderer;
 import planeair.components.menu.infos.NGraphInfoPanel;
-
+import planeair.graph.coloring.ColoringAlgorithm;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.GraphSAE;
@@ -130,7 +131,7 @@ public class NGraphMenuPanel extends JPanel{
         /**
          * JcomboBox that help too choose an algo for the coloration
          */
-        private JComboBox<String> algoChoice = new JComboBox<>();
+        private JComboBox<ColoringAlgorithm> algoChoice = new JComboBox<>();
         /**
          * JPanel for put the JComboBox (choose algo) next to JButton (validate) 
          */
@@ -161,7 +162,7 @@ public class NGraphMenuPanel extends JPanel{
         /**
          * String containing the last algo selected
          */
-        private String lastAlgoSelected = null ;
+        private ColoringAlgorithm lastAlgoSelected = null ;
         //#endregion
 
         //#region APP
@@ -342,15 +343,18 @@ public class NGraphMenuPanel extends JPanel{
      * @param graphIsImported
      */
     public void initAlgoComboBox(boolean graphIsImported) {
-        algoChoice.removeAllItems() ;
+        DefaultComboBoxModel<ColoringAlgorithm> model ;
+
         if (graphIsImported) {
-            algoChoice.addItem(ColoringUtilities.DSATUR);
-            algoChoice.addItem(ColoringUtilities.RLF);
-            algoChoice.addItem(ColoringUtilities.WELSH_POWELL);
+            model = new DefaultComboBoxModel<>(ColoringAlgorithm.algorithmList()) ;
+            
         }
         else {
-            algoChoice.addItem("INDISPONIBLE") ;
+            model = new DefaultComboBoxModel<>(ColoringAlgorithm.algorithmList()) ;
+            model.addElement(getCurrentAlgorithm());
+            
         }
+        algoChoice.setModel(model) ;
     }
 
     /**
@@ -419,14 +423,14 @@ public class NGraphMenuPanel extends JPanel{
         // Default for time comboBoxes
         marginComboBox.setRenderer(new NTimeComboBoxRenderer(Color.WHITE, Color.BLACK)) ;
 
-        algoChoice.setRenderer(new NDefaultRenderer<String>() {
+        algoChoice.setRenderer(new NDefaultRenderer<ColoringAlgorithm>() {
             @Override
-            public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
+            public Component getListCellRendererComponent(JList<? extends ColoringAlgorithm> list, ColoringAlgorithm value, int index,
                     boolean isSelected, boolean cellHasFocus) {
                 JLabel cell = (JLabel)super.getListCellRendererComponent(
                     list, value, index, isSelected, cellHasFocus) ;
 
-                cell.setText(value) ;
+                cell.setText(value.toString()) ;
                 return cell ;
             }
         });
@@ -444,7 +448,7 @@ public class NGraphMenuPanel extends JPanel{
      * Getter for the comboBox containing the algorithms
      * @return
      */
-    public JComboBox<String> getAlgoChoice() {
+    public JComboBox<ColoringAlgorithm> getAlgoChoice() {
         return this.algoChoice ;
     }
 
@@ -485,8 +489,8 @@ public class NGraphMenuPanel extends JPanel{
      * Getter for the current algorithm chosen
      * @return
      */
-    public String getCurrentAlgorithm() {
-        return (String)this.algoChoice.getSelectedItem() ;
+    public ColoringAlgorithm getCurrentAlgorithm() {
+        return (ColoringAlgorithm)this.algoChoice.getSelectedItem() ;
     }
 
     /**
@@ -540,7 +544,7 @@ public class NGraphMenuPanel extends JPanel{
      * Setter for the lastAlgoSelected field
      * @param lastAlgoSelected
      */
-    public void setLastAlgoSelected(String lastAlgoSelected) {
+    public void setLastAlgoSelected(ColoringAlgorithm lastAlgoSelected) {
         this.lastAlgoSelected = lastAlgoSelected ;
     }
     //#endregion
@@ -562,8 +566,8 @@ public class NGraphMenuPanel extends JPanel{
         graph.setKMax(currentKMax) ;
         
         // The algorithm used changed so we need to update the coloring
-        if (lastAlgoSelected != (String)algoChoice.getSelectedItem()) {
-            lastAlgoSelected = (String)algoChoice.getSelectedItem() ;
+        if (lastAlgoSelected != (ColoringAlgorithm)algoChoice.getSelectedItem()) {
+            lastAlgoSelected = (ColoringAlgorithm)algoChoice.getSelectedItem() ;
             coloringChanged = true ;
         }
         
@@ -581,7 +585,8 @@ public class NGraphMenuPanel extends JPanel{
             if (lastAlgoSelected != null) {
                 ColoringUtilities.removeCurrentColoring(graph) ;
             }
-            ColoringUtilities.colorGraphWithChosenAlgorithm(graph, (String)algoChoice.getSelectedItem()) ;
+            ColoringUtilities.colorGraphWithChosenAlgorithm(graph, 
+                (ColoringAlgorithm)algoChoice.getSelectedItem()) ;
             if (graph instanceof FlightsIntersectionGraph) {
                 graph.setKMax(graph.getNbColors()) ;
                 currentKMax = graph.getKMax() ;

@@ -262,8 +262,9 @@ public class Flight extends SingleNode {
         if (flightWaypoint == null && this.getFlightWaypoint() != null) {
             MapWaypointButton fwpButton = 
                 this.getFlightWaypoint().getWaypointButton() ;  
-        
-            fwpButton.deselect() ;
+            
+            if (fwpButton.isSelected())
+                fwpButton.deselect() ;
         }
         this.setAttribute(Flight.FLIGHT_WAYPOINT, flightWaypoint) ;
     }

@@ -119,8 +119,7 @@ public class MapWaypointButton extends JToggleButton {
         if (selected) {
             this.setForeground(Color.RED) ;
             this.setBorder(new StrokeBorder(new BasicStroke(3))) ;
-        }
-        else {
+        } else {
             this.setBorder(null) ;
         }
 
@@ -145,7 +144,7 @@ public class MapWaypointButton extends JToggleButton {
      * @author Nathan LIEGEON
      * @see select
      */
-    public void deselect() {
+    public synchronized void deselect() {
         setSelectionStyle(false) ;
         this.setSelected(false) ;
         waypointSelected = null ;
@@ -163,10 +162,11 @@ public class MapWaypointButton extends JToggleButton {
      * @author Nathan LIEGEON
      * @see deselect
      */
-    public void select() {
+    public synchronized void select() {
         if (waypointSelected != null) {
             waypointSelected.deselect() ;
         }
+        
         setSelectionStyle(true) ;
         this.setSelected(true) ;
         waypointSelected = this ;

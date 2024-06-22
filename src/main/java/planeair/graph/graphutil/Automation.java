@@ -16,10 +16,8 @@ import java.util.Comparator;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 
-import planeair.graph.coloring.ColoringDSATUR;
-import planeair.graph.coloring.ColoringRLF;
+import planeair.graph.coloring.ColoringAlgorithm;
 import planeair.graph.coloring.ColoringUtilities;
-import planeair.graph.coloring.ColoringWelshPowell;
 import planeair.graph.graphtype.TestGraph;
 import planeair.importation.ImportationTestGraph;
 //#endregion
@@ -31,31 +29,7 @@ import planeair.importation.ImportationTestGraph;
  * @author Nathan LIEGEON
  */
 public abstract class Automation {
-
     //#region ATTRIBUTES
-
-    /**
-     * Number of algorithms that are supported by this process
-     */
-    private static final int NUMBER_OF_ALGORITHMS = 3 ;
-
-    /**
-     * Constant representing the Welsh & Powell algorithm 
-     * for list indexing and switch statements
-     */
-    private static final int WELSH_POWELL = 0 ;
-
-    /**
-     * Constant representing the DSATUR algorithm 
-     * for list indexing and switch statements
-     */
-    private static final int DSATUR = 1 ;
-
-    /**
-     * Constant representing the RLF algorithm 
-     * for list indexing and switch statements
-     */
-    private static final int RLF = 2 ;
 
     /**
      * Default folder where the solution will be stored
@@ -70,7 +44,7 @@ public abstract class Automation {
      * Starts the importation of all the files
      * 
      * @param path Folder from which the files will be imported
-     * @param identifiers The file name structures
+     * @param identifiers The file name structure(s)
      * @param placeholder Character that will be replaced by numbers
      * 
      * @author Nathan LIEGEON
@@ -78,7 +52,9 @@ public abstract class Automation {
     public static void startAutomation(String path, String[] identifiers, char placeholder, int numberOfCores) {
         long start = System.nanoTime() ;
         ExecutorService threadPool = Executors.newFixedThreadPool(numberOfCores) ;
-        TreeSet<TestGraph> graphSet = Automation.importDataFromFolder(path, identifiers, placeholder, threadPool) ;
+        TreeSet<TestGraph> graphSet = Automation.importDataFromFolder
+            (path, identifiers, placeholder, threadPool) ;
+        
         new File(path + FOLDER_PATH).mkdirs() ;
 
         for (TestGraph graph : graphSet) {
@@ -248,46 +224,30 @@ public abstract class Automation {
      * @author Nathan LIEGEON
      */
     public static TestGraph useBestColoringAlgorithm(TestGraph graph, ExecutorService threadPool) {
-
+        final int ALGORITHM_COUNT = ColoringAlgorithm.algorithmList().length ;
         ArrayList<TestGraph> graphList = new ArrayList<>() ;
-        for (int i = 0 ; i < NUMBER_OF_ALGORITHMS ; i++) {
+        for (int i = 0 ; i < ALGORITHM_COUNT ; i++) {
             graphList.add((TestGraph)Graphs.clone(graph)) ;
         }
 
         // Verifies all 3 threads are done before continuing
-        CountDownLatch latch = new CountDownLatch(NUMBER_OF_ALGORITHMS) ;
+        CountDownLatch latch = new CountDownLatch(ALGORITHM_COUNT) ;
 
+        // Creates the threads handling the colorings
+        for (Integer algorithmId = 0 ; algorithmId < 
+            ALGORITHM_COUNT ; algorithmId++) {
 
-        // Creates the threads handling the colorations
-        Runnable welshPowell = new Runnable() {
-            @Override
-            public void run() {
-                ColoringWelshPowell.coloringWelshPowell(graphList.get(WELSH_POWELL)) ;
-                System.out.println("WELSH_POWELL : " + graphList.get(WELSH_POWELL).getNbConflicts()) ;
-                latch.countDown() ;
-            }
-        } ;
-
-        Runnable dsatur = new Runnable() {
-            public void run() {
-                ColoringDSATUR.coloringDsatur(graphList.get(DSATUR));
-                System.out.println("DSATUR : " + graphList.get(DSATUR).getNbConflicts()) ;
-                latch.countDown() ;
-            };
-        } ;
-
-        Runnable rlf = new Runnable() {
-            @Override
-            public void run() {
-                ColoringRLF.coloringRLF(graphList.get(RLF)) ;
-                System.out.println("RLF : " + graphList.get(RLF).getNbConflicts()) ;
-                latch.countDown() ;
-            }
-        } ;
-
-        threadPool.execute(welshPowell) ;
-        threadPool.execute(dsatur) ;
-        threadPool.execute(rlf) ;
+            ColoringAlgorithm currentAlgorithm = ColoringAlgorithm.algorithmList()[algorithmId] ;
+            TestGraph graphColored = graphList.get(algorithmId);
+            threadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    ColoringUtilities.colorGraphWithChosenAlgorithm(
+                        graphColored, currentAlgorithm) ;
+                    latch.countDown() ;
+                }
+            }) ;
+        }
 
         try {
             latch.await() ;
@@ -296,25 +256,12 @@ public abstract class Automation {
         }
         // Finds the best solution
 
-        int bestAlgorithm = findBestAlgorithmInList(graphList) ;
-        switch (bestAlgorithm) {
-            case WELSH_POWELL :
-                System.out.println("WP") ;
-                break ;
-            case DSATUR:
-                System.out.println("DSATUR") ;
-                break ;
-            case RLF:
-                System.out.println("RLF") ;
-                break ;
-            default : 
-                System.out.println("ALGORITHM UNDEFINED") ;
-                break ;
-        }
+        ColoringAlgorithm bestAlgorithm = findBestAlgorithmInList(graphList) ;
+        System.out.println(bestAlgorithm) ;
 
         TestGraph temp  = null ;
-        if (bestAlgorithm < graphList.size()) {
-            temp = graphList.get(bestAlgorithm) ;
+        if (bestAlgorithm.getId() < graphList.size()) {
+            temp = graphList.get(bestAlgorithm.getId()) ;
         }
 
         return temp ;
@@ -411,7 +358,7 @@ public abstract class Automation {
      * 
      * @author Nathan LIEGEON
      */
-    public static Integer findBestAlgorithmInList(ArrayList<TestGraph> list) {
+    public static ColoringAlgorithm findBestAlgorithmInList(ArrayList<TestGraph> list) {
 
         if (list.isEmpty()) {
             return null ;
@@ -421,18 +368,21 @@ public abstract class Automation {
         Integer currentAlgorithm = 1 ;
         boolean hasLessConflicts ;
         boolean hasLessColors ;
+
         while (currentAlgorithm < list.size()) {
             hasLessConflicts = list.get(bestAlgorithm).getNbConflicts() 
                 > list.get(currentAlgorithm).getNbConflicts() ;
+
             hasLessColors = list.get(bestAlgorithm).getNbColors() 
                 > list.get(currentAlgorithm).getNbColors() ;
+
             if (hasLessColors || hasLessConflicts) {
                 bestAlgorithm = currentAlgorithm ;
             }
             currentAlgorithm++ ;
         }
         
-        return bestAlgorithm ;
+        return ColoringAlgorithm.algorithmList()[bestAlgorithm] ;
 
     }
 

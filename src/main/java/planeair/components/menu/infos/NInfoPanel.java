@@ -1,6 +1,7 @@
 package planeair.components.menu.infos;
 
 //#region IMPORT
+
 import java.awt.Dimension;
 
 import java.awt.FlowLayout;
@@ -18,6 +19,7 @@ import planeair.components.mapview.mapwp.MapWaypoint;
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
 import planeair.components.mapview.mapwp.flightwp.FlightWaypoint;
 import planeair.util.Airport;
+
 //#endregion
 
 /**
@@ -165,7 +167,7 @@ public class NInfoPanel extends JPanel {
      * 
      * @author GIRAUD Nila 
      */
-    public void showInfos(MapWaypoint mapWaypoint) {
+    public synchronized void showInfos(MapWaypoint mapWaypoint) {
 
         hideInfos();
 
@@ -178,7 +180,7 @@ public class NInfoPanel extends JPanel {
             this.labelFlightRight.setText(mapWaypoint.toStringSecond());
             this.add(this.flightPanel);
         }
-        else{
+        else if (mapWaypoint instanceof AirportWaypoint) {
             this.labelAirport.setText(mapWaypoint.toString());
             this.add(airportPanel);
 
@@ -186,8 +188,10 @@ public class NInfoPanel extends JPanel {
             this.airport = ((AirportWaypoint) mapWaypoint).getAirport();
             if(!this.airport.getFlightList().isEmpty()){
                 this.table = new JTable();
-                this.model = new NFlightTableInfoModel(this.airport);
-                this.table.setModel(model);
+
+                this.table.setModel(new NFlightTableInfoModel(
+                    this.table, this.airport));
+                table.setAutoCreateRowSorter(true) ;
                 scrollPane.setViewportView(table);
                 this.add(panelTable);
             }
@@ -216,5 +220,4 @@ public class NInfoPanel extends JPanel {
         Map.infoPanel = this;
     }
     //#endregion
-    
 }
