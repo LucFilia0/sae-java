@@ -14,7 +14,7 @@ package planeairtest.importation;
 
 	//#region PLANEAIR
 	import planeair.graph.graphtype.TestGraph;
-	import planeair.importation.ImportationTestGraph;
+	import planeair.importation.TestGraphImportation;
 	//#endregion
 
 	//#region EXCEPTIONS
@@ -59,13 +59,13 @@ public class TestGraphImportationTest {
 	public void testImportTestGraphFromFile() {
 		File file = null;
 		try {
-			file = new File("src/test/java/planeairtest/testfiles/shitty-graph1.txt");
+			file = new File("src/test/java/planeairtest/testfiles/shitty-graph.txt");
 		}catch(NullPointerException e) {
 			e.printStackTrace();
 		}
 
 		try {
-			ImportationTestGraph.importTestGraphFromFile(testGraph, file, false);
+			TestGraphImportation.importTestGraphFromFile(testGraph, file, false);
 		}catch(FileNotFoundException fnfe) {
 			System.err.println("File not found, you dummy");
 		}catch(InvalidFileFormatException iffe) {
@@ -76,5 +76,27 @@ public class TestGraphImportationTest {
 		assertTrue(this.testGraph.getNodeCount() == 11);
 		assertTrue(this.testGraph.getEdgeCount() == 20);
 		assertTrue(this.testGraph.getKMax() == 2);
+	}
+
+	@Test
+	public void testWrongTestGraphImportation() {
+
+		File wrongFile = null;
+		
+		try {
+			wrongFile = new File("src/test/java/planeairtest/testfiles/wrong-graph.txt");
+		}catch(NullPointerException npe) {
+			System.err.println("Null pointer passed you moron");
+		}
+
+		try {
+			TestGraphImportation.importTestGraphFromFile(testGraph, wrongFile, false);
+			fail("Exception not found");
+		}catch(FileNotFoundException fnfe) {
+			System.err.println(fnfe.getMessage());
+			fail("File not found you little piece of... paper");
+		}catch(InvalidFileFormatException iffe) {
+			System.out.println("Exception catched");
+		}
 	}
 }

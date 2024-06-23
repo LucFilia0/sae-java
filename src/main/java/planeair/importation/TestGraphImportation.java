@@ -59,7 +59,7 @@ package planeair.importation;
  * 
  * @author Luc le grand, que dis-je, le <strong>Manifik</strong>
  */
-public class ImportationTestGraph {
+public class TestGraphImportation {
 
     //#region STATIC VARIABLES
 
@@ -84,8 +84,8 @@ public class ImportationTestGraph {
      * @param testGraphFile The {@link java.io.File File} which contains the TestGraph's data
      * @param showErrorMessages "True" if you want that the error messages are prompt, "false" if you don't
      * 
-     * @throws FileNotFoundException Threw if the File does not exist, ot is not found
-     * @throws InvalidFileFormatException Threw if the File format is incorrect
+     * @throws FileNotFoundException Thrown if the File does not exist, ot is not found
+     * @throws InvalidFileFormatException Thrown if the File format is incorrect
      * 
      * @author Luc le Manifik
      */
@@ -155,8 +155,8 @@ public class ImportationTestGraph {
         while(!kMaxImported && lineScanner.hasNextLine()) {
 
             ++currentLine;
-            line = lineScanner.nextLine().replaceAll(ImportationTestGraph.REGEX_TEST_GRAPH, "");
-            line = line.replaceAll("[ ]{2,}", " ");
+            line = lineScanner.nextLine().replaceAll(TestGraphImportation.REGEX_TEST_GRAPH, "");
+            line = line.replaceAll("[ ]{2,}", " "); // Important to do it AFTER the first RegEx is done :)
             dataScanner = new Scanner(line);
 
             // Checking if the scanner has next line
@@ -214,7 +214,7 @@ public class ImportationTestGraph {
         while(!nbNodesImported && lineScanner.hasNextLine()) {
 
             ++currentLine;
-            line = lineScanner.nextLine().replaceAll(ImportationTestGraph.REGEX_TEST_GRAPH, "");
+            line = lineScanner.nextLine().replaceAll(TestGraphImportation.REGEX_TEST_GRAPH, "");
             line = line.replaceAll("[ ]{2,}", " ");
             dataScanner = new Scanner(line);
 
@@ -277,7 +277,7 @@ public class ImportationTestGraph {
 
             ++currentLine;
             line = lineScanner.nextLine();
-            line = line.replaceAll(ImportationTestGraph.REGEX_TEST_GRAPH, "");
+            line = line.replaceAll(TestGraphImportation.REGEX_TEST_GRAPH, "");
             line = line.replaceAll("[ ]{2,}", " ");
 
             if(!line.equals("\n")) { // If the line is not empty

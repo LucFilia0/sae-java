@@ -44,7 +44,7 @@ package planeair.components.menu;
         //#endregion
 //#endregion 
 //#endregion
-import planeair.importation.ImportationFIG;
+import planeair.importation.FIGImportation;
 
 /**
  * Class which create a JPanel of MENU for the graph 
@@ -623,7 +623,7 @@ public class NGraphMenuPanel extends JPanel{
     }
 
     private void changeSecurityMargin(FlightsIntersectionGraph fig, int securityMargin) {
-        ImportationFIG.reDoCollisions(fig, securityMargin);
+        FIGImportation.reDoCollisions(fig, securityMargin);
     }
     //#endregion
 }

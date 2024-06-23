@@ -45,8 +45,8 @@ package planeair.components.imports;
         //#endregion
 
         //#region IMPORTATION
-        import planeair.importation.ImportationFIG;
-        import planeair.importation.ImportationTestGraph;
+        import planeair.importation.FIGImportation;
+        import planeair.importation.TestGraphImportation;
         //#endregion
 
         //#region .UTIL
@@ -300,7 +300,7 @@ public class NImportButtonPanel extends JPanel {
             if(fileChooser.getFile() != null) {
                 try {
                     this.app.setGraph(new TestGraph(fileChooser.getFile().getName())) ;
-                    ImportationTestGraph.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
+                    TestGraphImportation.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
                         fileChooser.getFile(), false);
 
                     this.flightsImported = false;
@@ -338,7 +338,7 @@ public class NImportButtonPanel extends JPanel {
             try {
                 fileChooser.userImportFile();
                 if(fileChooser.getFile() != null) {
-                    ImportationFIG.importAirportsFromFile(this.app.getAirportSet(), fileChooser.getFile());
+                    FIGImportation.importAirportsFromFile(this.app.getAirportSet(), fileChooser.getFile());
                     this.airportsImported = true;
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
@@ -358,7 +358,7 @@ public class NImportButtonPanel extends JPanel {
                 fileChooser.userImportFile();
                 if(fileChooser.getFile() != null) {
                     app.setGraph(new FlightsIntersectionGraph(fileChooser.getFile().getName())) ;
-                    ImportationFIG.importFlightsFromFile(this.app.getAirportSet(), 
+                    FIGImportation.importFlightsFromFile(this.app.getAirportSet(), 
                         (FlightsIntersectionGraph)this.app.getGraph(), fileChooser.getFile(), FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN);
                     
                     ColoringDSATUR.coloringDsatur(app.getGraph()) ;

@@ -26,7 +26,7 @@ import planeair.graph.coloring.ColoringRLF;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.coloring.ColoringWelshPowell;
 import planeair.graph.graphtype.TestGraph;
-import planeair.importation.ImportationTestGraph;
+import planeair.importation.TestGraphImportation;
 
 /**
  * Automates every step of the test where we have to import 20 graphs, 
@@ -150,7 +150,7 @@ public abstract class Automation {
                     public void run() {
                         TestGraph temp = new TestGraph(file.getName()) ;
                         try {
-                            ImportationTestGraph.importTestGraphFromFile(temp, file, false);
+                            TestGraphImportation.importTestGraphFromFile(temp, file, false);
                         }
 
                         catch (FileNotFoundException e) {

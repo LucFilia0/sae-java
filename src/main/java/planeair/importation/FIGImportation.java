@@ -49,7 +49,7 @@ import planeair.util.NTime;
  * 
  * @author Luc le grand, que dis-je, le <strong>Manifik</strong>
  */
-public abstract class ImportationFIG {
+public abstract class FIGImportation {
 
     //#region STATIC VARIABLES
 
@@ -104,11 +104,11 @@ public abstract class ImportationFIG {
 
         while(scanLine.hasNextLine()) {
             ++currentLine;
-            line = scanLine.nextLine().replaceAll(ImportationFIG.REGEX_FIG, ""); // Suppress all the useless spaces
+            line = scanLine.nextLine().replaceAll(FIGImportation.REGEX_FIG, ""); // Suppress all the useless spaces
 
             if(line != "") { // Check if the line is not just a blank line
                 try {
-                    ImportationFIG.createAirportFrom(airportSet, line); // Creates an Airport with the informations of the line.
+                    FIGImportation.createAirportFrom(airportSet, line); // Creates an Airport with the informations of the line.
                 }catch(InvalidFileFormatException errorInFile) {
                     scanLine.close();
                     // All errors are threw as InvalidFileFormatException, because the File is not in the correct format, non-dependant of which error precisely
@@ -157,25 +157,25 @@ public abstract class ImportationFIG {
                     s_location = string_attribute;
                     break;
                 case 2 :
-                    s_latitudeDegree = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_latitudeDegree = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 3 :
-                    s_latitudeMinutes = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_latitudeMinutes = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 4 :
-                    s_latitudeSeconds = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_latitudeSeconds = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 5 :
                     latitudeDirection = string_attribute.toUpperCase().charAt(0);
                     break;
                 case 6 :
-                    s_longitudeDegree = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_longitudeDegree = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 7 :
-                    s_longitudeMinutes = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_longitudeMinutes = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 8 :
-                    s_longitudeSeconds = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_longitudeSeconds = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 9 :
                     longitudeDirection = string_attribute.toUpperCase().charAt(0);
@@ -243,11 +243,11 @@ public abstract class ImportationFIG {
      * @param timeSecurity The time gap below which the Flights are considered like in collision (in MINUTES).
      * 
      * @throws FileNotFoundException Thrown if the file is not found or does not exist.
-     * @throws InvalidEntryException Thrown if the values passed in the Flights's constructor are not correct.
+     * @throws InvalidFileFormatException Thrown if the source File does not matches the expected format.
      * 
      * @author Luc le Manifik
      */
-    public static void importFlightsFromFile(AirportSet airportSet, FlightsIntersectionGraph fig, File flightsFile, double timeSecurity) throws FileNotFoundException, InvalidEntryException {
+    public static void importFlightsFromFile(AirportSet airportSet, FlightsIntersectionGraph fig, File flightsFile, double timeSecurity) throws FileNotFoundException, InvalidFileFormatException {
         
         Scanner scanLine = null;
 
@@ -264,18 +264,15 @@ public abstract class ImportationFIG {
 
         while(scanLine.hasNextLine()) {
             ++currentLine;
-            line = scanLine.nextLine().replaceAll(ImportationFIG.REGEX_FIG, "");
+            line = scanLine.nextLine().replaceAll(FIGImportation.REGEX_FIG, "");
             if(line != "") { // Pass if the line is just a blank line
                 try {
-                    flight = ImportationFIG.createFlightFrom(airportSet, fig, line);
+                    flight = FIGImportation.createFlightFrom(airportSet, fig, line);
 
-                    ImportationFIG.createCollisions(fig, flight, timeSecurity); // Creates all the collisions from this new Flight
+                    FIGImportation.createCollisions(fig, flight, timeSecurity); // Creates all the collisions from this new Flight
                 }catch(InvalidFileFormatException iffe) {
                     scanLine.close();
                     throw iffe;
-                }catch(InvalidEntryException iee) {
-                    scanLine.close();
-                    throw iee;
                 }
             }
         }
@@ -333,13 +330,13 @@ public abstract class ImportationFIG {
                         s_arrival = string_attribute;
                         break;
                     case 3 :
-                        departureTime_h = Integer.parseInt(string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, ""));
+                        departureTime_h = Integer.parseInt(string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, ""));
                         break;
                     case 4 :
-                        departureTime_m = Integer.parseInt(string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, ""));
+                        departureTime_m = Integer.parseInt(string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, ""));
                         break;
                     case 5 :
-                        duration = Integer.parseInt(string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, ""));
+                        duration = Integer.parseInt(string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, ""));
                         break;
                     default : 
                         System.err.println("Error at Line " + currentLine + " : More informations than required.");
@@ -364,7 +361,7 @@ public abstract class ImportationFIG {
         // If everything is ok, the Flight is initialized
 
         // Setting up the FlightFactory to create Flight nodes
-        fig.setNodeFactory(new FlightFactory()); // IDK if it's correct but Inch'Allah
+        fig.setNodeFactory(new FlightFactory()); // IDK if it's correct but Inch
         
         Flight flight = null;
         try {

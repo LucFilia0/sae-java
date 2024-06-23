@@ -2,32 +2,19 @@ package planeair.util;
 
 //#region IMPORTS
 
-    //#region JAVA
+import java.util.ArrayList;
+import java.util.Iterator;
 
-    import java.util.ArrayList;
-    import java.util.Iterator;
-
-    //#endregion
-
-    //#region GRAPHSTREAM
-
-    import org.graphstream.graph.Node;
+import org.graphstream.graph.Node;
 
 import planeair.components.mapview.mapwp.airportwp.AirportWaypoint;
-
-//#endregion
-
-    //#region PLANEAIR
-
-    import planeair.graph.graphtype.FlightsIntersectionGraph;
-    import planeair.graph.graphutil.Flight;
-
-    //#endregion
+import planeair.graph.graphtype.FlightsIntersectionGraph;
+import planeair.graph.graphutil.Flight;
 
 //#endregion
 
 /**
- * the Airport class represents the different airports which are imported (in this case, France's airports).
+ * The Airport class represents the different airports which are imported (in this case, France's airports).
  * 
  * @author Luc le Manifik
  */
@@ -46,7 +33,7 @@ public class Airport {
     private String location;
 
     /**
-     * The GeoPosition of the Airport 
+     * The Coordinate of the Airport 
      */
     private Coordinate coordinate;
     
@@ -196,7 +183,7 @@ public class Airport {
      * 
      * @param coordinate ({@link planeair.util.Coordinate Coordinate}) - The new Coordinate of the Airport
      * 
-     * @throws NullPointerException Threw if the {@link planeair.util.Coordinate Coordinate} passed  in parameter is null
+     * @throws NullPointerException Thrown if the {@link planeair.util.Coordinate Coordinate} passed  in parameter is null
      * 
      * @author Luc le Manifik
      */

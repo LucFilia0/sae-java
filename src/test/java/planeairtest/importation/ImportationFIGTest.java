@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 	
 import planeair.graph.graphtype.FlightsIntersectionGraph;
-import planeair.importation.ImportationFIG;
+import planeair.importation.FIGImportation;
 import planeair.util.AirportSet;
 
 import java.io.FileNotFoundException;
@@ -26,7 +26,7 @@ import planeair.exceptions.ObjectNotFoundException;
  */
 public class ImportationFIGTest {
 
-	//#region ATRIBUTES
+	//#region ATTRIBUTES
 
 	/**
 	 * The File which contains the Airports' informations
@@ -37,6 +37,20 @@ public class ImportationFIGTest {
 	 * The File which contains the Flights' informations
 	 */
 	private File flightFile;
+
+	/**
+	 * File containing Flights' informations.
+	 * This File contains missing informations on certain lines.
+	 * Used to test if the exceptions are well catched.
+	 */
+	private File wrongFlightFile;
+
+	/**
+	 * File containing Airports' informations.
+	 * This File contains missing informations on certain lines.
+	 * Used to test if the exceptions are well catched.
+	 */
+	private File wrongAirportFile;
 
 	/**
 	 * The AirportSet which will contains the imported Airports
@@ -55,11 +69,19 @@ public class ImportationFIGTest {
 	 */
 	@Before
 	public void init() {
-		this.airportFile = null;
-		this.flightFile = null;
+		
+		this.airportFile 		= null;
+		this.flightFile 		= null;
+
+		this.wrongFlightFile	= null;
+		this.wrongAirportFile	= null;
+
 		try {
-			airportFile = new File("src/test/java/planeairtest/testfiles/shitty-airports.csv");
-			flightFile = new File("src/test/java/planeairtest/testfiles/vol-test3.csv");
+			this.airportFile = new File("src/test/java/planeairtest/testfiles/shitty-airports.csv");
+			this.flightFile = new File("src/test/java/planeairtest/testfiles/shitty-flights.csv");
+
+			this.wrongFlightFile = new File("src/test/java/planeairtest/testfiles/wrong-flights.csv");
+			this.wrongAirportFile = new File("src/test/java/planeairtest/testfiles/wrong-airports.csv");
 		}catch(NullPointerException npe) {
 			System.err.println(npe.getMessage());
 			fail("mf");
@@ -67,7 +89,10 @@ public class ImportationFIGTest {
 	}
 
 	/**
-	 * This method is used to test the Airports' importation
+	 * This method is used to test if the Airports' importation
+	 * runs correctly
+	 * 
+	 * @author Luc le Manifik
 	 */
 	@Test
 	public void testImportAirportsFromFile() {
@@ -75,7 +100,7 @@ public class ImportationFIGTest {
 		this.airportSet = new AirportSet();
 
 		try {
-			ImportationFIG.importAirportsFromFile(airportSet, airportFile);
+			FIGImportation.importAirportsFromFile(airportSet, airportFile);
 		}catch(InvalidFileFormatException | FileNotFoundException e) {
 			System.err.println(e.getMessage());
 			fail("File can't be read, mf");
@@ -93,12 +118,15 @@ public class ImportationFIGTest {
 	}
 
 	/**
-	 * This method is used to test the Flights' importation
+	 * This method is used to test if the Flights' importation
+	 * runs correctly
+	 * 
+	 * @author Luc le Manifik
 	 */
 	@Test
-	public void testImportAirportFromFile() {
+	public void testImportFlightsFromFile() {
 
-		this.fig = new FlightsIntersectionGraph("Test-FIG");
+		this.fig = new FlightsIntersectionGraph("FIG");
 
 		// Import the Airports if the former test has not ran
 		if(this.airportSet == null) {
@@ -106,7 +134,7 @@ public class ImportationFIGTest {
 		}
 
 		try {
-			ImportationFIG.importFlightsFromFile(airportSet, fig, flightFile, FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN);
+			FIGImportation.importFlightsFromFile(airportSet, fig, flightFile, FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN);
 		}catch(FileNotFoundException | InvalidEntryException e) {
 			System.err.println(e.getMessage());
 			fail("File can't be read you dumbass");
@@ -127,7 +155,55 @@ public class ImportationFIGTest {
 		};
 
 		for(int fId = 0; fId < flightIds.length; ++fId) {
-			assertFalse(fig.getNode(flightIds[fId]) == null);
+			assertFalse(fig.getNode(flightIds[fId]) == null); // Verifying if Flights exist
+		}
+	}
+
+	/**
+	 * This method verifies if the InvalidFileFormatException exception is correctly thrown
+	 * when there are some missing informations on Airports' File's lines.
+	 * 
+	 * @author Luc le Manifik
+	 */
+	@Test
+	public void testWrongAirportFile() {
+
+		this.airportSet = new AirportSet();
+
+		try {
+			FIGImportation.importAirportsFromFile(airportSet, wrongAirportFile);
+			fail("Exception not detected");
+		}catch(FileNotFoundException fnfe) {
+			System.err.println(fnfe.getMessage());
+			fail("File not found you dummy");
+		}catch(InvalidFileFormatException iffe) {
+			System.out.println("Exception catched");
+		}
+	}
+
+	/**
+	 * This method verifies if the InvalidFileFormatException exception is correctly thrown
+	 * when there are some missing informations on the Flights' File's lines.*
+	 * 
+	 * @author Luc le Manifik 
+	 */
+	@Test
+	public void testWrongFlightFile() {
+
+		if(this.airportSet == null) {
+			testImportAirportsFromFile();
+		}
+
+		this.fig = new FlightsIntersectionGraph("wrong-FIG");
+
+ 		try {
+			FIGImportation.importFlightsFromFile(airportSet, fig, wrongFlightFile, FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN); 
+			fail("Exception not detected");
+		}catch(FileNotFoundException fnfe) {
+			System.err.println(fnfe.getMessage());
+			fail("File not found you dummy");
+		}catch(InvalidFileFormatException iffe) {
+			System.out.println("Exception catched");
 		}
 	}
 }
