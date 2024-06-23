@@ -18,7 +18,8 @@ import planeair.graph.graphtype.GraphSAE;
 //#endregion
 
 /**
- * Class handling all the methods for the RLF graph Algorithm
+ * Class handling all the methods to implement the {@code RLF} 
+ * graph coloring Algorithm.<br><br>
  * The algorithm was based on this
  * {@link <a href = "https://en.wikipedia.org/wiki/Recursive_largest_first_algorithm">source</a>}
  * 
@@ -56,8 +57,6 @@ public abstract class ColoringRLF {
 
         graph.setNbColors(color) ;
         graph.setNbConflicts(nbConflicts) ;
-        
-
     }
 
     /**
@@ -69,7 +68,9 @@ public abstract class ColoringRLF {
      * @param graph The clone of the graph getting progressively emptied
      * @param color The color used to color nodes 
      * (will get incremented before doing treatments)
-     * @return
+     * @param kMax The graph's kMax or {@code INTEGER.Max_Value} if the graph
+     * has no kMax
+     * @return The number of colors used to color the graph
      * 
      * @author Nathan LIEGEON
      */

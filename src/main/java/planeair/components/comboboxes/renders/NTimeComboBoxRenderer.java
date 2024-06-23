@@ -17,12 +17,12 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
 
     //#region INSTANTIALISATION AND INITIALISATION
     /**
-     * Default color for text
+     * Default color for the text
      */
     public static final Color DEFAULT_TEXT_COLOR = Color.BLACK ;
 
     /**
-     * Default background Color
+     * Default color of the background
      */
 	public static final Color DEFAULT_BACKGROUND_COLOR = Color.YELLOW ;
     //#endregion
@@ -30,8 +30,8 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
     //#region CONSTRUCTOR CHOOSE COLOR
     /**
      * Constructor of NTimeComboBoxRenderer
-     * @param textColor 
-     * @param backgroundColor
+     * @param textColor The color of the text
+     * @param backgroundColor The color of the background
      */
     public NTimeComboBoxRenderer(Color textColor, Color backgroundColor) {
         super(textColor, backgroundColor) ;
@@ -56,8 +56,8 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
             boolean isSelected,
             boolean cellHasFocus) {
         
-        JLabel cell = (JLabel)super.getListCellRendererComponent(
-            list, value, index, isSelected, cellHasFocus) ;
+        JLabel cell = (JLabel)super.getListCellRendererComponent
+            (list, value, index, isSelected, cellHasFocus) ;
         
         if (value < 10){
             cell.setText("0" + String.valueOf(value));

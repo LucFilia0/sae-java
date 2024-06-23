@@ -79,18 +79,23 @@ public class NMaxGraphFrame extends JFrame{
         this.setSize(new Dimension(1100,700));
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);  
-        // Handles properly closing the window by moving back all the panels it moved
+        
+        // Handles properly closing the window by 
+        // moving back all the panels it moved
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 removeAll() ;
                 graphInfoPanel.removeAll() ;
                 graph.removeAll() ;
-                App.app.getMainScreen().getMinGraphPanel().getButtonAgr().setEnabled(true) ;
+                App.app.getMainScreen().getMinGraphPanel()
+                    .getButtonAgr().setEnabled(true) ;
+
                 if (graphRenderer != null) {
                     graphInfo.setFontSize(12);
                     App.app.getMainScreen().initGraphBottomPanel() ;
-                    App.app.getMainScreen().getMinGraphPanel().addGraphToPanel(App.app.getGraphRenderer()) ;
+                    App.app.getMainScreen().getMinGraphPanel()
+                        .addGraphToPanel(App.app.getGraphRenderer()) ;
                     App.app.repaint();
                     App.app.revalidate() ;
                 }

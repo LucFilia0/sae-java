@@ -12,6 +12,14 @@ import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
 //#endregion
 
+/**<html>
+ * Class containing all the methods to implement the {@code DSATUR} 
+ * graph coloring algorithm
+ * 
+ * @author GIRAUD Nila mod. Nathan LIEGEON
+ * @see <a href = "https://fr.wikipedia.org/wiki/DSATUR"> For more details</a>
+ * </html>
+ */
 public abstract class ColoringDSATUR {
     
     /**

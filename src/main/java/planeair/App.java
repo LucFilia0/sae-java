@@ -45,12 +45,13 @@ public class App extends javax.swing.JFrame {
             System.setProperty("java -Dsun.java2d.opengl", "True") ;
         }
         else {
-            System.out.println("Sorry this is not supported for Mac, get a better OS 👍👍👍\n "+
-                "If you're using anything else then just cry harder 🦈") ;
+            System.out.println("OS not Supported") ;
         }   
         
-        App app = new App();
-        app.setVisible(true);
+        /* App app = new App();
+        app.setVisible(true); */
+        Automation.startAutomation("./data", new String[]{"graph-testX.txt"}, 
+            'X', Runtime.getRuntime().availableProcessors());
     }
 
     //-- APP ATTRIBUTES

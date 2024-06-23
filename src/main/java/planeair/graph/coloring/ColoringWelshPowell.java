@@ -13,7 +13,11 @@ import org.graphstream.graph.Node;
 import planeair.graph.graphtype.GraphSAE;
 //#endregion
 /**
- * Class handling the Welsh & Powell algorithm
+ * 
+ * Class handling the {@code Welsh & Powell} algorithm
+ * 
+ * @author Nathan LIEGEON
+ * @see 
  */
 public abstract class ColoringWelshPowell {
     

@@ -246,11 +246,13 @@ public class PanelCreator {
 	}
 
 	/**
+	 * <html>
 	 * Sets the default style for selected nodes.
-	 * 
+	 * <br><br>
 	 * This method is synchronized because it might be called twice at the
 	 * same time which would result in an exception being thrown.
 	 * @param n The Node
+	 * </html>
 	 */
 	public synchronized static void setSelectedStyle(Node n) {
 		n.removeAttribute("ui.size") ;
@@ -278,7 +280,8 @@ public class PanelCreator {
 	//#region MOUSE EVENTS
 
 	/**
-	 * Class handling all mouse events on this panel
+	 * Class handling all {@code Mouse Events} on this panel. Operations supported
+	 * are zooming with the scrool wheel and moving by dragging the mouse
 	 * 
 	 * @author Nathan LIEGEON
 	 */
@@ -300,8 +303,9 @@ public class PanelCreator {
 		}
 
 		/**
-		 * This event handles zooming on the graph from 0.1x to 2x while 
-		 * also moving the camera a bit so the zoom is less clunky to use
+		 * This event handles {@code Zooming} on the graph from {@code 0.1x} toi
+		 * {@code 2x} while also moving the camera a bit so the zoom feels
+		 * less clunky to use
 		 * 
 		 * @author Nathan LIEGEON
 		 */
@@ -340,8 +344,8 @@ public class PanelCreator {
 	//#region VIEWER EVENTS
 		
 	/**
-	 * Class handling viewer events which are events related to graphical elements in the viewer
-	 * (nodes, edges and other stuff)
+	 * Class handling {@code Viewer Events} which are events related to 
+	 * {@code graphical elements} in the viewer (nodes, edges and other stuff)
 	 * 
 	 * @author Nathan LIEGEON
 	 */
@@ -355,14 +359,17 @@ public class PanelCreator {
 		}
 		
 		/**
+		 * <html>
 		 * Makes the {@code Node} bigger when hovering 
-		 * over them and shows their id
+		 * over them and shows their {@code id}
+		 * <br><br>
 		 * If this node is a flight, selects the 
 		 * corresponding {@code FlightWaypoint}
 		 * 
-		 * @param id the Id of the node that is being hovered
+		 * @param id the {@ode Id} of the node that is being hovered
 		 *
 		 * @author Nathan LIEGEON
+		 * </html>
 		 */
 		@Override
 		public void mouseOver(String id) {
@@ -438,8 +445,16 @@ public class PanelCreator {
 
 	/**
 	 * Thread used to pump graph events
+	 * 
+	 * @author Nathan LIEGEON
 	 */
 	public class GraphEventPumper extends Thread {
+
+		/**
+		 * Instantiates the {@code Thread}.
+		 * If {@code interrupted}, it will try to start another Thread.
+		 * To properly close it, close the {@link View}.
+		 */
 		public GraphEventPumper() {
 			super(new Runnable() {
 				public void run() {

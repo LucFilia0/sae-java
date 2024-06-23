@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 //#endregion
 
 /**
- * Panel shown if no graph has been imported, it contains a single giant skull image 
- * (or a placeholder text if you dare delete it)
+ * Panel shown if no graph has been imported, it contains a single 
+ * giant skull image (or a placeholder text if you dare delete it)
  * 
  * @author Knight of the Holy CROUS'kie
  */

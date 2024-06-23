@@ -152,12 +152,15 @@ public class MapWaypointButton extends JToggleButton {
     }
 
     /**
-     * Highlights a waypoint when clicked on by putting a
-     * colored border around it, only one button
-     * can be selected at a time
-     * 
-     * If the waypoint corresponds to a flight, then also updates
-     * its related graph node's style to also appear selected
+     * <html>
+     * Highlights a {@code Waypoint} when the user clicks on it by 
+     * putting a colored border around it,<br>
+     * <strong>only one button can be selected at a time.</strong>
+     * <br><br>
+     * If the {@code Waypoint} corresponds to a flight, then also updates
+     * its related {@link org.graphstream.graph.Node Node} 
+     * style to also appear selected
+     * </html>
      * 
      * @author Nathan LIEGEON
      * @see deselect

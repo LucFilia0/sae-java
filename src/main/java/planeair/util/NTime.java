@@ -136,8 +136,9 @@ public class NTime implements Comparable<NTime> {
     }
 
     /**
+     * Converts the LocalTime into a NTime object
      * 
-     * @return (FlightTime) - CurrentTime
+     * @return The current Time as a NTime object
      * 
      * @author Nathan LIEGEON
      */

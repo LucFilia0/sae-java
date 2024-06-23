@@ -2,19 +2,11 @@ package planeairtest.graph.coloring;
 
 
 //#region IMPORTS
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-	//#region JUNIT
-	import org.junit.Test;
-	import static org.junit.Assert.*;
-	//#endregion
-
-	//#region JAVA
-    import planeair.graph.coloring.ColoringUtilities;
-    import planeair.graph.coloring.ColoringWelshPowell;
-    //#endregion
-    
-    //#region PLANEAIR
-    //#endregion
+import planeair.graph.coloring.ColoringUtilities;
+import planeair.graph.coloring.ColoringWelshPowell;
 //#endregion
 
 //#endregion

@@ -2,7 +2,7 @@ package planeair.graph.coloring;
 
 //#region IMPORTS
 import java.awt.Color;
-//-- Import Java
+
 import java.util.* ;
 import java.util.stream.Collectors;
 
@@ -87,7 +87,10 @@ public abstract class ColoringUtilities {
      * @author Nathan LIEGEON
      */
     public static void setGraphStyle(GraphSAE graph, int nbColor) {
-        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size ;\n size : " + DEFAULT_NODE_SIZE + " ; }\n") ;
+        StringBuffer stylesheet = new StringBuffer("node {size-mode : dyn-size;"
+                                                    + " \n size : " 
+                                                    + DEFAULT_NODE_SIZE 
+                                                    + " ; }\n") ;
         Integer color ;
         HashMap<Integer, Color> colorMap = graph.getColorMap() ;
         colorMap.clear() ;
@@ -98,11 +101,12 @@ public abstract class ColoringUtilities {
         }
         
         for (Node coloringNode : graph) {
-            color = (Integer)coloringNode.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
+            color = (Integer)coloringNode.getAttribute
+                (ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
             coloringNode.setAttribute("ui.class", "color" + color) ;
         }
         
-        // FFFFFF in decimal (i asked Google 👍) - 15 
+        // FFFFFF in decimal (i asked Google) - 15 
         //to get to FFFFF0 to avoid white nodes
         int maxHexValue = 16777200 ;
         
@@ -160,32 +164,6 @@ public abstract class ColoringUtilities {
         graph.setAttribute(GraphSAE.COLOR_ATTRIBUTE, 0) ;
         for (Node node : graph) {
             node.setAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE, 0) ;
-            node.setAttribute(GraphSAE.CONFLICT_ATTRIBUTE, 0) ;
-        }
-    }
-
-    /**
-     * Colors the graph with the chosen algorithm
-     * if the algorithm passed doesn't exist, doesn't do anything
-     * 
-     * @param graph The graph we wanna color
-     * @param algorithm The String representing the algorithm
-     * 
-     * @author Nathan LIEGEON
-     */
-    public static void colorGraphWithChosenAlgorithm(GraphSAE graph, ColoringAlgorithms algorithm) {
-        
-        switch (algorithm) {
-                case DSATUR :
-                    ColoringDSATUR.coloringDsatur(graph) ;
-                    break ;
-                case WELSH_POWELL :
-                    ColoringWelshPowell.coloringWelshPowell(graph) ;
-                    break ;
-                case RLF :
-                    ColoringRLF.coloringRLF(graph) ;  
-                    break ;
-                default :
         }
     }
 
@@ -249,19 +227,22 @@ public abstract class ColoringUtilities {
     }
 
     /**
-     * Colors all {@code Nodes} that don't yet have a color with the least
-     * conflicting color.
-     * 
-     * A conflict is an edge whose extremeties have the same color
-     * @param graphSet Set containing Nodes we are trying to color
-     * If one of the nodes has a color, it gets skipped
+     * <html>
+     * Colors all {@code Nodes} that don't yet have a 
+     * {@code color} with the least conflicting color.
+     * <br><br>
+     * A conflict is an {@code edge} whose extremeties have the same color
+     * @param graphSet {@code Set} containing {@code Nodes} we are 
+     * trying to color. If one of the nodes has a color, it gets skipped
      * @param kMax Maximum color that can be assigned to a node
      * 
      * @return The number of conflicts that occurred
      * 
      * @author Nathan LIEGEON
+     * </html>
      */
     public static int colorWithLeastConflicts(Set<Node> graphSet, int kMax) {
+        
         TreeSet<Node> set = new TreeSet<>((node1, node2) -> {
             if (node1.getDegree() == node2.getDegree()) {
                 return node1.getId().compareTo(node2.getId()) ;
@@ -292,17 +273,43 @@ public abstract class ColoringUtilities {
      * conflicting color
      * 
      * a conflict is an edge whose extremeties have the same color
-     * @param graphSet Set containing Nodes we are trying to color
-     * If one of the nodes has a color, it gets skipped
+     * @param graph the graph from which all the nodes will be taken
      * 
      * calls the default implementation of this method (the one with a set)
-     * with the graph's kmax and all its nodes in the set without filtering them
+     * with the graph's kmax and all its nodes that don't yet have a color
      * 
      * @return The number of conflicts that occurred
      * 
      * @author Nathan LIEGEON
      */
     public static int colorWithLeastConflicts(GraphSAE graph) {
-        return colorWithLeastConflicts(graph.nodes().collect(Collectors.toSet()), graph.getKMax()) ;
+        return colorWithLeastConflicts(graph.nodes()
+            .filter(n -> (int)n.getAttribute(NODE_COLOR_ATTRIBUTE) == 0)
+            .collect(Collectors.toSet())
+            , graph.getKMax()) ;
+    }
+
+    /**
+     * <html>
+     * Colors the graph with the chosen algorithm if the algorithm
+     * has a defined method for it.<br><br>
+     * Its arguments should be a {@link GraphSAE} and it should be {@code 
+     * static}
+     * 
+     * @param graph The graph we want to color
+     * @param algorithm The algorithm used
+     * @return {@code true} if the method was successfully invoked, 
+     * {@code false} else
+     * </html>
+     */
+    public static boolean colorGraphWithChosenAlgorithm(GraphSAE graph, 
+                        ColoringAlgorithms algorithm) {
+        try {
+            algorithm.getMethod().invoke(null, graph) ;
+        } catch (Exception e) {
+            return false ;
+        }
+
+        return true ;
     }
 }

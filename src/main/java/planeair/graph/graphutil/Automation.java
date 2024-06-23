@@ -10,13 +10,14 @@ import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 
-import planeair.graph.coloring.ColoringAlgorithm;
+import planeair.graph.coloring.ColoringAlgorithms;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.TestGraph;
 import planeair.importation.ImportationTestGraph;
@@ -59,8 +60,7 @@ public abstract class Automation {
 
         for (TestGraph graph : graphSet) {
             TestGraph coloredGraph = Automation.useBestColoringAlgorithm(graph, threadPool) ;
-            Automation.writeToFile(coloredGraph, path) ;
-                
+            Automation.writeToFile(coloredGraph, path) ; 
         }
 
         System.out.println("Done Writing") ;
@@ -92,8 +92,8 @@ public abstract class Automation {
         File folder = new File(path) ;
         File[] files = folder.listFiles(new FileFilter() {
             @Override
-            public boolean accept(File arg0) {
-                return isFileLike(arg0.getName(), identifiers, placeholder) ;
+            public boolean accept(File file) {
+                return isFileLike(file.getName(), identifiers, placeholder) ;
             }
         }) ;
 
@@ -107,7 +107,8 @@ public abstract class Automation {
                     public void run() {
                         TestGraph temp = new TestGraph(file.getName()) ;
                         try {
-                            ImportationTestGraph.importTestGraphFromFile(temp, file, false);
+                            ImportationTestGraph.importTestGraphFromFile(temp, 
+                                file, false);
                             res.add(temp) ;
                         }
 
@@ -160,7 +161,7 @@ public abstract class Automation {
 
             graph.nodes().forEach(n -> set.add(n)) ;
             for (Node node : set) {
-                resWriter.write(node.getId() + " ; " + node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) + '\n') ;
+                resWriter.write(node.getId() + "; " + node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) + '\n') ;
             }
 
             resWriter.close() ;
@@ -170,9 +171,7 @@ public abstract class Automation {
             
             conflictWriter.write(graph.getId() + ";" + Integer.toString(graph.getNbConflicts()) + '\n') ;
             conflictWriter.close() ;
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e) ;
         }
     }
@@ -219,31 +218,30 @@ public abstract class Automation {
      * Finds the best coloring algorithm and returns its solution
      * @param graph Graph that was colored
      * @param threadPool List of threads currently used
-     * @return
+     * @return the graph with the best solution
      * 
      * @author Nathan LIEGEON
      */
     public static TestGraph useBestColoringAlgorithm(TestGraph graph, ExecutorService threadPool) {
-        final int ALGORITHM_COUNT = ColoringAlgorithm.algorithmList().length ;
-        ArrayList<TestGraph> graphList = new ArrayList<>() ;
-        for (int i = 0 ; i < ALGORITHM_COUNT ; i++) {
-            graphList.add((TestGraph)Graphs.clone(graph)) ;
+        ColoringAlgorithms[] algorithmList = ColoringAlgorithms.algorithmList() ;
+        final int algorithmCount = algorithmList.length ;
+
+        HashMap<ColoringAlgorithms, TestGraph> graphMap = new HashMap<>() ;
+        for (int i = 0 ; i < algorithmList.length ; i++) {
+            graphMap.put(algorithmList[i], 
+                (TestGraph)Graphs.clone(graph)) ;
         }
 
         // Verifies all 3 threads are done before continuing
-        CountDownLatch latch = new CountDownLatch(ALGORITHM_COUNT) ;
+        CountDownLatch latch = new CountDownLatch(algorithmCount) ;
 
         // Creates the threads handling the colorings
-        for (Integer algorithmId = 0 ; algorithmId < 
-            ALGORITHM_COUNT ; algorithmId++) {
-
-            ColoringAlgorithm currentAlgorithm = ColoringAlgorithm.algorithmList()[algorithmId] ;
-            TestGraph graphColored = graphList.get(algorithmId);
+        for (ColoringAlgorithms algorithm : graphMap.keySet()) {
             threadPool.execute(new Runnable() {
                 @Override
                 public void run() {
                     ColoringUtilities.colorGraphWithChosenAlgorithm(
-                        graphColored, currentAlgorithm) ;
+                        graph, algorithm) ;
                     latch.countDown() ;
                 }
             }) ;
@@ -254,15 +252,9 @@ public abstract class Automation {
         } catch (Exception e) {
             System.out.println("Interrupted 🤓🤓🤓") ;
         }
-        // Finds the best solution
 
-        ColoringAlgorithm bestAlgorithm = findBestAlgorithmInList(graphList) ;
-        System.out.println(bestAlgorithm) ;
-
-        TestGraph temp  = null ;
-        if (bestAlgorithm.getId() < graphList.size()) {
-            temp = graphList.get(bestAlgorithm.getId()) ;
-        }
+        ColoringAlgorithms bestAlgorithm = findBestAlgorithmInList(graphMap) ;
+        TestGraph temp = graphMap.get(bestAlgorithm) ;
 
         return temp ;
     }
@@ -313,9 +305,8 @@ public abstract class Automation {
                     res = false ;
                 }
                 offset-- ;
-            }
 
-            else if (filenameBuffer != identifierBuffer) {
+            } else if (filenameBuffer != identifierBuffer) {
                 res = false ;
             }
             
@@ -351,38 +342,43 @@ public abstract class Automation {
     }
 
     /**
-     * Returns which algorithm in the list has the best solution
+     * Returns which algorithm in the map has the best solution
      * 
-     * @param list the list we are checking
-     * @return index of the best algorithm or null if the list is empty
+     * @param map Map containing for each algorithm the graph that
+     * will be colored with it
+     * @return the best algorithm or null if there was non
      * 
      * @author Nathan LIEGEON
      */
-    public static ColoringAlgorithm findBestAlgorithmInList(ArrayList<TestGraph> list) {
+    public static ColoringAlgorithms findBestAlgorithmInList(
+        HashMap<ColoringAlgorithms, TestGraph> map) {
 
-        if (list.isEmpty()) {
+        if (map.keySet().isEmpty()) {
             return null ;
         }
         
-        Integer bestAlgorithm = 0 ;
-        Integer currentAlgorithm = 1 ;
+        Iterator<ColoringAlgorithms> itr = map.keySet().iterator() ;
+        ColoringAlgorithms bestAlgorithm = null;
+        bestAlgorithm = itr.next() ;
+        
+        ColoringAlgorithms currentAlgorithm ;
         boolean hasLessConflicts ;
         boolean hasLessColors ;
 
-        while (currentAlgorithm < list.size()) {
-            hasLessConflicts = list.get(bestAlgorithm).getNbConflicts() 
-                > list.get(currentAlgorithm).getNbConflicts() ;
+        while (itr.hasNext()) {
+            currentAlgorithm = itr.next() ;
+            hasLessConflicts = map.get(bestAlgorithm).getNbConflicts()
+                > map.get(currentAlgorithm).getNbConflicts() ;
 
-            hasLessColors = list.get(bestAlgorithm).getNbColors() 
-                > list.get(currentAlgorithm).getNbColors() ;
+            hasLessColors = map.get(bestAlgorithm).getNbColors() 
+                > map.get(currentAlgorithm).getNbColors() ;
 
             if (hasLessColors || hasLessConflicts) {
                 bestAlgorithm = currentAlgorithm ;
             }
-            currentAlgorithm++ ;
         }
         
-        return ColoringAlgorithm.algorithmList()[bestAlgorithm] ;
+        return bestAlgorithm ;
 
     }
 
