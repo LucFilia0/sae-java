@@ -420,7 +420,6 @@ public class NMainScreen extends JPanel {
 
             //#region BODY
             
-            
             //#endregion
             
             //#region LEFT

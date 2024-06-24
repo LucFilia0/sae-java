@@ -32,7 +32,7 @@ import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
 import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphutil.PanelCreator;
-import planeair.importation.ImportationFIG;
+import planeair.importation.FIGImportation;
 //#endregion
 /**
  * Class which create a JPanel of MENU for the graph 
@@ -619,7 +619,7 @@ public class NGraphMenuPanel extends JPanel{
     }
 
     private void changeSecurityMargin(FlightsIntersectionGraph fig, int securityMargin) {
-        ImportationFIG.reDoCollisions(fig, securityMargin);
+        FIGImportation.reDoCollisions(fig, securityMargin);
     }
     //#endregion
 }

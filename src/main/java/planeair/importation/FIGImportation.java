@@ -24,6 +24,8 @@ import planeair.util.Coordinate;
 import planeair.util.NTime;
 //#endregion
 
+//#endregion
+
 /**
  * <html>
  * This class contains all the functions/procedures linked to FIG importation.
@@ -48,20 +50,29 @@ import planeair.util.NTime;
  * 
  * @author Luc le grand, que dis-je, le <strong>Manifik</strong>
  */
-public abstract class ImportationFIG {
+public abstract class FIGImportation {
+
+    //#region STATIC VARIABLES
 
     /**
-     * The RegEx which is used to clean the lines of the files. It only accepts ";", spaces, numbers and letters.
+     * The RegEx which is used to clean the lines of the files. It only accepts ";", numbers and letters.
      * All the other caracters are ignored.
      * 
      * @author Luc le Manifik
      */
-    public static final String REGEX_FIG = "[^; 0-9A-Za-z]";
+    public static final String REGEX_FIG = "[^;0-9A-Za-z]";
 
     /**
-     * Only accept numbers
+     * The RegEx which removes everything which is not a number
      */
     public static final String REGEX_NUMBERS = "[^0-9]";
+
+    /**
+     * The current line of the File
+     */
+    public static int currentLine;
+  
+    //#endregion
 
     /*
      * ===============================================
@@ -72,7 +83,7 @@ public abstract class ImportationFIG {
     /**
      * Imports the Airports from a File passed in parameter. They are automatically added to the AirportSet.
      * 
-     * @param airportsFile ({@link java.io.File File}) - The File read.
+     * @param airportsFile The source {@link java.io.File File File}
      *
      * @throws FileNotFoundException Thrown if the source File is not found or does not exist
      * @throws InvalidFileFormatException Thrown if the File is not found or does not exist 
@@ -90,14 +101,15 @@ public abstract class ImportationFIG {
         }
 
         String line;
-        int currentLine = 0; // The line currently read in the source file. To report errors to the user.
+        currentLine = 0; // The line currently read in the source file. To report errors to the user.
 
         while(scanLine.hasNextLine()) {
             ++currentLine;
-            line = scanLine.nextLine();
-            if(line.charAt(0) != '\n') { // Check if the line is not just a blank line
+            line = scanLine.nextLine().replaceAll(FIGImportation.REGEX_FIG, ""); // Suppress all the useless spaces
+
+            if(line != "") { // Check if the line is not just a blank line
                 try {
-                    ImportationFIG.createAirportFrom(airportSet, line, currentLine); // Creates an Airport with the informations of the line.
+                    FIGImportation.createAirportFrom(airportSet, line); // Creates an Airport with the informations of the line.
                 }catch(InvalidFileFormatException errorInFile) {
                     scanLine.close();
                     // All errors are Thrown as InvalidFileFormatException, because the File is not in the correct format, non-dependant of which error precisely
@@ -121,11 +133,9 @@ public abstract class ImportationFIG {
      * 
      * @author Luc le Manifik
      */
-    private static void createAirportFrom(AirportSet airportSet, String line, int currentLine) throws InvalidFileFormatException {
+    private static void createAirportFrom(AirportSet airportSet, String line) throws InvalidFileFormatException {
 
-        String okLine = line.replaceAll(ImportationFIG.REGEX_FIG, ""); // Suppress all the useless spaces
-
-        Scanner scanAirport = new Scanner(okLine);
+        Scanner scanAirport = new Scanner(line);
         scanAirport.useDelimiter("[;\0]");
 
         String string_attribute; // Store the different attributes of the Airport
@@ -148,25 +158,25 @@ public abstract class ImportationFIG {
                     s_location = string_attribute;
                     break;
                 case 2 :
-                    s_latitudeDegree = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_latitudeDegree = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 3 :
-                    s_latitudeMinutes = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_latitudeMinutes = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 4 :
-                    s_latitudeSeconds = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_latitudeSeconds = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 5 :
                     latitudeDirection = string_attribute.toUpperCase().charAt(0);
                     break;
                 case 6 :
-                    s_longitudeDegree = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_longitudeDegree = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 7 :
-                    s_longitudeMinutes = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_longitudeMinutes = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 8 :
-                    s_longitudeSeconds = string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, "");
+                    s_longitudeSeconds = string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, "");
                     break;
                 case 9 :
                     longitudeDirection = string_attribute.toUpperCase().charAt(0);
@@ -228,17 +238,17 @@ public abstract class ImportationFIG {
      * Imports and creates Flights from the source file passed in parameter. The Airports which are needed to create the Flights
      * are in the AirportSet, passed in parameter. It is made this way so that we can create multiple FIG without having to re-import the Airports each time.
      * 
-     * @param airportSet ({@link util.AirportSet util.AirportSet}) - The Set that contains all the Airports.
-     * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG which contains all the Flights
-     * @param flightsFile ({@link java.io.File java.io.File}) - The source file where the informations  on the Flights are stored.
-     * @param timeSecurity (double) - The time Gap below which the Flights are considered like in collision (in MINUTES).
+     * @param airportSet The {@link util.AirportSet util.AirportSet AirportSet} that contains all the Airports.
+     * @param fig The {@link graph.FlightsIntersectionGraph FIG} which contains all the Flights
+     * @param flightsFile The source {@link java.io.File java.io.File File} where the informations  on the Flights are stored.
+     * @param timeSecurity The time gap below which the Flights are considered like in collision (in MINUTES).
      * 
      * @throws FileNotFoundException Thrown if the file is not found or does not exist.
-     * @throws InvalidEntryException Thrown if the values passed in the Flights's constructor are not correct.
+     * @throws InvalidFileFormatException Thrown if the source File does not matches the expected format.
      * 
      * @author Luc le Manifik
      */
-    public static void importFlightsFromFile(AirportSet airportSet, FlightsIntersectionGraph fig, File flightsFile, double timeSecurity) throws FileNotFoundException, InvalidEntryException {
+    public static void importFlightsFromFile(AirportSet airportSet, FlightsIntersectionGraph fig, File flightsFile) throws FileNotFoundException, InvalidFileFormatException {
         
         Scanner scanLine = null;
 
@@ -249,24 +259,21 @@ public abstract class ImportationFIG {
         }
 
         String line;
-        int currentLine = 0;
+        currentLine = 0;
 
         Flight flight = null;
 
-        while(scanLine.hasNext()) {
+        while(scanLine.hasNextLine()) {
             ++currentLine;
-            line = scanLine.nextLine();
-            if(line.charAt(0) != '\n') { // Pass if the line is just a blank line
+            line = scanLine.nextLine().replaceAll(FIGImportation.REGEX_FIG, "");
+            if(line != "") { // Pass if the line is just a blank line
                 try {
-                    flight = ImportationFIG.createFlightFrom(airportSet, fig, line, currentLine);
+                    flight = FIGImportation.createFlightFrom(airportSet, fig, line);
 
-                    ImportationFIG.createCollisions(fig, flight, timeSecurity); // Creates all the collisions from this new Flight
+                    FIGImportation.createCollisions(fig, flight); // Creates all the collisions from this new Flight
                 }catch(InvalidFileFormatException iffe) {
                     scanLine.close();
                     throw iffe;
-                }catch(InvalidEntryException iee) {
-                    scanLine.close();
-                    throw iee;
                 }
             }
         }
@@ -287,20 +294,18 @@ public abstract class ImportationFIG {
     /**
      * Set the attributes of a Flight from a String, with informations separated by semi-colons ";".
      * 
-     * @param airportSet ({@link util.AirportSet util.AirportSet}) - The AirportSet on which are contains all the airports.
-     * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG, which contains the Flights
-     * @param line (String) - The line on which the relatives informations of the Flight are registered.
-     * @param currentLine (int) - The current line of the source file, used to report the errors.
+     * @param airportSet The {@link util.AirportSet util.AirportSet AirportSet} on which are contains all the airports.
+     * @param fig The {@link graph.FlightsIntersectionGraph FIG}, which contains the Flights
+     * @param line The line on which the relatives informations of the Flight are registered.
+     * @param currentLine The current line of the source file, used to report the errors.
      * 
      * @throws InvalidFileFormatException Thrown if the line does not meet the requirement. Like missing informations, etc...
      * 
      * @author Luc le Manifik
      */
-    private static Flight createFlightFrom(AirportSet airportSet, FlightsIntersectionGraph fig, String line, int currentLine) throws InvalidFileFormatException {
+    private static Flight createFlightFrom(AirportSet airportSet, FlightsIntersectionGraph fig, String line) throws InvalidFileFormatException {
 
-        String okLine = line.replaceAll(ImportationFIG.REGEX_FIG, "");
-
-        Scanner scanData = new Scanner(okLine);
+        Scanner scanData = new Scanner(line);
         scanData.useDelimiter("[;\0]");
 
         int currentAttribute = 0;
@@ -312,9 +317,7 @@ public abstract class ImportationFIG {
         NTime departureTime = null;
 
         while(scanData.hasNext()) {
-            
-            string_attribute = scanData.next(); // store the current Flight's data (name, then departureAirport, then ...)
-                        
+            string_attribute = scanData.next(); // stores the current Flight's data (name, then departureAirport, then ...)
             try {
                 switch(currentAttribute) {
                     case 0 :
@@ -327,13 +330,13 @@ public abstract class ImportationFIG {
                         s_arrival = string_attribute;
                         break;
                     case 3 :
-                        departureTime_h = Integer.parseInt(string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, ""));
+                        departureTime_h = Integer.parseInt(string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, ""));
                         break;
                     case 4 :
-                        departureTime_m = Integer.parseInt(string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, ""));
+                        departureTime_m = Integer.parseInt(string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, ""));
                         break;
                     case 5 :
-                        duration = Integer.parseInt(string_attribute.replaceAll(ImportationFIG.REGEX_NUMBERS, ""));
+                        duration = Integer.parseInt(string_attribute.replaceAll(FIGImportation.REGEX_NUMBERS, ""));
                         break;
                     default : 
                         System.err.println("Erreur à la ligne " + currentLine 
@@ -342,8 +345,7 @@ public abstract class ImportationFIG {
                 }
             }catch(NumberFormatException e) {
                 scanData.close();
-                throw new InvalidFileFormatException(currentLine, 
-                    "Problème lors du cast d'une String vers un int");
+                throw new InvalidFileFormatException(currentLine, e.getMessage());
             }
             
             ++currentAttribute; // Increment to pass to the next attribute
@@ -367,7 +369,7 @@ public abstract class ImportationFIG {
         // If everything is ok, the Flight is initialized
 
         // Setting up the FlightFactory to create Flight nodes
-        fig.setNodeFactory(new FlightFactory()); // IDK if it's correct but Inch'Allah
+        fig.setNodeFactory(new FlightFactory()); // IDK if it's correct but Inch
         
         Flight flight = null;
         try {
@@ -406,11 +408,11 @@ public abstract class ImportationFIG {
      * 
      * @author Luc le Manifik
      */
-    private static void createCollisions(FlightsIntersectionGraph fig, Flight flight, double timeSecurity) {
+    private static void createCollisions(FlightsIntersectionGraph fig, Flight flight) {
         String idFlight = flight.getId();
 
         fig.nodes().forEach(e -> {
-            if(flight.isBooming((Flight)e, timeSecurity)) {
+            if(flight.isBooming((Flight)e, fig.getSecurityMargin())) {
                 if(fig.getEdge(e.getId() + "-" + idFlight) == null && fig.getEdge(idFlight + "-" + e.getId()) == null) {
                     fig.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
                 }
@@ -421,7 +423,7 @@ public abstract class ImportationFIG {
     public static void reDoCollisions(FlightsIntersectionGraph fig, int securityMargin) {
         fig.edges().forEach(e -> fig.removeEdge(e));
         fig.nodes().forEach(e -> 
-            createCollisions(fig, (Flight)e, securityMargin)
+            createCollisions(fig, (Flight)e)
         );
     }
 }

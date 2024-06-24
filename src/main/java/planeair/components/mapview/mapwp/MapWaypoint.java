@@ -8,10 +8,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 //#endregion
 
 /**
- * This class is made to put interactive Waypoints on the Application's map.
- * The MapWaypoints are Waypoints with a JButton and an icon, which make them clickable 🤯.
+ * This class puts interactive Waypoints on the Application's map.
+ * The MapWaypoints are Waypoints with a JButton and an icon, which makes them clickable .
  * 
- * This class is abstract, and can only be instaced throught one of its children (AirportWaypoint, FlightWaypoint...)
+ * This class is abstract, and can only be instanced throught one of its children (AirportWaypoint, FlightWaypoint...)
  * 
  * @author Luc le Manifik
  */
@@ -21,7 +21,7 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
 
     /**
      * The button with which we can interact.
-     * This button will be placed at the same position that the MapWaypoint on the Map, 
+     * This button will be placed at the same position that the MapWaypoint's Coordinate on the Map, 
      * and will be constantly repainted.
      */
     protected MapWaypointButton waypointButton;
@@ -33,11 +33,11 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
     /**
      * Creates a new MapWaypoint.
      * 
-     * @param iconFile ({@link java.io.File File}) - The File of the MapWaypoint's icon (in fact the MapWaypoint's button's icon 🤯)
-     * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The position of the MapWaypoint on the Map
-     * @param degree (double) - The orientation degree of the MapWaypoint's image
+     * @param iconFile The {@link java.io.File File} of the MapWaypoint's icon (in fact the MapWaypoint's button's icon 🤯)
+     * @param geoPosition The {@link org.jxmapviewer.viewer.GeoPosition position} of the MapWaypoint on the Map
+     * @param degree The orientation degree of the MapWaypoint's image
      * 
-     * @throws IOException Threw if the "iconFile" is not found, or does not match the "image" requirements.
+     * @throws IOException Thrown if the "iconFile" is not found, or does not match the "image" requirements.
      * 
      * @author Luc le Manifik
      */
@@ -52,10 +52,6 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
             e.printStackTrace();
         }
     }
-
-    //#endregion
-
-    //#region PRIVATE METHODS
 
     //#endregion
 
@@ -81,9 +77,9 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
     /**
      * Sets the icon of the MapWaypoint's MapWaypointButton (which is the visual of the MapWaypoint).
      * 
-     * @param iconFile ({@link java.io.File File}) - The new icon's File
+     * @param iconFile The new icon's {@link java.io.File File}
      * 
-     * @throws IOException Threw if the new File is not found or does not match the "image" requirements.
+     * @throws IOException Thrown if the new File is not found or does not match the "image" requirements.
      * 
      * @author Luc le Manifik
      */

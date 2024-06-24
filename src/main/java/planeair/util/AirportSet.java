@@ -63,7 +63,7 @@ public class AirportSet extends HashSet<Airport> {
 
     /**
      * Returns the Set of the inactive Airports, which means the ones that ARE NOT used by the Flights.
-     * They are in red on the Map.
+     * They are in gray on the Map.
      * 
      * @return The {@link java.util.HashSet HashSet} which contains all the unused Airports
      * 
@@ -79,9 +79,9 @@ public class AirportSet extends HashSet<Airport> {
      * 
      * @param name The name of the searched Airport
      * 
-     * @return The found {@link util.Airport util.Airport}
+     * @return The found {@link util.Airport Airport}
      * 
-     * @throws ObjectNotFoundException Threw if none airport in the AiportSet has the searched name
+     * @throws ObjectNotFoundException Thrown if none airport in the AiportSet has the searched name
      * 
      * @author Luc le Manifik
      */
@@ -133,4 +133,5 @@ public class AirportSet extends HashSet<Airport> {
     }
 
     //#endregion
+
 }

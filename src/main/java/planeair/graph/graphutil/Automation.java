@@ -20,7 +20,7 @@ import org.graphstream.graph.implementations.Graphs;
 import planeair.graph.coloring.ColoringAlgorithms;
 import planeair.graph.coloring.ColoringUtilities;
 import planeair.graph.graphtype.TestGraph;
-import planeair.importation.ImportationTestGraph;
+import planeair.importation.TestGraphImportation;
 //#endregion
 
 /**
@@ -107,7 +107,7 @@ public abstract class Automation {
                     public void run() {
                         TestGraph temp = new TestGraph(file.getName()) ;
                         try {
-                            ImportationTestGraph.importTestGraphFromFile(temp, 
+                            TestGraphImportation.importTestGraphFromFile(temp, 
                                 file, false);
                             res.add(temp) ;
                         }

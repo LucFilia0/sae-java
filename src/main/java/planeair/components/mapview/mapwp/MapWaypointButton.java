@@ -65,7 +65,7 @@ public class MapWaypointButton extends JToggleButton {
             throw e;
         }
 
-        initListeners() ;
+        this.initListeners() ;
 
         // Sets the background of the button unfilled, and makes the border disapear
         this.setContentAreaFilled(false);
@@ -77,7 +77,7 @@ public class MapWaypointButton extends JToggleButton {
 
     //#endregion
 
-    //#region INIT
+    //#region PRIVATE METHODS
     
     private void initListeners() {
         this.addItemListener(new ItemListener() {

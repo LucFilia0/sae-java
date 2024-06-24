@@ -9,7 +9,7 @@ import org.junit.Before;
 
 import planeair.exceptions.InvalidFileFormatException;
 import planeair.graph.graphtype.TestGraph;
-import planeair.importation.ImportationTestGraph;
+import planeair.importation.TestGraphImportation;
 
 public class TestColoring {
         
@@ -28,10 +28,10 @@ public class TestColoring {
         testGraph1 = new TestGraph("test1") ;
         testGraph2 = new TestGraph("test2") ;
         try {
-            ImportationTestGraph.importTestGraphFromFile(testGraph1, new File
+            TestGraphImportation.importTestGraphFromFile(testGraph1, new File
                 ("src/test/java/planeairtest/testfiles/testgraph1.txt"), 
                 false) ;
-            ImportationTestGraph.importTestGraphFromFile(testGraph2, new File
+            TestGraphImportation.importTestGraphFromFile(testGraph2, new File
                 ("src/test/java/planeairtest/testfiles/testgraph2.txt"), 
                 false);
         }catch(FileNotFoundException fnfe) {

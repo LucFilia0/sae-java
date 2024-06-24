@@ -465,8 +465,8 @@ public class Flight extends SingleNode {
 
                         double deltaX_A, deltaX_B;
 
-                        deltaX_A = depX_A - crossX;
-                        deltaX_B = depX_B - crossX;
+                        deltaX_A = crossX - depX_A;
+                        deltaX_B = crossX - depX_B;
 
                         // We add the departure Time, to get the real time/hour when the Flight will get to the crossing point.
                         crossTime_A = (deltaX_A / speedX_A) + this.getDepartureTime().getValueInMinutes(); 
@@ -485,7 +485,10 @@ public class Flight extends SingleNode {
                     // We enter here if the slopes of the routes are the same AND they have the same
                     // coordinate origin
                     // So -> They are confounded
-                    if (!( (depX_A < depX_B && depX_A < arrX_B && arrX_A < depX_B && arrX_A < arrX_B) || (depX_A > depX_B && depX_A > arrX_B && arrX_A > depX_B && arrX_A > arrX_B) )) {
+                    if (!( (depX_A < depX_B && depX_A < arrX_B && arrX_A < depX_B && arrX_A < arrX_B)
+                        ||
+                        (depX_A > depX_B && depX_A > arrX_B && arrX_A > depX_B && arrX_A > arrX_B) )) {
+                        
                         explode = true;
                     }
                 }
@@ -496,9 +499,12 @@ public class Flight extends SingleNode {
     }
 
     /**
-     * This function returns the current position of the Flight.
+     * This function position of the Flight at the specified NTime.
      * It considers the departure Airport's coordinates, the arrival Airport's
      * coordinates and the current time to calculate it's real position.
+     * 
+     * @param time The {@link planeair.util.NTime NTime} which indicates when we want to
+     *          paint the Flight
      * 
      * @return currentGeoPosition ({@link org.jxmapviewer.viewer.GeoPosition}) - The
      *         current GeoPosition of the Flight if it is currently flying. Else,
