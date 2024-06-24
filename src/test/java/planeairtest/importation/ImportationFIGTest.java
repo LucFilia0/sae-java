@@ -134,7 +134,7 @@ public class ImportationFIGTest {
 		}
 
 		try {
-			FIGImportation.importFlightsFromFile(airportSet, fig, flightFile, FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN);
+			FIGImportation.importFlightsFromFile(airportSet, fig, flightFile);
 		}catch(FileNotFoundException | InvalidEntryException e) {
 			System.err.println(e.getMessage());
 			fail("File can't be read you dumbass");
@@ -197,7 +197,7 @@ public class ImportationFIGTest {
 		this.fig = new FlightsIntersectionGraph("wrong-FIG");
 
  		try {
-			FIGImportation.importFlightsFromFile(airportSet, fig, wrongFlightFile, FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN); 
+			FIGImportation.importFlightsFromFile(airportSet, fig, wrongFlightFile); 
 			fail("Exception not detected");
 		}catch(FileNotFoundException fnfe) {
 			System.err.println(fnfe.getMessage());

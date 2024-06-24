@@ -2,36 +2,20 @@ package planeair.importation;
 
 //#region IMPORTS
 
-    //#region JAVA
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-    import java.io.File;
-    import java.io.FileNotFoundException;
-    import java.util.Scanner;
+import org.graphstream.graph.EdgeRejectedException;
+import org.graphstream.graph.ElementNotFoundException;
+import org.graphstream.graph.IdAlreadyInUseException;
+import org.graphstream.graph.Node;
 
-    //#endregion
+import planeair.exceptions.InvalidEntryException;
+import planeair.exceptions.InvalidFileFormatException;
 
-    //#region GRAPHSTREAM
-
-    import org.graphstream.graph.EdgeRejectedException;
-    import org.graphstream.graph.ElementNotFoundException;
-    import org.graphstream.graph.IdAlreadyInUseException;
-    import org.graphstream.graph.Node;
-
-    //#endregion
-
-    //#region PLANEAIR
-
-    import planeair.exceptions.InvalidEntryException;
-    import planeair.exceptions.InvalidFileFormatException;
-
-    //#endregion
-
-    //#region EXCEPTIONS
-
-    import planeair.graph.coloring.ColoringUtilities;
-    import planeair.graph.graphtype.TestGraph;
-
-    //#endregion
+import planeair.graph.coloring.ColoringUtilities;
+import planeair.graph.graphtype.TestGraph;
 
 //#endregion
 
@@ -78,7 +62,7 @@ public class TestGraphImportation {
     //#region PUBLIC IMPORTATION
 
     /**
-     * Imports the TestGraph data specified in parameter
+     * Imports the TestGraph's specified in parameter from a source File
      * 
      * @param testGraph The {@link planeair.graph.graphtype.TestGraph TestGraph} we want to import
      * @param testGraphFile The {@link java.io.File File} which contains the TestGraph's data

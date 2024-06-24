@@ -2,17 +2,14 @@ package planeair.util;
 
 //#region IMPORTS
 
-    //#region PLANEAIR
-
-    import planeair.exceptions.InvalidCoordinateException;
-
-    //#endregion
+import planeair.exceptions.InvalidCoordinateException;
 
 //#endregion
 
 /**
  * This class extends {@link org.jxmapviewer.viewer.GeoPosition GeoPosition}, from JxMapViewer, but takes care of the direction char ('N', 'E'...) that are
- * stored in the source file. The final values of the Coordinate are stored as doubles.
+ * stored in the source File. The final values of the Coordinate are stored as doubles, but they can be rendered as beautiful Strings like :
+ * 12° 12' 12'' S | 1° 1' 1'' E
  * 
  * @author Luc le Manifik
  */
@@ -113,7 +110,7 @@ public class Coordinate extends org.jxmapviewer.viewer.GeoPosition {
     //#region TOSTRING
 
     /**
-     * Returns the Coordinate in a great format (Ex: 12° 13' 14'' | 12° 12' 12'')
+     * Returns the Coordinate in a great format (Ex: 12° 13' 14'' S | 12° 12' 12'' E)
      * 
      * @return The String which represents the Coordinate
      * 
@@ -134,10 +131,10 @@ public class Coordinate extends org.jxmapviewer.viewer.GeoPosition {
     /**
      * Creates a new Coordinate, but putting a negative value if there is 'S' or 'O'
      * 
-     * @param coordDegree The coordinate degree
-     * @param coordMinutes The coordinate minutes
-     * @param coordSeconds The coordinate seconds
-     * @param coordDirection The coordinate direction
+     * @param coordDegree The coordinate's degree
+     * @param coordMinutes The coordinate's minutes
+     * @param coordSeconds The coordinate's seconds
+     * @param coordDirection The coordinate's direction
      * @param type 0 to import a latitude ('N' or 'S') and 1 to import a longitude ('E' or 'O')
      * 
      * @return The decimal value of the coordinate axis (positive OR negative)
@@ -149,24 +146,10 @@ public class Coordinate extends org.jxmapviewer.viewer.GeoPosition {
 
         switch(type) {
             case 0 : 
-                switch(coordDirection) {
-                    case 'N' :
-                        break;
-                    case 'S' :
-                        decimalCoordinate *= -1;
-                        break;
-                    default :
-                }
+                decimalCoordinate *= (coordDirection == 'S') ? -1 : 1;
                 break;
             case 1 : 
-                switch(coordDirection) {
-                    case 'E' :
-                        break;
-                    case 'O' :
-                        decimalCoordinate *= -1;
-                        break;
-                    default :
-                }
+                decimalCoordinate *= (coordDirection == 'O') ? -1 : 1;
                 break;
             default :
                 System.err.println("Programmer's error : check Coordinate.java, line 35 :)");

@@ -51,7 +51,8 @@ public class TestGraphImportationTest {
 	}
 	
 	/**
-	 * This method tests the importation of the TestGraph
+	 * This method tests the importation of the TestGraph when no error must be thrown.
+	 * In RegEx we trust
 	 * 
 	 * @author Luc le Manifik
 	 */
@@ -78,10 +79,19 @@ public class TestGraphImportationTest {
 		assertTrue(this.testGraph.getKMax() == 2);
 	}
 
+	/**
+	 * Tests if the importation thrown errors when supposed to. Meaning when there is not
+	 * enough informations on a line.
+	 * I'm too lazy to make the program searching for the missing information
+	 * on the next line. Maybe next time.
+	 * Not sure it is a good idea, though...
+	 * 
+	 * @author Luc le Manifik
+	 */
 	@Test
 	public void testWrongTestGraphImportation() {
 
-		File wrongFile = null;
+		File wrongFile = null; // Not enough information on a line
 		
 		try {
 			wrongFile = new File("src/test/java/planeairtest/testfiles/wrong-graph.txt");

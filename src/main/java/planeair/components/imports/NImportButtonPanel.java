@@ -359,7 +359,7 @@ public class NImportButtonPanel extends JPanel {
                 if(fileChooser.getFile() != null) {
                     app.setGraph(new FlightsIntersectionGraph(fileChooser.getFile().getName())) ;
                     FIGImportation.importFlightsFromFile(this.app.getAirportSet(), 
-                        (FlightsIntersectionGraph)this.app.getGraph(), fileChooser.getFile(), FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN);
+                        (FlightsIntersectionGraph)this.app.getGraph(), fileChooser.getFile());
                     
                     ColoringDSATUR.coloringDsatur(app.getGraph()) ;
                     ColoringUtilities.setGraphStyle(app.getGraph(), app.getGraph().getNbColors()) ;

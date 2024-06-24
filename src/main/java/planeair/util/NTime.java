@@ -91,8 +91,9 @@ public class NTime implements Comparable<NTime> {
     /**
      * Setter for the min field
      * 
-     * @param min Values go from 0 to 59
-     * @throws InvalidTimeException
+     * @param min Value goes from 0 to 59
+     * 
+     * @throws InvalidTimeException Thrown if a wrong time is passed (22h78, for example)
      */
     public void setMinute(int min) throws InvalidTimeException {
         this.min = min;
@@ -105,17 +106,13 @@ public class NTime implements Comparable<NTime> {
      * toString() FlightTime's method.
      */
     public String toString() {
-        String between = null;
-        if(this.min < 10)
-            between = "h0";
-        else
-            between = "h";
+        String between = (this.min < 10) ? "h0" : "h";
         return this.getHour() + between + this.getMinute() ;
     }
     
     /**
      * Return the value of the Time in minutes.
-     * @return (int) - The value of the Time in minutes.
+     * @return The value of the Time in minutes.
      * 
      * @author Luc le Manifik
      */
@@ -138,7 +135,6 @@ public class NTime implements Comparable<NTime> {
     }
 
     /**
-     * 
      * @return (FlightTime) - CurrentTime
      * 
      * @author Nathan LIEGEON

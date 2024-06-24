@@ -247,7 +247,7 @@ public abstract class FIGImportation {
      * 
      * @author Luc le Manifik
      */
-    public static void importFlightsFromFile(AirportSet airportSet, FlightsIntersectionGraph fig, File flightsFile, double timeSecurity) throws FileNotFoundException, InvalidFileFormatException {
+    public static void importFlightsFromFile(AirportSet airportSet, FlightsIntersectionGraph fig, File flightsFile) throws FileNotFoundException, InvalidFileFormatException {
         
         Scanner scanLine = null;
 
@@ -269,7 +269,7 @@ public abstract class FIGImportation {
                 try {
                     flight = FIGImportation.createFlightFrom(airportSet, fig, line);
 
-                    FIGImportation.createCollisions(fig, flight, timeSecurity); // Creates all the collisions from this new Flight
+                    FIGImportation.createCollisions(fig, flight); // Creates all the collisions from this new Flight
                 }catch(InvalidFileFormatException iffe) {
                     scanLine.close();
                     throw iffe;
@@ -317,7 +317,6 @@ public abstract class FIGImportation {
 
         while(scanData.hasNext()) {
             string_attribute = scanData.next(); // stores the current Flight's data (name, then departureAirport, then ...)
-            System.out.println("|"+string_attribute+"|");
             try {
                 switch(currentAttribute) {
                     case 0 :
@@ -400,11 +399,11 @@ public abstract class FIGImportation {
      * 
      * @author Luc le Manifik
      */
-    private static void createCollisions(FlightsIntersectionGraph fig, Flight flight, double timeSecurity) {
+    private static void createCollisions(FlightsIntersectionGraph fig, Flight flight) {
         String idFlight = flight.getId();
 
         fig.nodes().forEach(e -> {
-            if(flight.isBooming((Flight)e, timeSecurity)) {
+            if(flight.isBooming((Flight)e, fig.getSecurityMargin())) {
                 if(fig.getEdge(e.getId() + "-" + idFlight) == null && fig.getEdge(idFlight + "-" + e.getId()) == null) {
                     fig.addEdge(idFlight + "-" + e.getId(), idFlight, e.getId());
                 }
@@ -415,7 +414,7 @@ public abstract class FIGImportation {
     public static void reDoCollisions(FlightsIntersectionGraph fig, int securityMargin) {
         fig.edges().forEach(e -> fig.removeEdge(e));
         fig.nodes().forEach(e -> 
-            createCollisions(fig, (Flight)e, securityMargin)
+            createCollisions(fig, (Flight)e)
         );
     }
 }

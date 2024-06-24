@@ -1,18 +1,13 @@
 package planeair;
 
-//-- Import Swing
+//#region IMPORTS
 
 import javax.swing.JFrame;
-
-
-//-- Import AWT
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-
-//-- Import Plane AIR
 
 import planeair.util.AirportSet;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
@@ -22,6 +17,8 @@ import planeair.graph.graphutil.PanelCreator;
 import planeair.components.NMainScreen;
 import planeair.components.imports.NImportScreen;
 
+//#endregion
+
 /**
  * This class loads the application. It extends JFrame and loads itself. Beautiful isn't it ?
  * 
@@ -29,19 +26,29 @@ import planeair.components.imports.NImportScreen;
  */
 public class App extends javax.swing.JFrame {
 
-    //-- LAUNCHING THE APP
+    //#region LAUNCHER
+
+    /**
+     * The main app of this project
+     */
+    public static App app ; // ChokBar de Bzzzz
 
     /**
      * The function which is loaded when the program in lauched.
      * 
-     * @param args (String[]) - IDK bro
+     * @param args IDK bro. Maybe something like argc and argv in C ??
+     * 
+     * @author Not me
      */
     public static void main(String[] args) {
         
         // DON'T TOUCH THAT IT'S VERY IMPORTANT
         System.setProperty("org.graphstream.ui", "swing") ;
         System.setProperty("sun.java2d.uiScale", "100%") ;
+
         String osName = System.getProperty("os.name").toLowerCase() ;
+
+        // Racism section
         if (osName.startsWith("windows")) {
             System.setProperty("java -Dsun.java2d.directx", "True") ;
         }
@@ -53,24 +60,34 @@ public class App extends javax.swing.JFrame {
                 "If you're using anything else then just cry harder 🦈") ;
         }
         
+        // Launching the App
         App app = new App();
         app.setVisible(true);
+    }
 
-        }
+    //#endregion
 
-    //-- APP ATTRIBUTES
-
-    // BASE
-
-    /**
-     * The width of the application's screen
-     */
-    public final static int APPLICATION_SCREEN_WIDTH = 1080;
+    //#region STATIC VARIABLES
 
     /**
-     * The height of the application's screen
+     * The default width of the application's screen
      */
-    public final static int APPLICATION_SCREEN_HEIGHT = 720;
+    public static final int DEFAULT_APP_SCREEN_WIDTH = 1080;
+
+    /**
+     * The default height of the application's screen
+     */
+    public static final int DEFAULT_APP_SCREEN_HEIGHT = 720;
+
+    /**
+     * The minimal width of the application's screen
+     */
+    public static final int MIN_APP_SCREEN_WIDTH = 1200;
+
+    /**
+     * The minimal height of the application's screen
+     */
+    public static final int MIN_APP_SCREEN_HEIGHT = 800;
 
     /**
      * THE COLOR OF THE APP (not really yellow but quand même)
@@ -102,17 +119,21 @@ public class App extends javax.swing.JFrame {
      */
     public static final Font KINDATITLE = new Font("Arial", Font.BOLD, 26);
 
-    // FRAMES
+    //#endregion
+
+    //#region ATTRIBUTES
+
+    // SCREENS
 
     /**
-     * Page of selection of import file
-     * It's the first that you see when you open the app
+     * Page to select source files
+     * It's the first screen that you see when you launch the app
      */
     private NImportScreen importScreen;
 
     /**
      * The principal panel of the App, where the map is located, the graph
-     * and how to change them
+     * and how to change them, thanks to the different menus
      */
     private NMainScreen mainScreen;
 
@@ -122,11 +143,6 @@ public class App extends javax.swing.JFrame {
      * The AirportSet which contains all the Airports
      */
     private AirportSet airportSet;
-    
-    /**
-     * The main app of this project
-     */
-    public static App app ; // ChokBar de Bzzzz
 
     /**
      * The FIG which contains all the Flights
@@ -144,12 +160,9 @@ public class App extends javax.swing.JFrame {
      */
     private PanelCreator graphRenderer ;
 
-    /**
-     * The time security
-     */
-    private double timeSecurity = 15;
+    //#endregion
 
-    //-- APP CONSTRUCTOR
+    //#region CONSTRUCTORS
 
     /**
      * Creates a new App. It means one. Because there is only one App.
@@ -157,12 +170,12 @@ public class App extends javax.swing.JFrame {
      * @author Luc le Manifik
      */
     App() {
-        app = this ;
+        App.app = this;
 
         // Basic configuration
         this.setTitle("Plane AIR");
-        this.setSize(App.APPLICATION_SCREEN_WIDTH, App.APPLICATION_SCREEN_HEIGHT);
-        this.setMinimumSize(new Dimension(1200,800));
+        this.setSize(DEFAULT_APP_SCREEN_WIDTH, DEFAULT_APP_SCREEN_HEIGHT);
+        this.setMinimumSize(new Dimension(MIN_APP_SCREEN_WIDTH, MIN_APP_SCREEN_HEIGHT));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -172,7 +185,9 @@ public class App extends javax.swing.JFrame {
         this.addComponents();
     }
 
-    //-- SETUP METHODS
+    //#endregion
+
+    //#region PRIVATE METHODS
 
     /**
      * This procedure initalize all the application's attributes.
@@ -181,7 +196,7 @@ public class App extends javax.swing.JFrame {
      */
     private void initAttributes() {
 
-        this.airportSet = null; //new AirportSet() ;
+        this.airportSet = null;
         this.fig = new FlightsIntersectionGraph("FIG") ;
         this.testGraph = new TestGraph("TestGraph") ;
 
@@ -200,7 +215,9 @@ public class App extends javax.swing.JFrame {
         this.add(this.importScreen, BorderLayout.CENTER); // Starts with import screen
     }
 
-    //-- PANEL SWITCH METHODS
+    //#endregion
+
+    //#region SWITCH METHODS
 
     /**
      * Switch from importPanel to principalPanel
@@ -208,10 +225,10 @@ public class App extends javax.swing.JFrame {
      */
     public void switchToMainScreen() {
 
-        this.mainScreen.addTimePanel();
+        this.mainScreen.addTimePanel(); // Only add the slider if a FIG is charged
 
         this.remove(this.importScreen);
-        this.add(this.mainScreen);
+        this.add(this.mainScreen, BorderLayout.CENTER);
 
         this.revalidate();
         this.repaint();
@@ -224,11 +241,13 @@ public class App extends javax.swing.JFrame {
     public void switchToImportScreen(){
         
         this.remove(this.mainScreen);
-        this.add(this.importScreen);
+        this.add(this.importScreen, BorderLayout.CENTER);
 
         this.revalidate();
         this.repaint();
     }
+
+    //#endregion
 
     //-- GETTERS AND SETTERS
 
@@ -262,7 +281,7 @@ public class App extends javax.swing.JFrame {
     /**
      * Sets the value of the AirportSet
      * 
-     * @param fig ({@link planeair.util.AirportSet AirportSet}) - The new AirportSet of the App
+     * @param fig The new {@link planeair.util.AirportSet AirportSet} of the App
      * 
      * @author Luc le Manifik
      */
@@ -271,29 +290,25 @@ public class App extends javax.swing.JFrame {
     }
 
     /**
-     * Returns the PanelCreator which renders the TestGraph
-     * @return ({@link planeair.graph.graphutil.PanelCreator PanelCreator}) - The PanelCreator which renders the TestGraph
+     * @return The {@link planeair.graph.graphutil.PanelCreator PanelCreator} which renders the TestGraph
      */
     public PanelCreator getGraphRenderer() {
         return this.graphRenderer ;
     }
 
     /**
-     * Returns the graph currently being rendered 
-     * @return
+     * @return the graph currently being rendered 
      */
     public GraphSAE getGraph() {
         return graphRenderer.getGraph() ;
     }
 
     /**
-     * Returns the principal frame of the App
-     * @return ({@link planeair.components.NMainScreen NPrincipalPanelApp}) - The principal frame of the App
+     * @return The {@link planeair.components.NMainScreen principal frame} of the App
      */
     public NMainScreen getMainScreen() {
         return this.mainScreen;
     }
-
 
     public void initTestGraphRenderer() {
         initTestGraphRenderer(false) ;
@@ -305,7 +320,7 @@ public class App extends javax.swing.JFrame {
 
     /**
      * Returns the importation panel of the App
-     * @return ({@link planeair.components.imports.NImportScreen NImportPanelApp}) - The importation panel od the App
+     * @return The {@link planeair.components.imports.NImportScreen importation panel} of the App
      */
     public NImportScreen getImportScreen() {
         return this.importScreen;
@@ -313,18 +328,9 @@ public class App extends javax.swing.JFrame {
 
     /**
      * Returns the AirportSet of the App
-     * @return ({@link planeair.util.AirportSet AirportSet}) - The AirportSet which contains all the imported Airports
+     * @return The {@link planeair.util.AirportSet AirportSet} which contains all the imported Airports
      */
     public AirportSet getAirportSet() {
         return this.airportSet;
     }
-
-    /**
-     * Returns the time security of the App
-     * @return (double) - The time security under which the crossing Flights are considered in collision
-     */
-    public double getTimeSecurity() {
-        return this.timeSecurity;
-    }
-
 }

@@ -55,11 +55,11 @@ public class Airport {
      * Creates a new Airport.
      * Airports have Flights, going in and out of them, and needs to be imported BEFORE the Flights.
      * 
-     * @param name (String) - The name of the Airport.
-     * @param location (String) - The location/city of the Airport.
-     * @param coordinate ({@link planeair.util.Coordinate Coordinate}) - The Coordinate/location of the Airport. Extends {@link org.jxmapviewer.viewer.GeoPosition GeoPosition}
+     * @param name The name of the Airport.
+     * @param location The location/city of the Airport.
+     * @param coordinate The {@link planeair.util.Coordinate Coordinate} of the Airport. Extends {@link org.jxmapviewer.viewer.GeoPosition GeoPosition}
      * 
-     * @throws NullPointerException Threw if the Object passed in parameter is Null / not declared
+     * @throws NullPointerException Thrown if the Object passed in parameter is Null / not declared
      * 
      * @author Luc le Manifik
      */
@@ -123,18 +123,14 @@ public class Airport {
     }
     
     /**
-     * Returns all the fligts coming to and going from this airport
-     * 
-     * @return
-     * 
+     * @return Returns all the fligts coming to and going from this airport
      */
     public ArrayList<Flight> getFlightList() {
         return this.flightList ;
     }
 
     /**
-     * 
-     * @return
+     * @return The {@link planeair.components.mapview.mapwp.airportwp.AirportWaypoint AirportWaypoint}
      */
     public AirportWaypoint getWaypoint() {
         return this.waypoint;
@@ -145,11 +141,11 @@ public class Airport {
     //#region SETTERS
 
     /**
-     * Sets the name of the Airport.
+     * Sets the name of the Airport
      * 
-     * @param name (String) - The new name of the Airport.
+     * @param name The new name of the Airport
      * 
-     * @throws NullPointerException Threw if the String passed in parameter is null.
+     * @throws NullPointerException Thrown if the String passed in parameter is null
      * 
      * @author Luc le Manifik
      */
@@ -162,11 +158,11 @@ public class Airport {
     }
 
     /**
-     * Sets the location of the Airport.
+     * Sets the location of the Airport
      * 
-     * @param location (String) - The new location of the Airport.
+     * @param location The new location of the Airport
      * 
-     * @throws NullPointerException Threw if the (String) passed in parameter is null.
+     * @throws NullPointerException Threw if the (String) passed in parameter is null
      * 
      * @author Luc le Manifik
      */
@@ -181,7 +177,7 @@ public class Airport {
     /**
      * Sets the longitude of the Airport.
      * 
-     * @param coordinate ({@link planeair.util.Coordinate Coordinate}) - The new Coordinate of the Airport
+     * @param coordinate The new {@link planeair.util.Coordinate Coordinate} of the Airport
      * 
      * @throws NullPointerException Thrown if the {@link planeair.util.Coordinate Coordinate} passed  in parameter is null
      * 
@@ -196,8 +192,8 @@ public class Airport {
     }
 
     /**
-     * 
-     * @param waypoint
+     * Sets the {@link planeair.components.mapview.mapwp.airportwp.AirportWaypoint AirportWaypoint} linked to the Airport
+     * @param waypoint The new AirportWaypoint of the Airport
      */
     public void setWaypoint(AirportWaypoint waypoint) {
         this.waypoint = waypoint;
@@ -211,7 +207,7 @@ public class Airport {
      * This method returns if the Airport must be marked active (in red) on the Map, because one of the Flights
      * in the FIG is using this Airport.
      * 
-     * @param fig ({@link graph.FlightsIntersectionGraph}) - The FIG, which contains the Flights to check
+     * @param fig The {@link graph.FlightsIntersectionGraph FIG}, which contains the {@link planeair.graph.graphutil.Flight Flights} to check
      * 
      * @return "True" if the Flight must be marked as an active one, else "false"
      * 
