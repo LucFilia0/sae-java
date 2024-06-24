@@ -97,7 +97,7 @@ public class TestGraphImportation {
 
         // Checks if the TestGraph Data
         if(!kMaxImported && !nbNodesImported && !lineScanner.hasNextLine()) {
-            throw new InvalidFileFormatException(currentLine, "The maximum amount of colors, and/or the number of nodes could not be correctly imported at this point of the source file.");
+            throw new InvalidFileFormatException(currentLine, "Le nombre maximal de couleurs et/ou le nombre de noeuds n'a pas pu être correctement importé");
         }
 
         try {
@@ -151,15 +151,15 @@ public class TestGraphImportation {
                     }catch(NumberFormatException nfe) {
                         lineScanner.close();
                         dataScanner.close();
-                        throw new InvalidFileFormatException(currentLine, "The maximum amount of colors can't be read. The TestGraph can not be correctly imported.");
+                        throw new InvalidFileFormatException(currentLine, "Le nombre maximal de couleur ne peut pas être lu");
                     }catch(InvalidEntryException iee) {
                         lineScanner.close();
                         dataScanner.close();
-                        throw new InvalidFileFormatException(currentLine, "The maximum amount of colors must be a positive number.");
+                        throw new InvalidFileFormatException(currentLine, "Le nombre maximal de couleurs doit être un nombre positif");
                     }
     
                     if(showErrorMessages && dataScanner.hasNext()) { // Check if there is an other value on the line. Then prompts an error, but continue the execution of the program
-                        System.err.println("At Line " + currentLine +  " : More information than required");
+                        System.err.println("Erreur ligne " + currentLine +  " : Plus d'informations que nécessaire");
                     }
                 }
             }
@@ -209,15 +209,15 @@ public class TestGraphImportation {
                     }catch(NumberFormatException nfe) {
                         lineScanner.close();
                         dataScanner.close();
-                        throw new InvalidFileFormatException(currentLine, "The number of nodes can't be read. The TestGraph can not be correctly imported.");
+                        throw new InvalidFileFormatException(currentLine, "Le nombre de noeuds ne peut pas être lu");
                     }catch(InvalidEntryException iee) {
                         lineScanner.close();
                         dataScanner.close();
-                        throw new InvalidFileFormatException(currentLine, "The number of nodes must be a positive number.");
+                        throw new InvalidFileFormatException(currentLine, "Le nombre de noeuds doit être un nombre positif");
                     }
     
                     if(showErrorMessages && dataScanner.hasNext()) { // Check if there is an other value on the line. Then prompts an error, but continue the execution of the program
-                        System.err.println("At Line " + currentLine +  " : More information than required");
+                        System.err.println("Erreur ligne " + currentLine +  " : Plus d'informations que nécessaire");
                     }
                 }
             }
@@ -281,7 +281,7 @@ public class TestGraphImportation {
                 
                 // Checks if there is too much informations on the line, then print a message error, but continue the execution
                 if(showErrorMessages && nodeScanner.hasNext()) {
-                    System.err.println("Error at Line " + currentLine + " : Too many informations on line");
+                    System.err.println("Erreur ligne " + currentLine + " : Trop d'informations sur la ligne");
                 }
     
                 // Adds the nodes and increment node number if they do not already exist
@@ -307,22 +307,22 @@ public class TestGraphImportation {
                     catch(IdAlreadyInUseException iaiue) {
                         // -> If an edge with the same id already exists and strict checking is enabled
                         if (showErrorMessages) {
-                            System.err.println("Error at Line " + currentLine + " : Edge " + idNodeA + "-" + idNodeB + " already exists.");
+                            System.err.println("Erreur ligne " + currentLine + " : Arête " + idNodeA + "-" + idNodeB + " existe déjà");
                         }
                     }catch(ElementNotFoundException enfe) {
                         // -> If strict checking is enabled, and 'node1' or 'node2' are not registered in the graph
                         if (showErrorMessages) {
-                            System.err.println("Error at Line " + currentLine + " : Node [" + idNodeA + "] or node [" + idNodeB + "] undeclared.");
+                            System.err.println("Erreur ligne " + currentLine + " : Noeud [" + idNodeA + "] ou noeud [" + idNodeB + "] non déclaré");
                         }
                     }catch(EdgeRejectedException ere) {
                         // -> If strict checking is enabled and the edge is not accepted
                         if (showErrorMessages) {
-                            System.err.println("Error at Line " + currentLine + " : Trying to add edge [" + idNodeA + "-" + idNodeB + "] but edge [" + idNodeB + "-" + idNodeA + "] seems to already exist");
+                            System.err.println("Erreur ligne " + currentLine + " : Essaie d'ajouter arête [" + idNodeA + "-" + idNodeB + "] mais arête [" + idNodeB + "-" + idNodeA + "] existe déjà");
                         }
                     }
                 }else {
                     nodeScanner.close();
-                    throw new InvalidFileFormatException(currentLine, "The number of created nodes exceeds the maximum amount specified in the source file.");
+                    throw new InvalidFileFormatException(currentLine, "Le nombre de noeuds créés excède le nombre maximal spécifié en début de fichier");
                 }
             }
         }
