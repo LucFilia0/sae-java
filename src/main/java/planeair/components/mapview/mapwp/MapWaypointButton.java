@@ -77,6 +77,8 @@ public class MapWaypointButton extends JToggleButton {
 
     //#endregion
 
+    //#region INIT
+    
     private void initListeners() {
         this.addItemListener(new ItemListener() {
             @Override
@@ -90,6 +92,8 @@ public class MapWaypointButton extends JToggleButton {
             }
         }) ;
     }
+
+    //#endregion
 
     //#region GETTERS
 
@@ -108,10 +112,11 @@ public class MapWaypointButton extends JToggleButton {
     //#region SETTERS
 
      /**
-     * Changes this waypoint's style based on whether or not it is Selected
+     * Changes this {@code Waypoint}'s style based on whether or not it is Selected
      * If the waypoint is a FlightWaypoint, also update its Node
      * 
-     * @param selected True if it is currently selected, false if not
+     * @param selected {@code true} if it is currently selected, 
+     * {@code false} if not
      * 
      * @author Nathan LIEGEON
      */

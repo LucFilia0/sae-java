@@ -32,10 +32,11 @@ import org.graphstream.ui.swing_viewer.util.MouseOverMouseManager;
 public class PanelCreator {
 
 	//#region ATTRIBUTES
+
 	/**
 	 * boolean handling the pumping of events in a separate thread
 	 */
-	protected boolean isRendering = true ;
+	protected boolean isRendering ;
 
 	/**
 	 * Graph displayed in the panel
@@ -65,9 +66,12 @@ public class PanelCreator {
 	/**
 	 * Field storing the mouse position for where it first started dragging
 	 */
-	protected Point3 dragPos = null ;
+	protected Point3 dragPos ;
+	
 	//#endregion
+
 	//#region CONSTRUCTORS
+
 	/**
 	 * Handles the creation of a view on the graph, giving access
 	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
@@ -79,6 +83,7 @@ public class PanelCreator {
 	public PanelCreator(GraphSAE graph) {
 		this(graph, false) ;
 	}
+
 	/**
 	 * Handles the creation of a view on the graph, giving access
 	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
@@ -99,7 +104,9 @@ public class PanelCreator {
 		panel = (ViewPanel)viewer.addDefaultView(inOwnFrame) ;
 		view = viewer.getDefaultView() ;
 		viewer.enableAutoLayout() ;
+
 		// Sets the way the graph handles mouse events over nodes
+		this.dragPos = null ;
 		view.setMouseManager(new MouseOverMouseManager(EnumSet.of(InteractiveElement.NODE), 20) {
 			@Override
 			public void mouseDragged(MouseEvent event) {
@@ -126,7 +133,7 @@ public class PanelCreator {
 		
 		// Thread running in the background constantly sending events that happened on the graph
 		Thread graphPump = new GraphEventPumper() ;
-		graphPump.start(); ;
+		graphPump.start() ;
 	}
 	//#endregion
 	//#region GETTERS
@@ -248,7 +255,7 @@ public class PanelCreator {
 	/**
 	 * <html>
 	 * Sets the default style for selected nodes.
-	 * <br><br>
+	 * <br><br>	
 	 * This method is synchronized because it might be called twice at the
 	 * same time which would result in an exception being thrown.
 	 * @param n The Node
@@ -458,6 +465,7 @@ public class PanelCreator {
 		public GraphEventPumper() {
 			super(new Runnable() {
 				public void run() {
+					isRendering = true ;
 					while(isRendering) {
 						try {
 							
@@ -468,8 +476,7 @@ public class PanelCreator {
 
 							// Restarts a Thread if this one got interrupted,
 							// else ignores the exception
-							if (interrupted())
-								(new GraphEventPumper()).start() ;
+							if (interrupted()) ;
 						}
 					}
 				}
