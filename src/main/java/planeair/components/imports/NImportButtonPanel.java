@@ -2,6 +2,7 @@ package planeair.components.imports;
 
 //#region IMPORT
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.BorderFactory;
@@ -63,7 +64,7 @@ public class NImportButtonPanel extends JPanel {
     /**
      * The default String which is prompted on the confirmation buttons
      */
-    public static final String CONFIRM_MESSAGE = "Valider";
+    public static final String NEXT_MESSAGE = "Suivant";
 
     /**
      * The default message which is prompted on the rejection buttons
@@ -122,8 +123,8 @@ public class NImportButtonPanel extends JPanel {
      * Button for valided aerorort
      * Location : below buttonAirport
      */
-    private NFilledButton confirmAirports = 
-        new NFilledButton(NImportButtonPanel.CONFIRM_MESSAGE);
+    private NFilledButton NextAirports = 
+        new NFilledButton(NImportButtonPanel.NEXT_MESSAGE);
     /**
      * Button for return back to the step the user were
      */
@@ -140,8 +141,8 @@ public class NImportButtonPanel extends JPanel {
      * Button for valide vols
      * Location : below buttonFlight
      */
-    private NFilledButton confirmFlights = 
-        new NFilledButton(NImportButtonPanel.CONFIRM_MESSAGE);
+    private NFilledButton NextFlights = 
+        new NFilledButton(NImportButtonPanel.NEXT_MESSAGE);
     /**
      * Button for annule return back to the step the user is
      */
@@ -152,8 +153,13 @@ public class NImportButtonPanel extends JPanel {
      * Test pour rajouter un boutton valider au début
      * Location : below buttons choice
      */
-    private NFilledButton confirmStart = 
-        new NFilledButton(NImportButtonPanel.CONFIRM_MESSAGE);
+    private NFilledButton NextStart = 
+        new NFilledButton(NImportButtonPanel.NEXT_MESSAGE);
+
+    /**
+     * Label for error message
+     */
+    private JLabel errorLabel = new JLabel(" ");
 
     /**
      * Frame of the App
@@ -211,7 +217,9 @@ public class NImportButtonPanel extends JPanel {
         this.panelReturnConfirmAir.setBackground(App.KINDAYELLOW);
         this.panelReturnConfirmFlight.setBackground(App.KINDAYELLOW);
 
-        this.confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.NextStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        this.errorLabel.setFont(App.KINDANORMAL);
     }
 
     /**
@@ -231,13 +239,13 @@ public class NImportButtonPanel extends JPanel {
         buttonsPanel.add(choiceGraphImportation);
 
         panelReturnConfirmAir.add(returnBackAirports);
-        panelReturnConfirmAir.add(confirmAirports);
+        panelReturnConfirmAir.add(NextAirports);
 
         panelReturnConfirmFlight.add(returnBackFlights);
-        panelReturnConfirmFlight.add(confirmFlights);
+        panelReturnConfirmFlight.add(NextFlights);
 
         this.add(buttonsPanel);
-        this.add(confirmStart);
+        this.add(NextStart);
 
         this.add(Box.createRigidArea(new Dimension(0, 5)));
     }
@@ -249,7 +257,7 @@ public class NImportButtonPanel extends JPanel {
     private void addEvents(){
 
         // First button : Step directly in the NMainScreen
-        confirmStart.addActionListener((ActionEvent e) -> {
+        NextStart.addActionListener((ActionEvent e) -> {
             if (App.app.getGraphRenderer() != null) {
                 if(app.getMainScreen().getMap() != null && this.app.getGraph() instanceof TestGraph) {
                     app.getMainScreen().getMap().clearAll();
@@ -283,7 +291,8 @@ public class NImportButtonPanel extends JPanel {
                         
                     initDefaultGraphImportation(this.app.getMainScreen().getGraphInfoPanel()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
-                    JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                    this.errorLabel.setText(error.getMessage());
+                    JOptionPane.showMessageDialog(null,errorLabel,"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                     fileChooser.setFile(null);
                 }
             }
@@ -298,7 +307,7 @@ public class NImportButtonPanel extends JPanel {
             this.airportsImported = false; // TODO
 
             buttonsPanel.removeAll();
-            this.remove(confirmStart);
+            this.remove(NextStart);
             buttonsPanel.add(buttonAirportFileSelection);
             this.add(panelReturnConfirmAir);
             panelReturnConfirmAir.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -318,7 +327,8 @@ public class NImportButtonPanel extends JPanel {
                     this.airportsImported = true;
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
-                JOptionPane.showMessageDialog(this.app, error.getMessage(),
+                this.errorLabel.setText(error.getMessage());
+                JOptionPane.showMessageDialog(this.app, errorLabel,
                     "Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                 fileChooser.setFile(null);
             }   
@@ -345,16 +355,17 @@ public class NImportButtonPanel extends JPanel {
                     this.flightsImported = true;
                 }
             }catch(InvalidFileFormatException | FileNotFoundException error) {
-                JOptionPane.showMessageDialog(null, error.getMessage(),"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
+                this.errorLabel.setText(error.getMessage());
+                JOptionPane.showMessageDialog(null,errorLabel,"Erreur d'importation", JOptionPane.ERROR_MESSAGE);
                 fileChooser.setFile(null);
             }
     
         });
     
-        confirmAirports.addActionListener((ActionEvent e) -> {
+        NextAirports.addActionListener((ActionEvent e) -> {
             if(this.airportsImported) {
                 buttonsPanel.removeAll();
-                this.remove(confirmStart);
+                this.remove(NextStart);
                 buttonsPanel.add(buttonFlightFileSelection);
                 this.remove(panelReturnConfirmAir);
                 this.add(panelReturnConfirmFlight);
@@ -368,7 +379,7 @@ public class NImportButtonPanel extends JPanel {
             this.app.setVisible(true);
         });
     
-        confirmFlights.addActionListener((ActionEvent e) -> {
+        NextFlights.addActionListener((ActionEvent e) -> {
             if(this.airportsImported && this.flightsImported) {
                 this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
                 this.app.switchToMainScreen();
@@ -403,8 +414,8 @@ public class NImportButtonPanel extends JPanel {
         buttonsPanel.add(choiceFlightImportation);
         buttonsPanel.add(choiceGraphImportation);
         this.add(buttonsPanel);
-        this.add(confirmStart);
-        confirmStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.add(NextStart);
+        NextStart.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(Box.createRigidArea(new Dimension(0, 5)));
     }
 
