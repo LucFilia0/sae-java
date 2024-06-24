@@ -18,7 +18,7 @@ public class InvalidFileFormatException extends Error {
      * Prompts a default message
      */
     public InvalidFileFormatException() {
-        super("Source file does not match the required format of data");
+        super("Le fichier source ne rencontre pas le format requis");
     }
 
     /**
@@ -29,6 +29,6 @@ public class InvalidFileFormatException extends Error {
      * @param comment The comment you want to add, to describe the error
      */
     public InvalidFileFormatException(int currentLine, String comment) {
-        super("Source file does not match the required format of data : Line " + currentLine + " : " + comment);
+        super("Le fichier source ne rencontre pas le format requis : Ligne " + currentLine + " : " + comment);
     }
 }

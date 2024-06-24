@@ -113,6 +113,7 @@ public class NInfoPanel extends JPanel {
 
         //#region AIRPORT
         this.labelAirport = new JLabel();
+        labelAirport.setFont(App.KINDANORMAL);
         this.airportPanel = new JPanel();
         this.scrollPane = new JScrollPane();
         this.panelTable = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -130,7 +131,9 @@ public class NInfoPanel extends JPanel {
 
         //#region FLIGHT
         this.labelFlightLeft = new JLabel();
+        labelFlightLeft.setFont(App.KINDANORMAL);
         this.labelFlightRight = new JLabel();
+        labelFlightRight.setFont(App.KINDANORMAL);
         this.flightPanel = new JPanel(new GridLayout(1,2));
 
         this.labelFlightLeft.setOpaque(false);

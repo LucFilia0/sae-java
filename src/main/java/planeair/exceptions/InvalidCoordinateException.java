@@ -12,6 +12,6 @@ public class InvalidCoordinateException extends Exception {
      * source File is not correct
      */
     public InvalidCoordinateException() {
-        super("Wrong Coordinate format. Sori. Goofy me.");
+        super("Le format de la coordonnée ne correspond pas");
     }
 }

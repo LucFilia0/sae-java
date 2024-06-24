@@ -364,6 +364,11 @@ public class NImportButtonPanel extends JPanel {
         });
 
         returnBackAirports.addActionListener((ActionEvent e) -> {
+
+            this.airportsImported = false;
+            this.flightsImported = false;
+            App.app.setGraph(null);
+
             resetPanel(panelReturnConfirmAir, buttonAirportFileSelection);
             this.app.setVisible(true);
         });

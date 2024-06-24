@@ -182,7 +182,7 @@ public abstract class FIGImportation {
                     longitudeDirection = string_attribute.toUpperCase().charAt(0);
                     break;
                 default :
-                    System.err.println("Error at Line " + currentLine + " : More informations than required.");
+                    System.err.println("Erreur ligne " + currentLine + " : Plus d'informations que nécessaire");
                     break;
             }
             ++currentAttribute;
@@ -191,7 +191,7 @@ public abstract class FIGImportation {
 
         // Ensure we have all the required informations
         if(currentAttribute < 9) {
-            throw new InvalidFileFormatException(currentLine, "Missing informations to correctly create the Airport");
+            throw new InvalidFileFormatException(currentLine, "Pas assez d'informations pour créer l'aéroport");
         }
 
         // Cast the coordinates String informations to int
@@ -204,7 +204,7 @@ public abstract class FIGImportation {
             longitudeMinutes = Integer.parseInt(s_longitudeMinutes);
             longitudeSeconds = Integer.parseInt(s_longitudeSeconds);
         }catch(NumberFormatException nfe) {
-            throw new InvalidFileFormatException(currentLine, "There was an error during the cast from String to int.");
+            throw new InvalidFileFormatException(currentLine, "Une erreur est survenue lors du cast de String à int");
         }
 
         // Creates the two coordinates, need to be declared here before to be used in the Airport's Constructor below
@@ -386,11 +386,11 @@ public abstract class FIGImportation {
             flight.setFlightAttributes(start, end, departureTime, duration) ;
             
         }catch(ObjectNotFoundException onfe) {
-            throw new InvalidFileFormatException(currentLine, "Airport does not exist");
+            throw new InvalidFileFormatException(currentLine, "L'aéroport n'existe pas");
         }catch(InvalidEntryException iee) {
-            throw new InvalidFileFormatException(currentLine, "Invalid value entered");
+            throw new InvalidFileFormatException(currentLine, "Valeur passée invalide");
         }catch(NullPointerException npe) {
-            throw new InvalidFileFormatException(currentLine, "Object does not exist");
+            throw new InvalidFileFormatException(currentLine, "L'objet n'existe pas");
         }
 
         return flight;
