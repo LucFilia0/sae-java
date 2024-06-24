@@ -33,7 +33,7 @@ import java.text.DecimalFormat;
 //#endregion
 
 /**
- * Class which create a panel of INFO GRAPH
+ * Class which create a panel of INFORMATION GRAPH
  * The panel is situe in right bottom to the frame
  * 
  * @author GIRAUD Nila
@@ -151,12 +151,14 @@ public class NGraphInfoPanel extends JPanel {
          */
         private JPanel nbColorPanel = new JPanel() ;
         /**
-         * Title of the LINE six
+         * Title of the LINE 6
          * Nb of colors used to color the graph
          */
         private JLabel titleNbColorsUsed = new JLabel(NB_COLORS_TEXT + "-") ;
+        //#endregion
 
-        /**
+        //#region LINE 7 NB CONLFIT
+         /**
          * Add an empty border for titleNbConflictsOccurred
          */
         private JPanel nbConflictPanel = new JPanel() ;

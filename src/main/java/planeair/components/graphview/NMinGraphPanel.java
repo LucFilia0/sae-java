@@ -43,21 +43,18 @@ public class NMinGraphPanel extends JPanel {
     //#region  INSTANTIALISATION AND INITIALISATION
         //#region STRUCTURE
         /**
-         * GridLayout
-         * nb LINE : 2  (Graph + ButtonAgr)
-         * nb COLUMN : 1
-         * hgap : 0
-         * vgap : 30
+         * BoxLayout in Y_axis
+         * 2 components --> the graph and the extend graph button
          */
-        private JPanel gridPanelMinGraph = new JPanel();
+        private JPanel layoutNMinGraphPanel = new JPanel();
         //#endregion
 
         //#region FIRST COMPONENT 
         /**
          * Panel of the graph representation
-         * FlowLayout CENTER
+         * BorderLayout CENTER
          */
-        private JPanel FlowPanelGraph = new JPanel(new BorderLayout());
+        private JPanel layoutGraphPanel = new JPanel(new BorderLayout());
         //#endregion
 
         //#region SECOND COMPONENT 
@@ -69,7 +66,7 @@ public class NMinGraphPanel extends JPanel {
         private JButton buttonAgr = new JButton("AGRANDIR");
 
         /**
-         * Frame that will be spawned when the "Agrandir" button is pressed
+         * Frame that will be spawned when the expend button is pressed
          * Contains a bigger view on the graph
          */
         private JFrame maxGraphFrame ;
@@ -90,17 +87,17 @@ public class NMinGraphPanel extends JPanel {
         //STRUCT
         
         //GridPanel Background Color (YELLOW)
-        gridPanelMinGraph.setBackground(App.KINDAYELLOW);
-        gridPanelMinGraph.setLayout(new BoxLayout(gridPanelMinGraph, BoxLayout.Y_AXIS));
+        layoutNMinGraphPanel.setBackground(App.KINDAYELLOW);
+        layoutNMinGraphPanel.setLayout(new BoxLayout(layoutNMinGraphPanel, BoxLayout.Y_AXIS));
 
         /*FIRST COMPONENT */
         
         this.setMaximumSize(new Dimension(350,400));
         if (App.app.getGraphRenderer() == null) {
-            FlowPanelGraph = new NSkullPanel() ;
-            FlowPanelGraph.setLayout(new BorderLayout());
+            layoutGraphPanel = new NSkullPanel() ;
+            layoutGraphPanel.setLayout(new BorderLayout());
         }
-        FlowPanelGraph.setPreferredSize(new Dimension(325,325));
+        layoutGraphPanel.setPreferredSize(new Dimension(325,325));
          
         /*SECOND COMPONENT */
 
@@ -111,15 +108,18 @@ public class NMinGraphPanel extends JPanel {
 
         buttonCenter.setBackground(App.KINDAYELLOW);
 
+        //#region ADD
 
         /*FIRST COMPONENT */
-        gridPanelMinGraph.add(FlowPanelGraph);
+        layoutNMinGraphPanel.add(layoutGraphPanel);
 
         /*SECOND COMPONENT */
-        gridPanelMinGraph.add(buttonAgr);
+        layoutNMinGraphPanel.add(buttonAgr);
 
-        this.add(gridPanelMinGraph);
+        this.add(layoutNMinGraphPanel);
         this.initListeners() ;
+
+        //#endregion
     }
     //#endregion
 
@@ -130,7 +130,7 @@ public class NMinGraphPanel extends JPanel {
      * contains the panel containing the view of the graph
      */
     public void addGraphToPanel(PanelCreator graphRenderer) {
-        FlowPanelGraph.removeAll() ;
+        layoutGraphPanel.removeAll() ;
         JPanel panel ;
         if (graphRenderer != null) {
             panel = graphRenderer.getViewPanel() ;
@@ -138,8 +138,8 @@ public class NMinGraphPanel extends JPanel {
         else {
             panel = new NGraphNotHerePanel() ;
         }
-        this.FlowPanelGraph.removeAll() ;
-        this.FlowPanelGraph.add(panel, BorderLayout.CENTER) ;
+        this.layoutGraphPanel.removeAll() ;
+        this.layoutGraphPanel.add(panel, BorderLayout.CENTER) ;
         buttonCenter.setBackground(App.KINDAYELLOW);
     }
     //#endregion
@@ -151,7 +151,7 @@ public class NMinGraphPanel extends JPanel {
      * @author Luc le Manifik
      */
     public void removeGraphFromPanel() {
-        this.FlowPanelGraph.removeAll();
+        this.layoutGraphPanel.removeAll();
         App.app.setGraph(null);
     }
     //#endregion
@@ -160,16 +160,16 @@ public class NMinGraphPanel extends JPanel {
     public void addComponents(){
 
         /*FIRST COMPONENT */
-        gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,5)));
-        gridPanelMinGraph.add(FlowPanelGraph);
-        gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,10)));
+        layoutNMinGraphPanel.add(Box.createRigidArea(new Dimension(10,5)));
+        layoutNMinGraphPanel.add(layoutGraphPanel);
+        layoutNMinGraphPanel.add(Box.createRigidArea(new Dimension(10,10)));
 
         /*SECOND COMPONENT */
         buttonCenter.add(buttonAgr);
-        gridPanelMinGraph.add(buttonCenter);
-        gridPanelMinGraph.add(Box.createRigidArea(new Dimension(10,10)));
+        layoutNMinGraphPanel.add(buttonCenter);
+        layoutNMinGraphPanel.add(Box.createRigidArea(new Dimension(10,10)));
 
-        this.add(gridPanelMinGraph);
+        this.add(layoutNMinGraphPanel);
    }
    //#endregion
 

@@ -18,7 +18,7 @@ import planeair.graph.coloring.ColoringUtilities;
 
 /**
  * Model for JTable
- * The table have 3 colummn {"ID", "Heure", "Etat"} where the user will shows link Flights informations 
+ * The table have 4 colummn {"Attitude", "ID", "Heure", "Etat"} where the user will shows link Flights informations 
  * to the selected airport
  * 
  * @author GIRAUD Nila

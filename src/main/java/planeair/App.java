@@ -1,9 +1,10 @@
 package planeair;
 
+import javax.swing.ImageIcon;
+
 //-- Import Swing
 
 import javax.swing.JFrame;
-
 
 //-- Import AWT
 
@@ -11,6 +12,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 
 //-- Import Plane AIR
 
@@ -104,6 +106,11 @@ public class App extends javax.swing.JFrame {
     // FRAMES
 
     /**
+     * Logo of the Application
+     */
+    private Image logo = new ImageIcon("./icons/logoJaune.jpg").getImage();
+
+    /**
      * Page of selection of import file
      * It's the first that you see when you open the app
      */
@@ -162,6 +169,7 @@ public class App extends javax.swing.JFrame {
         this.setTitle("Plane AIR");
         this.setSize(App.APPLICATION_SCREEN_WIDTH, App.APPLICATION_SCREEN_HEIGHT);
         this.setMinimumSize(new Dimension(APPLICATION_SCREEN_WIDTH,APPLICATION_SCREEN_HEIGHT));
+        this.setIconImage(logo);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);

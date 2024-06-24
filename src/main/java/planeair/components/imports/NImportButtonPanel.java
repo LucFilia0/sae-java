@@ -61,7 +61,7 @@ import java.io.FileNotFoundException;
 //#endregion
 
 /**
- * Creates a JPanel of importation for Flights and Airports4
+ * Creates a JPanel of importation for Flights and Airport
  * @author GIRAUD Nila
  */
 public class NImportButtonPanel extends JPanel {
@@ -95,15 +95,7 @@ public class NImportButtonPanel extends JPanel {
     public static final String REJECT_MESSAGE = "Annuler";
     //#endregion
 
-    //#region ATTRIBUTS
-
-    /**
-     * Border Title for know what to do
-     */
-    TitledBorder border = new TitledBorder("Title");
-    //#endregion
-
-     //#region CHOOSING THE TYPE OF IMPORTATION
+    //#region CHOOSING THE TYPE OF IMPORTATION
     /**
      * Choice button
      * Graph
@@ -121,14 +113,14 @@ public class NImportButtonPanel extends JPanel {
         new NImportFileButton("<html>Importer<br>Vols / Aeroports</html>");
     
     /**
-     * Importation Button for Flights
+     * Importation button for Airports
      * aeroport.txt
      * Location : after pushing the button choiceFlight
      */
     private NImportFileButton buttonAirportFileSelection = 
         new NImportFileButton("Fichier des aéroports");
     /**
-     * Importation button
+     * Importation button for Flights
      * vol-test.csv
      * Location : after pushing the button buttonAirport
      */
@@ -188,7 +180,7 @@ public class NImportButtonPanel extends JPanel {
         new NFilledButton(NImportButtonPanel.CONFIRM_MESSAGE);
 
     /**
-     * Import the Frame of the App
+     * Frame of the App
      */
     private App app;
 
@@ -216,9 +208,9 @@ public class NImportButtonPanel extends JPanel {
      * @param framePrinc The object HomePage where the panel is put
      * @author GIRAUD Nila
      */
-    public NImportButtonPanel(App app){
+    public NImportButtonPanel(){
 
-        this.app = app;
+        this.app = App.app;
 
         this.initComponents();
         this.placeComponents();

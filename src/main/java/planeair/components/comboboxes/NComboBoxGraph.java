@@ -23,7 +23,7 @@ package planeair.components.comboboxes;
 
 
 /**
- * This class create ComboBox appearance for Graph Menu
+ * This class create custom ComboBox for Graph Menu with a Default renderer
  * 
  * @author GIRAUD Nila
  */

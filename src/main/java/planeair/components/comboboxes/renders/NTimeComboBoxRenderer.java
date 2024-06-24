@@ -14,6 +14,7 @@ package planeair.components.comboboxes.renders;
 
 /**
  * Class of renderer for Time ComboBoxs
+ * Add a 0 before 0 to 9 number 
  * 
  * @author GIRAUD Nila
  */
@@ -33,9 +34,9 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
 
     //#region CONSTRUCTOR CHOOSE COLOR
     /**
-     * Constructor of NTimeComboBoxRenderer
-     * @param textColor 
-     * @param backgroundColor
+     * Adaptive constructor for NTimeComboBoxRenderer
+     * @param textColor Choose text color
+     * @param backgroundColor choose background color
      */
     public NTimeComboBoxRenderer(Color textColor, Color backgroundColor) {
         super(textColor, backgroundColor) ;

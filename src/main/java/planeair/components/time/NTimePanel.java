@@ -43,23 +43,23 @@ public class NTimePanel extends JPanel {
 
         //#region STATIC
         /**
-         * Variable for HOUR representation ComboBox
+         * CONSTANT for HOUR representation ComboBox
          */
         public static final int HOUR = 23;
 
         /**
-         * Variable for MINUTES representation ComboBox
+         * CONSTANT for MINUTES representation ComboBox
          */
         public static final int MIN = 59;
         //#endregion
 
         //#region COMBOBOXS
         /**
-         * Layout Panel For hour's panel, link to the GridLayout of header
+         * Layout Panel For hour panel, link to the GridLayout of header
          */
         private JPanel hourPanelComboBox = new JPanel(new FlowLayout(FlowLayout.CENTER));
         /**
-         * JComboBox for choose hour
+         * JComboBox for choosen hours
          */
         private NComboBoxTime hourChoice = new NComboBoxTime(HOUR);
         /**
@@ -67,7 +67,7 @@ public class NTimePanel extends JPanel {
          */
         private JLabel betweenTime = new JLabel(" : ");
         /**
-         * JComboBox for choose minutes
+         * JComboBox for choosen minutes
          */
         private NComboBoxTime minChoice = new NComboBoxTime(MIN);
         //#endregion
@@ -79,27 +79,27 @@ public class NTimePanel extends JPanel {
          */
         private JPanel hourSliderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         /**
-         * Slider for Hour 
+         * Slider for time 
          * Location : Top of the center of the frame, below the comboBox
          */
         private NSliderTime sliderTime = new NSliderTime();
         //#endregion
 
         //#region BUTTON SIMULATION
-    /**
-     * Icon for the playing button (play)
-     */
-    private Icon iconPlay = new ImageIcon("./icons/play.png");
-    /**
-     * Icon for the playing button (pause)
-     */
-    private Icon iconPause = new ImageIcon("./icons/pause.png");
-    /**
-     * Button for playing the simulation 
-     * Location : right to the slider
-     */
-    private JButton playButton = new JButton(iconPlay);
-    //#endregion
+        /**
+         * Icon for the playing button (play)
+         */
+        private Icon iconPlay = new ImageIcon("./icons/play.png");
+        /**
+         * Icon for the playing button (pause)
+         */
+        private Icon iconPause = new ImageIcon("./icons/pause.png");
+        /**
+         * Button for playing the simulation 
+         * Location : right to the slider
+         */
+        private JButton playButton = new JButton(iconPlay);
+        //#endregion
 
     /**
      * The boolean which says if the simulation is currently playing (if the Flights are currenly moving)
@@ -120,8 +120,6 @@ public class NTimePanel extends JPanel {
      */
     public NTimePanel() {
         this.simulationPlaying = false;
-
-        //this.setLayout(new GridLayout(11,1));
         this.setLayout(new FlowLayout());
 
         this.container = new JPanel();
@@ -174,7 +172,7 @@ public class NTimePanel extends JPanel {
 
         //#region EVENTS
         /**
-         * Method adding events of the JFrame
+         * Method adding events (Listener)
          */
         private void addEvents(){
             

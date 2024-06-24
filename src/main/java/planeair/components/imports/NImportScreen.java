@@ -25,7 +25,7 @@ package planeair.components.imports;
 //#endregion
 
 /**
- * This class create a panel for information of the App and importantion of files necesseray
+ * This class create a panel for App's information and importation of necesseray files
  * It's the first panel you see when you open the App
  * 
  * @author GIRAUD Nila
@@ -40,7 +40,7 @@ public class NImportScreen extends JPanel {
     private JPanel header;
 
     /**
-     * Panel body of the Frame
+     * Panel body 
      * Center bouttonsImport panel
      */
     private JPanel body;
@@ -71,7 +71,6 @@ public class NImportScreen extends JPanel {
     //#region CONSTRUCTOR
     /**
      * Creates a new NImportScreen, which is in charge of the importation of data, from Files to the data structures in the App class
-     * @param app ({@link planeair.App App}) - The current App
      */
     public NImportScreen(){
 
@@ -101,7 +100,7 @@ public class NImportScreen extends JPanel {
         descriptionApp1.setFont(App.KINDABOLD);
         descriptionApp2.setFont(App.KINDABOLD);
 
-        buttonImport = new NImportButtonPanel(App.app);
+        buttonImport = new NImportButtonPanel();
     }
 
     /**
