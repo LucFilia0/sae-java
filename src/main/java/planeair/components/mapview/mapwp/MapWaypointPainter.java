@@ -205,12 +205,16 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                     g.setStroke(new BasicStroke(3)) ;
                     g.drawLine(depX, depY, arrX, arrY);
                 }
-            } 
+            }else {
+                map.remove(flightWp.getWaypointButton());
+                flightWp.getFlight().setFlightWaypoint(null) ;
+            }
         }
     }
 
     //#region ACTIVE AIRPORTS
 
+    // TODO la doc fdp
     /**
      * Paints all the ActiveAirports
      * @param g
