@@ -605,7 +605,7 @@ public class NMainScreen extends JPanel {
         //#region GETTER
         /**
          * Returns this panel's MinGraphPanel
-         * @return
+         * @return the panel with the graph
          */
         public NMinGraphPanel getMinGraphPanel() {
             return this.minGraphPanel ;
@@ -613,12 +613,16 @@ public class NMainScreen extends JPanel {
 
         /**
          * Returns this panel's MenuGraphPanel
-         * @return
+         * @return the graph menu
          */
         public NGraphMenuPanel getGraphMenuPanel() {
             return this.graphMenu ;
         }
 
+        /**
+         * Getter for the menu of the map
+         * @return The map menu 
+         */
         public NMapMenuPanel getMapMenuPanel() {
             return this.mapMenu ;
         }

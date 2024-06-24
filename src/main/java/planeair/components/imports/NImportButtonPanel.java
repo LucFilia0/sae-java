@@ -265,7 +265,7 @@ public class NImportButtonPanel extends JPanel {
         // Button to choose the TestGraph's File : Open JFileChooser
         choiceGraphImportation.addActionListener((ActionEvent e) -> {
 
-            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.GRAPH_FILE);
+            NFileChooser fileChooser = new NFileChooser(NFileChooser.GRAPH_FILE);
             fileChooser.userImportFile();
 
             if(fileChooser.getFile() != null) {
@@ -309,7 +309,7 @@ public class NImportButtonPanel extends JPanel {
         // Button to import Airports' File : Open JFileChooser
         buttonAirportFileSelection.addActionListener((ActionEvent e) -> {
             
-            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.AIRPORT_FILE);
+            NFileChooser fileChooser = new NFileChooser(NFileChooser.AIRPORT_FILE);
 
             try {
                 fileChooser.userImportFile();
@@ -328,7 +328,7 @@ public class NImportButtonPanel extends JPanel {
         // Button to import Flights' File : Open JFileChooser
         buttonFlightFileSelection.addActionListener((ActionEvent e) -> {
     
-            NFileChooser fileChooser = new NFileChooser(this.app, NFileChooser.FLIGHT_FILE);
+            NFileChooser fileChooser = new NFileChooser(NFileChooser.FLIGHT_FILE);
         
             try {
                 fileChooser.userImportFile();
@@ -393,7 +393,10 @@ public class NImportButtonPanel extends JPanel {
     // METHODS
  
     /**
-     * Restart the Panel for when we will open it again
+     * Restarts the Panel for when we will open it again
+     * 
+     * @param panel The panel contained
+     * @param button The button contained
      */
     public void resetPanel(JPanel panel, JButton button){
         buttonsPanel.removeAll();

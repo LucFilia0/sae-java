@@ -458,7 +458,7 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Getter for the comboBox containing the kMax options
-     * @return
+     * @return the combo box
      */
     public NComboBoxGraph getKmaxComboBox() {
         return this.kmaxComboBox ;
@@ -466,7 +466,7 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Getter for the comboBox containing the algorithms
-     * @return
+     * @return the combo box 
      */
     public JComboBox<ColoringAlgorithms> getAlgoChoice() {
         return this.algoChoice ;
@@ -500,7 +500,7 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Getter for the current kMax chosen
-     * @return
+     * @return Returns the currently selected kMax
      */
     public Integer getCurrentKMax() {
         return (Integer)this.kmaxComboBox.getSelectedItem() ;
@@ -508,14 +508,14 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Getter for the current algorithm chosen
-     * @return
+     * @return Returns the currently selected algorithm
      */
     public ColoringAlgorithms getCurrentAlgorithm() {
         return (ColoringAlgorithms)this.algoChoice.getSelectedItem() ;
     }
 
     /**
-     * Fuck Liegeon
+     * Getter for the last selected color
      * @return The last selected color
      */
     public Integer getLastColorSelected() {
@@ -563,7 +563,7 @@ public class NGraphMenuPanel extends JPanel{
     
     /**
      * Setter for the lastAlgoSelected field
-     * @param lastAlgoSelected
+     * @param lastAlgoSelected The last algorithm that was selected
      */
     public void setLastAlgoSelected(ColoringAlgorithms lastAlgoSelected) {
         this.lastAlgoSelected = lastAlgoSelected ;

@@ -148,6 +148,10 @@ public class NMinGraphPanel extends JPanel {
     //#endregion
 
     //#region ADD
+
+    /**
+     * Adds all the components to this panel
+     */
     public void addComponents(){
 
         /*FIRST COMPONENT */

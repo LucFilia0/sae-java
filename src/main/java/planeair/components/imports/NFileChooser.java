@@ -40,17 +40,14 @@ public class NFileChooser extends JFileChooser {
      */
     private File file;
 
-    private App app;
-
     /**
      * Constructor of NFileChooserForGraphApp
      * @param fileType know if it's an aeroport.txt, vol-test.csv or graphe-test.txt import
      */
-    public NFileChooser(App app, int fileType) throws InvalidFileFormatException {
+    public NFileChooser(int fileType) throws InvalidFileFormatException {
 
         // Attributes settings
         this.file = null;
-        this.app = app;
         this.setCurrentDirectory(new File(".")) ;
 
         // Filter
@@ -87,7 +84,7 @@ public class NFileChooser extends JFileChooser {
      */
     public void userImportFile() throws InvalidFileFormatException {
 
-        int result = this.showOpenDialog(this.app);
+        int result = this.showOpenDialog(App.app);
         if(result == JFileChooser.APPROVE_OPTION){
             this.file = this.getSelectedFile();
         }else if(result == JFileChooser.ERROR){

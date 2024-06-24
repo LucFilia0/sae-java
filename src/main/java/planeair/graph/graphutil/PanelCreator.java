@@ -76,7 +76,7 @@ public class PanelCreator {
 	 * Handles the creation of a view on the graph, giving access
 	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
 	 * moving around the view...
-	 * @param graph
+	 * @param graph The Graph that will be rendered
 	 * 
 	 * @author Nathan LIEGEON
 	 */
