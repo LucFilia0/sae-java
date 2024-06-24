@@ -85,14 +85,12 @@ public class NMapMenuPanel extends JPanel {
         this.setPreferredSize(new Dimension(225,300));
         this.setLayout( new GridLayout(5,1,0,15));
 
-        initComponents();
-
-       //#region ADD
-
-       //Title Menu
+        //#region ADD
+        //Title Menu
        titleMenu.setFont(App.KINDATITLE);
        this.add(titleMenu);
 
+        initComponents();
        //#endregion
 
        //#region DEFAULT SETUP
