@@ -110,10 +110,10 @@ public abstract class FIGImportation {
             if(line != "") { // Check if the line is not just a blank line
                 try {
                     FIGImportation.createAirportFrom(airportSet, line); // Creates an Airport with the informations of the line.
-                }catch(InvalidFileFormatException errorInFile) {
+                }catch(InvalidFileFormatException iffe) {
                     scanLine.close();
                     // All errors are Thrown as InvalidFileFormatException, because the File is not in the correct format, non-dependant of which error precisely
-                    throw new InvalidFileFormatException(currentLine, errorInFile.getMessage());
+                    throw iffe;
                 }
             }
         }
@@ -345,7 +345,7 @@ public abstract class FIGImportation {
                 }
             }catch(NumberFormatException e) {
                 scanData.close();
-                throw new InvalidFileFormatException(currentLine, e.getMessage());
+                throw new InvalidFileFormatException(currentLine, "Cast de String à int impossible (NumberFormatException)");
             }
             
             ++currentAttribute; // Increment to pass to the next attribute

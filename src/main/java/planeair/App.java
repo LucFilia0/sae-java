@@ -224,6 +224,7 @@ public class App extends javax.swing.JFrame {
     public void switchToMainScreen() {
 
         this.mainScreen.addTimePanel(); // Only add the slider if a FIG is charged
+        this.mainScreen.getMinGraphPanel().confirmDisplay(graphRenderer);
 
         this.remove(this.importScreen);
         this.add(this.mainScreen, BorderLayout.CENTER);
