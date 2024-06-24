@@ -182,6 +182,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
                    
                     waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
                 }else {
+                    map.remove(flightWp.getWaypointButton());
                     flightWp.getFlight().setFlightWaypoint(null) ;
                 }
 
