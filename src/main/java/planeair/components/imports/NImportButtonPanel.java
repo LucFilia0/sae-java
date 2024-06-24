@@ -257,6 +257,7 @@ public class NImportButtonPanel extends JPanel {
                     app.getMainScreen().initMap();
                     app.getMainScreen().refreshTime();
                 }
+                app.getMainScreen().getInfoPanel().hideInfos() ;
             }
             this.app.switchToMainScreen();
         });
@@ -369,6 +370,7 @@ public class NImportButtonPanel extends JPanel {
             if(this.airportsImported && this.flightsImported) {
                 this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
                 this.app.switchToMainScreen();
+                this.app.getMainScreen().getInfoPanel().hideInfos() ;
                 this.app.getMainScreen().initMap();
             }
         });

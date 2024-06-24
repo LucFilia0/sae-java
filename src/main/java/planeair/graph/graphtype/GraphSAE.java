@@ -41,8 +41,8 @@ public abstract class GraphSAE extends SingleGraph {
     public static final String CONFLICT_ATTRIBUTE = "nbConflicts" ; 
 
     /**
-     * array the size of the number of color used to color 
-     * the graph containing at the index i the Color assigned to the color i+1
+     * Hashmap storing for each color {@code (Integer)} a {@code Color}
+     * Object for its visual representation
      */
     private HashMap<Integer, Color> colorMap ;
 
@@ -71,7 +71,7 @@ public abstract class GraphSAE extends SingleGraph {
     /**
      * Returns the value of kMax, the maximum number of allowed colors.
      * 
-     * @return (int) - The maximum number of colors in the TestGraph
+     * @return The maximum number of colors in the TestGraph
      * 
      * @author Luc le Manifik
      */
@@ -82,7 +82,7 @@ public abstract class GraphSAE extends SingleGraph {
     /**
      * Returns the number of colors used to color the graph
      * 
-     * @return
+     * @return The number of colors
      */
     public int getNbColors() {
         return (int)this.getAttribute(GraphSAE.COLOR_ATTRIBUTE) ;
@@ -91,16 +91,15 @@ public abstract class GraphSAE extends SingleGraph {
     /**
      * Returns the number of conflicts that occurred while coloring the graph
      * 
-     * @return
+     * @return the number of conflicts
      */
     public int getNbConflicts() {
         return (int)this.getAttribute(TestGraph.CONFLICT_ATTRIBUTE) ;
     }
 
     /**
-     * Returns an array the size of the number of color used to color 
-     * the graph containing at the index i the Color assigned to the color i+1
-     * @return
+     * Getter for the HashMap mapping to each color its visual representation
+     * @return the HashMap
      */
     public HashMap<Integer, Color> getColorMap() {
         return this.colorMap ;
@@ -171,12 +170,12 @@ public abstract class GraphSAE extends SingleGraph {
      * Shows only nodes with their colorAttribute set to color
      * Gives the attribute "ui.hide" to all the ones that don't
      * 
-     * @param color
+     * @param color Color of the nodes that will be shown
      * 
      * @author Nathan LIEGEON
      */
     public void showNodesWithColor(int color) {
-        // Tell graphstream to fix their bug (or fix our own skill issue)
+        // Tell graphstream to fix their bug (or fix our own skill issue).
         this.nodes().forEach(n -> {
             if ((Integer)n.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) != color) {
                 n.edges().forEach(e -> {

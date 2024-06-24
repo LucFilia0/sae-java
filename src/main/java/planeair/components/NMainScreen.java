@@ -1,5 +1,6 @@
 package planeair.components;
 
+//#region IMPORTS
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
