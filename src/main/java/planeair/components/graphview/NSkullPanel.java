@@ -13,10 +13,12 @@ import javax.swing.JPanel;
 //#endregion
 
 /**
- * Panel shown if no graph has been imported, it contains a single 
- * giant skull image (or a placeholder text if you dare delete it)
- * 
+ * <html><strong>
+ * Panel shown if no graph has been imported, it contains a {@code SINGLE 
+ * GIANT SKULL IMAGE} (or a placeholder text if you dare delete it)
+ * </strong>
  * @author Knight of the Holy CROUS'kie
+ * </html>
  */
 public class NSkullPanel extends JPanel {
 
@@ -43,9 +45,12 @@ public class NSkullPanel extends JPanel {
         }
 
         catch (Exception e) {
-
-            // If the skull was deleted by some evil neferious awful mean heartless and possibly racist person
-            // then it paints a string instead
+            
+            /*
+             * If the skull was deleted by some evil neferious 
+             * awful mean heartless and possibly racist 
+             * person then it paints a string instead
+             */
             x = this.getWidth() / (this.getWidth()/200) ;
             y = this.getHeight() / 2 ;
             Rectangle rect = new Rectangle(this.getWidth()/4, this.getHeight()/4, this.getWidth()/2, this.getHeight()/2) ;

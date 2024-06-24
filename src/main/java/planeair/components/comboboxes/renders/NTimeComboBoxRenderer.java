@@ -16,7 +16,8 @@ import java.awt.Component;
  */
 public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
 
-    //#region INSTANTIALISATION AND INITIALISATION
+    //#region CONSTANTS
+    
     /**
      * Default color for the text
      */
@@ -28,7 +29,8 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
 	public static final Color DEFAULT_BACKGROUND_COLOR = Color.YELLOW ;
     //#endregion
 
-    //#region CONSTRUCTOR CHOOSE COLOR
+    //#region CONSTRUCTORS
+
     /**
      * Constructor of NTimeComboBoxRenderer
      * @param textColor The color of the text
@@ -37,9 +39,7 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
     public NTimeComboBoxRenderer(Color textColor, Color backgroundColor) {
         super(textColor, backgroundColor) ;
     }
-    //#endregion
 
-    //#region DEFAULT CONSTRUCTOR
     /**
 	 * Initializes the Renderer with its default background and text colors
 	 * Gives a default font for all items in this comboBox
@@ -47,9 +47,11 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
     public NTimeComboBoxRenderer() {
         super(DEFAULT_TEXT_COLOR, DEFAULT_BACKGROUND_COLOR) ;
     }
+
     //#endregion
 
     //#region GETTER
+
     public Component getListCellRendererComponent(
             JList<? extends Integer> list,
             Integer value,
@@ -69,6 +71,7 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
 
         return cell;
     }
+
     //#endregion
 
 }

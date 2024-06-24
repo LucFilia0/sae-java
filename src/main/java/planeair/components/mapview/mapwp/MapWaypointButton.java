@@ -79,6 +79,9 @@ public class MapWaypointButton extends JToggleButton {
 
     //#region PRIVATE METHODS
     
+    /**
+     * Adds all the listeners linked to this component
+     */
     private void initListeners() {
         this.addItemListener(new ItemListener() {
             @Override
@@ -128,10 +131,9 @@ public class MapWaypointButton extends JToggleButton {
             this.setBorder(null) ;
         }
 
-        if (this.getMapWaypoint() instanceof FlightWaypoint) {
+        if (this.getMapWaypoint() instanceof FlightWaypoint)
             ((FlightWaypoint)this.getMapWaypoint())
                 .updateFlightStyle(selected) ;
-        }
     }
 
     //#region PUBLIC METHODS

@@ -1,7 +1,7 @@
 package planeair;
 
-import javax.swing.ImageIcon;
 //#region IMPORTS
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import java.awt.BorderLayout;
@@ -172,6 +172,7 @@ public class App extends javax.swing.JFrame {
         this.setTitle("Plane AIR");
         this.setSize(MIN_APP_SCREEN_WIDTH, MIN_APP_SCREEN_HEIGHT);
         this.setMinimumSize(new Dimension(MIN_APP_SCREEN_WIDTH, MIN_APP_SCREEN_HEIGHT));
+        logo.getScaledInstance(2, 32, Image.SCALE_SMOOTH) ;
         this.setIconImage(logo);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

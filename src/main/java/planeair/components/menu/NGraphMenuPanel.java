@@ -569,7 +569,10 @@ public class NGraphMenuPanel extends JPanel{
     //#region COLORING
     /**
      * Changes the coloring of this graph best on the kmax and algorithm selected
-     * @param graph
+     * @param graph The graph whose coloring might change
+     * @param forcefully If you're lazy and just want the coloring to be forced
+     * to change without having to go through the checks, then set this to 
+     * {@code true}
      * 
      * @author Nathan LIEGEON
      */
@@ -621,7 +624,7 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Changes the color shown based on the value in the altitudeComboBox
-     * @param graphRenderer
+     * @param graphRenderer The renderer of the graph
      * 
      * @author Nathan LIEGEON
      */
@@ -633,6 +636,15 @@ public class NGraphMenuPanel extends JPanel{
         }
     }
 
+    /**
+     * Changes the security Margin by calculating all the collisions
+     * with the new security Margin
+     * 
+     * @param fig The fig whose collisions will be re-calculated
+     * @param securityMargin the new securityMargin
+     * 
+     * @author Luc le Manifik
+     */
     private void changeSecurityMargin(FlightsIntersectionGraph fig, int securityMargin) {
         FIGImportation.reDoCollisions(fig, securityMargin);
     }

@@ -72,7 +72,6 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
         this.activeAirportWaypointSet = ConcurrentHashMap.newKeySet() ;
         this.inactiveAirportWaypointSet = ConcurrentHashMap.newKeySet() ;
         this.flightWaypointSet  = ConcurrentHashMap.newKeySet() ;
-        this.flightWaypointSet  = ConcurrentHashMap.newKeySet() ;
         this.waypointButtonSet  = ConcurrentHashMap.newKeySet() ;
     }
 
@@ -164,7 +163,8 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
          */
         for(FlightWaypoint flightWp : this.flightWaypointSet) {
             
-            Integer drawnColor = App.app.getMainScreen().getGraphMenuPanel().getLastColorSelected() ;
+            Integer drawnColor = App.app.getMainScreen()
+                .getGraphMenuPanel().getLastColorSelected() ;
                 
             if (drawnColor == 0 || flightWp.getFlight().getAttribute(
                     ColoringUtilities.NODE_COLOR_ATTRIBUTE) == drawnColor) {
@@ -179,8 +179,9 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
         
                     x = flightWp_location.getX() - screen.getX() - MapWaypointButton.BUTTON_SIZE/2;
                     y = flightWp_location.getY() - screen.getY() - MapWaypointButton.BUTTON_SIZE/2;
-                   
+                    
                     waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
+                    showWaypoint(waypointButton) ;
                 }else {
                     map.remove(flightWp.getWaypointButton());
                     flightWp.getFlight().setFlightWaypoint(null) ;
@@ -239,21 +240,7 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             // In order to center the button on the wished position
             x = airportWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = airportWp_location.getY() - screen.getY() - waypointButton.getHeight();
-            NMainScreen main = App.app.getMainScreen() ;
 
-            // Calculates whether the waypoint would be on top of one of the menus
-            boolean graphMenuIntersects = main.isGraphMenuVisible() && main.getGraphMenuPanel().getBounds()
-                .intersects(waypointButton.getBounds()) ;
-            boolean mapMenuIntersects = main.isMapMenuVisible() && main.getMapMenuPanel().getBounds()
-                .intersects(waypointButton.getBounds()) ;
-            
-            // If the waypoint is over one of the menus, don't paint it
-            if (graphMenuIntersects || mapMenuIntersects) {
-                waypointButton.setVisible(false) ;   
-            }
-            else {
-                waypointButton.setVisible(true) ;
-            }
 
             waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
             ((Map)map).add(waypointButton);
@@ -296,23 +283,10 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
             // In order to center the button on the wished position
             x = airportWp_location.getX() - screen.getX() - waypointButton.getWidth()/2;
             y = airportWp_location.getY() - screen.getY() - waypointButton.getHeight();
-            NMainScreen main = App.app.getMainScreen() ;
-            // Calculates whether the waypoint would be on top of one of the menus
-            boolean graphMenuIntersects = main.isGraphMenuVisible() && main.getGraphMenuPanel().getBounds()
-                .intersects(waypointButton.getBounds()) ;
-            boolean mapMenuIntersects = main.isMapMenuVisible() && main.getMapMenuPanel().getBounds()
-                .intersects(waypointButton.getBounds()) ;
             
-            // If the waypoint is over one of the menus, don't paint it
-            if (graphMenuIntersects || mapMenuIntersects) {
-                waypointButton.setVisible(false) ;   
-            }
-            else {
-                waypointButton.setVisible(true) ;
-            }
-
             waypointButton.setBounds((int) Math.round(x), (int) Math.round(y), MapWaypointButton.BUTTON_SIZE, MapWaypointButton.BUTTON_SIZE);
             ((Map)map).add(waypointButton);
+            showWaypoint(waypointButton) ; 
         }
     }
 
@@ -337,11 +311,39 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
         throw new UnsupportedOperationException() ;
     }
 
+    /**
+     * Empties all the waypoint sets
+     */
     public void clearAll() {
         this.activeAirportWaypointSet.clear();
         this.inactiveAirportWaypointSet.clear();
         this.flightWaypointSet.clear();
         this.waypointButtonSet.clear();
+    }
+
+    /**
+     * Shows the {@code Waypoint} if it is not intersecting with 
+     * one of the {@code Menus}
+     * 
+     * @param waypointButton The waypoint whose position will be tested
+     * 
+     * @author Nathan LIEGEON
+     */
+    private void showWaypoint(MapWaypointButton waypointButton) {
+        NMainScreen main = App.app.getMainScreen() ;
+
+        boolean graphMenuIntersects = main.isGraphMenuVisible() 
+            && main.getGraphMenuPanel().getBounds()
+            .intersects(waypointButton.getBounds()) ;
+        boolean mapMenuIntersects = main.isMapMenuVisible() 
+            && main.getMapMenuPanel().getBounds()
+            .intersects(waypointButton.getBounds()) ;
+        
+        // If the waypoint is over one of the menus, it doesn't get painted
+        if (graphMenuIntersects || mapMenuIntersects)
+            waypointButton.setVisible(false) ;   
+        else
+            waypointButton.setVisible(true) ; 
     }
 
     //#endregion

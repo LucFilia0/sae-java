@@ -11,7 +11,8 @@ import javax.swing.ListCellRenderer;
 //#endregion
 
 /**
- * Haha figure it out by yourself loser 😂😂😂😂😂😂😂
+ * The default renderer for the {@code Combo boxes} of this app.
+ * Makes the text white, the background black, and sets a default font. 
  * 
  * @author Nathan LIEGEON
  */
@@ -29,7 +30,14 @@ public class NDefaultRenderer<T> implements ListCellRenderer<T> {
      */
 	public static final Color DEFAULT_BACKGROUND_COLOR = Color.BLACK ;
 
+	/**
+	 * The text color inputted by the user
+	 */
 	protected Color textColor ;
+
+	/**
+	 * The text color inputted by the user
+	 */
 	protected Color backgroundColor ;
 
 	/**

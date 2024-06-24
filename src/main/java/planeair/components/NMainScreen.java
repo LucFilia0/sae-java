@@ -34,154 +34,155 @@ import planeair.graph.graphtype.TestGraph;
 //#endregion*
 
 /**
- * This class creates the amin panel of the App where you can see the map and the graph of choosen files
+ * This class creates the amin panel of the App where you can see the map and
+ * the graph of choosen files
  * The class is one of the two Panel ADD directely in the JFrame (App)
  * 
  * @author GIRAUD Nila
  */
 public class NMainScreen extends JPanel {
 
-    //#region INSTANTIALISATION AND INITIALISATION
+    // #region INSTANTIALISATION AND INITIALISATION
 
-        //#region STRUCTURE
-        /**
-         * Locate in the North of the borderLayout of the frame
-         * nb LINE : 1 (PanelNav)
-         * nb COLUMN : 1
-         * hgap : 0
-         * vgap : 0
-         */
-        private JPanel header = new JPanel(new GridLayout(1,1,0,0));
+    // #region STRUCTURE
+    /**
+     * Locate in the North of the borderLayout of the frame
+     * nb LINE : 1 (PanelNav)
+     * nb COLUMN : 1
+     * hgap : 0
+     * vgap : 0
+     */
+    private JPanel header = new JPanel(new GridLayout(1, 1, 0, 0));
 
-        /**
-         * Locate in the WEST of the body's borderLayout
-         * Two MENU can appear here
-         * 1) NMenuGraphPanel
-         * 2) NMenuMapPanel
-         */
-        private JPanel article = new JPanel();
+    /**
+     * Locate in the WEST of the body's borderLayout
+     * Two MENU can appear here
+     * 1) NMenuGraphPanel
+     * 2) NMenuMapPanel
+     */
+    private JPanel article = new JPanel();
 
-        /**
-         * Locate int the EAST of the Map borderLayout
-         * Two panel appear here
-         * 1) NMinGraphPanel
-         * 2) NGraphInfoPanel
-         */
-        private JPanel aside = new JPanel(new GridLayout());
+    /**
+     * Locate int the EAST of the Map borderLayout
+     * Two panel appear here
+     * 1) NMinGraphPanel
+     * 2) NGraphInfoPanel
+     */
+    private JPanel aside = new JPanel(new GridLayout());
 
-        /**
-         * Locate int th SOUTH of the Map borderLayout
-         * Contain Info for mapWaipoint
-         */
-        private JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    /**
+     * Locate int th SOUTH of the Map borderLayout
+     * Contain Info for mapWaipoint
+     */
+    private JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        /**
-         * Locate in the CENTER of the Frame's borderLayout 
-         * For view the map even if we have the different Panel
-         */
-        private Map map ;
+    /**
+     * Locate in the CENTER of the Frame's borderLayout
+     * For view the map even if we have the different Panel
+     */
+    private Map map;
 
-        //#endregion
+    // #endregion
 
-        //#region HEADER COMPONENTS
+    // #region HEADER COMPONENTS
 
-            //#region NAV PANEL
-            /**
-             * Layout's panel for Navigation bar (Button MENU  + LOGO and NAME of the App)
-             * nb LINE : 1
-             * nb COLUMN : 3
-             * Location : top of the frame (represent the header)
-             */
-            private JPanel panelNav = new JPanel(new GridLayout(1,3));
-            //#endregion
+    // #region NAV PANEL
+    /**
+     * Layout's panel for Navigation bar (Button MENU + LOGO and NAME of the App)
+     * nb LINE : 1
+     * nb COLUMN : 3
+     * Location : top of the frame (represent the header)
+     */
+    private JPanel panelNav = new JPanel(new GridLayout(1, 3));
+    // #endregion
 
-            //#region NAV BUTTONS
-                //#region PANEL
-                /**
-                 * Put all buttons in the nav
-                 * Grid
-                 * LINE : 1
-                 * COLUMN : 2 (menu + import)
-                 * Location : left ine the header
-                 */
-                private JPanel panelButton = new JPanel();
-                //#endregion
+    // #region NAV BUTTONS
+    // #region PANEL
+    /**
+     * Put all buttons in the nav
+     * Grid
+     * LINE : 1
+     * COLUMN : 2 (menu + import)
+     * Location : left ine the header
+     */
+    private JPanel panelButton = new JPanel();
+    // #endregion
 
-                //#region MENU GRAPH 
-                /**
-                 * Icon of the Button menu graph
-                 * Description : A cross
-                 * Source : ./src/main/java/planeair/icons/close.png
-                 */
-                private Icon iconCloseGraph = new ImageIcon("./icons/close.png");
+    // #region MENU GRAPH
+    /**
+     * Icon of the Button menu graph
+     * Description : A cross
+     * Source : ./src/main/java/planeair/icons/close.png
+     */
+    private Icon iconCloseGraph = new ImageIcon("./icons/close.png");
 
-                /**
-                 * Icon of the Button menu Graph
-                 * Description : three horizontal lines
-                 * Source : ./src/main/java/planeair/icons/menu.png
-                 */
-                private Icon iconMenuGraph = new ImageIcon("./icons/graph.png");
-                /**
-                 * Button with their Icon
-                 * Location : first button in the nav
-                 */
-                private JButton buttonMenuGraph = new JButton(iconMenuGraph);
-                //#endregion
+    /**
+     * Icon of the Button menu Graph
+     * Description : three horizontal lines
+     * Source : ./src/main/java/planeair/icons/menu.png
+     */
+    private Icon iconMenuGraph = new ImageIcon("./icons/graph.png");
+    /**
+     * Button with their Icon
+     * Location : first button in the nav
+     */
+    private JButton buttonMenuGraph = new JButton(iconMenuGraph);
+    // #endregion
 
-                //#region MENU MAP
-                /**
-                 * Icon of the Button menu Map
-                 * Description :  A cross
-                 * Source : ./src/main/java/planeair/icons/close.png
-                 */
-                private Icon iconCloseMap = new ImageIcon("./icons/close.png");
-                /**
-                 * Icon of the Button menu Map
-                 * Description : A mini Map
-                 * Source : ./src/main/java/planeair/icons/map.png
-                 */
-                private Icon iconMenuMap = new ImageIcon("./icons/map.png");
-                /**
-                 * Button with their Icon
-                 * Location : second button in the nav
-                 */
-                private JButton buttonMenuMap = new JButton(iconMenuMap);
-                //#endregion
+    // #region MENU MAP
+    /**
+     * Icon of the Button menu Map
+     * Description : A cross
+     * Source : ./src/main/java/planeair/icons/close.png
+     */
+    private Icon iconCloseMap = new ImageIcon("./icons/close.png");
+    /**
+     * Icon of the Button menu Map
+     * Description : A mini Map
+     * Source : ./src/main/java/planeair/icons/map.png
+     */
+    private Icon iconMenuMap = new ImageIcon("./icons/map.png");
+    /**
+     * Button with their Icon
+     * Location : second button in the nav
+     */
+    private JButton buttonMenuMap = new JButton(iconMenuMap);
+    // #endregion
 
-                //#region IMPORTATION
-                /**
-                 * Icon for import button
-                 * Description :  A folder with an arrow
-                 * Source : ./src/main/java/planeair/icons/folder-input.png
-                 */
-                private Icon iconFolder = new ImageIcon("./icons/folder-input.png");
-                /**
-                 * Button for return with importButtons
-                 * Location : third button in the nav
-                 */
-                private JButton leaveButtonToImport = new JButton(iconFolder);
-                //#endregion
-            //#endregion
+    // #region IMPORTATION
+    /**
+     * Icon for import button
+     * Description : A folder with an arrow
+     * Source : ./src/main/java/planeair/icons/folder-input.png
+     */
+    private Icon iconFolder = new ImageIcon("./icons/folder-input.png");
+    /**
+     * Button for return with importButtons
+     * Location : third button in the nav
+     */
+    private JButton leaveButtonToImport = new JButton(iconFolder);
+    // #endregion
+    // #endregion
 
-            //#region NAME + LOGO
-            /**
-             * App's name + Logo
-             */
-            private JLabel labelLogoName = new JLabel("Plane AIR",JLabel.CENTER);
-            //#endregion
+    // #region NAME + LOGO
+    /**
+     * App's name + Logo
+     */
+    private JLabel labelLogoName = new JLabel("Plane AIR", JLabel.CENTER);
+    // #endregion
 
-            //#region BOOLEAN
-                /**
-                 * A boolean 
-                 * True if GraphMenu is Visible 
-                 * Else false
-                 */
-                private boolean graphMenuIsVisible ;
+    // #region BOOLEAN
+    /**
+     * A boolean
+     * True if GraphMenu is Visible
+     * Else false
+     */
+    private boolean graphMenuIsVisible;
 
-                /**
-                 * A boolean 
-                 * True if MapMenu is Visible 
-                 * Else false
+    /**
+     * A boolean
+     * True if MapMenu is Visible
+     * Else false
                  */
                 private boolean mapMenuIsVisible ;
                 //#endregion
