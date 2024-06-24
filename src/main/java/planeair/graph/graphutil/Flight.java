@@ -592,7 +592,7 @@ public class Flight extends SingleNode {
     /**
      * Tells this flight's waypoint that its selection has to 
      * be updated if it exists
-     * Also fire goofy aah word 🔥
+     * Also fire goofy aah word :)
      * 
      * @return true if the waypoint has been update, false if not
      * (so true if the waypoint exists, false if it doesn't)

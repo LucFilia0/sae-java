@@ -24,8 +24,8 @@ import javax.swing.BoxLayout;
 //#endregion
 
 /**
- * This class create a Panel for see the graph 
- * Their is also a button expand for see the graph in a other JFrame (it's bigger)
+ * This class creates a Panel for see the graph 
+ * There is also a expand button to see the graph in a other JFrame (it's bigger) (nice)
  * 
  * @author GIRAUD Nila
  */
@@ -164,6 +164,9 @@ public class NMinGraphPanel extends JPanel {
    }
    //#endregion
 
+    /**
+     * Initializes the Listeners
+     */
     private void initListeners() {
         buttonAgr.addActionListener((ActionEvent e) -> {
             buttonAgr.setEnabled(false) ;
@@ -173,6 +176,9 @@ public class NMinGraphPanel extends JPanel {
         });
     }
 
+    /**
+     * @return Ze button which puts the graph in its own frame
+     */
     public JButton getButtonAgr() {
         return this.buttonAgr ;
     }

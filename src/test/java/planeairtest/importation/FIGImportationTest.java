@@ -24,7 +24,7 @@ import planeair.exceptions.ObjectNotFoundException;
  * 
  * @author Luc le Manifik
  */
-public class ImportationFIGTest {
+public class FIGImportationTest {
 
 	//#region ATTRIBUTES
 

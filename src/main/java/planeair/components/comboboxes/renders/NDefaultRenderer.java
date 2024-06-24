@@ -31,12 +31,12 @@ public class NDefaultRenderer<T> implements ListCellRenderer<T> {
 	public static final Color DEFAULT_BACKGROUND_COLOR = Color.BLACK ;
 
 	/**
-	 * The text color inputted by the user
+	 * The text color input by the user
 	 */
 	protected Color textColor ;
 
 	/**
-	 * The text color inputted by the user
+	 * The text color input by the user
 	 */
 	protected Color backgroundColor ;
 

@@ -1,6 +1,5 @@
 package planeair.components.menu;
 
-
 //#region IMPORT
 import planeair.App;
 

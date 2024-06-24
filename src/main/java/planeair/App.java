@@ -308,10 +308,19 @@ public class App extends javax.swing.JFrame {
         return this.mainScreen;
     }
 
+    /**
+     * Stars the rendering of the testGraph and doesn't
+     * put it in a frame.
+     */
     public void initTestGraphRenderer() {
         initTestGraphRenderer(false) ;
     }
 
+    /**
+     * Starts the rendering of the testGraph
+     * @param inOwnFrame Whether or not the PanelCreator should create
+     * a new frame
+     */
     public void initTestGraphRenderer(boolean inOwnFrame) {
         this.graphRenderer = new PanelCreator(this.testGraph, inOwnFrame) ;
     }

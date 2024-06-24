@@ -249,10 +249,18 @@ public class NTimePanel extends JPanel {
         }
     }
 
+    /**
+     * @return {@code true} if the simulation is 
+     * currently playing (so if the flights are moving) and
+     * {@code false} else
+     */
     public boolean isSimulationPlaying() {
         return this.simulationPlaying;
     }
 
+    /**
+     * @return the slider that changes the time
+     */
     public NSliderTime getSliderTime() {
         return sliderTime;
     }

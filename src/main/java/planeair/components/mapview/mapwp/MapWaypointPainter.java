@@ -147,13 +147,13 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
          * STEP 1 : We paint the Airports' Waypoints
          */
         if(mapMenu.mustShowActiveAirports()) {
-            paintActiveAirports(g, map, width, height, mapZoom, screen);
+            paintActiveAirports(g, map, mapZoom, screen);
         }else {
             eraseActiveAirports();
         }
 
         if(mapMenu.mustShowInactiveAirports()) {
-            paintInactiveAirports(g, map, width, height, mapZoom, screen);
+            paintInactiveAirports(g, map, mapZoom, screen);
         }else {
             eraseInactiveAirports();
         }
@@ -216,17 +216,16 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
     //#region ACTIVE AIRPORTS
 
-    // TODO la doc fdp
     /**
      * Paints all the ActiveAirports
-     * @param g
-     * @param map
-     * @param width
-     * @param height
-     * @param mapZoom
-     * @param screen
+     * @param g idk
+     * @param map Ze Map
+     * @param mapZoom The zoom of Ze Map
+     * @param screen the screen dimension
+     * 
+     * @author Luc le Manifik
      */
-    private void paintActiveAirports(Graphics2D g, JXMapViewer map, int width, int height, int mapZoom, Rectangle screen) {
+    private void paintActiveAirports(Graphics2D g, JXMapViewer map, int mapZoom, Rectangle screen) {
 
         double x, y;
 
@@ -262,14 +261,15 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
 
     /**
      * Paint all the InactiveAirports
-     * @param g
-     * @param map
-     * @param width
-     * @param height
-     * @param mapZoom
-     * @param screen
+     * 
+     * @param g idk
+     * @param map Ze Map (again)
+     * @param mapZoom The zoom of the Map
+     * @param screen The screen dimensions
+     * 
+     * @author Luc le Manifik
      */
-    private void paintInactiveAirports(Graphics2D g, JXMapViewer map, int width, int height, int mapZoom, Rectangle screen) {
+    private void paintInactiveAirports(Graphics2D g, JXMapViewer map, int mapZoom, Rectangle screen) {
         
         double x, y;
 

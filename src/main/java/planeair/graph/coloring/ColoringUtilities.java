@@ -28,26 +28,6 @@ public abstract class ColoringUtilities {
      */
     public static final String NODE_COLOR_ATTRIBUTE = "color" ;
 
-    /**
-     * String Identifier for the DSATUR algorithm
-     */
-    public static final String DSATUR = "DSATUR" ;
-
-    /**
-     * String Identifier for the RLF algorithm
-     */
-    public static final String RLF = "RLF" ;
-
-    /**
-     * String Identifier for the Welsh & Powell algorithm
-     */
-    public static final String WELSH_POWELL = "WELSH POWELL" ;
-
-    /**
-     * Color for the default background color
-     */
-    public static final Color GRAPH_BACKGROUND_COLOR = new Color(250, 220, 87) ;
-
     //#endregion
     
     /**
@@ -156,7 +136,7 @@ public abstract class ColoringUtilities {
     /**
      * Removes all attributes linked to the coloring of this graph
      * 
-     * @param graph
+     * @param graph The graph in question
      * 
      * @author Nathan LIEGEON
      */

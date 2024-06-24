@@ -295,7 +295,7 @@ public class NImportButtonPanel extends JPanel {
             // In Garbage Collector we trust 🙌
             this.app.setAirportSet(new AirportSet());
 
-            this.airportsImported = false; // TODO
+            this.airportsImported = false;
 
             buttonsPanel.removeAll();
             this.remove(confirmStart);
