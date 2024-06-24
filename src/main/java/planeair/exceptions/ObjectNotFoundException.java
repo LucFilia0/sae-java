@@ -15,6 +15,6 @@ public class ObjectNotFoundException extends Exception {
      * @author Luc le Manifik.
      */
     public ObjectNotFoundException() {
-        super("The object can't be reached. Maybe he doesn't exist.");
+        super("L'objet ne peut pas être trouvé. Peut-être qu'il n'existe pas");
     }
 }

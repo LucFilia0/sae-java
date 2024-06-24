@@ -10,6 +10,6 @@ import planeair.util.NTime ;
 public class InvalidTimeException extends Exception {
     
     public InvalidTimeException(NTime time) {
-        super(time.getHour() + "h" + time.getMinute() + " is an invalid time") ;
+        super(time.getHour() + "h" + time.getMinute() + " est une heure invalide") ;
     }
 }

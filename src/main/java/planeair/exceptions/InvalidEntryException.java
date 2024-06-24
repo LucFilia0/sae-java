@@ -14,6 +14,6 @@ public class InvalidEntryException extends Error {
      */
     public InvalidEntryException()
     {
-        super("Invalid entry. The read value does not matches the requirement.");
+        super("Entrée invalide : La valeur lue n'est pas acceptée");
     }
 }
