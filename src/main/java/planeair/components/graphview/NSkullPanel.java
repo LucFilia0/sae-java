@@ -17,7 +17,7 @@ import javax.swing.JPanel;
  * Panel shown if no graph has been imported, it contains a {@code SINGLE 
  * GIANT SKULL IMAGE} (or a placeholder text if you dare delete it)
  * </strong>
- * @author Knight of the Holy CROUS'kie
+ * @author A true Knight of the Holy CROUS'kie
  * </html>
  */
 public class NSkullPanel extends JPanel {

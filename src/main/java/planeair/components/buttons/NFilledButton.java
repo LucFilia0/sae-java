@@ -1,8 +1,6 @@
 package planeair.components.buttons;
 
 //#region IMPORTATION
-
-
 import javax.swing.JButton;
 
 import planeair.App;

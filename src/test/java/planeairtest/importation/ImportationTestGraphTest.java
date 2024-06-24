@@ -29,7 +29,7 @@ package planeairtest.importation;
  * 
  * @author Luc le Manifik
  */
-public class TestGraphImportationTest {
+public class ImportationTestGraphTest {
 
 	//#region ATTRIBUTES
 

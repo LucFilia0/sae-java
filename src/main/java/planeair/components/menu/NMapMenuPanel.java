@@ -16,7 +16,7 @@ import planeair.components.mapview.Map;
 //#endregion
 
 /**
- * Create a panel Menu for Map
+ * Creates a panel Menu for Map
  * Help the user to modified appareance of the Map with JChekBox
  * 1) See lines for Flight
  * 2) See icon of used airport
@@ -109,12 +109,17 @@ public class NMapMenuPanel extends JPanel {
     private void initComponents() {
         for(int i = 0; i < NB_CHECK_BOXES; ++i) {
             this.checkBoxes[i] = new NMapCheckBox(this.parameterNames[i]);
-            addEvent(this.checkBoxes[i]);
+            initListeners(this.checkBoxes[i]);
             this.add(this.checkBoxes[i]);
         }
     }
 
-    private void addEvent(NMapCheckBox checkBox) {
+    /**
+     * adds the listeners
+     * @param checkBox The checkbox on which the 
+     * listener is added
+     */
+    private void initListeners(NMapCheckBox checkBox) {
         checkBox.addItemListener(new ItemListener() {
 
             @Override

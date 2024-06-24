@@ -76,7 +76,7 @@ public class PanelCreator {
 	 * Handles the creation of a view on the graph, giving access
 	 * to a panel containing this graph, multiple events, shortcuts, zooming, 
 	 * moving around the view...
-	 * @param graph
+	 * @param graph The Graph that will be rendered
 	 * 
 	 * @author Nathan LIEGEON
 	 */
@@ -476,7 +476,8 @@ public class PanelCreator {
 
 							// Restarts a Thread if this one got interrupted,
 							// else ignores the exception
-							if (interrupted()) ;
+							interrupted() ;
+							isRendering = true ;
 						}
 					}
 				}

@@ -355,26 +355,50 @@ public class NGraphInfoPanel extends JPanel {
             this.titleDegreeAvg.setText(DEGREE_TEXT + format.format(averageDegree)) ;
         }
 
+        /**
+         * changes the number of connected components
+         * @param nbCC the number of connected components
+         */
         public void setNbConnectedComponent(int nbCC) {
             this.titleComp.setText(CONNECTED_COMP_TEXT + nbCC) ;
         }
 
+        /**
+         * changes the number of diameter
+         * @param diameter the number of diameters
+         */
         public void setDiameter(int diameter) {
             this.titleDiameter.setText(DIAMETER_TEXT + diameter) ;
         }
 
+        /**
+         * changes the number of nodes
+         * @param nbNodes the number of nodes
+         */
         public void setNbNodes(int nbNodes) {
             this.titleNodes.setText(NB_NODES_TEXT + nbNodes) ;
         }
 
+        /**
+         * changes the number of edges
+         * @param nbEdges the number of edges
+         */
         public void setNbEdges(int nbEdges) {
             this.titleEdges.setText(NB_EDGES_TEXT + nbEdges) ;
         }
 
+        /**
+         * changes the number of colors
+         * @param nbNodes the number of colors
+         */
         public void setNbColorsUsed(int nbColors) {
             this.titleNbColorsUsed.setText(NB_COLORS_TEXT + nbColors) ;
         }
 
+        /**
+         * changes the number of conflicts
+         * @param nbNodes the number of conflicts
+         */
         public void setNbConflictsOccurred(int nbConflicts) {
             this.titleNbConflictsOccurred.setText(NB_CONFLICTS_TEXT + nbConflicts) ;
         } 
@@ -419,7 +443,7 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * Change font size of all labels inside this panel
-         * @param size
+         * @param size The new size of the font
          */
         public void setFontSize(int size) {
             titleComp.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;

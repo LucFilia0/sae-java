@@ -166,6 +166,8 @@ public class NInfoPanel extends JPanel {
     /**
      * Makes the NInfoPanel visible, and prompts the infos of the MapWaypooint that was clicked
      * 
+     * @param mapWaypoint the {@code Waypoint} whose information will be displayed
+     * 
      * @author GIRAUD Nila 
      */
     public synchronized void showInfos(MapWaypoint mapWaypoint) {

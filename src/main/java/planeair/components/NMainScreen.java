@@ -184,9 +184,9 @@ public class NMainScreen extends JPanel {
      * A boolean
      * True if MapMenu is Visible
      * Else false
-                 */
-                private boolean mapMenuIsVisible ;
-                //#endregion
+     */
+    private boolean mapMenuIsVisible ;
+    //#endregion
             
         //#endregion
 
@@ -476,6 +476,11 @@ public class NMainScreen extends JPanel {
             }
         }
 
+        /**
+         * Moves the slider fast to refresh the position of the Flights. #Brigand
+         * 
+         * @author Luc le Manifik
+         */
         public void refreshTime() {
             if(this.timePanel != null) {
                 int value = this.timePanel.getSliderTime().getValue();
@@ -600,7 +605,7 @@ public class NMainScreen extends JPanel {
         //#region GETTER
         /**
          * Returns this panel's MinGraphPanel
-         * @return
+         * @return the panel with the graph
          */
         public NMinGraphPanel getMinGraphPanel() {
             return this.minGraphPanel ;
@@ -608,12 +613,16 @@ public class NMainScreen extends JPanel {
 
         /**
          * Returns this panel's MenuGraphPanel
-         * @return
+         * @return the graph menu
          */
         public NGraphMenuPanel getGraphMenuPanel() {
             return this.graphMenu ;
         }
 
+        /**
+         * Getter for the menu of the map
+         * @return The map menu 
+         */
         public NMapMenuPanel getMapMenuPanel() {
             return this.mapMenu ;
         }

@@ -41,10 +41,10 @@ public class NSliderTime extends JSlider{
     //#endregion
 
     //#region SLIDER MODEL
-    @Override
-            public void updateUI() {
-                setUI(new CustomSliderUI(this));
-            }
+        @Override
+        public void updateUI() {
+            setUI(new CustomSliderUI(this));
+        }
 
         private static class CustomSliderUI extends BasicSliderUI {
 

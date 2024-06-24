@@ -175,6 +175,11 @@ public class NGraphMenuPanel extends JPanel{
          * The last registered securityMargin, to check if it needs a new importation 
          */
         private int lastSecurityMarginSelected;
+
+        /**
+         * The last registered chosen color
+         */
+        private int lastColorSelected ;
         //#endregion
     //#endregion 
 
@@ -185,8 +190,6 @@ public class NGraphMenuPanel extends JPanel{
      * @param kmaxComboBox the ComboBox that makes access change altitude max
      */
     public NGraphMenuPanel(int kmax, NComboBoxGraph kmaxComboBox){
-
-        
 
         this.setBackground(App.KINDAYELLOW);
         this.setLayout(new GridLayout(6,1));
@@ -211,7 +214,7 @@ public class NGraphMenuPanel extends JPanel{
     /**
      * Add components
      */
-    private void addComponents(){
+    private void addComponents() {
 
         this.add(titleMenu);
         //KMAX
@@ -227,7 +230,6 @@ public class NGraphMenuPanel extends JPanel{
         //ALGO
         borderPanelAlgo.add(algoOption);
         this.add(borderPanelAlgo);
-
 
         //Ok button
         layoutConfirm.add(confirmButton);
@@ -334,7 +336,7 @@ public class NGraphMenuPanel extends JPanel{
 
     }
 
-    //#region INIT / SETTER /GETTER
+    //#region INIT / SETTER / GETTER
     /**
      * Fills the altitude comboBox with the correct values and defines its Render
      * @param kmax
@@ -377,8 +379,8 @@ public class NGraphMenuPanel extends JPanel{
     /**
      * Initializes all comboBoxes in the menu
      * 
-     * @param kMax
-     * @param graphIsImported
+     * @param kMax The maximum amount of colors
+     * @param graphIsImported True if the graph is already imported, else false
      * 
      * @author Nathan LIEGEON
      */
@@ -417,6 +419,7 @@ public class NGraphMenuPanel extends JPanel{
             }
         });
 
+        // The comboBox to choose kMax
         kmaxComboBox.setRenderer(new NDefaultRenderer<Integer>() {
             @Override
             public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index,
@@ -455,7 +458,7 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Getter for the comboBox containing the kMax options
-     * @return
+     * @return the combo box
      */
     public NComboBoxGraph getKmaxComboBox() {
         return this.kmaxComboBox ;
@@ -463,17 +466,18 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Getter for the comboBox containing the algorithms
-     * @return
+     * @return the combo box 
      */
     public JComboBox<ColoringAlgorithms> getAlgoChoice() {
         return this.algoChoice ;
     }
 
+    /**
+     * @return The altitude comboBox
+     */
     public NComboBoxGraph getAltitudesComboBox() {
         return this.altitudeComboBox ;
     }
-
-    private int lastColorSelected ;
 
     /**
      * Sets the range of values and the default value of the kMax comboBox in the menu
@@ -496,7 +500,7 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Getter for the current kMax chosen
-     * @return
+     * @return Returns the currently selected kMax
      */
     public Integer getCurrentKMax() {
         return (Integer)this.kmaxComboBox.getSelectedItem() ;
@@ -504,15 +508,15 @@ public class NGraphMenuPanel extends JPanel{
 
     /**
      * Getter for the current algorithm chosen
-     * @return
+     * @return Returns the currently selected algorithm
      */
     public ColoringAlgorithms getCurrentAlgorithm() {
         return (ColoringAlgorithms)this.algoChoice.getSelectedItem() ;
     }
 
     /**
-     * Fuck Liegeon
-     * @return
+     * Getter for the last selected color
+     * @return The last selected color
      */
     public Integer getLastColorSelected() {
         return this.lastColorSelected ;
@@ -559,7 +563,7 @@ public class NGraphMenuPanel extends JPanel{
     
     /**
      * Setter for the lastAlgoSelected field
-     * @param lastAlgoSelected
+     * @param lastAlgoSelected The last algorithm that was selected
      */
     public void setLastAlgoSelected(ColoringAlgorithms lastAlgoSelected) {
         this.lastAlgoSelected = lastAlgoSelected ;

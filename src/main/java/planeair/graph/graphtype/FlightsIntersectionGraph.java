@@ -100,6 +100,10 @@ public class FlightsIntersectionGraph extends GraphSAE {
         this.setKMax(nbColors) ;
     }
 
+    /**
+     * Changes the security margin, under which Flights are considered like in collision
+     * @param securityMargin The new margin (in MINUTES)
+     */
     public void setSecurityMargin(int securityMargin) {
         this.securityMargin = securityMargin;
     }

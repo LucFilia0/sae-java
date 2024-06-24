@@ -52,6 +52,7 @@ public class NTimeComboBoxRenderer extends NDefaultRenderer<Integer>  {
 
     //#region GETTER
 
+    @Override
     public Component getListCellRendererComponent(
             JList<? extends Integer> list,
             Integer value,

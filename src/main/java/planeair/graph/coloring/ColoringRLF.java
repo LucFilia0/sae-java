@@ -18,12 +18,14 @@ import planeair.graph.graphtype.GraphSAE;
 //#endregion
 
 /**
+ * <html>
  * Class handling all the methods to implement the {@code RLF} 
  * graph coloring Algorithm.<br><br>
  * The algorithm was based on this
  * {@link <a href = "https://en.wikipedia.org/wiki/Recursive_largest_first_algorithm">source</a>}
  * 
  * @author Nathan LIEGEON
+ * </html>
  */
 public abstract class ColoringRLF {
     
@@ -135,8 +137,8 @@ public abstract class ColoringRLF {
     }
 
     /**
-     * Returns the node from addableNodesSet that has the most common neighbors 
-     * with all nodes in colorSet
+     * Returns the node from {@code addableNodesSet} that has the most common neighbors 
+     * with all nodes in {@code colorSet}
      * @param addableNodesSet Set containing all the nodes that can be chosen
      * @param colorSet Set containing the nodes 
      * @return the node that was selected 
