@@ -166,10 +166,6 @@ public class NGraphMenuPanel extends JPanel{
         //#endregion
 
         //#region APP
-        /**
-         * Homepage
-         */
-        private App app ;
 
         /**
          * The last registered securityMargin, to check if it needs a new importation 
@@ -195,11 +191,10 @@ public class NGraphMenuPanel extends JPanel{
         this.setLayout(new GridLayout(6,1));
 
         this.kmaxComboBox = kmaxComboBox ;
-        this.app = App.app ;
         this.lastSecurityMarginSelected = FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN;
 
         //#region ADD / INIT
-        initAlgoComboBox((app.getGraphRenderer() != null)) ;
+        initAlgoComboBox((App.app.getGraphRenderer() != null)) ;
         initComponents(kmax);
         addComponents();
         //#endregion
@@ -538,19 +533,19 @@ public class NGraphMenuPanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 lastColorSelected = (int)altitudeComboBox.getSelectedItem() ;
-                if(app.getGraph() instanceof FlightsIntersectionGraph) {
+                if(App.app.getGraph() instanceof FlightsIntersectionGraph) {
                     int sm = getSecurityMargin();
-                    FlightsIntersectionGraph fig = (FlightsIntersectionGraph)app.getGraph();
+                    FlightsIntersectionGraph fig = (FlightsIntersectionGraph)App.app.getGraph();
                     if(sm != lastSecurityMarginSelected) {
                         lastSecurityMarginSelected = sm;
                         fig.setSecurityMargin(sm);
                         changeSecurityMargin(fig, sm);
-                        changeColoring(app.getGraph(), true);
+                        changeColoring(App.app.getGraph(), true);
                     }
                 }
-                changeColoring(app.getGraph(), false) ;
-                changeColorShown(app.getGraphRenderer()) ;
-                app.getMainScreen().getMap().repaint();
+                changeColoring(App.app.getGraph(), false) ;
+                changeColorShown(App.app.getGraphRenderer()) ;
+                App.app.getMainScreen().getMap().repaint();
             }
         });
 
@@ -620,7 +615,7 @@ public class NGraphMenuPanel extends JPanel{
             }
             
             ColoringUtilities.setGraphStyle(graph, currentKMax) ;
-            NGraphInfoPanel panel = app.getMainScreen().getGraphInfoPanel() ;
+            NGraphInfoPanel panel = App.app.getMainScreen().getGraphInfoPanel() ;
             panel.setNbColorsUsed(graph.getNbColors()) ;
             panel.setNbConflictsOccurred(graph.getNbConflicts()) ;
         }
