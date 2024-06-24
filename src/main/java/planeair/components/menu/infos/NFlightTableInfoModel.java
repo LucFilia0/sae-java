@@ -1,5 +1,6 @@
 package planeair.components.menu.infos;
 
+import java.awt.Color;
 //#region IMPORT
 import java.awt.Font;
 import java.util.List;
@@ -154,7 +155,9 @@ public class NFlightTableInfoModel extends AbstractTableModel {
         }
 
         JTableHeader header = table.getTableHeader() ;
+        header.setBackground(Color.LIGHT_GRAY);
         header.setFont(new Font("Arial", Font.BOLD, 14)) ;
+        table.setBackground(Color.WHITE);
     }
     //#endregion
     

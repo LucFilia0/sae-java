@@ -167,7 +167,7 @@ public class NGraphMenuPanel extends JPanel{
 
         //#region APP
         /**
-         * Homepage blablabla
+         * Homepage
          */
         private App app ;
 
@@ -181,115 +181,38 @@ public class NGraphMenuPanel extends JPanel{
     //#region CONSTRUCTOR
     /**
      * Constructor of NMenuPanelApp
-     * @param kmax
-     * @param kmaxComboBox 
+     * @param kmax the altitude max for coloring
+     * @param kmaxComboBox the ComboBox that makes access change altitude max
      */
-    public NGraphMenuPanel(App app, int kmax, NComboBoxGraph kmaxComboBox){
+    public NGraphMenuPanel(int kmax, NComboBoxGraph kmaxComboBox){
 
-        this.app = app ;
-        this.kmaxComboBox = kmaxComboBox ;
-        this.lastSecurityMarginSelected = FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN;
+        
 
         this.setBackground(App.KINDAYELLOW);
-
         this.setLayout(new GridLayout(6,1));
 
-        //TITLE
-        titleMenu.setFont(App.KINDATITLE);
+        this.kmaxComboBox = kmaxComboBox ;
+        this.app = App.app ;
+        this.lastSecurityMarginSelected = FlightsIntersectionGraph.DEFAULT_SECURITY_MARGIN;
 
-        //#region KMAX
-        kmaxOption.setLayout( new GridLayout(2,1));
-
-        // Title
-        changeKmax.setFont(App.KINDANORMAL);
-        kmaxOption.setBackground(App.KINDAYELLOW);
-
-        
-        //  ComboBox
-        if (kmax > 1) {
-            this.initKmaxValues(kmax) ;
-        }
-        else {
-            kmaxComboBox.addItem(0) ;
-            kmaxComboBox.setSelectedIndex(0) ;
-        }
-        initAltitudeComboBox(kmax);
-        kmaxComboBox.setSelectedItem(kmax);
-        
-
-        kmaxOption.add(changeKmax);
-        kmaxOption.add(kmaxComboBox);
-
-        borderPanelKmax.setBackground(App.KINDAYELLOW);
-        borderPanelKmax.setPreferredSize(new Dimension(250,30));
-
-        borderPanelKmax.add(kmaxOption);
-        //#endregion
-
-        //#region ALTITUDES
-        altitudeMaxOption.setLayout(new GridLayout(2,1));
-        altitudeMaxOption.setBackground(App.KINDAYELLOW);
-
-        // Titre
-        colorChoice.setFont(App.KINDANORMAL);
-
-        // ComboBox
-        // Democraty doesn't work in times of war. DO NOT TOUCH (or i will put a pipe bomb in your mail).
-
-        altitudeMaxOption.add(colorChoice);
-        altitudeMaxOption.add(altitudeComboBox);
-
-        borderPanelAlt.setBackground(App.KINDAYELLOW);
-        //#endregion
-
-        //#region SAFETY MARGIN
-        // SAFETY MARGIN
-        marginComboBox.setSelectedItem(15);
-        marginOptionPanel.setLayout(new GridLayout(2,1));
-        marginOptionPanel.setBackground(App.KINDAYELLOW);
-
-        // Titre
-        safetyMargin.setFont(App.KINDANORMAL);
-
-        // JComboBox
-        marginOptionPanel.add(safetyMargin);
-        marginOptionPanel.add(marginComboBox);
-
-        borderPanelMargin.setBackground(App.KINDAYELLOW);
-        //#endregion SAFETY MARGIN
-
-        //#region ALGO
-        algoOption.setLayout(new GridLayout(2,1));
-        algoOption.setBackground(App.KINDAYELLOW);
-
-        // Titre
-        algorithmes.setFont(App.KINDANORMAL);
-
-        // JComboBox
-
-        algoChoice.setForeground(Color.WHITE);
-        algoChoice.setFont(new Font("Arial", Font.BOLD, 18));
-        algoChoice.setBackground(Color.BLACK);
-        algoChoice.setPreferredSize(NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
-
-        algoOption.add(algorithmes);
-        algoOption.add(algoChoice);
-
-        borderPanelAlgo.setBackground(App.KINDAYELLOW);
-        //#endregion
-
-        //#region CONFIRM
-        confirmButton.setForeground(Color.WHITE);
-        confirmButton.setFont(App.KINDABOLD);
-        confirmButton.setBackground(Color.BLACK);
-        confirmButton.setPreferredSize(NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
-        layoutConfirm.setBackground(App.KINDAYELLOW);
-        //#endregion
-
+        //#region ADD / INIT
         initAlgoComboBox((app.getGraphRenderer() != null)) ;
+        initComponents(kmax);
+        addComponents();
+        //#endregion
 
-        //#region ADD
-        //ADD
+        //#region LISTENERS AND RENDERERS
+        initListeners() ;
+        initRenderers() ;
+        //#endregion
+    }
+    //#endregion
+
+    /**
+     * Add components
+     */
+    private void addComponents(){
+
         this.add(titleMenu);
         //KMAX
         this.add(borderPanelKmax);
@@ -309,13 +232,107 @@ public class NGraphMenuPanel extends JPanel{
         //Ok button
         layoutConfirm.add(confirmButton);
         this.add(layoutConfirm);
-        //#endregion
 
-        //LISTENERS AND RENDERERS
-        initListeners() ;
-        initRenderers() ;
     }
-    //#endregion
+
+    /**
+     * Init components
+     * @param kmax is max altitude
+     */
+    private void initComponents(int kmax){
+
+         //TITLE
+         titleMenu.setFont(App.KINDATITLE);
+
+         //#region KMAX
+         kmaxOption.setLayout( new GridLayout(2,1));
+ 
+         // Title
+         changeKmax.setFont(App.KINDANORMAL);
+         kmaxOption.setBackground(App.KINDAYELLOW);
+ 
+         
+         //  ComboBox
+         if (kmax > 1) {
+             this.initKmaxValues(kmax) ;
+         }
+         else {
+             kmaxComboBox.addItem(0) ;
+             kmaxComboBox.setSelectedIndex(0) ;
+         }
+         initAltitudeComboBox(kmax);
+         kmaxComboBox.setSelectedItem(kmax);
+         
+ 
+         kmaxOption.add(changeKmax);
+         kmaxOption.add(kmaxComboBox);
+ 
+         borderPanelKmax.setBackground(App.KINDAYELLOW);
+         borderPanelKmax.setPreferredSize(new Dimension(250,30));
+ 
+         borderPanelKmax.add(kmaxOption);
+         //#endregion
+ 
+         //#region ALTITUDES
+         altitudeMaxOption.setLayout(new GridLayout(2,1));
+         altitudeMaxOption.setBackground(App.KINDAYELLOW);
+ 
+         // Titre
+         colorChoice.setFont(App.KINDANORMAL);
+ 
+         // ComboBox
+         altitudeMaxOption.add(colorChoice);
+         altitudeMaxOption.add(altitudeComboBox);
+ 
+         borderPanelAlt.setBackground(App.KINDAYELLOW);
+         //#endregion
+ 
+         //#region SAFETY MARGIN
+         // SAFETY MARGIN
+         marginComboBox.setSelectedItem(15);
+         marginOptionPanel.setLayout(new GridLayout(2,1));
+         marginOptionPanel.setBackground(App.KINDAYELLOW);
+ 
+         // Titre
+         safetyMargin.setFont(App.KINDANORMAL);
+ 
+         // JComboBox
+         marginOptionPanel.add(safetyMargin);
+         marginOptionPanel.add(marginComboBox);
+ 
+         borderPanelMargin.setBackground(App.KINDAYELLOW);
+         //#endregion SAFETY MARGIN
+ 
+         //#region ALGO
+         algoOption.setLayout(new GridLayout(2,1));
+         algoOption.setBackground(App.KINDAYELLOW);
+ 
+         // Titre
+         algorithmes.setFont(App.KINDANORMAL);
+ 
+         // JComboBox
+ 
+         algoChoice.setForeground(Color.WHITE);
+         algoChoice.setFont(new Font("Arial", Font.BOLD, 18));
+         algoChoice.setBackground(Color.BLACK);
+         algoChoice.setPreferredSize(NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
+ 
+         algoOption.add(algorithmes);
+         algoOption.add(algoChoice);
+ 
+         borderPanelAlgo.setBackground(App.KINDAYELLOW);
+         //#endregion
+ 
+         //#region CONFIRM
+         confirmButton.setForeground(Color.WHITE);
+         confirmButton.setFont(App.KINDABOLD);
+         confirmButton.setBackground(Color.BLACK);
+         confirmButton.setPreferredSize(NGraphMenuPanel.KINDACOMBOBOXDIMENSION);
+         layoutConfirm.setBackground(App.KINDAYELLOW);
+         //#endregion
+
+
+    }
 
     //#region INIT / SETTER /GETTER
     /**

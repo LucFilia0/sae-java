@@ -23,7 +23,7 @@ import planeair.util.Airport;
 //#endregion
 
 /**
- * The JPannel that is prompted when a MapItem is pressed, showing all the required informations
+ * The JPanel that is prompted when a MapWaypoint is pressed, showing all the required informations
  *
  * @author Luc le Manifik
  */
@@ -51,11 +51,12 @@ public class NInfoPanel extends JPanel {
 
 
         /**
-         *  JTable for departure/arrival flight of the airport
+         * JTable for departure/arrival flight of the airport
          * Row Informations : 
-         * ID
-         * Time
-         * Arrival or Dpearture
+         * Attribute /
+         * ID /
+         * Time /
+         * Arrival or Departure
          */
         JTable table;
 
@@ -63,7 +64,6 @@ public class NInfoPanel extends JPanel {
          * Model for the JTable
          */
         NFlightTableInfoModel model;
-
 
         /**
          * The airport selected by the user
@@ -73,15 +73,15 @@ public class NInfoPanel extends JPanel {
         
         //#region FLIGHT
         /**
-         * The first COLUMN of the prompt
+         * The first COLUMN of the Flight prompt
          */
         private JLabel labelFlightLeft;
         /**
-         * The Second COLULMN of the prompt
+         * The Second COLULMN of the Flight prompt
          */
         private JLabel labelFlightRight;
         /**
-         * Panel which contain labelFlight
+         * Panel which contain Flight label
          */
         private JPanel flightPanel;
         //#endregion
@@ -95,7 +95,6 @@ public class NInfoPanel extends JPanel {
      * @author Luc le Manifik
      */
     public NInfoPanel() {
-        
         this.initComponents();
         this.setOpaque(false);
         this.addComponents();
@@ -154,7 +153,6 @@ public class NInfoPanel extends JPanel {
         //#region FLight
         flightPanel.add(labelFlightLeft);
         flightPanel.add(labelFlightRight);
-        this.scrollPane.setViewportView(table);
         panelTable.add(scrollPane);
         //#endregion
 
@@ -163,7 +161,7 @@ public class NInfoPanel extends JPanel {
 
     //#region SET INFORMATIONS --> SHOW AND HIDE
     /**
-     * Makes the NInfoPanel visible, and prompts the infos of the MapItem that was clicked
+     * Makes the NInfoPanel visible, and prompts the infos of the MapWaypooint that was clicked
      * 
      * @author GIRAUD Nila 
      */

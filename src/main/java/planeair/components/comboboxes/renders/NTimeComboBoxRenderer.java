@@ -10,6 +10,7 @@ import java.awt.Component;
 
 /**
  * Class of renderer for Time ComboBoxs
+ * Add a 0 before 0 to 9 number 
  * 
  * @author GIRAUD Nila
  */

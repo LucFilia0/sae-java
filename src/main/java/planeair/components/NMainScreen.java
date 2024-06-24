@@ -46,7 +46,7 @@ public class NMainScreen extends JPanel {
         //#region STRUCTURE
         /**
          * Locate in the North of the borderLayout of the frame
-         * nb LINE : 3 (PanelNav + HourPanelCenter)
+         * nb LINE : 1 (PanelNav)
          * nb COLUMN : 1
          * hgap : 0
          * vgap : 0
@@ -90,7 +90,6 @@ public class NMainScreen extends JPanel {
              * Layout's panel for Navigation bar (Button MENU  + LOGO and NAME of the App)
              * nb LINE : 1
              * nb COLUMN : 3
-             * hgap : 200
              * Location : top of the frame (represent the header)
              */
             private JPanel panelNav = new JPanel(new GridLayout(1,3));
@@ -112,14 +111,14 @@ public class NMainScreen extends JPanel {
                 /**
                  * Icon of the Button menu graph
                  * Description : A cross
-                 * Source : ./src/main/java/close.png
+                 * Source : ./src/main/java/planeair/icons/close.png
                  */
                 private Icon iconCloseGraph = new ImageIcon("./icons/close.png");
 
                 /**
                  * Icon of the Button menu Graph
                  * Description : three horizontal lines
-                 * Source : ./src/main/java/menu.png
+                 * Source : ./src/main/java/planeair/icons/menu.png
                  */
                 private Icon iconMenuGraph = new ImageIcon("./icons/graph.png");
                 /**
@@ -133,13 +132,13 @@ public class NMainScreen extends JPanel {
                 /**
                  * Icon of the Button menu Map
                  * Description :  A cross
-                 * Source : ./src/main/java/close.png
+                 * Source : ./src/main/java/planeair/icons/close.png
                  */
                 private Icon iconCloseMap = new ImageIcon("./icons/close.png");
                 /**
                  * Icon of the Button menu Map
                  * Description : A mini Map
-                 * Source : ./src/main/java/map.png
+                 * Source : ./src/main/java/planeair/icons/map.png
                  */
                 private Icon iconMenuMap = new ImageIcon("./icons/map.png");
                 /**
@@ -152,6 +151,8 @@ public class NMainScreen extends JPanel {
                 //#region IMPORTATION
                 /**
                  * Icon for import button
+                 * Description :  A folder with an arrow
+                 * Source : ./src/main/java/planeair/icons/folder-input.png
                  */
                 private Icon iconFolder = new ImageIcon("./icons/folder-input.png");
                 /**
@@ -202,7 +203,7 @@ public class NMainScreen extends JPanel {
              */
             private JPanel bodyCenter;
             /**
-             * See the number altitudes choose
+             * Change the altitude max
              * Location : in the panel menu --> need here for Events
              */
             private NComboBoxGraph kmaxComboBox = new NComboBoxGraph(); 
@@ -278,7 +279,7 @@ public class NMainScreen extends JPanel {
 
         //#region COMPONENTS
         /**
-         * 
+         * init components
          */
         private void initComponents() {
 
@@ -423,7 +424,7 @@ public class NMainScreen extends JPanel {
             //#endregion
             
             //#region LEFT
-            graphMenu = new NGraphMenuPanel(App.app, 0, kmaxComboBox);
+            graphMenu = new NGraphMenuPanel(0, kmaxComboBox);
             mapMenu = new NMapMenuPanel(map);
             map.add(article,BorderLayout.WEST);
             //#endregion
@@ -484,7 +485,7 @@ public class NMainScreen extends JPanel {
 
         //#region EVENTS
         /**
-         * Method adding events of the Panel
+         * Method adding events of the App (Only for that Panel)
          */
         private void addEvents(){
 

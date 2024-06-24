@@ -2,11 +2,9 @@ package planeair.components.comboboxes;
 
 //#region IMPORT
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Component;
 import java.awt.Color;
 
 import planeair.App;
@@ -15,7 +13,7 @@ import planeair.components.comboboxes.renders.NTimeComboBoxRenderer;
 
 /**
  * This class is for create a custom JComboxBox 
- * Is a default one --> Time for Map and time for Safety security
+ * Is a default one --> Time for Map 
  * 
  * @author GIRAUD Nila
  */
@@ -36,24 +34,7 @@ public class NComboBoxTime extends JComboBox<Integer> {
     public NComboBoxTime(int time){
 
         initComponents();
-        render = new NTimeComboBoxRenderer() {
-            @Override
-            public Component getListCellRendererComponent(
-                javax.swing.JList<? extends Integer> list, 
-                Integer value, 
-                int index, 
-                boolean isSelected, 
-                boolean cellHasFocus) {
-
-                JLabel cell = (JLabel)super.getListCellRendererComponent(
-                    list, value, index, isSelected, cellHasFocus) ;
-                
-                cell.setForeground(Color.BLACK) ;
-                return cell ;
-            }
-        } ;
-
-        this.setRenderer(render);
+        render = new NTimeComboBoxRenderer(Color.BLACK, App.KINDAYELLOW );
 
         for(int i = 0 ; i <= time ; i++){
             this.addItem(i);

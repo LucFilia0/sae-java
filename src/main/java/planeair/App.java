@@ -1,5 +1,6 @@
 package planeair;
 
+import javax.swing.ImageIcon;
 //#region IMPORTS
 import javax.swing.JFrame;
 
@@ -7,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 
 import planeair.util.AirportSet;
 import planeair.graph.graphtype.FlightsIntersectionGraph;
@@ -76,7 +78,7 @@ public class App extends javax.swing.JFrame {
     /**
      * The minimal height of the application's screen
      */
-    public static final int MIN_APP_SCREEN_HEIGHT = 800;
+    public static final int MIN_APP_SCREEN_HEIGHT = 900;
 
     /**
      * THE COLOR OF THE APP (not really yellow but quand même)
@@ -115,8 +117,13 @@ public class App extends javax.swing.JFrame {
     // SCREENS
 
     /**
-     * Page to select source files
-     * It's the first screen that you see when you launch the app
+     * Logo of the Application
+     */
+    private Image logo = new ImageIcon("./icons/logoJaune.jpg").getImage();
+
+    /**
+     * Page of selection of import file
+     * It's the first that you see when you open the app
      */
     private NImportScreen importScreen;
 
@@ -165,6 +172,7 @@ public class App extends javax.swing.JFrame {
         this.setTitle("Plane AIR");
         this.setSize(MIN_APP_SCREEN_WIDTH, MIN_APP_SCREEN_HEIGHT);
         this.setMinimumSize(new Dimension(MIN_APP_SCREEN_WIDTH, MIN_APP_SCREEN_HEIGHT));
+        this.setIconImage(logo);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
