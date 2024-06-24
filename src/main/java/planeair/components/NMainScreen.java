@@ -387,9 +387,9 @@ public class NMainScreen extends JPanel {
             graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
             
             graphInfo = new NGraphInfoPanel();
+
             graphInfo.computeGraphStats() ;
             graphLRightBottom.add(this.graphInfo);
-
             graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
         }
         //#endregion

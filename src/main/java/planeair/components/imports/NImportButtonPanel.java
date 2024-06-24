@@ -259,6 +259,9 @@ public class NImportButtonPanel extends JPanel {
                 }
                 app.getMainScreen().getInfoPanel().hideInfos() ;
             }
+            App.app.getMainScreen().getMinGraphPanel()
+                .confirmDisplay(App.app.getGraphRenderer());
+
             this.app.switchToMainScreen();
         });
 
@@ -273,7 +276,7 @@ public class NImportButtonPanel extends JPanel {
                     this.app.setGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     TestGraphImportation.importTestGraphFromFile((TestGraph)this.app.getGraph(), 
                         fileChooser.getFile(), false);
-
+                        
                     this.flightsImported = false;
                     this.airportsImported = false;
                     
@@ -421,10 +424,14 @@ public class NImportButtonPanel extends JPanel {
      * @param infoGraph Panel which will contain the statistics
      */
     public void initDefaultGraphImportation(NGraphInfoPanel infoGraph) {
-        this.app.getMainScreen().getMinGraphPanel().addGraphToPanel(this.app.getGraphRenderer()) ;
-        this.app.getMainScreen().getGraphMenuPanel()
-            .initAllComboBoxes(app.getGraph().getKMax(), true) ;
-        this.app.getMainScreen().getGraphMenuPanel().setLastAlgoSelected(null) ;
-        infoGraph.computeGraphStats() ;
+        this.app.getMainScreen().getMinGraphPanel()
+            .addGraphToPanel(this.app.getGraphRenderer()) ;
+        if (App.app.getGraphRenderer() != null) {
+            System.out.println(App.app.getGraph()) ;
+            this.app.getMainScreen().getGraphMenuPanel()
+                .initAllComboBoxes(app.getGraph().getKMax(), true) ;
+            this.app.getMainScreen().getGraphMenuPanel().setLastAlgoSelected(null) ;
+            infoGraph.computeGraphStats() ;
+        }
     }
 }

@@ -424,8 +424,8 @@ public class NGraphInfoPanel extends JPanel {
          * If the graph has a Coloring, then inputs the number of colors and conflicts
          */
         public void computeGraphStats() {
-            this.setDefaultValues() ;
             if (App.app.getGraphRenderer() != null) { 
+                this.setDefaultValues() ;
                 GraphSAE graph = App.app.getGraph() ;  
                 ConnectedComponents cc = new ConnectedComponents(graph) ;
                 cc.compute() ;

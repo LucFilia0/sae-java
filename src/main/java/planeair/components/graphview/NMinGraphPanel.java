@@ -189,7 +189,7 @@ public class NMinGraphPanel extends JPanel {
 
     /**
      * Confirms that the graph Renderer isn't null, if it is, updates
-     * its display accordingly
+     * its display accordingly (haha funni skul panel :D)
      * @param graphRenderer The renderer of the graph that should be displayed
      */
     public void confirmDisplay(PanelCreator graphRenderer) {
@@ -197,6 +197,7 @@ public class NMinGraphPanel extends JPanel {
             layoutGraphPanel.removeAll() ;
             layoutGraphPanel.add(new NSkullPanel(), BorderLayout.CENTER) ;
         }
+        App.app.getMainScreen().initGraphBottomPanel() ;
     }
 
     /**
