@@ -181,7 +181,7 @@ public class NImportButtonPanel extends JPanel {
      * In the constructor you have to specify the number of button
      * 1 for aeroport
      * 2 for " + vols
-     * @param framePrinc The object HomePage where the panel is put
+     *
      * @author GIRAUD Nila
      */
     public NImportButtonPanel(){

@@ -158,7 +158,7 @@ public enum ColoringAlgorithms {
             method = null ;
         }
 
-        return method ;
+        return method ;     
     }
 
     //#endregion

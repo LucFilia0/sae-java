@@ -342,6 +342,8 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * set TitleDiameter
+         * 
+         * @param titleDiameter the new diameter
          */
         public void setTitleDiameter(JLabel titleDiameter) {
             this.titleDiameter = titleDiameter;

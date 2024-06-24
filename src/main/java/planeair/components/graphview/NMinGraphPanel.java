@@ -88,7 +88,7 @@ public class NMinGraphPanel extends JPanel {
             layoutGraphPanel = new NSkullPanel() ;
             layoutGraphPanel.setLayout(new BorderLayout());
         }
-        layoutGraphPanel.setPreferredSize(new Dimension(325,325));
+        layoutGraphPanel.setPreferredSize(new Dimension(325,325));  
          
         /*SECOND COMPONENT */
 
@@ -185,6 +185,18 @@ public class NMinGraphPanel extends JPanel {
      */
     public JButton getButtonAgr() {
         return this.buttonAgr ;
+    }
+
+    /**
+     * Confirms that the graph Renderer isn't null, if it is, updates
+     * its display accordingly
+     * @param graphRenderer The renderer of the graph that should be displayed
+     */
+    public void confirmDisplay(PanelCreator graphRenderer) {
+        if (graphRenderer == null) {
+            layoutGraphPanel.removeAll() ;
+            layoutGraphPanel.add(new NSkullPanel(), BorderLayout.CENTER) ;
+        }
     }
 
     /**
