@@ -31,14 +31,47 @@ public class NSliderTime extends JSlider{
      */
     public NSliderTime(){
 
+        initComponent();
+        
+    }
+    //#endregion
+
+    /**
+     * Init components
+     * 
+     */
+    private void initComponent(){
+
         this.setMinimum(0);
         this.setMaximum(1439); // 24 * 60 - 1 : Nb of minutes in one day
         this.setPreferredSize(new Dimension(300,40));
         this.setValue(0000);
         this.setForeground(Color.BLACK);
         this.setOpaque(false);
+
     }
-    //#endregion
+
+
+    /**
+     * Reset the Slider
+     *
+     */
+    public void resetSlider(){
+
+        initComponent();
+
+    }
+
+    /**
+     * Moves the slider fast to refresh the position of the Flights. #Brigand
+     * 
+     * @author Luc le Manifik
+     */
+    public void refreshTime() {
+        int value = this.getValue();
+        this.setValue(12);
+        this.setValue(value); // Briganderie
+    }
 
     //#region SLIDER MODEL
         @Override

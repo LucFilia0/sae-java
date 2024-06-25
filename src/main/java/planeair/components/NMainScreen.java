@@ -476,18 +476,6 @@ public class NMainScreen extends JPanel {
             }
         }
 
-        /**
-         * Moves the slider fast to refresh the position of the Flights. #Brigand
-         * 
-         * @author Luc le Manifik
-         */
-        public void refreshTime() {
-            if(this.timePanel != null) {
-                int value = this.timePanel.getSliderTime().getValue();
-                this.timePanel.getSliderTime().setValue(12);
-                this.timePanel.getSliderTime().setValue(value); // Briganderie
-            }
-        }
         //#endregion
 
         //#region EVENTS
@@ -650,6 +638,14 @@ public class NMainScreen extends JPanel {
          */
         public Map getMap() {
             return this.map;
+        }
+
+        /**
+         * The TimePanel have The TimeSlider and TimeComboboxes
+         * @return the panel in question
+         */
+        public NTimePanel getTimePanel() {
+            return timePanel;
         }
         //#endregion
 

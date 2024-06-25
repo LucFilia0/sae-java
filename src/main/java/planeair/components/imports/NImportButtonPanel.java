@@ -256,7 +256,7 @@ public class NImportButtonPanel extends JPanel {
                     App.app.getMainScreen().getMap().clearAll();
                 }else if(App.app.getMainScreen().getMap() != null && App.app.getGraph() instanceof FlightsIntersectionGraph) {
                     App.app.getMainScreen().initMap();
-                    App.app.getMainScreen().refreshTime();
+                    App.app.getMainScreen().getTimePanel().getSliderTime().refreshTime();
                 }
                 App.app.getMainScreen().getInfoPanel().hideInfos() ;
             }
@@ -301,6 +301,7 @@ public class NImportButtonPanel extends JPanel {
             App.app.setAirportSet(new AirportSet());
 
             this.airportsImported = false;
+            this.flightsImported = false;
 
             buttonsPanel.removeAll();
             this.remove(NextStart);
@@ -386,6 +387,7 @@ public class NImportButtonPanel extends JPanel {
                 App.app.switchToMainScreen();
                 App.app.getMainScreen().getInfoPanel().hideInfos() ;
                 App.app.getMainScreen().initMap();
+                App.app.getMainScreen().getTimePanel().getSliderTime().resetSlider();
             }
         });
     
