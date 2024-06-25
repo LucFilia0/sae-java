@@ -1,5 +1,7 @@
 package planeair.components.menu.infos;
 
+import java.awt.Color;
+
 //#region IMPORT
 
 import java.awt.Dimension;
@@ -7,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -121,7 +124,7 @@ public class NInfoPanel extends JPanel {
         this.labelAirport.setOpaque(false);
         this.airportPanel.setBackground(App.KINDAYELLOW);
 
-        this.scrollPane.setPreferredSize(new Dimension(400,100));
+        this.scrollPane.setPreferredSize(new Dimension(400,125));
         this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setBackground(App.KINDAYELLOW);

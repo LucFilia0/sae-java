@@ -130,6 +130,19 @@ public class NMapMenuPanel extends JPanel {
         });
     }
 
+    /**
+     * Method for refresh the Panel
+     * All retrun to check
+     */
+    public void refresh(){
+
+        for (int i = 0; i < NB_CHECK_BOXES; i++){
+
+            this.checkBoxes[i].setSelected(true);
+        }
+
+    }
+
     //#endregion
 
     //#region GETTERS

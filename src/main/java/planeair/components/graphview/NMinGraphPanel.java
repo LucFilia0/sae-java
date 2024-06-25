@@ -83,12 +83,12 @@ public class NMinGraphPanel extends JPanel {
 
         /*FIRST COMPONENT */
         
-        this.setMaximumSize(new Dimension(350,400));
+        this.setMaximumSize(new Dimension(350,375));
         if (App.app.getGraphRenderer() == null) {
             layoutGraphPanel = new NSkullPanel() ;
             layoutGraphPanel.setLayout(new BorderLayout());
         }
-        layoutGraphPanel.setPreferredSize(new Dimension(325,325));  
+        layoutGraphPanel.setPreferredSize(new Dimension(325,300)); 
          
         /*SECOND COMPONENT */
 

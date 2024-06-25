@@ -222,9 +222,12 @@ public class App extends javax.swing.JFrame {
      * @author GIRAUD Nila - modified by Luc le Manifik
      */
     public void switchToMainScreen() {
-
         this.mainScreen.addTimePanel(); // Only add the slider if a FIG is charged
         this.mainScreen.getMinGraphPanel().confirmDisplay(graphRenderer);
+        this.mainScreen.getGraphInfoPanel().refresh(); 
+        this.mainScreen.getMapMenuPanel().refresh();
+        this.mainScreen.getGraphMenuPanel().refresh() ;
+        this.mainScreen.getInfoPanel().hideInfos();
 
         this.remove(this.importScreen);
         this.add(this.mainScreen, BorderLayout.CENTER);
@@ -278,6 +281,14 @@ public class App extends javax.swing.JFrame {
     }
 
     /**
+     * Refreshes the panel creator with the new graph
+     * @param graph the new graph
+     */
+    public void setGraphRendered(GraphSAE graph) {
+        this.graphRenderer = new PanelCreator(graph) ;
+    }
+
+    /**
      * Sets the value of the AirportSet
      * 
      * @param fig The new {@link planeair.util.AirportSet AirportSet} of the App
@@ -299,7 +310,10 @@ public class App extends javax.swing.JFrame {
      * @return the graph currently being rendered 
      */
     public GraphSAE getGraph() {
-        return graphRenderer.getGraph() ;
+        if (graphRenderer != null) {
+            return graphRenderer.getGraph() ;
+        }
+        return null ;
     }
 
     /**

@@ -258,11 +258,7 @@ public class NImportButtonPanel extends JPanel {
                     App.app.getMainScreen().initMap();
                     App.app.getMainScreen().getTimePanel().getSliderTime().refreshTime();
                 }
-                App.app.getMainScreen().getInfoPanel().hideInfos() ;
             }
-            App.app.getMainScreen().getMinGraphPanel()
-                .confirmDisplay(App.app.getGraphRenderer());
-
             App.app.switchToMainScreen();
         });
 
@@ -277,13 +273,12 @@ public class NImportButtonPanel extends JPanel {
                     App.app.setGraph(new TestGraph(fileChooser.getFile().getName())) ;
                     TestGraphImportation.importTestGraphFromFile((TestGraph)App.app.getGraph(), 
                         fileChooser.getFile(), false);
+                    App.app.setGraphRendered(App.app.getGraph());
                         
                     this.flightsImported = false;
                     this.airportsImported = false;
                     
                     App.app.getMainScreen().initGraphBottomPanel();
-                    if (App.app.getMainScreen().getInfoPanel() != null)
-                        App.app.getMainScreen().getInfoPanel().hideInfos();
                         
                     initDefaultGraphImportation(App.app.getMainScreen().getGraphInfoPanel()) ;
                 }catch(InvalidFileFormatException | FileNotFoundException error) {
@@ -292,7 +287,7 @@ public class NImportButtonPanel extends JPanel {
                     fileChooser.setFile(null);
                 }
             }
-        });
+         });
 
         // Choose Flights and Airports importation
         choiceFlightImportation.addActionListener((ActionEvent e) -> {
@@ -343,10 +338,12 @@ public class NImportButtonPanel extends JPanel {
                     App.app.setGraph(new FlightsIntersectionGraph(fileChooser.getFile().getName())) ;
                     FIGImportation.importFlightsFromFile(App.app.getAirportSet(), 
                         (FlightsIntersectionGraph)App.app.getGraph(), fileChooser.getFile());
-                    
+                                        
                     ColoringDSATUR.coloringDsatur(App.app.getGraph()) ;
                     ColoringUtilities.setGraphStyle(App.app.getGraph(), App.app.getGraph().getNbColors()) ;
                     App.app.getGraph().setKMax(App.app.getGraph().getNbColors()) ;
+                    App.app.setGraphRendered(App.app.getGraph());
+                    
                     App.app.getMainScreen().initGraphBottomPanel() ;
                     this.initDefaultGraphImportation(App.app.getMainScreen().getGraphInfoPanel());
                     this.flightsImported = true;
@@ -385,7 +382,6 @@ public class NImportButtonPanel extends JPanel {
             if(this.airportsImported && this.flightsImported) {
                 this.resetPanel(panelReturnConfirmFlight, buttonFlightFileSelection);
                 App.app.switchToMainScreen();
-                App.app.getMainScreen().getInfoPanel().hideInfos() ;
                 App.app.getMainScreen().initMap();
                 App.app.getMainScreen().getTimePanel().getSliderTime().resetSlider();
             }

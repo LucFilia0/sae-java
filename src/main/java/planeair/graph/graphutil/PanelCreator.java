@@ -476,8 +476,6 @@ public class PanelCreator {
 
 							// Restarts a Thread if this one got interrupted,
 							// else ignores the exception
-							interrupted() ;
-							isRendering = true ;
 						}
 					}
 				}

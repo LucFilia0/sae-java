@@ -647,5 +647,18 @@ public class NGraphMenuPanel extends JPanel{
     private void changeSecurityMargin(FlightsIntersectionGraph fig, int securityMargin) {
         FIGImportation.reDoCollisions(fig, securityMargin);
     }
+
+    /**
+     * Updates the information displayed on the panel
+     */
+    public void refresh() {
+        GraphSAE graph = App.app.getGraph() ;
+        if (graph == null) {
+            initAllComboBoxes(0, false);
+        }
+        else {
+            initAllComboBoxes(graph.getKMax(), true) ;
+        }
+    }
     //#endregion
 }

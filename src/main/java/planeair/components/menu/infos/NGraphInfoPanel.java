@@ -164,6 +164,19 @@ public class NGraphInfoPanel extends JPanel {
      * Contructor of NInfoGraphPanelApps
      */
     public NGraphInfoPanel() {
+        
+        this.initComponents();
+        this.addComponents();
+       
+        this.setVisible(true);
+
+    }
+    //#endregion
+
+    /**
+     * Initializes all the components
+     */
+    private void initComponents() {
         this.setBackground(App.KINDAYELLOW);
 
         this.setLayout(new GridBagLayout());
@@ -190,14 +203,10 @@ public class NGraphInfoPanel extends JPanel {
         titleNbConflictsOccurred.setFont(App.KINDANORMAL);
 
         this.setMaximumSize(new Dimension(225,230));
-        this.addComponents();
-       
-        this.setVisible(true);
-
     }
-    //#endregion
 
     //#region ADD
+
     /**
      * Add Components in the panel
      */
@@ -455,6 +464,14 @@ public class NGraphInfoPanel extends JPanel {
             titleNbColorsUsed.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
             titleNbConflictsOccurred.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
             titleNodes.setFont(new Font(getFont().getName(), Font.BOLD, size)) ;
+        }
+
+        /**
+         * Refreshes the panel
+         */
+        public void refresh() {
+            this.addComponents() ; //#CryAboutIt #Kms #Brigand #CROUS'kie
+            this.computeGraphStats() ;
         }
     //#endregion
 }

@@ -359,7 +359,7 @@ public class NMainScreen extends JPanel {
 
                 //#region FOOTER
                 footer.setOpaque(false);
-                footer.setPreferredSize(new Dimension(this.getWidth(), 140));
+                footer.setPreferredSize(new Dimension(this.getWidth(), 160));
                 //#endregion
             //#endregion  
             
@@ -387,7 +387,6 @@ public class NMainScreen extends JPanel {
             graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
             
             graphInfo = new NGraphInfoPanel();
-
             graphInfo.computeGraphStats() ;
             graphLRightBottom.add(this.graphInfo);
             graphLRightBottom.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -437,11 +436,10 @@ public class NMainScreen extends JPanel {
             //#endregion
 
             //#region FOOTER
-            JPanel emptyfooter = new JPanel();
+            JPanel emptyfooter = new JPanel(new FlowLayout());
             emptyfooter.setPreferredSize(new Dimension(5,footer.getHeight()));
             footer.add(emptyfooter);
             footer.add(infoPanel);
-        
 
             //#endregion
 
@@ -617,7 +615,7 @@ public class NMainScreen extends JPanel {
 
         /**
          * Returns this panel's InfoGraphPanel
-         * @return
+         * @return the information panel
          */
         public NGraphInfoPanel getGraphInfoPanel() {
             return this.graphInfo ;
