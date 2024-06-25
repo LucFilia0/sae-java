@@ -18,14 +18,17 @@ import planeair.graph.graphtype.GraphSAE;
 //#endregion
 
 /**
+ * 
  * <html>
  * Class handling all the methods to implement the {@code RLF} 
  * graph coloring Algorithm.<br><br>
  * The algorithm was based on this
- * {@link <a href = "https://en.wikipedia.org/wiki/Recursive_largest_first_algorithm">source</a>}
  * 
- * @author Nathan LIEGEON
+ * @see <a href = "https://en.wikipedia.org/wiki/Recursive_largest_first_algorithm">
+ *      for more detail
+ * </a>
  * </html>
+ * @author Nathan LIEGEON
  */
 public abstract class ColoringRLF {
     

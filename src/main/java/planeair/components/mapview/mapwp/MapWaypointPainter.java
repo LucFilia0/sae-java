@@ -304,10 +304,11 @@ public class MapWaypointPainter extends WaypointPainter<MapWaypoint> {
     /**
      * This method is not supported for a MapWaypointPainter
      * 
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException this method has been replaced by
+     * more specific methods
      */
     @Override
-    public HashSet<MapWaypoint> getWaypoints() {
+    public HashSet<MapWaypoint> getWaypoints() throws UnsupportedOperationException {
         throw new UnsupportedOperationException() ;
     }
 

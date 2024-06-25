@@ -258,8 +258,8 @@ public class PanelCreator {
 	 * <br><br>	
 	 * This method is synchronized because it might be called twice at the
 	 * same time which would result in an exception being thrown.
-	 * @param n The Node
 	 * </html>
+	 * @param n The Node
 	 */
 	public synchronized static void setSelectedStyle(Node n) {
 		n.removeAttribute("ui.size") ;
@@ -373,10 +373,10 @@ public class PanelCreator {
 		 * If this node is a flight, selects the 
 		 * corresponding {@code FlightWaypoint}
 		 * 
+		 * </html>
 		 * @param id the {@ode Id} of the node that is being hovered
 		 *
 		 * @author Nathan LIEGEON
-		 * </html>
 		 */
 		@Override
 		public void mouseOver(String id) {

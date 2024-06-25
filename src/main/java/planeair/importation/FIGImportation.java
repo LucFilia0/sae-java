@@ -27,6 +27,7 @@ import planeair.util.NTime;
 //#endregion
 
 /**
+ * 
  * <html>
  * This class contains all the functions/procedures linked to FIG importation.
  * <hr>
@@ -81,8 +82,10 @@ public abstract class FIGImportation {
      */
 
     /**
-     * Imports the Airports from a File passed in parameter. They are automatically added to the AirportSet.
-     * 
+     * Imports the Airports from a File passed in parameter. They are 
+     * automatically added to the AirportSet.
+     *
+     * @param airportSet the set in which they will be added 
      * @param airportsFile The source {@link java.io.File File File}
      *
      * @throws FileNotFoundException Thrown if the source File is not found or does not exist
@@ -238,10 +241,9 @@ public abstract class FIGImportation {
      * Imports and creates Flights from the source file passed in parameter. The Airports which are needed to create the Flights
      * are in the AirportSet, passed in parameter. It is made this way so that we can create multiple FIG without having to re-import the Airports each time.
      * 
-     * @param airportSet The {@link util.AirportSet util.AirportSet AirportSet} that contains all the Airports.
-     * @param fig The {@link graph.FlightsIntersectionGraph FIG} which contains all the Flights
+     * @param airportSet The {@link AirportSet util.AirportSet AirportSet} that contains all the Airports.
+     * @param fig The {@link FlightsIntersectionGraph FIG} which contains all the Flights
      * @param flightsFile The source {@link java.io.File java.io.File File} where the informations  on the Flights are stored.
-     * @param timeSecurity The time gap below which the Flights are considered like in collision (in MINUTES).
      * 
      * @throws FileNotFoundException Thrown if the file is not found or does not exist.
      * @throws InvalidFileFormatException Thrown if the source File does not matches the expected format.
@@ -420,6 +422,11 @@ public abstract class FIGImportation {
         });   
     }
 
+    /**
+     * Recalculates the collections of this graph with the new security margin
+     * @param fig the fig being redone
+     * @param securityMargin the new security margin
+     */
     public static void reDoCollisions(FlightsIntersectionGraph fig, int securityMargin) {
         fig.edges().forEach(e -> fig.removeEdge(e));
         fig.nodes().forEach(e -> 

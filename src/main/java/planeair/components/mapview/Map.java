@@ -186,10 +186,8 @@ public class Map extends org.jxmapviewer.JXMapViewer {
         //#region CENTERING MAP
 
         /**
-         * This method centers the Map at the 'center_geoposition' location, with the 'center_zoom' zoom value.
-         * 
-         * @see setCenterGeoPosition() - in {@link ihm.Map}
-         * @see setCenterZoom() - in {@link ihm.Map}
+         * This method centers the Map at the 'center_geoposition' location, 
+         * with the 'center_zoom' zoom value.
          * 
          * @author Luc le Manifik
          */
@@ -207,7 +205,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             /**
              * This method adds the Airports' icons on the Map.
              * 
-             * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
+             * @param airportSet ({@link AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
              * 
              * @author Luc le Manifik
              */
@@ -233,7 +231,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             /**
              * This method adds the InactiveAirports to the AirportSet
              * 
-             * @param airportSet The {@link planeair.util.AirportSet AirportSet} which contains the Airports
+             * @param airportSet The {@link AirportSet AirportSet} which contains the Airports
              */
             private void addInactiveAirports(AirportSet airportSet) {
                 for(Airport airport : airportSet.getInactiveAirports()) {
@@ -250,7 +248,7 @@ public class Map extends org.jxmapviewer.JXMapViewer {
             /**
              * This method removes and repaints the InactiveAirports from the {@link planeair.components.mapview.mapwp.MapWaypointPainter MapWaypointPainter}
              * 
-             * @param airportSet ({@link util.AirportSet}) - The AirportSet which contains all the Airports, their position, etc...
+             * @param airportSet The AirportSet which contains all the Airports, their position, etc...
              */
             public void removeAirports(AirportSet airportSet) {
                 removeActiveAirports(airportSet);

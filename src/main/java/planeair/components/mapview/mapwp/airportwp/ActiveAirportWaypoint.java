@@ -31,8 +31,8 @@ public class ActiveAirportWaypoint extends AirportWaypoint {
      * Creates a new ActiveAirportWaypoint.
      * ActiveAirports are represented in red on the Map
      * 
-     * @param airport ({@link planeair.util.Airport Airport}) - The Airport which is represented by the ActiveAirportWaypoint
-     * @param geoPosition ({@link org.jxmapviewer.viewer.GeoPosition GeoPosition}) - The position of the Airport
+     * @param airport ({@link Airport Airport}) - The Airport which is represented by the ActiveAirportWaypoint
+     * @param position ({@link org.jxmapviewer.viewer.GeoPosition GeoPosition}) - The position of the Airport
      * 
      * @author Luc le Manifik
      */

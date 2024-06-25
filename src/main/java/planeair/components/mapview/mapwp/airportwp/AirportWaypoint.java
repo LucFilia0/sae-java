@@ -68,6 +68,8 @@ public abstract class AirportWaypoint extends planeair.components.mapview.mapwp.
 	/**
 	 * Sets the Airport which is represented by the AirportWaypoint.
 	 * Only if it's not null
+	 * 
+	 * @param airport the new airport
 	 */
 	public void setAirport(Airport airport) {
 		if(airport != null) {

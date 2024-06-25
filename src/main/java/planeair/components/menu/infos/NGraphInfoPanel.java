@@ -290,6 +290,7 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * set TitleDegreeAvg
+         * @param titleDegreeAvg the new label
          */
         public void setTitleDegreeAvg(JLabel titleDegreeAvg) {
             this.titleDegreeAvg = titleDegreeAvg;
@@ -306,6 +307,7 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * set TitleComp
+         * @param titleComp the new label
          */
         public void setTitleComp(JLabel titleComp) {
             this.titleComp = titleComp;
@@ -321,6 +323,7 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * set TitleNodes
+         * @param titleNodes the new label
          */
         public void setTitleNodes(JLabel titleNodes) {
             this.titleNodes = titleNodes;
@@ -336,6 +339,7 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * set TitleEdges
+         * @param titleEdges the new label
          */
         public void setTitleEdges(JLabel titleEdges) {
             this.titleEdges = titleEdges;
@@ -351,7 +355,6 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * set TitleDiameter
-         * 
          * @param titleDiameter the new diameter
          */
         public void setTitleDiameter(JLabel titleDiameter) {
@@ -360,6 +363,11 @@ public class NGraphInfoPanel extends JPanel {
         //#endregion
 
         //#region JLABEL DECIMAL FORMAT
+
+        /**
+         * Sets the text for the average degree field with a 2 digit precision
+         * @param averageDegree The average degree being set
+         */
         public void setAverageDegree(double averageDegree) {
             DecimalFormat format = new DecimalFormat("#.##") ;
             format.setRoundingMode(RoundingMode.HALF_UP) ;
@@ -400,7 +408,7 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * changes the number of colors
-         * @param nbNodes the number of colors
+         * @param nbColors the number of colors
          */
         public void setNbColorsUsed(int nbColors) {
             this.titleNbColorsUsed.setText(NB_COLORS_TEXT + nbColors) ;
@@ -408,7 +416,7 @@ public class NGraphInfoPanel extends JPanel {
 
         /**
          * changes the number of conflicts
-         * @param nbNodes the number of conflicts
+         * @param nbConflicts the number of conflicts
          */
         public void setNbConflictsOccurred(int nbConflicts) {
             this.titleNbConflictsOccurred.setText(NB_CONFLICTS_TEXT + nbConflicts) ;

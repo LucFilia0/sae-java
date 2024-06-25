@@ -8,7 +8,11 @@ import planeair.util.NTime ;
  * @author Nathan LIEGEON
  */
 public class InvalidTimeException extends Exception {
-    
+   
+    /**
+     * Displays the error explaining the time is invalid
+     * @param time the time
+     */
     public InvalidTimeException(NTime time) {
         super(time.getHour() + "h" + time.getMinute() + " est une heure invalide") ;
     }

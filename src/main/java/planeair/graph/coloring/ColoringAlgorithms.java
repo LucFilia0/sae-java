@@ -11,6 +11,7 @@ import planeair.graph.graphtype.GraphSAE;
 //#endregion
 
 /**
+ * 
  * <html>
  * Enum storing constants linked to algorithms, 
  * it defines for each algorithm
@@ -31,14 +32,28 @@ import planeair.graph.graphtype.GraphSAE;
  */
 public enum ColoringAlgorithms {
     //#region CONSTANTS
+    
+    /**
+     * Default constant for when algorithms cannot be applied
+     */
     INDISPONIBLE(-1, "INDISPONIBLE", null),
+
+    /**
+     * The Welsh and Powell algorithm constant
+     */
     WELSH_POWELL(0, "Welsh & Powell", setMethod(
         ColoringWelshPowell.class, "coloringWelshPowell", 
         new Class<?>[]{GraphSAE.class})),
 
+    /**
+     * The DSATUR algorithm constant
+     */
     DSATUR(1, "DSATUR",setMethod(ColoringDSATUR.class, 
     "coloringDsatur", new Class<?>[]{GraphSAE.class})),
 
+    /**
+     * The RLF algorithm constant
+     */
     RLF(2, "RLF", setMethod(ColoringRLF.class, 
         "coloringRLF", new Class<?>[]{GraphSAE.class})) ;
 

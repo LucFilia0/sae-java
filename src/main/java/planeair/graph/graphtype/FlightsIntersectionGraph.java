@@ -13,8 +13,7 @@ import planeair.exceptions.InvalidEntryException;
  * then they will collide.
  *  
  * To avoid that, coloring algorithms are used to spread Flights on different altitudes.
- * 
- * @implNote Uses the GraphStream attributes.
+ * /!\ Uses the GraphStream attributes 
  * 
  * @author Luc le Manifik
  */
@@ -22,6 +21,9 @@ public class FlightsIntersectionGraph extends GraphSAE {
 
     //#region STATIC VARIABLES
 
+    /**
+     * The default security margin used to create the graph
+     */
     public static final int DEFAULT_SECURITY_MARGIN = 15;
 
     //#endregion
@@ -80,6 +82,10 @@ public class FlightsIntersectionGraph extends GraphSAE {
 
     //#region GETTERS
 
+    /**
+     * Getter for the security margin used to construct the fig
+     * @return the security margin
+     */
     public int getSecurityMargin() {
         return this.securityMargin;
     }

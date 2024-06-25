@@ -16,9 +16,7 @@ import planeair.graph.coloring.ColoringUtilities;
 
 /**
  * Flight extends SingleNode, from GraphStream, and is a node of a
- * FlightsIntersectionGraph.
- * 
- * @implNote Uses the GraphStream attributes.
+ * FlightsIntersectionGraph. /!\ uses the GraphStream attribute
  * 
  * @author Luc le Manifik
  */
@@ -27,6 +25,11 @@ public class Flight extends SingleNode {
     // #region BLACK MAGIC -> ASK LIEGEON
 
     // Can only be used with the "graph.addNode()" method.
+    /**
+     * Instantiates a new flight
+     * @param graph The graph from which it is from
+     * @param id its id, has to be {@code unique}
+     */
     protected Flight(AbstractGraph graph, String id) {
         super(graph, id); // -> the name of the flight is its identifier
     }
@@ -256,12 +259,16 @@ public class Flight extends SingleNode {
     /**
      * Set the Flight Waypoint related to this flight
      * 
-     * @param flightWaypoint
+     * @param flightWaypoint the flight waypoint linked to this flight
+     * if null, will also deselect its waypoint button before setting it the
+     * waypoint to null
+     * 
+     * @see MapWaypointButton
      */
     public void setFlightWaypoint(FlightWaypoint flightWaypoint) {
         if (flightWaypoint == null && this.getFlightWaypoint() != null) {
-            MapWaypointButton fwpButton = 
-                this.getFlightWaypoint().getWaypointButton() ;  
+            MapWaypointButton fwpButton = this.getFlightWaypoint()
+                .getWaypointButton() ;  
             
             if (fwpButton.isSelected())
                 fwpButton.deselect() ;
@@ -593,9 +600,9 @@ public class Flight extends SingleNode {
      * Tells this flight's waypoint that its selection has to 
      * be updated if it exists
      * Also fire goofy aah word :)
-     * 
-     * @return true if the waypoint has been update, false if not
-     * (so true if the waypoint exists, false if it doesn't)
+     *
+     * @param isSelected whether or not the waypoint is selected 
+     * @return true if the waypoint has been update, false 
      * 
      * @author Nathan LIEGEON
      */

@@ -37,8 +37,6 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
      * @param geoPosition The {@link org.jxmapviewer.viewer.GeoPosition position} of the MapWaypoint on the Map
      * @param degree The orientation degree of the MapWaypoint's image
      * 
-     * @throws IOException Thrown if the "iconFile" is not found, or does not match the "image" requirements.
-     * 
      * @author Luc le Manifik
      */
     public MapWaypoint(File iconFile, GeoPosition geoPosition, double degree) {
@@ -61,8 +59,7 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
      * Gets the MapWaypointButton of the MapWaypoint. 
      * The MapWaypointButton actually contains the visual of the MapWaypoint.
      * 
-     * @return ({@link ihm.mapvisuals.mapwp.MapWaypointButton MapWaypointButton}) 
-     * - The MapWaypointButton linked to the MapWaypoint
+     * @return The {@link MapWaypointButton} linked to the MapWaypoint
      * 
      * @author Luc le Manifik
      */
@@ -101,12 +98,14 @@ public abstract class MapWaypoint extends org.jxmapviewer.viewer.DefaultWaypoint
     /**
      * Returns the correctly formated informations of the MapWaypointButton
      * First part
+     * @return the string
      */
     public abstract String toStringFirst();
 
     /**
      * Returns the correctly formated informations of the MapWaypointButton
      * First part
+     * @return the string
      */
     public abstract String toStringSecond();
 

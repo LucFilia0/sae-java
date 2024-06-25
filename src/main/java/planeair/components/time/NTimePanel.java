@@ -102,6 +102,9 @@ public class NTimePanel extends JPanel {
      */
     private Thread simulation;
 
+    /**
+     * the panel that contains everything
+     */
     private JPanel container;
     //#endregion
 
@@ -236,8 +239,9 @@ public class NTimePanel extends JPanel {
 
     //#region GETTER / SETTER
     /**
-     * //
-     * @return
+     * Returns the time selected on the slider as a NTime object
+     * @return the time on the slider
+     * @throws InvalidTimeException if there was a problem in the conversion
      */
     public NTime getSelectedTime() throws InvalidTimeException {
         int value = this.sliderTime.getValue();

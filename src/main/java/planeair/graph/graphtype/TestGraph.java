@@ -7,9 +7,10 @@ import planeair.exceptions.InvalidEntryException;
 /**
  * TestGraph is the basic class to handle the "graph-testX.txt" files.
  * This class extends the class SingleGraph, from GraphStream.
- * It's basically an empty Graph, with no peculiar meaning, and just allows you to test your code
+ * It's basically an empty Graph, with no peculiar meaning, and just allows 
+ * you to test your code.
+ * /!\ Uses the graphstream attributes
  * 
- * @implNote Uses the GraphStream attributes
  * 
  * @author Luc le Manifik
  */

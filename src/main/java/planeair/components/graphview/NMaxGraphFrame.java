@@ -44,6 +44,7 @@ public class NMaxGraphFrame extends JFrame{
     //#region CONSTRUCTOR
     /**
      * Constructor of NMaxGraphFrame
+     * @param graphRenderer the renderer of the graph on the frame
      */
     public NMaxGraphFrame(PanelCreator graphRenderer){
         this.graphInfo = new NGraphInfoPanel() ;

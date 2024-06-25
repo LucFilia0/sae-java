@@ -9,7 +9,7 @@ import planeair.graph.graphtype.FlightsIntersectionGraph;
 
 /**
  * The AirportSet class is a container for the Airport class.
- * It stores the Airports in a HashSet<Airport>.
+ * It stores the Airports in a {@link HashSet}.
  * It also contains two other Sets : the "activeAirports" Set and the "inactiveAirports" Set,
  * which each contains the ActiveAirports (in red) and the InactiveAirports (in gray) 
  * 
@@ -74,12 +74,12 @@ public class AirportSet extends HashSet<Airport> {
     }
 
     /**
-     * Searches and returns an {@link planeair.util.Aiport Airport}, by giving his name.
+     * Searches and returns an {@link Airport Airport}, by giving his name.
      * If the Airport does not exist, then an exception is raised.
      * 
      * @param name The name of the searched Airport
      * 
-     * @return The found {@link util.Airport Airport}
+     * @return The found {@link Airport Airport}
      * 
      * @throws ObjectNotFoundException Thrown if none airport in the AiportSet has the searched name
      * 
@@ -115,7 +115,8 @@ public class AirportSet extends HashSet<Airport> {
      * It must be called after the Flights' importation, because it needs the Flights to know
      * if it's used or not.
      * 
-     * @param fig The {@link graph.FlightsIntersectionGraph FIG} which contains all the Airports
+     * @param fig The {@link FlightsIntersectionGraph FIG} 
+     * which contains all the Airports
      * 
      * @author Luc le Manifik
      */

@@ -255,7 +255,8 @@ public class App extends javax.swing.JFrame {
 
     /**
      * Sets the value of the Graph, and instantiates the correct renderer
-     * @param graph ({@link planeair.graph.GraphSAE TestGraph}) - The new Graph rendered on the App
+     * @param graph ({@link planeair.graph.GraphSAE TestGraph}) - 
+     * The new Graph rendered on the App
      */
     public void setGraph(GraphSAE graph) {
         if (graph == null) {
@@ -291,7 +292,7 @@ public class App extends javax.swing.JFrame {
     /**
      * Sets the value of the AirportSet
      * 
-     * @param fig The new {@link planeair.util.AirportSet AirportSet} of the App
+     * @param as The new {@link planeair.util.AirportSet AirportSet} of the App
      * 
      * @author Luc le Manifik
      */
@@ -300,7 +301,8 @@ public class App extends javax.swing.JFrame {
     }
 
     /**
-     * @return The {@link planeair.graph.graphutil.PanelCreator PanelCreator} which renders the TestGraph
+     * @return The {@link planeair.graph.graphutil.PanelCreator PanelCreator} 
+     * which renders the TestGraph
      */
     public PanelCreator getGraphRenderer() {
         return this.graphRenderer ;

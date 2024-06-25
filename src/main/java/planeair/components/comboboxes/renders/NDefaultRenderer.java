@@ -44,8 +44,8 @@ public class NDefaultRenderer<T> implements ListCellRenderer<T> {
 	 * Overrides this Renderer's default text color and background colors
 	 * with whatever you want
 	 * 
-	 * @param textColor
-	 * @param backgroundColor
+	 * @param textColor the custom text color the user wants
+	 * @param backgroundColor the custom background color the user wants
 	 */
 	public NDefaultRenderer(Color textColor, Color backgroundColor) {
 		this.textColor = textColor ;

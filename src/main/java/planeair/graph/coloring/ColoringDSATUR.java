@@ -12,13 +12,15 @@ import planeair.graph.graphtype.GraphSAE;
 import planeair.graph.graphtype.TestGraph;
 //#endregion
 
-/**<html>
+/**
+ * 
+ * <html>
  * Class containing all the methods to implement the {@code DSATUR} 
  * graph coloring algorithm
  * 
- * @author GIRAUD Nila mod. Nathan LIEGEON
  * @see <a href = "https://fr.wikipedia.org/wiki/DSATUR"> For more details</a>
  * </html>
+ * @author GIRAUD Nila mod. Nathan LIEGEON
  */
 public abstract class ColoringDSATUR {
     
@@ -26,9 +28,8 @@ public abstract class ColoringDSATUR {
      * Give a graph's coloring with less colision we can, use graph saturation principle (degree).
      * 
      * @param graph Graph that will be tested.
-     * @return max array consisting of 2 values, 1 : number of colors used, 2 : number of conflicts
      * 
-     * @autor GIRAUD Nila mod. Nathan LIEGEON
+     * @author GIRAUD Nila mod. Nathan LIEGEON
      */
     public static void coloringDsatur(GraphSAE graph) {
         int kMax = graph.getKMax() ;
@@ -139,7 +140,7 @@ public abstract class ColoringDSATUR {
      * @param ListesNodes LinkedList of Graph's Nodes
      * @return max A node
      * 
-     * @autor GIRAUD Nila
+     * @author GIRAUD Nila
      */
     private static Node MaxNodeDSATUR( LinkedList<Node> ListesNodes){
         Node max = ListesNodes.getFirst();
@@ -157,7 +158,7 @@ public abstract class ColoringDSATUR {
      * @param ListNodes LinkedList of Graph's Nodes
      * @param nodeP The Node that we want to insert
      * 
-     * @autor GIRAUD Nila
+     * @author GIRAUD Nila
      */
 
     public static void insertSorted(LinkedList<Node> ListNodes, Node nodeP) {

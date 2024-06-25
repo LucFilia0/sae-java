@@ -18,7 +18,7 @@ import planeair.App;
 //#endregion
 
 /**
- * This class is the button of a {@link ihm.mapvisuals.mapwp.MapWaypoint MapWaypoint}, 
+ * This class is the button of a {@link MapWaypoint MapWaypoint}, 
  * and allows the user to click and interact with the MapWaypoints on the Map.
  * 
  * @author Luc le Manifik
@@ -49,9 +49,12 @@ public class MapWaypointButton extends JToggleButton {
      * The WaypointButton's constructor. Creates a new WaypointButton.
      * The icon is prompt from the "iconFile" parameter
      * 
-     * @param iconFile ({@link java.io.File File}) - The File from which is prompted the button's icon.
-     * 
-     * @throws IOException Threw if the File does not exist or does not match the "image" requirements.
+     * @param iconFile ({@link java.io.File File}) - The File from which is 
+     * prompted the button's icon.
+     * @param mapWaypoint the mapWaypoint linked to thbis button
+     * @param radian the rotation that needs to be applied to this button
+     * @throws IOException Threw if the File does not exist or does not match 
+     * the "image" requirements.
      */
     public MapWaypointButton(File iconFile, MapWaypoint mapWaypoint, double radian) throws IOException {
 
@@ -139,12 +142,14 @@ public class MapWaypointButton extends JToggleButton {
     //#region PUBLIC METHODS
 
     /**
-     * <html>Undoes the selection on a waypoint by removing the border around 
+     * 
+     * <html> 
+     * Undoes the selection on a waypoint by removing the border around 
      * and by hiding the info panel showing its information.<br>
      * If this waypoint is a {@link FlightWaypoint} then also highlight its
      * corresponding Flight on the graph.<br>
      * <br>
-     * <strong>/!\ GETS CALLED BY select() ON THE PREVIOUSLY SELECTED
+     * <strong> /!\ GETS CALLED BY select() ON THE PREVIOUSLY SELECTED
      * WAYPOINT /!\</strong>
      * </html>
      * 
@@ -159,6 +164,7 @@ public class MapWaypointButton extends JToggleButton {
     }
 
     /**
+     * 
      * <html>
      * Highlights a {@code Waypoint} when the user clicks on it by 
      * putting a colored border around it,<br>

@@ -1,6 +1,5 @@
 package planeair.components.menu.infos;
 
-import java.awt.Color;
 
 //#region IMPORT
 
@@ -9,7 +8,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;

@@ -71,7 +71,6 @@ public class NFileChooser extends JFileChooser {
         this.setDialogTitle("Enregistrer sous");
         this.setDialogType(JFileChooser.SAVE_DIALOG);
         this.setApproveButtonText("Ouvrir");
-        this.setCurrentDirectory(new File("./data"));
         this.setFileSelectionMode(JFileChooser.FILES_ONLY);
         this.setMultiSelectionEnabled(false);
     }
@@ -102,6 +101,7 @@ public class NFileChooser extends JFileChooser {
 
     /**
      * Set the file which the user want to import
+     * @param file the new file
      */
     public void setFile(File file) {
         this.file = file;

@@ -47,6 +47,9 @@ public abstract class Automation {
      * @param path Folder from which the files will be imported
      * @param identifiers The file name structure(s)
      * @param placeholder Character that will be replaced by numbers
+     * @param numberOfCores number of processors available
+     * for multithreading (use Runtime.getRuntime()
+     * .availableProcessors())
      * 
      * @author Nathan LIEGEON
      */
@@ -138,7 +141,6 @@ public abstract class Automation {
      * 
      * @param graph Graph whose data is written down
      * @param path Parent folder where the importation took place
-     * @param threadPool current threadPool used to divide the tasks
      * 
      * @author Nathan LIEGEON
      */
@@ -323,7 +325,7 @@ public abstract class Automation {
      * This function is also case sensitive
      * 
      * @param filename name your are testing
-     * @param identifier array containing different identifiers the filename will be compared to
+     * @param identifiers array containing different identifiers the filename will be compared to
      * @param placeholder character which should be replaced by numbers
      * @return boolean telling whether the file was similar to one of the identifiers or not
      * 

@@ -53,7 +53,8 @@ public class NFlightTableInfoModel extends AbstractTableModel {
 
     /**
      * Constructor of the class, Need for taken the choose Airport 
-     * @param airport
+     * @param table the table on which the model will be applied
+     * @param airport the airport providing the information to this table
      */
     public NFlightTableInfoModel(JTable table, Airport airport) {
         initRenders(table) ;
@@ -115,9 +116,24 @@ public class NFlightTableInfoModel extends AbstractTableModel {
      * Enum containing for each column its title and type
      */
     public enum Titles {
+        /**
+         * The ID field, a {@link String}
+         */
         ID("ID", String.class),
+
+        /**
+         * The hour field, a {@link NTime}
+         */
         HOUR("Heure", NTime.class),
+
+        /**
+         * The state, a {@link String}
+         */
         STATE("Etat", String.class),
+
+        /**
+         * The altitude, an {@link Integer}
+         */
         ALTITUDE("Altitude", Integer.class) ;
 
         /**

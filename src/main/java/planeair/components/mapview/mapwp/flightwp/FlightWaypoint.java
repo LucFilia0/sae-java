@@ -73,6 +73,7 @@ public class FlightWaypoint extends MapWaypoint {
 	
 	/**
 	 * Sets the new value of the flight represented by the FlightWaypoint
+     * @param flight the new flight linked to this waypoint
 	 */
 	public void setFlight(Flight flight) {
 		if(flight != null) {

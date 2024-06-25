@@ -13,12 +13,14 @@ import javax.swing.JPanel;
 //#endregion
 
 /**
- * <html><strong>
+ * 
+ * <html>
+ * <strong>
  * Panel shown if no graph has been imported, it contains a {@code SINGLE 
  * GIANT SKULL IMAGE} (or a placeholder text if you dare delete it)
  * </strong>
- * @author A true Knight of the Holy CROUS'kie
  * </html>
+ * @author A true Knight of the Holy CROUS'kie
  */
 public class NSkullPanel extends JPanel {
 

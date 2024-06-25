@@ -34,27 +34,15 @@ public abstract class ColoringUtilities {
      * Checks if the coloring worked.
      * 
      * @param graph Graph that will be tested.
-     * @param String key of the color attribute used
      * @return int number of nodes which are adjacent to another node with the same color.
      * 
      * @author Nathan LIEGEON
      */
-    public static int computeNumberOfConflicts(GraphSAE graph, boolean showErrorMessages) {
-        int nbProblems = 0 ;
-        int color ;
-        for (Node node : graph) {
-            for (Node neighbor : node.neighborNodes().collect(Collectors.toSet())) {
-                color = (int)node.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE) ;
-                if (color != 0 && color == (int)neighbor.getAttribute(ColoringUtilities.NODE_COLOR_ATTRIBUTE)) {
-                    nbProblems++ ;
-                    if (showErrorMessages) {
-                        System.out.println("Probleme entre " + node + " et " + neighbor) ;
-                    }
-                }
-            }
-        }   
-
-        return nbProblems/2 ;
+    public static int computeNumberOfConflicts(GraphSAE graph) {
+        return (int)graph.edges().filter(e -> 
+            e.getNode0().getAttribute(NODE_COLOR_ATTRIBUTE) ==
+            e.getNode1().getAttribute(NODE_COLOR_ATTRIBUTE))
+            .count() ;
     }
 
     /**
@@ -150,9 +138,10 @@ public abstract class ColoringUtilities {
     /**
      * Colors a node by minimizing conflicts
      * 
-     * @param graph graph you are trying to color
      * @param node node you are trying to color 
-     * @return array consisting of 2 values, the color assigned to the node and the number of conflicts it generated
+     * @param kMax the kMax of the graph the node originates from
+     * @return array consisting of 2 values, the color assigned to the node and 
+     * the number of conflicts it generated
      * 
      * @author Nathan LIEGEON
      */
@@ -207,6 +196,7 @@ public abstract class ColoringUtilities {
     }
 
     /**
+     * 
      * <html>
      * Colors all {@code Nodes} that don't yet have a 
      * {@code color} with the least conflicting color.
@@ -215,11 +205,11 @@ public abstract class ColoringUtilities {
      * @param graphSet {@code Set} containing {@code Nodes} we are 
      * trying to color. If one of the nodes has a color, it gets skipped
      * @param kMax Maximum color that can be assigned to a node
+     * </html>
      * 
      * @return The number of conflicts that occurred
      * 
      * @author Nathan LIEGEON
-     * </html>
      */
     public static int colorWithLeastConflicts(Set<Node> graphSet, int kMax) {
         
@@ -270,17 +260,18 @@ public abstract class ColoringUtilities {
     }
 
     /**
+     * 
      * <html>
      * Colors the graph with the chosen algorithm if the algorithm
      * has a defined method for it.<br><br>
      * Its arguments should be a {@link GraphSAE} and it should be {@code 
      * static}
      * 
+     * </html>
      * @param graph The graph we want to color
      * @param algorithm The algorithm used
      * @return {@code true} if the method was successfully invoked, 
      * {@code false} else
-     * </html>
      */
     public static boolean colorGraphWithChosenAlgorithm(GraphSAE graph, 
                         ColoringAlgorithms algorithm) {

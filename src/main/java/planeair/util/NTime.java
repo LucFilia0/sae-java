@@ -8,7 +8,8 @@ import planeair.exceptions.InvalidTimeException;
 //#endregion
 
 /**
- * Class handling hours and minutes only for easier access and manipulation in the {@link graph.Flight Flight class}
+ * Class handling hours and minutes only for easier access and manipulation in the 
+ * {@link planeair.graph.graphutil.Flight Flight class}
  * 
  * @author Nathan LIEGEON
  */

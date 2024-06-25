@@ -1,0 +1,24 @@
+-classpath
+'C:/Users/natha/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar;C:/Users/natha/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar;C:/Users/natha/.m2/repository/org/graphstream/gs-core/2.0/gs-core-2.0.jar;C:/Users/natha/.m2/repository/org/graphstream/pherd/1.0/pherd-1.0.jar;C:/Users/natha/.m2/repository/org/graphstream/mbox2/1.0/mbox2-1.0.jar;C:/Users/natha/.m2/repository/org/graphstream/gs-ui-swing/2.0/gs-ui-swing-2.0.jar;C:/Users/natha/.m2/repository/org/graphstream/gs-algo/2.0/gs-algo-2.0.jar;C:/Users/natha/.m2/repository/org/apache/commons/commons-math/2.1/commons-math-2.1.jar;C:/Users/natha/.m2/repository/org/apache/commons/commons-math3/3.4.1/commons-math3-3.4.1.jar;C:/Users/natha/.m2/repository/org/jfree/jfreechart/1.0.14/jfreechart-1.0.14.jar;C:/Users/natha/.m2/repository/org/jfree/jcommon/1.0.17/jcommon-1.0.17.jar;C:/Users/natha/.m2/repository/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar;C:/Users/natha/.m2/repository/com/lowagie/itext/2.1.5/itext-2.1.5.jar;C:/Users/natha/.m2/repository/bouncycastle/bcmail-jdk14/138/bcmail-jdk14-138.jar;C:/Users/natha/.m2/repository/bouncycastle/bcprov-jdk14/138/bcprov-jdk14-138.jar;C:/Users/natha/.m2/repository/org/jxmapviewer/jxmapviewer2/2.0/jxmapviewer2-2.0.jar;C:/Users/natha/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar'
+-encoding
+'Cp1252'
+-protected
+-source
+'17'
+-sourcepath
+'c:/Cours/Java/DOSSIER SAE/sae-java/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'c:/Cours/Java/DOSSIER SAE/sae-java/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'sae 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'sae 1.0-SNAPSHOT API'

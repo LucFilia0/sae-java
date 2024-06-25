@@ -13,17 +13,21 @@ import org.graphstream.graph.Node;
 import planeair.graph.graphtype.GraphSAE;
 //#endregion
 /**
- * 
- * Class handling the {@code Welsh & Powell} algorithm
+ * <html>
+ * Class handling the {@code Welsh and Powell} algorithm
  * 
  * @author Nathan LIEGEON
- * @see 
+ * @see <a href="https://en.wikipedia.org/wiki/Graph_coloring">
+ *  for more detail
+ * </a>
+ * </html>
  */
 public abstract class ColoringWelshPowell {
     
     /**
-     * Colors a Graph using the Welsh & Powell algorithm with at most kMax colors if 
-     * the graph is a testGraph. If it can't do so, it will try to minimize conflicts
+     * Colors a Graph using the Welsh and Powell algorithm with at most kMax 
+     * colors if the graph is a testGraph. If it can't do so, 
+     * it will try to minimize conflicts.
      * 
      * @param graph Graph getting colored
      * 

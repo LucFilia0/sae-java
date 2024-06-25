@@ -52,7 +52,7 @@ public abstract class GraphSAE extends SingleGraph {
 
     /**
      * Constructor setting our attributes to a default value of 0.
-     * @param id
+     * @param id The id of the graph
      */
     protected GraphSAE(String id) {
         super(id) ;
@@ -126,7 +126,7 @@ public abstract class GraphSAE extends SingleGraph {
 
     /**
      * Sets the total number of colors used to color the graph
-     * @param nbConflicts new number of colors
+     * @param nbColors new number of colors
      */
     public void setNbColors(int nbColors) {
         if (nbColors < 0) {

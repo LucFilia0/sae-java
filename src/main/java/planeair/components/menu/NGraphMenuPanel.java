@@ -334,7 +334,8 @@ public class NGraphMenuPanel extends JPanel{
     //#region INIT / SETTER / GETTER
     /**
      * Fills the altitude comboBox with the correct values and defines its Render
-     * @param kmax
+     * @param kmax the kMax on the graph being rendered, if lesser than 0, shows
+     * an error symbol on the comboBox
      */
     public void initAltitudeComboBox(int kmax){
         altitudeComboBox.removeAllItems();
@@ -354,7 +355,8 @@ public class NGraphMenuPanel extends JPanel{
     /**
      * Initializes algoComboBox with either the algorithms or
      * an error message depending of if the graph has been imported
-     * @param graphIsImported
+     * @param graphIsImported {@code true} if the graph is imported, 
+     * {@code false} else
      */
     public void initAlgoComboBox(boolean graphIsImported) {
         DefaultComboBoxModel<ColoringAlgorithms> model ;

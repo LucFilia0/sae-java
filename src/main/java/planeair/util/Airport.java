@@ -209,7 +209,8 @@ public class Airport {
      * This method returns if the Airport must be marked active (in red) on the Map, because one of the Flights
      * in the FIG is using this Airport.
      * 
-     * @param fig The {@link graph.FlightsIntersectionGraph FIG}, which contains the {@link planeair.graph.graphutil.Flight Flights} to check
+     * @param fig The {@link FlightsIntersectionGraph FIG}, which contains the 
+     * {@link Flight Flights} to check
      * 
      * @return "True" if the Flight must be marked as an active one, else "false"
      * 
